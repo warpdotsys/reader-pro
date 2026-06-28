@@ -1,0 +1,11 @@
+.git
+reference-source
+recovered-assets
+reader-pro-work
+*.log
+*.tmp
+.DS_Store
+.idea
+.vscode
+.env
+.env.*
