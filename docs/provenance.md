@@ -14,16 +14,22 @@ This repository was assembled from an authorized local binary artifact supplied 
 - Embedded library count: `85`
 - Embedded non-class resource count: `257`
 
+## Decompiled source recovery
+
+- Tool: JADX `1.5.5` downloaded from the official `skylot/jadx` GitHub release archive.
+- Input for decompilation: application classes extracted from `BOOT-INF/classes` and repackaged as `recovery/decompile-work/app-classes.jar`.
+- Output committed at: `recovered-source/jadx/`.
+- Decompiled Java files: `302`.
+- Decompiled resource files committed: `0`.
+- Duplicate `.class` files copied by JADX into `resources/` are omitted because `app/reader-pro-3.2.14.jar` is the authoritative bytecode archive.
+- JADX reported error count: `19`. Output was still emitted; decompiled files should be treated as recovered audit/reconstruction material, not as a verified clean build source tree.
+
 ## Public references
 
-- `changshengyu/reader-dev`: `fa22f271849d45f93349ae1636223e27b16a4691` — 2026-05-31 10:07:19 +0800 Improve reader cache warm start
-- `hectorqin/reader-legado`: `d162b90398400b035da6645a2b3df6d6c81b9d72` — 2025-03-06 13:34:06 +0800 Update README.md
+- `changshengyu/reader-dev`: `fa22f271849d45f93349ae1636223e27b16a4691` — limited older source reference copied into `reference-source/`.
+- `hectorqin/reader-legado`: `d162b90398400b035da6645a2b3df6d6c81b9d72` — limited older source reference used for comparison.
 
 The public repositories are reference material only. When reference source and the 3.2.14 artifact differ, the artifact is treated as authoritative.
-
-## Tooling limitation
-
-The local shell did not have a Java runtime, javap, Maven, Gradle, Docker, or GitHub CLI available. The executable named `cfr` on PATH is a Python forensics tool, not the Java CFR decompiler. Therefore this pass preserves the full 3.2.14 binary artifact and recovered web/resources, and includes readable legacy source as reference. Full bytecode-to-source normalization remains a documented follow-up once a JDK/decompiler is available.
 
 ## Top package inventory
 
@@ -69,215 +75,177 @@ The local shell did not have a Java runtime, javap, Maven, Gradle, Docker, or Gi
 - `com.htmake.reader.ReaderApplication`: 1
 - `com.htmake.reader.ReaderApplication$Companion$vertx$2`: 1
 
-## Main top-level application classes
+## Main recovered Java files
 
-- `com.htmake.reader.ReaderApplication`
-- `com.htmake.reader.ReaderApplicationKt`
-- `com.htmake.reader.SpringEvent`
-- `com.htmake.reader.api.ReturnData`
-- `com.htmake.reader.api.YueduApi`
-- `com.htmake.reader.api.YueduApiKt`
-- `com.htmake.reader.api.controller.BaseController`
-- `com.htmake.reader.api.controller.BaseControllerKt`
-- `com.htmake.reader.api.controller.BookController`
-- `com.htmake.reader.api.controller.BookControllerKt`
-- `com.htmake.reader.api.controller.BookGroupController`
-- `com.htmake.reader.api.controller.BookGroupControllerKt`
-- `com.htmake.reader.api.controller.BookSourceController`
-- `com.htmake.reader.api.controller.BookSourceControllerKt`
-- `com.htmake.reader.api.controller.BookmarkController`
-- `com.htmake.reader.api.controller.BookmarkControllerKt`
-- `com.htmake.reader.api.controller.CURD`
-- `com.htmake.reader.api.controller.CURDKt`
-- `com.htmake.reader.api.controller.FileController`
-- `com.htmake.reader.api.controller.FileControllerKt`
-- `com.htmake.reader.api.controller.HttpTTSController`
-- `com.htmake.reader.api.controller.LicenseController`
-- `com.htmake.reader.api.controller.LicenseControllerKt`
-- `com.htmake.reader.api.controller.ReplaceRuleController`
-- `com.htmake.reader.api.controller.ReplaceRuleControllerKt`
-- `com.htmake.reader.api.controller.RssSourceController`
-- `com.htmake.reader.api.controller.RssSourceControllerKt`
-- `com.htmake.reader.api.controller.UserController`
-- `com.htmake.reader.api.controller.UserControllerKt`
-- `com.htmake.reader.api.controller.WebdavController`
-- `com.htmake.reader.api.controller.WebdavControllerKt`
-- `com.htmake.reader.config.AppConfig`
-- `com.htmake.reader.config.BookConfig`
-- `com.htmake.reader.db.DB`
-- `com.htmake.reader.db.JSONTable`
-- `com.htmake.reader.db.JSONTableKt`
-- `com.htmake.reader.db.SQLTable`
-- `com.htmake.reader.db.SQLTableKt`
-- `com.htmake.reader.entity.ActiveLicense`
-- `com.htmake.reader.entity.BasicError`
-- `com.htmake.reader.entity.License`
-- `com.htmake.reader.entity.MongoFile`
-- `com.htmake.reader.entity.Size`
-- `com.htmake.reader.entity.User`
-- `com.htmake.reader.init.ReaderAdapter`
-- `com.htmake.reader.init.appCtx`
-- `com.htmake.reader.lib.tts.constant.OutputFormat`
-- `com.htmake.reader.lib.tts.constant.TtsConstants`
-- `com.htmake.reader.lib.tts.constant.TtsStyleEnum`
-- `com.htmake.reader.lib.tts.constant.VoiceEnum`
-- `com.htmake.reader.lib.tts.exceptions.TtsException`
-- `com.htmake.reader.lib.tts.model.SSML`
-- `com.htmake.reader.lib.tts.model.SpeechConfig`
-- `com.htmake.reader.lib.tts.service.TTSService`
-- `com.htmake.reader.lib.tts.util.Tools`
-- `com.htmake.reader.utils.ExtKt`
-- `com.htmake.reader.utils.IntTypeAdapter`
-- `com.htmake.reader.utils.LRUCache`
-- `com.htmake.reader.utils.LongTypeAdapter`
-- `com.htmake.reader.utils.MongoManager`
-- `com.htmake.reader.utils.RemoteWebview`
-- `com.htmake.reader.utils.SpringContextUtils`
-- `com.htmake.reader.utils.UserMutex`
-- `com.htmake.reader.utils.VertExtKt`
-- `com.htmake.reader.verticle.RestVerticle`
-- `com.htmake.reader.verticle.RestVerticleKt`
-- `io.legado.app.adapters.DefaultAdpater`
-- `io.legado.app.adapters.ReaderAdapterHelper`
-- `io.legado.app.adapters.ReaderAdapterInterface`
-- `io.legado.app.constant.Action`
-- `io.legado.app.constant.AppConst`
-- `io.legado.app.constant.AppPattern`
-- `io.legado.app.constant.BookType`
-- `io.legado.app.constant.DeepinkBookSource`
-- `io.legado.app.constant.PreferKey`
-- `io.legado.app.constant.RSSKeywords`
-- `io.legado.app.constant.Status`
-- `io.legado.app.data.entities.BaseBook`
-- `io.legado.app.data.entities.BaseSource`
-- `io.legado.app.data.entities.Book`
-- `io.legado.app.data.entities.BookChapter`
-- `io.legado.app.data.entities.BookGroup`
-- `io.legado.app.data.entities.BookKt`
-- `io.legado.app.data.entities.BookSource`
-- `io.legado.app.data.entities.Bookmark`
-- `io.legado.app.data.entities.Cache`
-- `io.legado.app.data.entities.Cookie`
-- `io.legado.app.data.entities.HttpTTS`
-- `io.legado.app.data.entities.ReplaceRule`
-- `io.legado.app.data.entities.RssArticle`
-- `io.legado.app.data.entities.RssSource`
-- `io.legado.app.data.entities.SearchBook`
-- `io.legado.app.data.entities.SearchKeyword`
-- `io.legado.app.data.entities.SearchResult`
-- `io.legado.app.data.entities.TxtTocRule`
-- `io.legado.app.data.entities.rule.BookInfoRule`
-- `io.legado.app.data.entities.rule.BookListRule`
-- `io.legado.app.data.entities.rule.ContentRule`
-- `io.legado.app.data.entities.rule.ExploreRule`
-- `io.legado.app.data.entities.rule.SearchRule`
-- `io.legado.app.data.entities.rule.TocRule`
-- `io.legado.app.exception.ConcurrentException`
-- `io.legado.app.exception.ContentEmptyException`
-- `io.legado.app.exception.NoStackTraceException`
-- `io.legado.app.exception.RegexTimeoutException`
-- `io.legado.app.exception.TocEmptyException`
-- `io.legado.app.help.BookHelp`
-- `io.legado.app.help.BytesEncodingDetect`
-- `io.legado.app.help.CacheManager`
-- `io.legado.app.help.DefaultData`
-- `io.legado.app.help.Encoding`
-- `io.legado.app.help.EncodingDetectHelp`
-- `io.legado.app.help.JsExtensions`
-- `io.legado.app.help.SourceAnalyzer`
-- `io.legado.app.help.coroutine.CompositeCoroutine`
-- `io.legado.app.help.coroutine.Coroutine`
-- `io.legado.app.help.coroutine.CoroutineContainer`
-- `io.legado.app.help.http.ByteConverter`
-- `io.legado.app.help.http.CookieStore`
-- `io.legado.app.help.http.CoroutinesCallAdapterFactory`
-- `io.legado.app.help.http.EncodeConverter`
-- `io.legado.app.help.http.HttpHelperKt`
-- `io.legado.app.help.http.OkHttpUtilsKt`
-- `io.legado.app.help.http.RequestMethod`
-- `io.legado.app.help.http.Res`
-- `io.legado.app.help.http.SSLHelper`
-- `io.legado.app.help.http.StrResponse`
-- `io.legado.app.help.http.api.CookieManager`
-- `io.legado.app.lib.icu4j.CharsetDetector`
-- `io.legado.app.lib.icu4j.CharsetMatch`
-- `io.legado.app.lib.icu4j.CharsetRecog_2022`
-- `io.legado.app.lib.icu4j.CharsetRecog_UTF8`
-- `io.legado.app.lib.icu4j.CharsetRecog_Unicode`
-- `io.legado.app.lib.icu4j.CharsetRecog_mbcs`
-- `io.legado.app.lib.icu4j.CharsetRecog_sbcs`
-- `io.legado.app.lib.icu4j.CharsetRecognizer`
-- `io.legado.app.model.Debug`
-- `io.legado.app.model.DebugKt`
-- `io.legado.app.model.DebugLog`
-- `io.legado.app.model.DebugLogKt`
-- `io.legado.app.model.Debugger`
-- `io.legado.app.model.DebuggerKt`
-- `io.legado.app.model.analyzeRule.AnalyzeByJSonPath`
-- `io.legado.app.model.analyzeRule.AnalyzeByJSoup`
-- `io.legado.app.model.analyzeRule.AnalyzeByRegex`
-- `io.legado.app.model.analyzeRule.AnalyzeByXPath`
-- `io.legado.app.model.analyzeRule.AnalyzeRule`
-- `io.legado.app.model.analyzeRule.AnalyzeRuleKt`
-- `io.legado.app.model.analyzeRule.AnalyzeUrl`
-- `io.legado.app.model.analyzeRule.QueryTTF`
-- `io.legado.app.model.analyzeRule.RuleAnalyzer`
-- `io.legado.app.model.analyzeRule.RuleData`
-- `io.legado.app.model.analyzeRule.RuleDataInterface`
-- `io.legado.app.model.localBook.CbzFile`
-- `io.legado.app.model.localBook.EpubFile`
-- `io.legado.app.model.localBook.EpubFileKt`
-- `io.legado.app.model.localBook.LocalBook`
-- `io.legado.app.model.localBook.PdfFile`
-- `io.legado.app.model.localBook.TextFile`
-- `io.legado.app.model.localBook.TextFileKt`
-- `io.legado.app.model.localBook.UmdFile`
-- `io.legado.app.model.rss.Rss`
-- `io.legado.app.model.rss.RssParserByRule`
-- `io.legado.app.model.rss.RssParserDefault`
-- `io.legado.app.model.webBook.BookChapterList`
-- `io.legado.app.model.webBook.BookContent`
-- `io.legado.app.model.webBook.BookInfo`
-- `io.legado.app.model.webBook.BookList`
-- `io.legado.app.model.webBook.WebBook`
-- `io.legado.app.model.webBook.WebBookKt`
-- `io.legado.app.utils.ACache`
-- `io.legado.app.utils.ACacheKt`
-- `io.legado.app.utils.AnkoHelpsKt`
-- `io.legado.app.utils.AttemptResult`
-- `io.legado.app.utils.Base64`
-- `io.legado.app.utils.EncoderUtils`
-- `io.legado.app.utils.EncodingDetect`
-- `io.legado.app.utils.FileExtensionsKt`
-- `io.legado.app.utils.FileUtils`
-- `io.legado.app.utils.GsonExtensionsKt`
-- `io.legado.app.utils.HtmlFormatter`
-- `io.legado.app.utils.IntJsonDeserializer`
-- `io.legado.app.utils.JsonExtensionsKt`
-- `io.legado.app.utils.JsoupExtensionsKt`
-- `io.legado.app.utils.LogUtilsKt`
-- `io.legado.app.utils.MD5Utils`
-- `io.legado.app.utils.MapDeserializerDoubleAsIntFix`
-- `io.legado.app.utils.NetworkUtils`
-- `io.legado.app.utils.ParameterizedTypeImpl`
-- `io.legado.app.utils.StringExtensionsKt`
-- `io.legado.app.utils.StringUtils`
-- `io.legado.app.utils.TextUtils`
-- `io.legado.app.utils.ThrowableExtensionsKt`
-- `io.legado.app.utils.UTF8BOMFighter`
-- `io.legado.app.utils.Utf8BomUtils`
-- `io.legado.app.utils.XmlUtils`
-- `io.legado.app.utils.ZipUtils`
-- `io.legado.app.utils.ZipUtilsKt`
+- `recovered-source/jadx/sources/com/htmake/reader/ReaderApplication.java`
+- `recovered-source/jadx/sources/com/htmake/reader/ReaderApplicationKt.java`
+- `recovered-source/jadx/sources/com/htmake/reader/SpringEvent.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/ReturnData.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/YueduApi.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/YueduApiKt.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/BaseController.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/BaseControllerKt.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/BookController$cacheBookOnServer$$inlined$CoroutineExceptionHandler$1.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/BookController$getBookCover$$inlined$CoroutineExceptionHandler$1.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/BookController$textToSpeech$$inlined$CoroutineExceptionHandler$1.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/BookController.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/BookControllerKt.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/BookGroupController.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/BookGroupControllerKt.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/BookSourceController.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/BookSourceControllerKt.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/BookmarkController.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/BookmarkControllerKt.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/CURD.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/CURDKt.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/FileController.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/FileControllerKt.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/HttpTTSController.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/LicenseController$checkLicense$$inlined$CoroutineExceptionHandler$1.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/LicenseController$importLicense$$inlined$CoroutineExceptionHandler$1.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/LicenseController.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/LicenseControllerKt.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/ReplaceRuleController.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/ReplaceRuleControllerKt.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/RssSourceController.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/RssSourceControllerKt.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/UserController.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/UserControllerKt.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/WebdavController$1$10.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/WebdavController$1$2.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/WebdavController$1$3.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/WebdavController$1$4.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/WebdavController$1$5.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/WebdavController$1$6.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/WebdavController$1$7.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/WebdavController$1$8.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/WebdavController$1$9.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/WebdavController.java`
+- `recovered-source/jadx/sources/com/htmake/reader/api/controller/WebdavControllerKt.java`
+- `recovered-source/jadx/sources/com/htmake/reader/config/AppConfig.java`
+- `recovered-source/jadx/sources/com/htmake/reader/config/BookConfig.java`
+- `recovered-source/jadx/sources/com/htmake/reader/db/DB.java`
+- `recovered-source/jadx/sources/com/htmake/reader/db/JSONTable.java`
+- `recovered-source/jadx/sources/com/htmake/reader/db/JSONTableKt.java`
+- `recovered-source/jadx/sources/com/htmake/reader/db/SQLTable.java`
+- `recovered-source/jadx/sources/com/htmake/reader/db/SQLTableKt.java`
+- `recovered-source/jadx/sources/com/htmake/reader/entity/ActiveLicense.java`
+- `recovered-source/jadx/sources/com/htmake/reader/entity/BasicError.java`
+- `recovered-source/jadx/sources/com/htmake/reader/entity/License.java`
+- `recovered-source/jadx/sources/com/htmake/reader/entity/MongoFile.java`
+- `recovered-source/jadx/sources/com/htmake/reader/entity/Size.java`
+- `recovered-source/jadx/sources/com/htmake/reader/entity/User.java`
+- `recovered-source/jadx/sources/com/htmake/reader/init/ReaderAdapter.java`
+- `recovered-source/jadx/sources/com/htmake/reader/init/appCtx.java`
+- `recovered-source/jadx/sources/com/htmake/reader/lib/tts/constant/OutputFormat.java`
+- `recovered-source/jadx/sources/com/htmake/reader/lib/tts/constant/TtsConstants.java`
+- `recovered-source/jadx/sources/com/htmake/reader/lib/tts/constant/TtsStyleEnum.java`
+- `recovered-source/jadx/sources/com/htmake/reader/lib/tts/constant/VoiceEnum.java`
+- `recovered-source/jadx/sources/com/htmake/reader/lib/tts/exceptions/TtsException.java`
+- `recovered-source/jadx/sources/com/htmake/reader/lib/tts/model/SSML.java`
+- `recovered-source/jadx/sources/com/htmake/reader/lib/tts/model/SpeechConfig.java`
+- `recovered-source/jadx/sources/com/htmake/reader/lib/tts/service/TTSService.java`
+- `recovered-source/jadx/sources/com/htmake/reader/lib/tts/util/Tools.java`
+- `recovered-source/jadx/sources/com/htmake/reader/utils/ExtKt.java`
+- `recovered-source/jadx/sources/com/htmake/reader/utils/IntTypeAdapter.java`
+- `recovered-source/jadx/sources/com/htmake/reader/utils/LRUCache.java`
+- `recovered-source/jadx/sources/com/htmake/reader/utils/LongTypeAdapter.java`
+- `recovered-source/jadx/sources/com/htmake/reader/utils/MongoManager.java`
+- `recovered-source/jadx/sources/com/htmake/reader/utils/RemoteWebview.java`
+- `recovered-source/jadx/sources/com/htmake/reader/utils/SpringContextUtils.java`
+- `recovered-source/jadx/sources/com/htmake/reader/utils/UserMutex.java`
+- `recovered-source/jadx/sources/com/htmake/reader/utils/VertExtKt.java`
+- `recovered-source/jadx/sources/com/htmake/reader/verticle/RestVerticle$coroutineHandler$1$2.java`
+- `recovered-source/jadx/sources/com/htmake/reader/verticle/RestVerticle$coroutineHandlerWithoutRes$1$2.java`
+- `recovered-source/jadx/sources/com/htmake/reader/verticle/RestVerticle.java`
+- `recovered-source/jadx/sources/com/htmake/reader/verticle/RestVerticleKt.java`
+- `recovered-source/jadx/sources/io/legado/app/adapters/DefaultAdpater.java`
+- `recovered-source/jadx/sources/io/legado/app/adapters/ReaderAdapterHelper.java`
+- `recovered-source/jadx/sources/io/legado/app/adapters/ReaderAdapterInterface.java`
+- `recovered-source/jadx/sources/io/legado/app/constant/Action.java`
+- `recovered-source/jadx/sources/io/legado/app/constant/AppConst.java`
+- `recovered-source/jadx/sources/io/legado/app/constant/AppPattern.java`
+- `recovered-source/jadx/sources/io/legado/app/constant/BookType.java`
+- `recovered-source/jadx/sources/io/legado/app/constant/DeepinkBookSource.java`
+- `recovered-source/jadx/sources/io/legado/app/constant/PreferKey.java`
+- `recovered-source/jadx/sources/io/legado/app/constant/RSSKeywords.java`
+- `recovered-source/jadx/sources/io/legado/app/constant/Status.java`
+- `recovered-source/jadx/sources/io/legado/app/data/entities/BaseBook.java`
+- `recovered-source/jadx/sources/io/legado/app/data/entities/BaseSource.java`
+- `recovered-source/jadx/sources/io/legado/app/data/entities/Book.java`
+- `recovered-source/jadx/sources/io/legado/app/data/entities/BookChapter.java`
+- `recovered-source/jadx/sources/io/legado/app/data/entities/BookGroup.java`
+- `recovered-source/jadx/sources/io/legado/app/data/entities/BookKt.java`
+- `recovered-source/jadx/sources/io/legado/app/data/entities/BookSource.java`
+- `recovered-source/jadx/sources/io/legado/app/data/entities/Bookmark.java`
+- `recovered-source/jadx/sources/io/legado/app/data/entities/Cache.java`
+- `recovered-source/jadx/sources/io/legado/app/data/entities/Cookie.java`
+- `recovered-source/jadx/sources/io/legado/app/data/entities/HttpTTS.java`
+- `recovered-source/jadx/sources/io/legado/app/data/entities/ReplaceRule.java`
+- `recovered-source/jadx/sources/io/legado/app/data/entities/RssArticle.java`
+- `recovered-source/jadx/sources/io/legado/app/data/entities/RssSource.java`
+- `recovered-source/jadx/sources/io/legado/app/data/entities/SearchBook.java`
+- `recovered-source/jadx/sources/io/legado/app/data/entities/SearchKeyword.java`
+- `recovered-source/jadx/sources/io/legado/app/data/entities/SearchResult.java`
+- `recovered-source/jadx/sources/io/legado/app/data/entities/TxtTocRule.java`
+- `recovered-source/jadx/sources/io/legado/app/data/entities/rule/BookInfoRule.java`
+- `recovered-source/jadx/sources/io/legado/app/data/entities/rule/BookListRule.java`
+- `recovered-source/jadx/sources/io/legado/app/data/entities/rule/ContentRule.java`
+- `recovered-source/jadx/sources/io/legado/app/data/entities/rule/ExploreRule.java`
+- `recovered-source/jadx/sources/io/legado/app/data/entities/rule/SearchRule.java`
+- `recovered-source/jadx/sources/io/legado/app/data/entities/rule/TocRule.java`
+- `recovered-source/jadx/sources/io/legado/app/exception/ConcurrentException.java`
+- `recovered-source/jadx/sources/io/legado/app/exception/ContentEmptyException.java`
+- `recovered-source/jadx/sources/io/legado/app/exception/NoStackTraceException.java`
+- `recovered-source/jadx/sources/io/legado/app/exception/RegexTimeoutException.java`
+- `recovered-source/jadx/sources/io/legado/app/exception/TocEmptyException.java`
+- `recovered-source/jadx/sources/io/legado/app/help/BookHelp$saveImages$2$1$req$1.java`
+- `recovered-source/jadx/sources/io/legado/app/help/BookHelp.java`
+- `recovered-source/jadx/sources/io/legado/app/help/BytesEncodingDetect.java`
+- `recovered-source/jadx/sources/io/legado/app/help/CacheManager.java`
+- `recovered-source/jadx/sources/io/legado/app/help/DefaultData.java`
+- `recovered-source/jadx/sources/io/legado/app/help/Encoding.java`
+- `recovered-source/jadx/sources/io/legado/app/help/EncodingDetectHelp.java`
+- `recovered-source/jadx/sources/io/legado/app/help/JsExtensions$ajaxAll$1$asyncArray$1$1.java`
+- `recovered-source/jadx/sources/io/legado/app/help/JsExtensions$getZipByteArrayContent$bytes$1.java`
+- `recovered-source/jadx/sources/io/legado/app/help/JsExtensions$queryTTF$font$1.java`
+- `recovered-source/jadx/sources/io/legado/app/help/JsExtensions.java`
+- `recovered-source/jadx/sources/io/legado/app/help/SourceAnalyzer.java`
+- `recovered-source/jadx/sources/io/legado/app/help/coroutine/CompositeCoroutine.java`
+- `recovered-source/jadx/sources/io/legado/app/help/coroutine/Coroutine$cancel$1$1.java`
+- `recovered-source/jadx/sources/io/legado/app/help/coroutine/Coroutine.java`
+- `recovered-source/jadx/sources/io/legado/app/help/coroutine/CoroutineContainer.java`
+- `recovered-source/jadx/sources/io/legado/app/help/http/ByteConverter.java`
+- `recovered-source/jadx/sources/io/legado/app/help/http/CookieStore.java`
+- `recovered-source/jadx/sources/io/legado/app/help/http/CoroutinesCallAdapterFactory.java`
+- `recovered-source/jadx/sources/io/legado/app/help/http/EncodeConverter.java`
+- `recovered-source/jadx/sources/io/legado/app/help/http/HttpHelperKt.java`
+- `recovered-source/jadx/sources/io/legado/app/help/http/OkHttpUtilsKt.java`
+- `recovered-source/jadx/sources/io/legado/app/help/http/RequestMethod.java`
+- `recovered-source/jadx/sources/io/legado/app/help/http/Res.java`
+- `recovered-source/jadx/sources/io/legado/app/help/http/SSLHelper.java`
+- `recovered-source/jadx/sources/io/legado/app/help/http/StrResponse.java`
+- `recovered-source/jadx/sources/io/legado/app/help/http/api/CookieManager.java`
+- `recovered-source/jadx/sources/io/legado/app/lib/icu4j/CharsetDetector.java`
+- `recovered-source/jadx/sources/io/legado/app/lib/icu4j/CharsetMatch.java`
+- `recovered-source/jadx/sources/io/legado/app/lib/icu4j/CharsetRecog_2022.java`
+- `recovered-source/jadx/sources/io/legado/app/lib/icu4j/CharsetRecog_UTF8.java`
+- `recovered-source/jadx/sources/io/legado/app/lib/icu4j/CharsetRecog_Unicode.java`
+- `recovered-source/jadx/sources/io/legado/app/lib/icu4j/CharsetRecog_mbcs.java`
+- `recovered-source/jadx/sources/io/legado/app/lib/icu4j/CharsetRecog_sbcs.java`
+- `recovered-source/jadx/sources/io/legado/app/lib/icu4j/CharsetRecognizer.java`
+- `recovered-source/jadx/sources/io/legado/app/model/Debug.java`
+- `recovered-source/jadx/sources/io/legado/app/model/DebugKt.java`
+- `recovered-source/jadx/sources/io/legado/app/model/DebugLog.java`
 
 ## Manifest
 
 ```text
-Manifest-Version: 1.0
-Main-Class: org.springframework.boot.loader.JarLauncher
-Start-Class: com.htmake.reader.ReaderApplicationKt
-Spring-Boot-Version: 2.1.6.RELEASE
-Spring-Boot-Classes: BOOT-INF/classes/
+Manifest-Version: 1.0
+Main-Class: org.springframework.boot.loader.JarLauncher
+Start-Class: com.htmake.reader.ReaderApplicationKt
+Spring-Boot-Version: 2.1.6.RELEASE
+Spring-Boot-Classes: BOOT-INF/classes/
 Spring-Boot-Lib: BOOT-INF/lib/
 ```
 

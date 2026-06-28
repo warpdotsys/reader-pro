@@ -1,0 +1,142 @@
+package me.ag2s.epublib.epub;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.util.zip.CRC32;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+import me.ag2s.epublib.domain.EpubBook;
+import me.ag2s.epublib.domain.MediaTypes;
+import me.ag2s.epublib.domain.Resource;
+import me.ag2s.epublib.util.IOUtil;
+import org.xmlpull.v1.XmlSerializer;
+
+/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/epub/EpubWriter.class */
+public class EpubWriter {
+    private static final String TAG = EpubWriter.class.getName();
+    static final String EMPTY_NAMESPACE_PREFIX = "";
+    private BookProcessor bookProcessor;
+
+    public EpubWriter() {
+        this(BookProcessor.IDENTITY_BOOKPROCESSOR);
+    }
+
+    public EpubWriter(BookProcessor bookProcessor) {
+        this.bookProcessor = bookProcessor;
+    }
+
+    public void write(EpubBook book, OutputStream out) throws IOException {
+        EpubBook book2 = processBook(book);
+        ZipOutputStream resultStream = new ZipOutputStream(out);
+        writeMimeType(resultStream);
+        writeContainer(resultStream);
+        initTOCResource(book2);
+        writeResources(book2, resultStream);
+        writePackageDocument(book2, resultStream);
+        resultStream.close();
+    }
+
+    private EpubBook processBook(EpubBook book) {
+        if (this.bookProcessor != null) {
+            book = this.bookProcessor.processBook(book);
+        }
+        return book;
+    }
+
+    private void initTOCResource(EpubBook book) {
+        Resource tocResource;
+        try {
+            if (book.isEpub3()) {
+                tocResource = NCXDocumentV3.createNCXResource(book);
+            } else {
+                tocResource = NCXDocumentV2.createNCXResource(book);
+            }
+            Resource currentTocResource = book.getSpine().getTocResource();
+            if (currentTocResource != null) {
+                book.getResources().remove(currentTocResource.getHref());
+            }
+            book.getSpine().setTocResource(tocResource);
+            book.getResources().add(tocResource);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void writeResources(EpubBook book, ZipOutputStream resultStream) {
+        for (Resource resource : book.getResources().getAll()) {
+            writeResource(resource, resultStream);
+        }
+    }
+
+    private void writeResource(Resource resource, ZipOutputStream resultStream) {
+        if (resource == null) {
+            return;
+        }
+        try {
+            resultStream.putNextEntry(new ZipEntry("OEBPS/" + resource.getHref()));
+            InputStream inputStream = resource.getInputStream();
+            IOUtil.copy(inputStream, resultStream);
+            inputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void writePackageDocument(EpubBook book, ZipOutputStream resultStream) throws IOException {
+        resultStream.putNextEntry(new ZipEntry("OEBPS/content.opf"));
+        XmlSerializer xmlSerializer = EpubProcessorSupport.createXmlSerializer(resultStream);
+        PackageDocumentWriter.write(this, xmlSerializer, book);
+        xmlSerializer.flush();
+    }
+
+    private void writeContainer(ZipOutputStream resultStream) throws IOException {
+        resultStream.putNextEntry(new ZipEntry("META-INF/container.xml"));
+        Writer out = new OutputStreamWriter(resultStream);
+        out.write("<?xml version=\"1.0\"?>\n");
+        out.write("<container version=\"1.0\" xmlns=\"urn:oasis:names:tc:opendocument:xmlns:container\">\n");
+        out.write("\t<rootfiles>\n");
+        out.write("\t\t<rootfile full-path=\"OEBPS/content.opf\" media-type=\"application/oebps-package+xml\"/>\n");
+        out.write("\t</rootfiles>\n");
+        out.write("</container>");
+        out.flush();
+    }
+
+    private void writeMimeType(ZipOutputStream resultStream) throws IOException {
+        ZipEntry mimetypeZipEntry = new ZipEntry("mimetype");
+        mimetypeZipEntry.setMethod(0);
+        byte[] mimetypeBytes = MediaTypes.EPUB.getName().getBytes();
+        mimetypeZipEntry.setSize(mimetypeBytes.length);
+        mimetypeZipEntry.setCrc(calculateCrc(mimetypeBytes));
+        resultStream.putNextEntry(mimetypeZipEntry);
+        resultStream.write(mimetypeBytes);
+    }
+
+    private long calculateCrc(byte[] data) {
+        CRC32 crc = new CRC32();
+        crc.update(data);
+        return crc.getValue();
+    }
+
+    String getNcxId() {
+        return "ncx";
+    }
+
+    String getNcxHref() {
+        return NCXDocumentV2.DEFAULT_NCX_HREF;
+    }
+
+    String getNcxMediaType() {
+        return MediaTypes.NCX.getName();
+    }
+
+    public BookProcessor getBookProcessor() {
+        return this.bookProcessor;
+    }
+
+    public void setBookProcessor(BookProcessor bookProcessor) {
+        this.bookProcessor = bookProcessor;
+    }
+}

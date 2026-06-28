@@ -1,0 +1,9 @@
+package me.ag2s.epublib.domain;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/domain/LazyResourceProvider.class */
+public interface LazyResourceProvider {
+    InputStream getResourceStream(String href) throws IOException;
+}

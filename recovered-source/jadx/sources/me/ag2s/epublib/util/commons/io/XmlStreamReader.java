@@ -1,0 +1,344 @@
+package me.ag2s.epublib.util.commons.io;
+
+import io.legado.app.constant.RSSKeywords;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.text.MessageFormat;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import me.ag2s.epublib.epub.PackageDocumentBase;
+
+/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/util/commons/io/XmlStreamReader.class */
+public class XmlStreamReader extends Reader {
+    private static final int BUFFER_SIZE = 8192;
+    private static final String UTF_8 = "UTF-8";
+    private static final String US_ASCII = "US-ASCII";
+    private static final String UTF_16 = "UTF-16";
+    private static final String UTF_32 = "UTF-32";
+    private final Reader reader;
+    private final String encoding;
+    private final String defaultEncoding;
+    private static final String RAW_EX_1 = "Invalid encoding, BOM [{0}] XML guess [{1}] XML prolog [{2}] encoding mismatch";
+    private static final String RAW_EX_2 = "Invalid encoding, BOM [{0}] XML guess [{1}] XML prolog [{2}] unknown BOM";
+    private static final String HTTP_EX_1 = "Invalid encoding, CT-MIME [{0}] CT-Enc [{1}] BOM [{2}] XML guess [{3}] XML prolog [{4}], BOM must be NULL";
+    private static final String HTTP_EX_2 = "Invalid encoding, CT-MIME [{0}] CT-Enc [{1}] BOM [{2}] XML guess [{3}] XML prolog [{4}], encoding mismatch";
+    private static final String HTTP_EX_3 = "Invalid encoding, CT-MIME [{0}] CT-Enc [{1}] BOM [{2}] XML guess [{3}] XML prolog [{4}], Invalid MIME";
+    private static final ByteOrderMark[] BOMS = {ByteOrderMark.UTF_8, ByteOrderMark.UTF_16BE, ByteOrderMark.UTF_16LE, ByteOrderMark.UTF_32BE, ByteOrderMark.UTF_32LE};
+    private static final String UTF_16BE = "UTF-16BE";
+    private static final String UTF_16LE = "UTF-16LE";
+    private static final String UTF_32BE = "UTF-32BE";
+    private static final String UTF_32LE = "UTF-32LE";
+    private static final String EBCDIC = "CP1047";
+    private static final ByteOrderMark[] XML_GUESS_BYTES = {new ByteOrderMark("UTF-8", 60, 63, 120, 109), new ByteOrderMark(UTF_16BE, 0, 60, 0, 63), new ByteOrderMark(UTF_16LE, 60, 0, 63, 0), new ByteOrderMark(UTF_32BE, 0, 0, 0, 60, 0, 0, 0, 63, 0, 0, 0, 120, 0, 0, 0, 109), new ByteOrderMark(UTF_32LE, 60, 0, 0, 0, 63, 0, 0, 0, 120, 0, 0, 0, 109, 0, 0, 0), new ByteOrderMark(EBCDIC, 76, 111, 167, 148)};
+    private static final Pattern CHARSET_PATTERN = Pattern.compile("charset=[\"']?([.[^; \"']]*)[\"']?");
+    public static final Pattern ENCODING_PATTERN = Pattern.compile("<\\?xml.*encoding[\\s]*=[\\s]*((?:\".[^\"]*\")|(?:'.[^']*'))", 8);
+
+    public String getDefaultEncoding() {
+        return this.defaultEncoding;
+    }
+
+    public XmlStreamReader(final File file) throws IOException {
+        this(new FileInputStream((File) Objects.requireNonNull(file)));
+    }
+
+    public XmlStreamReader(final InputStream inputStream) throws IOException {
+        this(inputStream, true);
+    }
+
+    public XmlStreamReader(final InputStream inputStream, final boolean lenient) throws IOException {
+        this(inputStream, lenient, (String) null);
+    }
+
+    public XmlStreamReader(final InputStream inputStream, final boolean lenient, final String defaultEncoding) throws IOException {
+        Objects.requireNonNull(inputStream, "inputStream");
+        this.defaultEncoding = defaultEncoding;
+        BOMInputStream bom = new BOMInputStream(new BufferedInputStream(inputStream, 8192), false, BOMS);
+        BOMInputStream pis = new BOMInputStream(bom, true, XML_GUESS_BYTES);
+        this.encoding = doRawStream(bom, pis, lenient);
+        this.reader = new InputStreamReader(pis, this.encoding);
+    }
+
+    public XmlStreamReader(final URL url) throws IOException {
+        this(((URL) Objects.requireNonNull(url, RSSKeywords.RSS_ITEM_URL)).openConnection(), (String) null);
+    }
+
+    public XmlStreamReader(final URLConnection conn, final String defaultEncoding) throws IOException {
+        Objects.requireNonNull(conn, "conm");
+        this.defaultEncoding = defaultEncoding;
+        String contentType = conn.getContentType();
+        InputStream inputStream = conn.getInputStream();
+        BOMInputStream bom = new BOMInputStream(new BufferedInputStream(inputStream, 8192), false, BOMS);
+        BOMInputStream pis = new BOMInputStream(bom, true, XML_GUESS_BYTES);
+        if ((conn instanceof HttpURLConnection) || contentType != null) {
+            this.encoding = processHttpStream(bom, pis, contentType, true);
+        } else {
+            this.encoding = doRawStream(bom, pis, true);
+        }
+        this.reader = new InputStreamReader(pis, this.encoding);
+    }
+
+    public XmlStreamReader(final InputStream inputStream, final String httpContentType) throws IOException {
+        this(inputStream, httpContentType, true);
+    }
+
+    public XmlStreamReader(final InputStream inputStream, final String httpContentType, final boolean lenient, final String defaultEncoding) throws IOException {
+        Objects.requireNonNull(inputStream, "inputStream");
+        this.defaultEncoding = defaultEncoding;
+        BOMInputStream bom = new BOMInputStream(new BufferedInputStream(inputStream, 8192), false, BOMS);
+        BOMInputStream pis = new BOMInputStream(bom, true, XML_GUESS_BYTES);
+        this.encoding = processHttpStream(bom, pis, httpContentType, lenient);
+        this.reader = new InputStreamReader(pis, this.encoding);
+    }
+
+    public XmlStreamReader(final InputStream inputStream, final String httpContentType, final boolean lenient) throws IOException {
+        this(inputStream, httpContentType, lenient, null);
+    }
+
+    public String getEncoding() {
+        return this.encoding;
+    }
+
+    @Override // java.io.Reader
+    public int read(final char[] buf, final int offset, final int len) throws IOException {
+        return this.reader.read(buf, offset, len);
+    }
+
+    @Override // java.io.Reader, java.io.Closeable, java.lang.AutoCloseable
+    public void close() throws IOException {
+        this.reader.close();
+    }
+
+    private String doRawStream(final BOMInputStream bom, final BOMInputStream pis, final boolean lenient) throws IOException {
+        String bomEnc = bom.getBOMCharsetName();
+        String xmlGuessEnc = pis.getBOMCharsetName();
+        String xmlEnc = getXmlProlog(pis, xmlGuessEnc);
+        try {
+            return calculateRawEncoding(bomEnc, xmlGuessEnc, xmlEnc);
+        } catch (XmlStreamReaderException ex) {
+            if (lenient) {
+                return doLenientDetection(null, ex);
+            }
+            throw ex;
+        }
+    }
+
+    private String processHttpStream(final BOMInputStream bom, final BOMInputStream pis, final String httpContentType, final boolean lenient) throws IOException {
+        String bomEnc = bom.getBOMCharsetName();
+        String xmlGuessEnc = pis.getBOMCharsetName();
+        String xmlEnc = getXmlProlog(pis, xmlGuessEnc);
+        try {
+            return calculateHttpEncoding(httpContentType, bomEnc, xmlGuessEnc, xmlEnc, lenient);
+        } catch (XmlStreamReaderException ex) {
+            if (lenient) {
+                return doLenientDetection(httpContentType, ex);
+            }
+            throw ex;
+        }
+    }
+
+    private String doLenientDetection(String httpContentType, XmlStreamReaderException ex) throws IOException {
+        if (httpContentType != null && httpContentType.startsWith("text/html")) {
+            try {
+                return calculateHttpEncoding("text/xml" + httpContentType.substring("text/html".length()), ex.getBomEncoding(), ex.getXmlGuessEncoding(), ex.getXmlEncoding(), true);
+            } catch (XmlStreamReaderException ex2) {
+                ex = ex2;
+            }
+        }
+        String encoding = ex.getXmlEncoding();
+        if (encoding == null) {
+            encoding = ex.getContentTypeEncoding();
+        }
+        if (encoding == null) {
+            encoding = this.defaultEncoding == null ? "UTF-8" : this.defaultEncoding;
+        }
+        return encoding;
+    }
+
+    String calculateRawEncoding(final String bomEnc, final String xmlGuessEnc, final String xmlEnc) throws IOException {
+        if (bomEnc == null) {
+            if (xmlGuessEnc == null || xmlEnc == null) {
+                return this.defaultEncoding == null ? "UTF-8" : this.defaultEncoding;
+            }
+            if (xmlEnc.equals(UTF_16) && (xmlGuessEnc.equals(UTF_16BE) || xmlGuessEnc.equals(UTF_16LE))) {
+                return xmlGuessEnc;
+            }
+            return xmlEnc;
+        }
+        if (bomEnc.equals("UTF-8")) {
+            if (xmlGuessEnc != null && !xmlGuessEnc.equals("UTF-8")) {
+                String msg = MessageFormat.format(RAW_EX_1, bomEnc, xmlGuessEnc, xmlEnc);
+                throw new XmlStreamReaderException(msg, bomEnc, xmlGuessEnc, xmlEnc);
+            }
+            if (xmlEnc != null && !xmlEnc.equals("UTF-8")) {
+                String msg2 = MessageFormat.format(RAW_EX_1, bomEnc, xmlGuessEnc, xmlEnc);
+                throw new XmlStreamReaderException(msg2, bomEnc, xmlGuessEnc, xmlEnc);
+            }
+            return bomEnc;
+        }
+        if (bomEnc.equals(UTF_16BE) || bomEnc.equals(UTF_16LE)) {
+            if (xmlGuessEnc != null && !xmlGuessEnc.equals(bomEnc)) {
+                String msg3 = MessageFormat.format(RAW_EX_1, bomEnc, xmlGuessEnc, xmlEnc);
+                throw new XmlStreamReaderException(msg3, bomEnc, xmlGuessEnc, xmlEnc);
+            }
+            if (xmlEnc != null && !xmlEnc.equals(UTF_16) && !xmlEnc.equals(bomEnc)) {
+                String msg4 = MessageFormat.format(RAW_EX_1, bomEnc, xmlGuessEnc, xmlEnc);
+                throw new XmlStreamReaderException(msg4, bomEnc, xmlGuessEnc, xmlEnc);
+            }
+            return bomEnc;
+        }
+        if (bomEnc.equals(UTF_32BE) || bomEnc.equals(UTF_32LE)) {
+            if (xmlGuessEnc != null && !xmlGuessEnc.equals(bomEnc)) {
+                String msg5 = MessageFormat.format(RAW_EX_1, bomEnc, xmlGuessEnc, xmlEnc);
+                throw new XmlStreamReaderException(msg5, bomEnc, xmlGuessEnc, xmlEnc);
+            }
+            if (xmlEnc != null && !xmlEnc.equals(UTF_32) && !xmlEnc.equals(bomEnc)) {
+                String msg6 = MessageFormat.format(RAW_EX_1, bomEnc, xmlGuessEnc, xmlEnc);
+                throw new XmlStreamReaderException(msg6, bomEnc, xmlGuessEnc, xmlEnc);
+            }
+            return bomEnc;
+        }
+        String msg7 = MessageFormat.format(RAW_EX_2, bomEnc, xmlGuessEnc, xmlEnc);
+        throw new XmlStreamReaderException(msg7, bomEnc, xmlGuessEnc, xmlEnc);
+    }
+
+    String calculateHttpEncoding(final String httpContentType, final String bomEnc, final String xmlGuessEnc, final String xmlEnc, final boolean lenient) throws IOException {
+        if (lenient && xmlEnc != null) {
+            return xmlEnc;
+        }
+        String cTMime = getContentTypeMime(httpContentType);
+        String cTEnc = getContentTypeEncoding(httpContentType);
+        boolean appXml = isAppXml(cTMime);
+        boolean textXml = isTextXml(cTMime);
+        if (!appXml && !textXml) {
+            String msg = MessageFormat.format(HTTP_EX_3, cTMime, cTEnc, bomEnc, xmlGuessEnc, xmlEnc);
+            throw new XmlStreamReaderException(msg, cTMime, cTEnc, bomEnc, xmlGuessEnc, xmlEnc);
+        }
+        if (cTEnc == null) {
+            if (appXml) {
+                return calculateRawEncoding(bomEnc, xmlGuessEnc, xmlEnc);
+            }
+            return this.defaultEncoding == null ? US_ASCII : this.defaultEncoding;
+        }
+        if (cTEnc.equals(UTF_16BE) || cTEnc.equals(UTF_16LE)) {
+            if (bomEnc != null) {
+                String msg2 = MessageFormat.format(HTTP_EX_1, cTMime, cTEnc, bomEnc, xmlGuessEnc, xmlEnc);
+                throw new XmlStreamReaderException(msg2, cTMime, cTEnc, bomEnc, xmlGuessEnc, xmlEnc);
+            }
+            return cTEnc;
+        }
+        if (cTEnc.equals(UTF_16)) {
+            if (bomEnc != null && bomEnc.startsWith(UTF_16)) {
+                return bomEnc;
+            }
+            String msg3 = MessageFormat.format(HTTP_EX_2, cTMime, cTEnc, bomEnc, xmlGuessEnc, xmlEnc);
+            throw new XmlStreamReaderException(msg3, cTMime, cTEnc, bomEnc, xmlGuessEnc, xmlEnc);
+        }
+        if (cTEnc.equals(UTF_32BE) || cTEnc.equals(UTF_32LE)) {
+            if (bomEnc != null) {
+                String msg4 = MessageFormat.format(HTTP_EX_1, cTMime, cTEnc, bomEnc, xmlGuessEnc, xmlEnc);
+                throw new XmlStreamReaderException(msg4, cTMime, cTEnc, bomEnc, xmlGuessEnc, xmlEnc);
+            }
+            return cTEnc;
+        }
+        if (cTEnc.equals(UTF_32)) {
+            if (bomEnc != null && bomEnc.startsWith(UTF_32)) {
+                return bomEnc;
+            }
+            String msg5 = MessageFormat.format(HTTP_EX_2, cTMime, cTEnc, bomEnc, xmlGuessEnc, xmlEnc);
+            throw new XmlStreamReaderException(msg5, cTMime, cTEnc, bomEnc, xmlGuessEnc, xmlEnc);
+        }
+        return cTEnc;
+    }
+
+    static String getContentTypeMime(final String httpContentType) {
+        String mime;
+        String mime2 = null;
+        if (httpContentType != null) {
+            int i = httpContentType.indexOf(";");
+            if (i >= 0) {
+                mime = httpContentType.substring(0, i);
+            } else {
+                mime = httpContentType;
+            }
+            mime2 = mime.trim();
+        }
+        return mime2;
+    }
+
+    static String getContentTypeEncoding(final String httpContentType) {
+        int i;
+        String encoding = null;
+        if (httpContentType != null && (i = httpContentType.indexOf(";")) > -1) {
+            String postMime = httpContentType.substring(i + 1);
+            Matcher m = CHARSET_PATTERN.matcher(postMime);
+            String encoding2 = m.find() ? m.group(1) : null;
+            encoding = encoding2 != null ? encoding2.toUpperCase(Locale.ROOT) : null;
+        }
+        return encoding;
+    }
+
+    private static String getXmlProlog(final InputStream inputStream, final String guessedEnc) throws IOException {
+        String encoding = null;
+        if (guessedEnc != null) {
+            byte[] bytes = new byte[8192];
+            inputStream.mark(8192);
+            int offset = 0;
+            int max = 8192;
+            int c = inputStream.read(bytes, 0, 8192);
+            int firstGT = -1;
+            String xmlProlog = PackageDocumentBase.PREFIX_OPF;
+            while (c != -1 && firstGT == -1 && offset < 8192) {
+                offset += c;
+                max -= c;
+                c = inputStream.read(bytes, offset, max);
+                xmlProlog = new String(bytes, 0, offset, guessedEnc);
+                firstGT = xmlProlog.indexOf(62);
+            }
+            if (firstGT == -1) {
+                if (c == -1) {
+                    throw new IOException("Unexpected end of XML stream");
+                }
+                throw new IOException("XML prolog or ROOT element not found on first " + offset + " bytes");
+            }
+            int bytesRead = offset;
+            if (bytesRead > 0) {
+                inputStream.reset();
+                BufferedReader bReader = new BufferedReader(new StringReader(xmlProlog.substring(0, firstGT + 1)));
+                StringBuffer prolog = new StringBuffer();
+                while (true) {
+                    String line = bReader.readLine();
+                    if (line == null) {
+                        break;
+                    }
+                    prolog.append(line);
+                }
+                Matcher m = ENCODING_PATTERN.matcher(prolog);
+                if (m.find()) {
+                    String encoding2 = ((String) Objects.requireNonNull(m.group(1))).toUpperCase(Locale.ROOT);
+                    encoding = encoding2.substring(1, encoding2.length() - 1);
+                }
+            }
+        }
+        return encoding;
+    }
+
+    static boolean isAppXml(final String mime) {
+        return mime != null && (mime.equals("application/xml") || mime.equals("application/xml-dtd") || mime.equals("application/xml-external-parsed-entity") || (mime.startsWith("application/") && mime.endsWith("+xml")));
+    }
+
+    static boolean isTextXml(final String mime) {
+        return mime != null && (mime.equals("text/xml") || mime.equals("text/xml-external-parsed-entity") || (mime.startsWith("text/") && mime.endsWith("+xml")));
+    }
+}

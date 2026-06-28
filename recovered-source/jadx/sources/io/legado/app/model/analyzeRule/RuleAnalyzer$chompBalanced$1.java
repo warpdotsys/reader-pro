@@ -1,0 +1,22 @@
+package io.legado.app.model.analyzeRule;
+
+import kotlin.Metadata;
+import kotlin.jvm.functions.Function2;
+import kotlin.jvm.internal.FunctionReferenceImpl;
+
+/* JADX INFO: compiled from: RuleAnalyzer.kt */
+/* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/analyzeRule/RuleAnalyzer$chompBalanced$1.class */
+@Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
+/* synthetic */ class RuleAnalyzer$chompBalanced$1 extends FunctionReferenceImpl implements Function2<Character, Character, Boolean> {
+    RuleAnalyzer$chompBalanced$1(RuleAnalyzer ruleAnalyzer) {
+        super(2, ruleAnalyzer, RuleAnalyzer.class, "chompCodeBalanced", "chompCodeBalanced(CC)Z", 0);
+    }
+
+    public final boolean invoke(char p0, char p1) {
+        return ((RuleAnalyzer) this.receiver).chompCodeBalanced(p0, p1);
+    }
+
+    public /* bridge */ /* synthetic */ Object invoke(Object p1, Object p2) {
+        return Boolean.valueOf(invoke(((Character) p1).charValue(), ((Character) p2).charValue()));
+    }
+}
