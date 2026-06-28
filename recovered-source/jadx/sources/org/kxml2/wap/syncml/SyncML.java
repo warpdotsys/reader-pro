@@ -5,7 +5,7 @@ import me.ag2s.epublib.epub.PackageDocumentBase;
 import org.kxml2.wap.WbxmlParser;
 import org.kxml2.wap.WbxmlSerializer;
 
-/* JADX INFO: loaded from: app-classes.jar:org/kxml2/wap/syncml/SyncML.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:org/kxml2/wap/syncml/SyncML.class */
 public abstract class SyncML {
     public static final String[] TAG_TABLE_0 = {"Add", "Alert", "Archive", "Atomic", "Chal", "Cmd", "CmdID", "CmdRef", "Copy", "Cred", "Data", "Delete", "Exec", "Final", "Get", "Item", "Lang", "LocName", "LocURI", "Map", "MapItem", "Meta", "MsgID", "MsgRef", "NoResp", "NoResults", "Put", "Replace", "RespURI", "Results", "Search", "Sequence", "SessionID", "SftDel", "Source", "SourceRef", "Status", "Sync", "SyncBody", "SyncHdr", "SyncML", "Target", "TargetRef", "Reserved for future use", "VerDTD", "VerProto", "NumberOfChanged", "MoreData", "Field", "Filter", "Record", "FilterType", "SourceParent", "TargetParent", "Move", "Correlator"};
     public static final String[] TAG_TABLE_1 = {"Anchor", "EMI", "Format", "FreeID", "FreeMem", "Last", "Mark", "MaxMsgSize", "Mem", "MetInf", "Next", "NextNonce", "SharedMem", "Size", "Type", "Version", "MaxObjSize", "FieldLevel"};

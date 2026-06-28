@@ -6,7 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/domain/EpubBook.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/domain/EpubBook.class */
 public class EpubBook implements Serializable {
     private static final long serialVersionUID = 2068355170895770100L;
     private Resource opfResource;

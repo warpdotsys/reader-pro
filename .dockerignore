@@ -1,13 +1,6 @@
 .git
-reference-source
-recovered-assets
-reader-pro-work
-*.log
-*.tmp
-.DS_Store
-.idea
-.vscode
-.env
-.env.*
+.agents_tmp
+reference
 recovered-source
-recovery
+reconstructed-web
+*.log

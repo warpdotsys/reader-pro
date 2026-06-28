@@ -7,14 +7,14 @@ import java.util.UUID;
 import me.ag2s.epublib.epub.PackageDocumentBase;
 import me.ag2s.epublib.util.StringUtil;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/domain/Identifier.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/domain/Identifier.class */
 public class Identifier implements Serializable {
     private static final long serialVersionUID = 955949951416391810L;
     private boolean bookId;
     private String scheme;
     private String value;
 
-    /* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/domain/Identifier$Scheme.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/domain/Identifier$Scheme.class */
     public interface Scheme {
         public static final String UUID = "UUID";
         public static final String ISBN = "ISBN";

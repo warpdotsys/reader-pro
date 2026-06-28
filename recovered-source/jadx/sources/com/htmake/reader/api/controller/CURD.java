@@ -20,6 +20,7 @@ import kotlin.jvm.functions.Function2;
 import kotlin.jvm.functions.Function3;
 import kotlin.jvm.internal.FunctionReferenceImpl;
 import kotlin.jvm.internal.Intrinsics;
+import kotlin.jvm.internal.Lambda;
 import kotlin.jvm.internal.Ref;
 import me.ag2s.epublib.epub.PackageDocumentBase;
 import org.jetbrains.annotations.NotNull;
@@ -27,13 +28,13 @@ import org.jetbrains.annotations.Nullable;
 import org.kxml2.wap.Wbxml;
 
 /* JADX INFO: compiled from: CURD.kt */
-/* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/CURD.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/CURD.class */
 @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u0000T\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\u0000\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0004\n\u0002\u0010\u000b\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0002\b\u0005\n\u0002\u0010\u0011\n\u0002\u0010\u000e\n\u0002\b\u0004\n\u0002\u0018\u0002\n\u0002\b\u0004\n\u0002\u0010\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0006\bf\u0018\u0000*\u0004\b\u0000\u0010\u00012\u00020\u0002J%\u0010\u0003\u001a\u0004\u0018\u00010\u00042\u0006\u0010\u0005\u001a\u00028\u00002\f\u0010\u0006\u001a\b\u0012\u0004\u0012\u00028\u00000\u0007H\u0016¢\u0006\u0002\u0010\bJ%\u0010\t\u001a\u0004\u0018\u00010\u00042\u0006\u0010\u0005\u001a\u00028\u00002\f\u0010\u0006\u001a\b\u0012\u0004\u0012\u00028\u00000\u0007H\u0016¢\u0006\u0002\u0010\bJ%\u0010\n\u001a\u0004\u0018\u00010\u00042\u0006\u0010\u0005\u001a\u00028\u00002\f\u0010\u0006\u001a\b\u0012\u0004\u0012\u00028\u00000\u0007H\u0016¢\u0006\u0002\u0010\bJ\u0019\u0010\u000b\u001a\u00020\f2\u0006\u0010\r\u001a\u00020\u000eH¦@ø\u0001\u0000¢\u0006\u0002\u0010\u000fJ\u001d\u0010\u0010\u001a\u00020\f2\u0006\u0010\u0011\u001a\u00020\u00122\u0006\u0010\u0013\u001a\u00028\u0000H&¢\u0006\u0002\u0010\u0014J\u0015\u0010\u0015\u001a\u00028\u00002\u0006\u0010\u0011\u001a\u00020\u0012H\u0016¢\u0006\u0002\u0010\u0016J\u001b\u0010\u0017\u001a\b\u0012\u0004\u0012\u00028\u00000\u00182\u0006\u0010\u0011\u001a\u00020\u0019H\u0016¢\u0006\u0002\u0010\u001aJ\u0019\u0010\u001b\u001a\u00020\u00042\u0006\u0010\r\u001a\u00020\u000eH\u0096@ø\u0001\u0000¢\u0006\u0002\u0010\u000fJ\u0019\u0010\u001c\u001a\u00020\u00042\u0006\u0010\r\u001a\u00020\u000eH\u0096@ø\u0001\u0000¢\u0006\u0002\u0010\u000fJ\u000e\u0010\u001d\u001a\b\u0012\u0004\u0012\u00028\u00000\u001eH&J\b\u0010\u001f\u001a\u00020\u0019H&J\u0010\u0010 \u001a\u00020\u00192\u0006\u0010\r\u001a\u00020\u000eH&J\u0019\u0010!\u001a\u00020\u00042\u0006\u0010\r\u001a\u00020\u000eH\u0096@ø\u0001\u0000¢\u0006\u0002\u0010\u000fJ%\u0010\"\u001a\u00020#2\u0006\u0010\u0011\u001a\u00028\u00002\u0006\u0010\u0013\u001a\u00020\f2\u0006\u0010$\u001a\u00020%H\u0016¢\u0006\u0002\u0010&J\u0018\u0010'\u001a\u00020%2\u0006\u0010\u0011\u001a\u00020%2\u0006\u0010(\u001a\u00020\u0019H\u0016J\u0019\u0010)\u001a\u00020\u00042\u0006\u0010\r\u001a\u00020\u000eH\u0096@ø\u0001\u0000¢\u0006\u0002\u0010\u000fJ\u0019\u0010*\u001a\u00020\u00042\u0006\u0010\r\u001a\u00020\u000eH\u0096@ø\u0001\u0000¢\u0006\u0002\u0010\u000f\u0082\u0002\u0004\n\u0002\b\u0019¨\u0006+"}, d2 = {"Lcom/htmake/reader/api/controller/CURD;", "T", PackageDocumentBase.PREFIX_OPF, "beforeAdd", "Lcom/htmake/reader/api/ReturnData;", "val1", "db", "Lcom/htmake/reader/db/DB;", "(Ljava/lang/Object;Lcom/htmake/reader/db/DB;)Lcom/htmake/reader/api/ReturnData;", "beforeDelete", "beforeSave", "checkUserAuth", PackageDocumentBase.PREFIX_OPF, "context", "Lio/vertx/ext/web/RoutingContext;", "(Lio/vertx/ext/web/RoutingContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "checker", "var1", "Lio/vertx/core/json/JsonObject;", "var2", "(Lio/vertx/core/json/JsonObject;Ljava/lang/Object;)Z", "convertToEntity", "(Lio/vertx/core/json/JsonObject;)Ljava/lang/Object;", "convertToEntityList", PackageDocumentBase.PREFIX_OPF, PackageDocumentBase.PREFIX_OPF, "(Ljava/lang/String;)[Ljava/lang/Object;", "delete", "deleteMulti", "getEntityClass", "Ljava/lang/Class;", "getTableName", "getUserNS", "list", "onCheckEnd", PackageDocumentBase.PREFIX_OPF, "var3", "Lio/vertx/core/json/JsonArray;", "(Ljava/lang/Object;ZLio/vertx/core/json/JsonArray;)V", "onList", "userNameSpace", "save", "saveMulti", "reader-pro"})
 public interface CURD<T> {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.CURD$delete$1, reason: invalid class name */
     /* JADX INFO: compiled from: CURD.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/CURD$delete$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/CURD$delete$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "CURD.kt", l = {121}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "delete", c = "com.htmake.reader.api.controller.CURD$DefaultImpls")
     static final class AnonymousClass1<T> extends ContinuationImpl {
@@ -57,7 +58,7 @@ public interface CURD<T> {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.CURD$deleteMulti$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: CURD.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/CURD$deleteMulti$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/CURD$deleteMulti$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "CURD.kt", l = {143}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "deleteMulti", c = "com.htmake.reader.api.controller.CURD$DefaultImpls")
     static final class C01051<T> extends ContinuationImpl {
@@ -81,7 +82,7 @@ public interface CURD<T> {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.CURD$list$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: CURD.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/CURD$list$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/CURD$list$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "CURD.kt", l = {57}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "list", c = "com.htmake.reader.api.controller.CURD$DefaultImpls")
     static final class C01071<T> extends ContinuationImpl {
@@ -105,7 +106,7 @@ public interface CURD<T> {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.CURD$save$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: CURD.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/CURD$save$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/CURD$save$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "CURD.kt", l = {Wbxml.LITERAL_C}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "save", c = "com.htmake.reader.api.controller.CURD$DefaultImpls")
     static final class C01081<T> extends ContinuationImpl {
@@ -129,7 +130,7 @@ public interface CURD<T> {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.CURD$saveMulti$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: CURD.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/CURD$saveMulti$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/CURD$saveMulti$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "CURD.kt", l = {92}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "saveMulti", c = "com.htmake.reader.api.controller.CURD$DefaultImpls")
     static final class C01101<T> extends ContinuationImpl {
@@ -200,7 +201,7 @@ public interface CURD<T> {
     Object deleteMulti(@NotNull RoutingContext context, @NotNull Continuation<? super ReturnData> $completion);
 
     /* JADX INFO: compiled from: CURD.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/CURD$DefaultImpls.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/CURD$DefaultImpls.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     public static final class DefaultImpls {
         public static <T> T convertToEntity(@NotNull CURD<T> curd, @NotNull JsonObject jsonObject) {
@@ -358,22 +359,7 @@ public interface CURD<T> {
             if (result != null) {
                 return result;
             }
-            final CURD<T> curd2 = curd;
-            dbTable$default.save(tConvertToEntity, new C01092(curd), new Function2<JsonObject, T, Boolean>() { // from class: com.htmake.reader.api.controller.CURD.save.3
-                /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-                {
-                    super(2);
-                }
-
-                public /* bridge */ /* synthetic */ Object invoke(Object p1, Object p2) {
-                    return Boolean.valueOf(invoke((JsonObject) p1, p2));
-                }
-
-                public final boolean invoke(@NotNull JsonObject jsonObject, T value) {
-                    Intrinsics.checkNotNullParameter(jsonObject, "jsonObject");
-                    return curd2.checker(jsonObject, value);
-                }
-            });
+            dbTable$default.save(tConvertToEntity, new C01092(curd), new AnonymousClass3(curd));
             return ReturnData.setData$default(returnData, PackageDocumentBase.PREFIX_OPF, null, 2, null);
         }
 
@@ -440,22 +426,7 @@ public interface CURD<T> {
                     return result;
                 }
             }
-            final CURD<T> curd2 = curd;
-            dbTable$default.saveMulti(tArrConvertToEntityList, new C01112(curd), new Function2<JsonObject, T, Boolean>() { // from class: com.htmake.reader.api.controller.CURD.saveMulti.3
-                /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-                {
-                    super(2);
-                }
-
-                public /* bridge */ /* synthetic */ Object invoke(Object p1, Object p2) {
-                    return Boolean.valueOf(invoke((JsonObject) p1, p2));
-                }
-
-                public final boolean invoke(@NotNull JsonObject jsonObject, T value) {
-                    Intrinsics.checkNotNullParameter(jsonObject, "jsonObject");
-                    return curd2.checker(jsonObject, value);
-                }
-            });
+            dbTable$default.saveMulti(tArrConvertToEntityList, new C01112(curd), new C01123(curd));
             return ReturnData.setData$default(returnData, PackageDocumentBase.PREFIX_OPF, null, 2, null);
         }
 
@@ -506,29 +477,14 @@ public interface CURD<T> {
             }
             JsonObject bodyAsJson = context.getBodyAsJson();
             Intrinsics.checkNotNullExpressionValue(bodyAsJson, "context.bodyAsJson");
-            final T tConvertToEntity = curd.convertToEntity(bodyAsJson);
+            T tConvertToEntity = curd.convertToEntity(bodyAsJson);
             String userNameSpace = curd.getUserNS(context);
             DB<T> dbTable$default = DB.Companion.table$default(DB.INSTANCE, userNameSpace, curd.getTableName(), null, 4, null);
             ReturnData result = curd.beforeDelete(tConvertToEntity, dbTable$default);
             if (result != null) {
                 return result;
             }
-            final CURD<T> curd2 = curd;
-            dbTable$default.delete(new Function1<JsonObject, Boolean>() { // from class: com.htmake.reader.api.controller.CURD.delete.2
-                /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-                {
-                    super(1);
-                }
-
-                public /* bridge */ /* synthetic */ Object invoke(Object p1) {
-                    return Boolean.valueOf(invoke((JsonObject) p1));
-                }
-
-                public final boolean invoke(@NotNull JsonObject it) {
-                    Intrinsics.checkNotNullParameter(it, "it");
-                    return curd2.checker(it, tConvertToEntity);
-                }
-            });
+            dbTable$default.delete(new AnonymousClass2(curd, tConvertToEntity));
             return ReturnData.setData$default(returnData, PackageDocumentBase.PREFIX_OPF, null, 2, null);
         }
 
@@ -578,7 +534,7 @@ public interface CURD<T> {
             if (!((Boolean) objCheckUserAuth).booleanValue()) {
                 return ReturnData.setData$default(returnData, "NEED_LOGIN", null, 2, null).setErrorMsg("请登录后使用");
             }
-            final Ref.ObjectRef itemList = new Ref.ObjectRef();
+            Ref.ObjectRef itemList = new Ref.ObjectRef();
             String bodyAsString = context.getBodyAsString();
             Intrinsics.checkNotNullExpressionValue(bodyAsString, "context.bodyAsString");
             itemList.element = curd.convertToEntityList(bodyAsString);
@@ -598,41 +554,14 @@ public interface CURD<T> {
                     return result;
                 }
             }
-            final CURD<T> curd2 = curd;
-            db.delete(new Function1<JsonObject, Boolean>() { // from class: com.htmake.reader.api.controller.CURD.deleteMulti.2
-                /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-                {
-                    super(1);
-                }
-
-                public /* bridge */ /* synthetic */ Object invoke(Object p1) {
-                    return Boolean.valueOf(invoke((JsonObject) p1));
-                }
-
-                public final boolean invoke(@NotNull JsonObject jsonObject) {
-                    Intrinsics.checkNotNullParameter(jsonObject, "it");
-                    int i2 = 0;
-                    int length2 = ((Object[]) itemList.element).length;
-                    if (0 < length2) {
-                        do {
-                            int i3 = i2;
-                            i2++;
-                            if (curd2.checker(jsonObject, (T) ((Object[]) itemList.element)[i3])) {
-                                return true;
-                            }
-                        } while (i2 < length2);
-                        return false;
-                    }
-                    return false;
-                }
-            });
+            db.delete(new C01062(itemList, curd));
             return ReturnData.setData$default(returnData, PackageDocumentBase.PREFIX_OPF, null, 2, null);
         }
     }
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.CURD$save$2, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: CURD.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/CURD$save$2.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/CURD$save$2.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     /* synthetic */ class C01092 extends FunctionReferenceImpl implements Function3<T, Boolean, JsonArray, Unit> {
         C01092(CURD<T> curd) {
@@ -650,9 +579,32 @@ public interface CURD<T> {
         }
     }
 
+    /* JADX INFO: renamed from: com.htmake.reader.api.controller.CURD$save$3, reason: invalid class name */
+    /* JADX INFO: compiled from: CURD.kt */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/CURD$save$3.class */
+    @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\u0010\n\u0000\n\u0002\u0010\u000b\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0000\u0010\u0000\u001a\u00020\u0001\"\u0004\b\u0000\u0010\u00022\u0006\u0010\u0003\u001a\u00020\u00042\u0006\u0010\u0005\u001a\u0002H\u0002H\n"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "T", "jsonObject", "Lio/vertx/core/json/JsonObject;", "value"})
+    static final class AnonymousClass3 extends Lambda implements Function2<JsonObject, T, Boolean> {
+        final /* synthetic */ CURD<T> this$0;
+
+        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+        AnonymousClass3(CURD<T> this$0) {
+            super(2);
+            this.this$0 = this$0;
+        }
+
+        public /* bridge */ /* synthetic */ Object invoke(Object p1, Object p2) {
+            return Boolean.valueOf(invoke((JsonObject) p1, p2));
+        }
+
+        public final boolean invoke(@NotNull JsonObject jsonObject, T value) {
+            Intrinsics.checkNotNullParameter(jsonObject, "jsonObject");
+            return this.this$0.checker(jsonObject, value);
+        }
+    }
+
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.CURD$saveMulti$2, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: CURD.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/CURD$saveMulti$2.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/CURD$saveMulti$2.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     /* synthetic */ class C01112 extends FunctionReferenceImpl implements Function3<T, Boolean, JsonArray, Unit> {
         C01112(CURD<T> curd) {
@@ -667,6 +619,91 @@ public interface CURD<T> {
         public /* bridge */ /* synthetic */ Object invoke(Object p1, Object p2, Object p3) {
             invoke(p1, ((Boolean) p2).booleanValue(), (JsonArray) p3);
             return Unit.INSTANCE;
+        }
+    }
+
+    /* JADX INFO: renamed from: com.htmake.reader.api.controller.CURD$saveMulti$3, reason: invalid class name and case insensitive filesystem */
+    /* JADX INFO: compiled from: CURD.kt */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/CURD$saveMulti$3.class */
+    @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\u0010\n\u0000\n\u0002\u0010\u000b\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0000\u0010\u0000\u001a\u00020\u0001\"\u0004\b\u0000\u0010\u00022\u0006\u0010\u0003\u001a\u00020\u00042\u0006\u0010\u0005\u001a\u0002H\u0002H\n"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "T", "jsonObject", "Lio/vertx/core/json/JsonObject;", "value"})
+    static final class C01123 extends Lambda implements Function2<JsonObject, T, Boolean> {
+        final /* synthetic */ CURD<T> this$0;
+
+        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+        C01123(CURD<T> this$0) {
+            super(2);
+            this.this$0 = this$0;
+        }
+
+        public /* bridge */ /* synthetic */ Object invoke(Object p1, Object p2) {
+            return Boolean.valueOf(invoke((JsonObject) p1, p2));
+        }
+
+        public final boolean invoke(@NotNull JsonObject jsonObject, T value) {
+            Intrinsics.checkNotNullParameter(jsonObject, "jsonObject");
+            return this.this$0.checker(jsonObject, value);
+        }
+    }
+
+    /* JADX INFO: renamed from: com.htmake.reader.api.controller.CURD$delete$2, reason: invalid class name */
+    /* JADX INFO: compiled from: CURD.kt */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/CURD$delete$2.class */
+    @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\u000e\n\u0000\n\u0002\u0010\u000b\n\u0002\b\u0002\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u0001\"\u0004\b\u0000\u0010\u00022\u0006\u0010\u0003\u001a\u00020\u0004H\n"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "T", "it", "Lio/vertx/core/json/JsonObject;"})
+    static final class AnonymousClass2 extends Lambda implements Function1<JsonObject, Boolean> {
+        final /* synthetic */ CURD<T> this$0;
+        final /* synthetic */ T $entity;
+
+        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+        AnonymousClass2(CURD<T> this$0, T $entity) {
+            super(1);
+            this.this$0 = this$0;
+            this.$entity = $entity;
+        }
+
+        public /* bridge */ /* synthetic */ Object invoke(Object p1) {
+            return Boolean.valueOf(invoke((JsonObject) p1));
+        }
+
+        public final boolean invoke(@NotNull JsonObject it) {
+            Intrinsics.checkNotNullParameter(it, "it");
+            return this.this$0.checker(it, this.$entity);
+        }
+    }
+
+    /* JADX INFO: renamed from: com.htmake.reader.api.controller.CURD$deleteMulti$2, reason: invalid class name and case insensitive filesystem */
+    /* JADX INFO: compiled from: CURD.kt */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/CURD$deleteMulti$2.class */
+    @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\u000e\n\u0000\n\u0002\u0010\u000b\n\u0002\b\u0002\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u0001\"\u0004\b\u0000\u0010\u00022\u0006\u0010\u0003\u001a\u00020\u0004H\n"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "T", "it", "Lio/vertx/core/json/JsonObject;"})
+    static final class C01062 extends Lambda implements Function1<JsonObject, Boolean> {
+        final /* synthetic */ Ref.ObjectRef<T[]> $itemList;
+        final /* synthetic */ CURD<T> this$0;
+
+        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+        C01062(Ref.ObjectRef<T[]> $itemList, CURD<T> this$0) {
+            super(1);
+            this.$itemList = $itemList;
+            this.this$0 = this$0;
+        }
+
+        public /* bridge */ /* synthetic */ Object invoke(Object p1) {
+            return Boolean.valueOf(invoke((JsonObject) p1));
+        }
+
+        public final boolean invoke(@NotNull JsonObject jsonObject) {
+            Intrinsics.checkNotNullParameter(jsonObject, "it");
+            int i = 0;
+            int length = ((Object[]) this.$itemList.element).length;
+            if (0 < length) {
+                do {
+                    int i2 = i;
+                    i++;
+                    if (this.this$0.checker(jsonObject, (T) ((Object[]) this.$itemList.element)[i2])) {
+                        return true;
+                    }
+                } while (i < length);
+                return false;
+            }
+            return false;
         }
     }
 }

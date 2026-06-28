@@ -19,7 +19,7 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.charset.Charset;
 import me.ag2s.epublib.util.commons.io.IOConsumer;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/util/IOUtil.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/util/IOUtil.class */
 public class IOUtil {
     public static final int EOF = -1;
     private static char[] SKIP_CHAR_BUFFER;

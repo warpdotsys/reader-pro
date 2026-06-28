@@ -1,44 +1,43 @@
 # reader-pro
 
-Clean distribution repository for `reader-pro` 3.2.14 under the `warpdotsys` organization.
+Artifact-first recovery of Reader Pro `3.2.14`.
 
-This repository uses the supplied `reader-pro-3.2.14.jar` as the authoritative runtime artifact, preserving the full 3.2.14 behavior while keeping recovered web/resources and legacy reference source available for audit and future source-level reconstruction.
+This repository preserves the provided `reader-pro-3.2.14.jar` as the authoritative runtime artifact and adds extracted assets, decompiled audit source, provenance documentation, and Docker publishing automation.
 
-## Contents
+## What is authoritative?
 
-- `app/reader-pro-3.2.14.jar` — authoritative Spring Boot runtime artifact.
-- `recovered-assets/` — web UI, simple UI, book source debug UI, defaults, and manifest extracted from the JAR.
-- `reference-source/` — legacy community-maintained source reference from `changshengyu/reader-dev`; useful for names/layout/comparison, not the authoritative 3.2.14 implementation.
-- `docs/provenance.md` — artifact hash, manifest, dependency inventory, and reference commits.
-- `docs/recovery-notes.md` — recovery status and known gaps.
-- `.github/workflows/docker-publish.yml` — DockerHub publishing workflow.
+- **Authoritative runtime:** `app/reader-pro-3.2.14.jar`
+- **Extracted runtime assets:** `recovered-assets/`
+- **Audit/decompiled source:** `recovered-source/jadx/`
+- **Best-effort web reconstruction aids:** `reconstructed-web/`
+- **Historical references only:** `reference/`
 
-## Run with Java
+The recovered source is not claimed to be official upstream source or a complete rebuildable Kotlin/Java project. When behavior differs between old public repositories and this JAR, the JAR wins.
+
+## Artifact facts
+
+- SHA-256: `b26fb4769d689d98ff26408ce79a275d719f360906c84acf52ff404e98030c8c`
+- Size: `72913887` bytes
+- Start class: `com.htmake.reader.ReaderApplicationKt`
+- Spring Boot: `2.1.6.RELEASE`
+
+Validate locally:
 
 ```bash
-java -jar app/reader-pro-3.2.14.jar
+python3 scripts/inventory.py
 ```
 
-The app listens on port `8080` by default. Override configuration with standard Spring Boot properties, for example:
+## Run
 
 ```bash
-java -Dreader.app.workDir=/data -Dreader.server.port=8080 -jar app/reader-pro-3.2.14.jar
+java -Dreader.app.workDir=./data -Dreader.server.port=8080 -jar app/reader-pro-3.2.14.jar
 ```
 
-## Run with Docker
+## Docker
 
 ```bash
 docker build -t warpdotsys/reader-pro:3.2.14 .
-docker run --rm -p 8080:8080 -v reader-data:/data warpdotsys/reader-pro:3.2.14
+docker run --rm -p 8080:8080 -v "$PWD/data:/data" warpdotsys/reader-pro:3.2.14
 ```
 
-## DockerHub publishing
-
-GitHub Actions publishes `warpdotsys/reader-pro` on default-branch pushes, `v*` tags, and manual dispatch. Configure these repository secrets:
-
-- `DOCKERHUB_USERNAME`
-- `DOCKERHUB_TOKEN`
-
-## License
-
-The legacy reference source is GPLv3. See `LICENSE`. The packaged artifact and recovered assets are included under the maintainer's authorization for this repository.
+See `docs/deployment.md` for runtime options and `docs/provenance.md` for recovery boundaries.

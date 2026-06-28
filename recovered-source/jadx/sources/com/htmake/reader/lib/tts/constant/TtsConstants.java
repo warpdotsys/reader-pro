@@ -1,6 +1,6 @@
 package com.htmake.reader.lib.tts.constant;
 
-/* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/lib/tts/constant/TtsConstants.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/lib/tts/constant/TtsConstants.class */
 public interface TtsConstants {
     public static final String TRUSTED_CLIENT_TOKEN = "6A5AA1D4EAFF4E9FB37E23D68491D6F4";
     public static final String VOICE_LIST_URL = "https://speech.platform.bing.com/consumer/speech/synthesize/readaloud/voices/list";

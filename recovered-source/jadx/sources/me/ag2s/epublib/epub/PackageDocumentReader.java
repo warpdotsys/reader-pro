@@ -29,7 +29,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/epub/PackageDocumentReader.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/epub/PackageDocumentReader.class */
 public class PackageDocumentReader extends PackageDocumentBase {
     private static final String TAG = PackageDocumentReader.class.getName();
     private static final String[] POSSIBLE_NCX_ITEM_IDS = {"toc", "ncx", "ncxtoc", NCXDocumentV3.NCX_ITEM_ID};

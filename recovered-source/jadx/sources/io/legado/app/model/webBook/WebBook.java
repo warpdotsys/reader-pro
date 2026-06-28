@@ -33,7 +33,7 @@ import org.jetbrains.annotations.Nullable;
 import org.kxml2.wap.Wbxml;
 
 /* JADX INFO: compiled from: WebBook.kt */
-/* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/webBook/WebBook.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/webBook/WebBook.class */
 @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u0000P\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0000\n\u0002\u0010\u000e\n\u0000\n\u0002\u0010\u000b\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0002\b\u0014\n\u0002\u0010 \n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0010\b\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\n\n\u0002\u0018\u0002\n\u0002\b\u0007\u0018\u00002\u00020\u0001B1\b\u0016\u0012\u0006\u0010\u0002\u001a\u00020\u0003\u0012\b\b\u0002\u0010\u0004\u001a\u00020\u0005\u0012\n\b\u0002\u0010\u0006\u001a\u0004\u0018\u00010\u0007\u0012\n\b\u0002\u0010\b\u001a\u0004\u0018\u00010\u0003¢\u0006\u0002\u0010\tB/\u0012\u0006\u0010\n\u001a\u00020\u000b\u0012\b\b\u0002\u0010\u0004\u001a\u00020\u0005\u0012\n\b\u0002\u0010\u0006\u001a\u0004\u0018\u00010\u0007\u0012\n\b\u0002\u0010\b\u001a\u0004\u0018\u00010\u0003¢\u0006\u0002\u0010\fJ+\u0010\u001f\u001a\b\u0012\u0004\u0012\u00020!0 2\u0006\u0010\"\u001a\u00020\u00032\n\b\u0002\u0010#\u001a\u0004\u0018\u00010$H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010%J-\u0010&\u001a\u00020\u00032\u0006\u0010'\u001a\u00020(2\u0006\u0010)\u001a\u00020*2\n\b\u0002\u0010+\u001a\u0004\u0018\u00010\u0003H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010,J#\u0010-\u001a\u00020(2\u0006\u0010'\u001a\u00020(2\b\b\u0002\u0010.\u001a\u00020\u0005H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010/J#\u0010-\u001a\u00020(2\u0006\u00100\u001a\u00020\u00032\b\b\u0002\u0010.\u001a\u00020\u0005H\u0086@ø\u0001\u0000¢\u0006\u0002\u00101J\u001f\u00102\u001a\b\u0012\u0004\u0012\u00020*0 2\u0006\u0010'\u001a\u00020(H\u0086@ø\u0001\u0000¢\u0006\u0002\u00103J2\u00104\u001a\b\u0012\u0004\u0012\u00020(052\u0006\u00106\u001a\u00020\u00032\u0006\u00107\u001a\u00020\u0003H\u0086@ø\u0001\u0000ø\u0001\u0000ø\u0001\u0001ø\u0001\u0002¢\u0006\u0004\b8\u00109J+\u0010:\u001a\b\u0012\u0004\u0012\u00020!0 2\u0006\u0010;\u001a\u00020\u00032\n\b\u0002\u0010#\u001a\u0004\u0018\u00010$H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010%R\u0011\u0010\n\u001a\u00020\u000b¢\u0006\b\n\u0000\u001a\u0004\b\r\u0010\u000eR\u0011\u0010\u0004\u001a\u00020\u0005¢\u0006\b\n\u0000\u001a\u0004\b\u000f\u0010\u0010R\u001c\u0010\u0006\u001a\u0004\u0018\u00010\u0007X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\u0011\u0010\u0012\"\u0004\b\u0013\u0010\u0014R\u0013\u0010\u0015\u001a\u0004\u0018\u00010\u00078F¢\u0006\u0006\u001a\u0004\b\u0016\u0010\u0012R\u0011\u0010\u0017\u001a\u00020\u00038F¢\u0006\u0006\u001a\u0004\b\u0018\u0010\u0019R\u0011\u0010\u001a\u001a\u00020\u00038F¢\u0006\u0006\u001a\u0004\b\u001b\u0010\u0019R\u001c\u0010\b\u001a\u0004\u0018\u00010\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\u001c\u0010\u0019\"\u0004\b\u001d\u0010\u001e\u0082\u0002\u000f\n\u0002\b\u0019\n\u0002\b!\n\u0005\b¡\u001e0\u0001¨\u0006<"}, d2 = {"Lio/legado/app/model/webBook/WebBook;", PackageDocumentBase.PREFIX_OPF, "bookSourceString", PackageDocumentBase.PREFIX_OPF, "debugLog", PackageDocumentBase.PREFIX_OPF, "debugLogger", "Lio/legado/app/model/DebugLog;", "userNameSpace", "(Ljava/lang/String;ZLio/legado/app/model/DebugLog;Ljava/lang/String;)V", "bookSource", "Lio/legado/app/data/entities/BookSource;", "(Lio/legado/app/data/entities/BookSource;ZLio/legado/app/model/DebugLog;Ljava/lang/String;)V", "getBookSource", "()Lio/legado/app/data/entities/BookSource;", "getDebugLog", "()Z", "getDebugLogger", "()Lio/legado/app/model/DebugLog;", "setDebugLogger", "(Lio/legado/app/model/DebugLog;)V", "debugger", "getDebugger", "sourceUrl", "getSourceUrl", "()Ljava/lang/String;", "userNS", "getUserNS", "getUserNameSpace", "setUserNameSpace", "(Ljava/lang/String;)V", "exploreBook", PackageDocumentBase.PREFIX_OPF, "Lio/legado/app/data/entities/SearchBook;", RSSKeywords.RSS_ITEM_URL, "page", PackageDocumentBase.PREFIX_OPF, "(Ljava/lang/String;Ljava/lang/Integer;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "getBookContent", "book", "Lio/legado/app/data/entities/Book;", "bookChapter", "Lio/legado/app/data/entities/BookChapter;", "nextChapterUrl", "(Lio/legado/app/data/entities/Book;Lio/legado/app/data/entities/BookChapter;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "getBookInfo", "canReName", "(Lio/legado/app/data/entities/Book;ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;", "bookUrl", "(Ljava/lang/String;ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;", "getChapterList", "(Lio/legado/app/data/entities/Book;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "preciseSearch", "Lkotlin/Result;", "name", "author", "preciseSearch-0E7RQCE", "(Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "searchBook", "key", "reader-pro"})
 public final class WebBook {
 
@@ -49,7 +49,7 @@ public final class WebBook {
 
     /* JADX INFO: renamed from: io.legado.app.model.webBook.WebBook$exploreBook$1, reason: invalid class name */
     /* JADX INFO: compiled from: WebBook.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/webBook/WebBook$exploreBook$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/webBook/WebBook$exploreBook$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "WebBook.kt", l = {111, 118}, i = {0, 0, 0, 0}, s = {"L$0", "L$1", "L$2", "L$3"}, n = {"this", "variableBook", "analyzeUrl", "res"}, m = "exploreBook", c = "io.legado.app.model.webBook.WebBook")
     static final class AnonymousClass1 extends ContinuationImpl {
@@ -75,7 +75,7 @@ public final class WebBook {
 
     /* JADX INFO: renamed from: io.legado.app.model.webBook.WebBook$getBookContent$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: WebBook.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/webBook/WebBook$getBookContent$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/webBook/WebBook$getBookContent$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "WebBook.kt", l = {255, 259}, i = {}, s = {}, n = {}, m = "getBookContent", c = "io.legado.app.model.webBook.WebBook")
     static final class C01671 extends ContinuationImpl {
@@ -100,7 +100,7 @@ public final class WebBook {
 
     /* JADX INFO: renamed from: io.legado.app.model.webBook.WebBook$getBookInfo$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: WebBook.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/webBook/WebBook$getBookInfo$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/webBook/WebBook$getBookInfo$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "WebBook.kt", l = {138, 156, 164}, i = {1, 1}, s = {"L$2", "L$3"}, n = {"analyzeUrl", "res"}, m = "getBookInfo", c = "io.legado.app.model.webBook.WebBook")
     static final class C01681 extends ContinuationImpl {
@@ -127,7 +127,7 @@ public final class WebBook {
 
     /* JADX INFO: renamed from: io.legado.app.model.webBook.WebBook$getChapterList$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: WebBook.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/webBook/WebBook$getChapterList$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/webBook/WebBook$getChapterList$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "WebBook.kt", l = {Wbxml.OPAQUE, 211, 218}, i = {1, 1}, s = {"L$2", "L$3"}, n = {"analyzeUrl", "res"}, m = "getChapterList", c = "io.legado.app.model.webBook.WebBook")
     static final class C01691 extends ContinuationImpl {
@@ -153,7 +153,7 @@ public final class WebBook {
 
     /* JADX INFO: renamed from: io.legado.app.model.webBook.WebBook$searchBook$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: WebBook.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/webBook/WebBook$searchBook$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/webBook/WebBook$searchBook$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "WebBook.kt", l = {Wbxml.PI, 74}, i = {0, 0}, s = {"L$2", "L$3"}, n = {"analyzeUrl", "res"}, m = "searchBook", c = "io.legado.app.model.webBook.WebBook")
     static final class C01701 extends ContinuationImpl {
@@ -388,7 +388,7 @@ public final class WebBook {
         }
     }
 
-    public static /* synthetic */ Object searchBook$default(WebBook webBook, String str, Integer num, Continuation continuation, int i, Object obj) throws Exception {
+    public static /* synthetic */ Object searchBook$default(WebBook webBook, String str, Integer num, Continuation continuation, int i, Object obj) {
         if ((i & 2) != 0) {
             num = 1;
         }
@@ -491,7 +491,7 @@ public final class WebBook {
     /*
         Code decompiled incorrectly, please refer to instructions dump.
     */
-    public final Object getBookInfo(@NotNull Book book, boolean canReName, @NotNull Continuation<? super Book> $completion) throws Exception {
+    public final Object getBookInfo(@NotNull Book book, boolean canReName, @NotNull Continuation<? super Book> $completion) {
         C01681 c01681;
         Ref.ObjectRef objectRef;
         Ref.ObjectRef res;
@@ -747,7 +747,7 @@ public final class WebBook {
     /*
         Code decompiled incorrectly, please refer to instructions dump.
     */
-    public final Object getBookContent(@NotNull Book book, @NotNull BookChapter bookChapter, @Nullable String nextChapterUrl, @NotNull Continuation<? super String> $completion) throws Exception {
+    public final Object getBookContent(@NotNull Book book, @NotNull BookChapter bookChapter, @Nullable String nextChapterUrl, @NotNull Continuation<? super String> $completion) {
         C01671 c01671;
         Object strResponseAwait$default;
         if ($completion instanceof C01671) {

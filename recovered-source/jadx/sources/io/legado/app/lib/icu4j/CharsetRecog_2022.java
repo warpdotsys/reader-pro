@@ -1,6 +1,6 @@
 package io.legado.app.lib.icu4j;
 
-/* JADX INFO: loaded from: app-classes.jar:io/legado/app/lib/icu4j/CharsetRecog_2022.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/lib/icu4j/CharsetRecog_2022.class */
 abstract class CharsetRecog_2022 extends CharsetRecognizer {
     CharsetRecog_2022() {
     }
@@ -50,7 +50,7 @@ abstract class CharsetRecog_2022 extends CharsetRecognizer {
         return quality;
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/lib/icu4j/CharsetRecog_2022$CharsetRecog_2022JP.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/lib/icu4j/CharsetRecog_2022$CharsetRecog_2022JP.class */
     static class CharsetRecog_2022JP extends CharsetRecog_2022 {
         private final byte[][] escapeSequences = {new byte[]{27, 36, 40, 67}, new byte[]{27, 36, 40, 68}, new byte[]{27, 36, 64}, new byte[]{27, 36, 65}, new byte[]{27, 36, 66}, new byte[]{27, 38, 64}, new byte[]{27, 40, 66}, new byte[]{27, 40, 72}, new byte[]{27, 40, 73}, new byte[]{27, 40, 74}, new byte[]{27, 46, 65}, new byte[]{27, 46, 70}};
 
@@ -73,7 +73,7 @@ abstract class CharsetRecog_2022 extends CharsetRecognizer {
         }
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/lib/icu4j/CharsetRecog_2022$CharsetRecog_2022KR.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/lib/icu4j/CharsetRecog_2022$CharsetRecog_2022KR.class */
     static class CharsetRecog_2022KR extends CharsetRecog_2022 {
         private final byte[][] escapeSequences = {new byte[]{27, 36, 41, 67}};
 
@@ -96,7 +96,7 @@ abstract class CharsetRecog_2022 extends CharsetRecognizer {
         }
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/lib/icu4j/CharsetRecog_2022$CharsetRecog_2022CN.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/lib/icu4j/CharsetRecog_2022$CharsetRecog_2022CN.class */
     static class CharsetRecog_2022CN extends CharsetRecog_2022 {
         private final byte[][] escapeSequences = {new byte[]{27, 36, 41, 65}, new byte[]{27, 36, 41, 71}, new byte[]{27, 36, 42, 72}, new byte[]{27, 36, 41, 69}, new byte[]{27, 36, 43, 73}, new byte[]{27, 36, 43, 74}, new byte[]{27, 36, 43, 75}, new byte[]{27, 36, 43, 76}, new byte[]{27, 36, 43, 77}, new byte[]{27, 78}, new byte[]{27, 79}};
 

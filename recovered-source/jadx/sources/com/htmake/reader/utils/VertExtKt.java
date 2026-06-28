@@ -10,6 +10,7 @@ import java.net.URLDecoder;
 import kotlin.Metadata;
 import kotlin.jvm.functions.Function0;
 import kotlin.jvm.internal.Intrinsics;
+import kotlin.jvm.internal.Lambda;
 import me.ag2s.epublib.Constants;
 import me.ag2s.epublib.epub.PackageDocumentBase;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.MDC;
 
 /* JADX INFO: compiled from: VertExt.kt */
-/* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/utils/VertExtKt.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/utils/VertExtKt.class */
 @Metadata(mv = {1, 5, 1}, k = 2, xi = 48, d1 = {"\u0000&\n\u0000\n\u0002\u0010\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\u0003\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0010\u0000\n\u0000\u001a\u0012\u0010\u0000\u001a\u00020\u0001*\u00020\u00022\u0006\u0010\u0003\u001a\u00020\u0004\u001a\u0018\u0010\u0005\u001a\u00020\u0001*\u00020\u00062\f\u0010\u0007\u001a\b\u0012\u0004\u0012\u00020\u00020\b\u001a\u0014\u0010\t\u001a\u00020\u0001*\u00020\u00022\b\u0010\n\u001a\u0004\u0018\u00010\u000b¨\u0006\f"}, d2 = {"error", PackageDocumentBase.PREFIX_OPF, "Lio/vertx/ext/web/RoutingContext;", "throwable", PackageDocumentBase.PREFIX_OPF, "globalHandler", "Lio/vertx/ext/web/Route;", "handler", "Lio/vertx/core/Handler;", "success", "any", PackageDocumentBase.PREFIX_OPF, "reader-pro"})
 public final class VertExtKt {
     public static final void success(@NotNull RoutingContext $this$success, @Nullable Object any) {
@@ -42,20 +43,29 @@ public final class VertExtKt {
         String strValueOf = String.valueOf(throwable.getMessage());
         Intrinsics.checkNotNullExpressionValue(path, "path");
         BasicError basicError = new BasicError("Internal Server Error", string, strValueOf, path, 500, System.currentTimeMillis());
-        final String errorJson = ExtKt.getGson().toJson(basicError);
+        String errorJson = ExtKt.getGson().toJson(basicError);
         ExtKt.getLogger().error("Internal Server Error", throwable);
-        ExtKt.getLogger().error(new Function0<Object>() { // from class: com.htmake.reader.utils.VertExtKt.error.1
-            /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-            {
-                super(0);
-            }
-
-            @Nullable
-            public final Object invoke() {
-                return errorJson;
-            }
-        });
+        ExtKt.getLogger().error(new AnonymousClass1(errorJson));
         $this$error.response().putHeader("content-type", "application/json; charset=utf-8").setStatusCode(500).end(errorJson);
+    }
+
+    /* JADX INFO: renamed from: com.htmake.reader.utils.VertExtKt$error$1, reason: invalid class name */
+    /* JADX INFO: compiled from: VertExt.kt */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/utils/VertExtKt$error$1.class */
+    @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\u0006\n\u0000\n\u0002\u0010\u0000\u0010\u0000\u001a\u0004\u0018\u00010\u0001H\n"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF})
+    static final class AnonymousClass1 extends Lambda implements Function0<Object> {
+        final /* synthetic */ String $errorJson;
+
+        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+        AnonymousClass1(String $errorJson) {
+            super(0);
+            this.$errorJson = $errorJson;
+        }
+
+        @Nullable
+        public final Object invoke() {
+            return this.$errorJson;
+        }
     }
 
     public static final void globalHandler(@NotNull Route $this$globalHandler, @NotNull Handler<RoutingContext> handler) {

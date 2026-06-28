@@ -1,19 +1,13 @@
 package io.legado.app.data.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import io.legado.app.constant.RSSKeywords;
 import io.legado.app.model.analyzeRule.RuleDataInterface;
 import io.legado.app.utils.GsonExtensionsKt;
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import kotlin.Lazy;
 import kotlin.LazyKt;
 import kotlin.Metadata;
-import kotlin.Result;
-import kotlin.ResultKt;
-import kotlin.jvm.functions.Function0;
 import kotlin.jvm.internal.DefaultConstructorMarker;
 import kotlin.jvm.internal.Intrinsics;
 import me.ag2s.epublib.epub.PackageDocumentBase;
@@ -22,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import org.kxml2.wap.Wbxml;
 
 /* JADX INFO: compiled from: RssArticle.kt */
-/* JADX INFO: loaded from: app-classes.jar:io/legado/app/data/entities/RssArticle.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/data/entities/RssArticle.class */
 @JsonIgnoreProperties({"variableMap", "_userNameSpace", "userNameSpace"})
 @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u0000D\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\u000e\n\u0002\b\u0003\n\u0002\u0010\t\n\u0002\b\u0006\n\u0002\u0010\u000b\n\u0002\b \n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0012\n\u0002\u0010\u0000\n\u0002\b\u0002\n\u0002\u0010\b\n\u0000\n\u0002\u0010\u0002\n\u0002\b\u0006\b\u0087\b\u0018\u00002\u00020\u0001B}\u0012\b\b\u0002\u0010\u0002\u001a\u00020\u0003\u0012\b\b\u0002\u0010\u0004\u001a\u00020\u0003\u0012\b\b\u0002\u0010\u0005\u001a\u00020\u0003\u0012\b\b\u0002\u0010\u0006\u001a\u00020\u0007\u0012\b\b\u0002\u0010\b\u001a\u00020\u0003\u0012\n\b\u0002\u0010\t\u001a\u0004\u0018\u00010\u0003\u0012\n\b\u0002\u0010\n\u001a\u0004\u0018\u00010\u0003\u0012\n\b\u0002\u0010\u000b\u001a\u0004\u0018\u00010\u0003\u0012\n\b\u0002\u0010\f\u001a\u0004\u0018\u00010\u0003\u0012\b\b\u0002\u0010\r\u001a\u00020\u000e\u0012\n\b\u0002\u0010\u000f\u001a\u0004\u0018\u00010\u0003¢\u0006\u0002\u0010\u0010J\t\u00105\u001a\u00020\u0003HÆ\u0003J\t\u00106\u001a\u00020\u000eHÆ\u0003J\u000b\u00107\u001a\u0004\u0018\u00010\u0003HÆ\u0003J\t\u00108\u001a\u00020\u0003HÆ\u0003J\t\u00109\u001a\u00020\u0003HÆ\u0003J\t\u0010:\u001a\u00020\u0007HÆ\u0003J\t\u0010;\u001a\u00020\u0003HÆ\u0003J\u000b\u0010<\u001a\u0004\u0018\u00010\u0003HÆ\u0003J\u000b\u0010=\u001a\u0004\u0018\u00010\u0003HÆ\u0003J\u000b\u0010>\u001a\u0004\u0018\u00010\u0003HÆ\u0003J\u000b\u0010?\u001a\u0004\u0018\u00010\u0003HÆ\u0003J\u0081\u0001\u0010@\u001a\u00020\u00002\b\b\u0002\u0010\u0002\u001a\u00020\u00032\b\b\u0002\u0010\u0004\u001a\u00020\u00032\b\b\u0002\u0010\u0005\u001a\u00020\u00032\b\b\u0002\u0010\u0006\u001a\u00020\u00072\b\b\u0002\u0010\b\u001a\u00020\u00032\n\b\u0002\u0010\t\u001a\u0004\u0018\u00010\u00032\n\b\u0002\u0010\n\u001a\u0004\u0018\u00010\u00032\n\b\u0002\u0010\u000b\u001a\u0004\u0018\u00010\u00032\n\b\u0002\u0010\f\u001a\u0004\u0018\u00010\u00032\b\b\u0002\u0010\r\u001a\u00020\u000e2\n\b\u0002\u0010\u000f\u001a\u0004\u0018\u00010\u0003HÆ\u0001J\u0013\u0010A\u001a\u00020\u000e2\b\u0010B\u001a\u0004\u0018\u00010CH\u0096\u0002J\b\u0010D\u001a\u00020\u0003H\u0016J\b\u0010E\u001a\u00020FH\u0016J\u001a\u0010G\u001a\u00020H2\u0006\u0010I\u001a\u00020\u00032\b\u0010J\u001a\u0004\u0018\u00010\u0003H\u0016J\u000e\u0010K\u001a\u00020H2\u0006\u0010L\u001a\u00020\u0003J\t\u0010M\u001a\u00020\u0003HÖ\u0001R\u000e\u0010\u0011\u001a\u00020\u0003X\u0082\u000e¢\u0006\u0002\n\u0000R\u001c\u0010\u000b\u001a\u0004\u0018\u00010\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\u0012\u0010\u0013\"\u0004\b\u0014\u0010\u0015R\u001c\u0010\n\u001a\u0004\u0018\u00010\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\u0016\u0010\u0013\"\u0004\b\u0017\u0010\u0015R\u001c\u0010\f\u001a\u0004\u0018\u00010\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\u0018\u0010\u0013\"\u0004\b\u0019\u0010\u0015R\u001a\u0010\b\u001a\u00020\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\u001a\u0010\u0013\"\u0004\b\u001b\u0010\u0015R\u001a\u0010\u0006\u001a\u00020\u0007X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\u001c\u0010\u001d\"\u0004\b\u001e\u0010\u001fR\u001a\u0010\u0002\u001a\u00020\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b \u0010\u0013\"\u0004\b!\u0010\u0015R\u001c\u0010\t\u001a\u0004\u0018\u00010\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\"\u0010\u0013\"\u0004\b#\u0010\u0015R\u001a\u0010\r\u001a\u00020\u000eX\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b$\u0010%\"\u0004\b&\u0010'R\u001a\u0010\u0004\u001a\u00020\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b(\u0010\u0013\"\u0004\b)\u0010\u0015R\u001a\u0010\u0005\u001a\u00020\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b*\u0010\u0013\"\u0004\b+\u0010\u0015R\u001c\u0010\u000f\u001a\u0004\u0018\u00010\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b,\u0010\u0013\"\u0004\b-\u0010\u0015R7\u0010.\u001a\u001e\u0012\u0004\u0012\u00020\u0003\u0012\u0004\u0012\u00020\u00030/j\u000e\u0012\u0004\u0012\u00020\u0003\u0012\u0004\u0012\u00020\u0003`08VX\u0096\u0084\u0002¢\u0006\f\n\u0004\b3\u00104\u001a\u0004\b1\u00102¨\u0006N"}, d2 = {"Lio/legado/app/data/entities/RssArticle;", "Lio/legado/app/model/analyzeRule/RuleDataInterface;", "origin", PackageDocumentBase.PREFIX_OPF, "sort", "title", "order", PackageDocumentBase.PREFIX_OPF, "link", RSSKeywords.RSS_ITEM_PUB_DATE, "description", "content", "image", "read", PackageDocumentBase.PREFIX_OPF, "variable", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)V", "_userNameSpace", "getContent", "()Ljava/lang/String;", "setContent", "(Ljava/lang/String;)V", "getDescription", "setDescription", "getImage", "setImage", "getLink", "setLink", "getOrder", "()J", "setOrder", "(J)V", "getOrigin", "setOrigin", "getPubDate", "setPubDate", "getRead", "()Z", "setRead", "(Z)V", "getSort", "setSort", "getTitle", "setTitle", "getVariable", "setVariable", "variableMap", "Ljava/util/HashMap;", "Lkotlin/collections/HashMap;", "getVariableMap", "()Ljava/util/HashMap;", "variableMap$delegate", "Lkotlin/Lazy;", "component1", "component10", "component11", "component2", "component3", "component4", "component5", "component6", "component7", "component8", "component9", "copy", "equals", "other", PackageDocumentBase.PREFIX_OPF, "getUserNameSpace", "hashCode", PackageDocumentBase.PREFIX_OPF, "putVariable", PackageDocumentBase.PREFIX_OPF, "key", "value", "setUserNameSpace", "nameSpace", "toString", "reader-pro"})
 public final /* data */ class RssArticle implements RuleDataInterface {
@@ -189,37 +183,7 @@ public final /* data */ class RssArticle implements RuleDataInterface {
         this.image = image;
         this.read = read;
         this.variable = variable;
-        this.variableMap = LazyKt.lazy(new Function0<HashMap<String, String>>() { // from class: io.legado.app.data.entities.RssArticle$variableMap$2
-            {
-                super(0);
-            }
-
-            /* JADX WARN: Type inference failed for: r2v1, types: [io.legado.app.data.entities.RssArticle$variableMap$2$invoke$$inlined$fromJsonObject$1] */
-            @NotNull
-            /* JADX INFO: renamed from: invoke, reason: merged with bridge method [inline-methods] */
-            public final HashMap<String, String> m159invoke() {
-                Object obj;
-                Gson $this$fromJsonObject$iv = GsonExtensionsKt.getGSON();
-                String json$iv = this.this$0.getVariable();
-                try {
-                    Result.Companion companion = Result.Companion;
-                    Type type = new TypeToken<HashMap<String, String>>() { // from class: io.legado.app.data.entities.RssArticle$variableMap$2$invoke$$inlined$fromJsonObject$1
-                    }.getType();
-                    Intrinsics.checkNotNullExpressionValue(type, "object : TypeToken<T>() {}.type");
-                    Object objFromJson = $this$fromJsonObject$iv.fromJson(json$iv, type);
-                    if (!(objFromJson instanceof HashMap)) {
-                        objFromJson = null;
-                    }
-                    obj = Result.constructor-impl((HashMap) objFromJson);
-                } catch (Throwable th) {
-                    Result.Companion companion2 = Result.Companion;
-                    obj = Result.constructor-impl(ResultKt.createFailure(th));
-                }
-                Object obj2 = obj;
-                HashMap<String, String> map = (HashMap) (Result.isFailure-impl(obj2) ? null : obj2);
-                return map == null ? new HashMap<>() : map;
-            }
-        });
+        this.variableMap = LazyKt.lazy(new RssArticle$variableMap$2(this));
         this._userNameSpace = PackageDocumentBase.PREFIX_OPF;
     }
 

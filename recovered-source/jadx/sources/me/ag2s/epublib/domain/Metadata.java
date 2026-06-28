@@ -9,7 +9,7 @@ import javax.xml.namespace.QName;
 import me.ag2s.epublib.epub.PackageDocumentBase;
 import me.ag2s.epublib.util.StringUtil;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/domain/Metadata.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/domain/Metadata.class */
 public class Metadata implements Serializable {
     private static final long serialVersionUID = -2437262888962149444L;
     public static final String DEFAULT_LANGUAGE = "en";

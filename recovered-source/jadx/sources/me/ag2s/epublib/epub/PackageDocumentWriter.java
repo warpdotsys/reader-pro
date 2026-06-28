@@ -16,7 +16,7 @@ import me.ag2s.epublib.epub.PackageDocumentBase;
 import me.ag2s.epublib.util.StringUtil;
 import org.xmlpull.v1.XmlSerializer;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/epub/PackageDocumentWriter.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/epub/PackageDocumentWriter.class */
 public class PackageDocumentWriter extends PackageDocumentBase {
     private static final String TAG = PackageDocumentWriter.class.getName();
 

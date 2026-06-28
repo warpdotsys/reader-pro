@@ -4,7 +4,7 @@ import java.io.IOException;
 import me.ag2s.umdlib.tool.UmdUtils;
 import me.ag2s.umdlib.tool.WrapOutputStream;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/umdlib/domain/UmdHeader.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/umdlib/domain/UmdHeader.class */
 public class UmdHeader {
     private byte umdType;
     private String title;

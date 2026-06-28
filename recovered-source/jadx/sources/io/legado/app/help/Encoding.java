@@ -3,7 +3,7 @@ package io.legado.app.help;
 import me.ag2s.epublib.Constants;
 
 /* JADX INFO: compiled from: EncodingDetectHelp.java */
-/* JADX INFO: loaded from: app-classes.jar:io/legado/app/help/Encoding.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/help/Encoding.class */
 class Encoding {
     public static int GB2312 = 0;
     public static int GBK = 1;

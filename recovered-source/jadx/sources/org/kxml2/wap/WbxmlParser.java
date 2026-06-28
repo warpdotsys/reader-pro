@@ -14,7 +14,7 @@ import me.ag2s.epublib.util.IOUtil;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-/* JADX INFO: loaded from: app-classes.jar:org/kxml2/wap/WbxmlParser.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:org/kxml2/wap/WbxmlParser.class */
 public class WbxmlParser implements XmlPullParser {
     static final String HEX_DIGITS = "0123456789abcdef";
     public static final int WAP_EXTENSION = 64;

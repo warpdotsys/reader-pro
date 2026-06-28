@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.Optional;
 import me.ag2s.epublib.epub.PackageDocumentBase;
 
-/* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/lib/tts/model/SSML.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/lib/tts/model/SSML.class */
 public class SSML implements Serializable {
     public static String SSML_PATTERN = "X-RequestId:%s\r\nContent-Type:application/ssml+xml\r\nX-Timestamp:%sZ\r\nPath:ssml\r\n\r\n<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xmlns:mstts='https://www.w3.org/2001/mstts' xml:lang='%s'>\r\n<voice name='%s'>\r\n%s<prosody pitch='%s' rate='%s' volume='%s'>%s</prosody>%s</voice></speak>";
     private String synthesisText;
@@ -18,6 +18,10 @@ public class SSML implements Serializable {
     private String volume;
     private TtsStyleEnum style;
     private OutputFormat outputFormat;
+
+    /* synthetic */ SSML(String x0, VoiceEnum x1, String x2, String x3, String x4, TtsStyleEnum x5, OutputFormat x6, AnonymousClass1 x7) {
+        this(x0, x1, x2, x3, x4, x5, x6);
+    }
 
     private SSML(String synthesisText, VoiceEnum voice, String rate, String pitch, String volume, TtsStyleEnum style, OutputFormat outputFormat) {
         this.synthesisText = synthesisText;
@@ -97,7 +101,7 @@ public class SSML implements Serializable {
         }).orElse(PackageDocumentBase.PREFIX_OPF));
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/lib/tts/model/SSML$SSMLBuilder.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/lib/tts/model/SSML$SSMLBuilder.class */
     public static class SSMLBuilder {
         private String synthesisText;
         private VoiceEnum voice;
@@ -143,7 +147,7 @@ public class SSML implements Serializable {
         }
 
         public SSML build() {
-            return new SSML(this.synthesisText, this.voice, this.rate, this.pitch, this.volume, this.style, this.outputFormat);
+            return new SSML(this.synthesisText, this.voice, this.rate, this.pitch, this.volume, this.style, this.outputFormat, null);
         }
     }
 }

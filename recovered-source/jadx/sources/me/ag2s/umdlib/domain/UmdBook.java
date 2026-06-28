@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import me.ag2s.umdlib.tool.WrapOutputStream;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/umdlib/domain/UmdBook.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/umdlib/domain/UmdBook.class */
 public class UmdBook {
     private int num;
     private UmdHeader header = new UmdHeader();

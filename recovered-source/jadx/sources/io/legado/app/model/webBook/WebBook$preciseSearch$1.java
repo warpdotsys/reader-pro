@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /* JADX INFO: compiled from: WebBook.kt */
-/* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/webBook/WebBook$preciseSearch$1.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/webBook/WebBook$preciseSearch$1.class */
 @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
 @DebugMetadata(f = "WebBook.kt", l = {276, 281}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "name", "author"}, m = "preciseSearch-0E7RQCE", c = "io.legado.app.model.webBook.WebBook")
 final class WebBook$preciseSearch$1 extends ContinuationImpl {

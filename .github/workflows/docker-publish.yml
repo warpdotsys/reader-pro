@@ -1,17 +1,22 @@
-name: Docker Publish
+name: Docker publish
 
 on:
-  push:
-    branches:
-      - main
-    tags:
-      - 'v*'
   pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
   workflow_dispatch:
 
 permissions:
   contents: read
-  packages: read
+
+concurrency:
+  group: docker-publish-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  IMAGE_NAME: warpdotsys/reader-pro
 
 jobs:
   docker:
@@ -27,12 +32,13 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: warpdotsys/reader-pro
+          images: ${{ env.IMAGE_NAME }}
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
             type=raw,value=3.2.14,enable={{is_default_branch}}
             type=ref,event=tag
-            type=sha,format=short
+            type=semver,pattern={{version}}
+            type=sha,prefix=sha-
 
       - name: Login to DockerHub
         if: github.event_name != 'pull_request'
@@ -45,7 +51,9 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
+          platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          platforms: linux/amd64,linux/arm64
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

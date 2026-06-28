@@ -2,7 +2,7 @@ package me.ag2s.epublib.domain;
 
 import java.io.Serializable;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/domain/ResourceReference.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/domain/ResourceReference.class */
 public class ResourceReference implements Serializable {
     private static final long serialVersionUID = 2596967243557743048L;
     protected Resource resource;

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/domain/MediaType.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/domain/MediaType.class */
 public class MediaType implements Serializable {
     private static final long serialVersionUID = -7256091153727506788L;
     private final String name;

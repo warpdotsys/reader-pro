@@ -6,7 +6,7 @@ import java.util.List;
 import me.ag2s.epublib.domain.EpubBook;
 import me.ag2s.epublib.domain.Resource;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/browsersupport/Navigator.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/browsersupport/Navigator.class */
 public class Navigator implements Serializable {
     private static final long serialVersionUID = 1076126986424925474L;
     private EpubBook book;

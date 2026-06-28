@@ -25,7 +25,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xmlpull.v1.XmlSerializer;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/epub/NCXDocumentV2.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/epub/NCXDocumentV2.class */
 public class NCXDocumentV2 {
     public static final String NAMESPACE_NCX = "http://www.daisy.org/z3986/2005/ncx/";
     public static final String PREFIX_NCX = "ncx";
@@ -35,13 +35,13 @@ public class NCXDocumentV2 {
     private static final String TAG;
     static final /* synthetic */ boolean $assertionsDisabled;
 
-    /* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/epub/NCXDocumentV2$NCXAttributeValues.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/epub/NCXDocumentV2$NCXAttributeValues.class */
     private interface NCXAttributeValues {
         public static final String chapter = "chapter";
         public static final String version = "2005-1";
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/epub/NCXDocumentV2$NCXAttributes.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/epub/NCXDocumentV2$NCXAttributes.class */
     private interface NCXAttributes {
         public static final String src = "src";
         public static final String name = "name";
@@ -52,7 +52,7 @@ public class NCXDocumentV2 {
         public static final String version = "version";
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/epub/NCXDocumentV2$NCXTags.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/epub/NCXDocumentV2$NCXTags.class */
     private interface NCXTags {
         public static final String ncx = "ncx";
         public static final String meta = "meta";

@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /* JADX INFO: compiled from: Debugger.kt */
-/* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/Debugger.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/Debugger.class */
 @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u0000F\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\u0010\u000e\n\u0002\u0010\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0010\t\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\f\n\u0002\u0010\u000b\n\u0002\b\u0005\u0018\u00002\u00020\u0001B\u0019\u0012\u0012\u0010\u0002\u001a\u000e\u0012\u0004\u0012\u00020\u0004\u0012\u0004\u0012\u00020\u00050\u0003¢\u0006\u0002\u0010\u0006J3\u0010\r\u001a\u00020\u00052\u0006\u0010\u000e\u001a\u00020\u000f2\u0006\u0010\u0010\u001a\u00020\u00112\u0006\u0010\u0012\u001a\u00020\u00132\b\u0010\u0014\u001a\u0004\u0018\u00010\u0004H\u0082@ø\u0001\u0000¢\u0006\u0002\u0010\u0015J!\u0010\u0016\u001a\u00020\u00052\u0006\u0010\u000e\u001a\u00020\u000f2\u0006\u0010\u0017\u001a\u00020\u0004H\u0082@ø\u0001\u0000¢\u0006\u0002\u0010\u0018J!\u0010\u0019\u001a\u00020\u00052\u0006\u0010\u000e\u001a\u00020\u000f2\u0006\u0010\u0010\u001a\u00020\u0011H\u0082@ø\u0001\u0000¢\u0006\u0002\u0010\u001aJ\u0010\u0010\u001b\u001a\u00020\u00052\u0006\u0010\u001c\u001a\u00020\u0004H\u0016J\u001a\u0010\u001b\u001a\u00020\u00052\b\u0010\u001d\u001a\u0004\u0018\u00010\u00042\b\u0010\u001e\u001a\u0004\u0018\u00010\u0004J$\u0010\u001b\u001a\u00020\u00052\b\u0010\u001d\u001a\u0004\u0018\u00010\u00042\b\u0010\u001e\u001a\u0004\u0018\u00010\u00042\u0006\u0010\u001f\u001a\u00020 H\u0016J!\u0010!\u001a\u00020\u00052\u0006\u0010\u000e\u001a\u00020\u000f2\u0006\u0010\"\u001a\u00020\u0004H\u0082@ø\u0001\u0000¢\u0006\u0002\u0010\u0018J!\u0010#\u001a\u00020\u00052\u0006\u0010\u000e\u001a\u00020\u000f2\u0006\u0010\"\u001a\u00020\u0004H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0018J!\u0010$\u001a\u00020\u00052\u0006\u0010\u000e\u001a\u00020\u000f2\u0006\u0010\u0010\u001a\u00020\u0011H\u0082@ø\u0001\u0000¢\u0006\u0002\u0010\u001aR\u000e\u0010\u0007\u001a\u00020\bX\u0082\u0004¢\u0006\u0002\n\u0000R\u001d\u0010\u0002\u001a\u000e\u0012\u0004\u0012\u00020\u0004\u0012\u0004\u0012\u00020\u00050\u0003¢\u0006\b\n\u0000\u001a\u0004\b\t\u0010\nR\u000e\u0010\u000b\u001a\u00020\fX\u0082\u000e¢\u0006\u0002\n\u0000\u0082\u0002\u0004\n\u0002\b\u0019¨\u0006%"}, d2 = {"Lio/legado/app/model/Debugger;", "Lio/legado/app/model/DebugLog;", "logMsg", "Lkotlin/Function1;", PackageDocumentBase.PREFIX_OPF, PackageDocumentBase.PREFIX_OPF, "(Lkotlin/jvm/functions/Function1;)V", "debugTimeFormat", "Ljava/text/SimpleDateFormat;", "getLogMsg", "()Lkotlin/jvm/functions/Function1;", "startTime", PackageDocumentBase.PREFIX_OPF, "contentDebug", "webBook", "Lio/legado/app/model/webBook/WebBook;", "book", "Lio/legado/app/data/entities/Book;", "bookChapter", "Lio/legado/app/data/entities/BookChapter;", "nextChapterUrl", "(Lio/legado/app/model/webBook/WebBook;Lio/legado/app/data/entities/Book;Lio/legado/app/data/entities/BookChapter;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "exploreDebug", RSSKeywords.RSS_ITEM_URL, "(Lio/legado/app/model/webBook/WebBook;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "infoDebug", "(Lio/legado/app/model/webBook/WebBook;Lio/legado/app/data/entities/Book;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "log", "message", "sourceUrl", "msg", "isHtml", PackageDocumentBase.PREFIX_OPF, "searchDebug", "key", "startDebug", "tocDebug", "reader-pro"})
 public final class Debugger implements DebugLog {
 
@@ -44,7 +44,7 @@ public final class Debugger implements DebugLog {
 
     /* JADX INFO: renamed from: io.legado.app.model.Debugger$contentDebug$1, reason: invalid class name */
     /* JADX INFO: compiled from: Debugger.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/Debugger$contentDebug$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/Debugger$contentDebug$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "Debugger.kt", l = {184}, i = {0, 0}, s = {"L$0", "L$1"}, n = {"this", "webBook"}, m = "contentDebug", c = "io.legado.app.model.Debugger")
     static final class AnonymousClass1 extends ContinuationImpl {
@@ -67,7 +67,7 @@ public final class Debugger implements DebugLog {
 
     /* JADX INFO: renamed from: io.legado.app.model.Debugger$exploreDebug$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: Debugger.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/Debugger$exploreDebug$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/Debugger$exploreDebug$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "Debugger.kt", l = {95, 102}, i = {0, 0}, s = {"L$0", "L$1"}, n = {"this", "webBook"}, m = "exploreDebug", c = "io.legado.app.model.Debugger")
     static final class C01521 extends ContinuationImpl {
@@ -91,7 +91,7 @@ public final class Debugger implements DebugLog {
 
     /* JADX INFO: renamed from: io.legado.app.model.Debugger$infoDebug$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: Debugger.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/Debugger$infoDebug$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/Debugger$infoDebug$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "Debugger.kt", l = {138, 143}, i = {0, 0}, s = {"L$0", "L$1"}, n = {"this", "webBook"}, m = "infoDebug", c = "io.legado.app.model.Debugger")
     static final class C01531 extends ContinuationImpl {
@@ -115,7 +115,7 @@ public final class Debugger implements DebugLog {
 
     /* JADX INFO: renamed from: io.legado.app.model.Debugger$searchDebug$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: Debugger.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/Debugger$searchDebug$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/Debugger$searchDebug$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "Debugger.kt", l = {117, 124}, i = {0, 0}, s = {"L$0", "L$1"}, n = {"this", "webBook"}, m = "searchDebug", c = "io.legado.app.model.Debugger")
     static final class C01541 extends ContinuationImpl {
@@ -139,7 +139,7 @@ public final class Debugger implements DebugLog {
 
     /* JADX INFO: renamed from: io.legado.app.model.Debugger$tocDebug$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: Debugger.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/Debugger$tocDebug$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/Debugger$tocDebug$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "Debugger.kt", l = {155, 164}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "webBook", "book"}, m = "tocDebug", c = "io.legado.app.model.Debugger")
     static final class C01551 extends ContinuationImpl {

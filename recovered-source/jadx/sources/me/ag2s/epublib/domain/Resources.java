@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import me.ag2s.epublib.util.StringUtil;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/domain/Resources.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/domain/Resources.class */
 public class Resources implements Serializable {
     private static final long serialVersionUID = 2450876953383871451L;
     private static final String IMAGE_PREFIX = "image_";

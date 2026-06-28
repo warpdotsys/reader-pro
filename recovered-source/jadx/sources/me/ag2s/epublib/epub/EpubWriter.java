@@ -14,7 +14,7 @@ import me.ag2s.epublib.domain.Resource;
 import me.ag2s.epublib.util.IOUtil;
 import org.xmlpull.v1.XmlSerializer;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/epub/EpubWriter.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/epub/EpubWriter.class */
 public class EpubWriter {
     private static final String TAG = EpubWriter.class.getName();
     static final String EMPTY_NAMESPACE_PREFIX = "";

@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /* JADX INFO: compiled from: BookHelp.kt */
-/* JADX INFO: loaded from: app-classes.jar:io/legado/app/help/BookHelp$saveImages$2$1$req$1.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/help/BookHelp$saveImages$2$1$req$1.class */
 @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\n\n\u0000\n\u0002\u0010\b\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H\u008a@"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "Lkotlinx/coroutines/CoroutineScope;"})
 @DebugMetadata(f = "BookHelp.kt", l = {138}, i = {}, s = {}, n = {}, m = "invokeSuspend", c = "io.legado.app.help.BookHelp$saveImages$2$1$req$1")
 final class BookHelp$saveImages$2$1$req$1 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super Integer>, Object> {

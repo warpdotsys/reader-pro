@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /* JADX INFO: compiled from: BookContent.kt */
-/* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/webBook/BookContent$analyzeContent$3$asyncArray$1$1.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/webBook/BookContent$analyzeContent$3$asyncArray$1$1.class */
 @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\n\n\u0000\n\u0002\u0010\u000e\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H\u008a@"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "Lkotlinx/coroutines/CoroutineScope;"})
 @DebugMetadata(f = "BookContent.kt", l = {95}, i = {0}, s = {"L$0"}, n = {"urlStr"}, m = "invokeSuspend", c = "io.legado.app.model.webBook.BookContent$analyzeContent$3$asyncArray$1$1")
 final class BookContent$analyzeContent$3$asyncArray$1$1 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super String>, Object> {

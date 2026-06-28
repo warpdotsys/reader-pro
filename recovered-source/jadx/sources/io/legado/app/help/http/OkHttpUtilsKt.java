@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Map;
 import kotlin.Metadata;
-import kotlin.Result;
 import kotlin.ResultKt;
 import kotlin.Unit;
 import kotlin.coroutines.Continuation;
@@ -30,7 +29,6 @@ import kotlinx.coroutines.Dispatchers;
 import me.ag2s.epublib.epub.NCXDocumentV2;
 import me.ag2s.epublib.epub.PackageDocumentBase;
 import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
@@ -44,13 +42,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /* JADX INFO: compiled from: OkHttpUtils.kt */
-/* JADX INFO: loaded from: app-classes.jar:io/legado/app/help/http/OkHttpUtilsKt.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/help/http/OkHttpUtilsKt.class */
 @Metadata(mv = {1, 5, 1}, k = 2, xi = 48, d1 = {"\u0000T\n\u0000\n\u0002\u0010\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010$\n\u0002\u0010\u000e\n\u0000\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0005\n\u0002\u0010\u000b\n\u0000\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\b\n\u0000\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0004\n\u0002\u0018\u0002\n\u0002\b\u0006\n\u0002\u0010\u0000\n\u0002\b\u0003\u001a\u001e\u0010\u0000\u001a\u00020\u0001*\u00020\u00022\u0012\u0010\u0003\u001a\u000e\u0012\u0004\u0012\u00020\u0005\u0012\u0004\u0012\u00020\u00050\u0004\u001a\u0015\u0010\u0006\u001a\u00020\u0007*\u00020\bH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\t\u001a0\u0010\n\u001a\u00020\u0001*\u00020\u00022\u0006\u0010\u000b\u001a\u00020\u00052\u0012\u0010\f\u001a\u000e\u0012\u0004\u0012\u00020\u0005\u0012\u0004\u0012\u00020\u00050\u00042\b\b\u0002\u0010\r\u001a\u00020\u000e\u001a8\u0010\u000f\u001a\u00020\u0010*\u00020\u00112\b\b\u0002\u0010\u0012\u001a\u00020\u00132\u0017\u0010\u0014\u001a\u0013\u0012\u0004\u0012\u00020\u0002\u0012\u0004\u0012\u00020\u00010\u0015¢\u0006\u0002\b\u0016H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0017\u001a8\u0010\u0018\u001a\u00020\u0007*\u00020\u00112\b\b\u0002\u0010\u0012\u001a\u00020\u00132\u0017\u0010\u0014\u001a\u0013\u0012\u0004\u0012\u00020\u0002\u0012\u0004\u0012\u00020\u00010\u0015¢\u0006\u0002\b\u0016H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0017\u001a8\u0010\u0019\u001a\u00020\u0010*\u00020\u00112\b\b\u0002\u0010\u0012\u001a\u00020\u00132\u0017\u0010\u0014\u001a\u0013\u0012\u0004\u0012\u00020\u0002\u0012\u0004\u0012\u00020\u00010\u0015¢\u0006\u0002\b\u0016H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0017\u001a8\u0010\u001a\u001a\u00020\u001b*\u00020\u00112\b\b\u0002\u0010\u0012\u001a\u00020\u00132\u0017\u0010\u0014\u001a\u0013\u0012\u0004\u0012\u00020\u0002\u0012\u0004\u0012\u00020\u00010\u0015¢\u0006\u0002\b\u0016H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0017\u001a(\u0010\u001c\u001a\u00020\u0001*\u00020\u00022\u0012\u0010\u001d\u001a\u000e\u0012\u0004\u0012\u00020\u0005\u0012\u0004\u0012\u00020\u00050\u00042\b\b\u0002\u0010\r\u001a\u00020\u000e\u001a\u0014\u0010\u001e\u001a\u00020\u0001*\u00020\u00022\b\u0010\u001f\u001a\u0004\u0018\u00010\u0005\u001a(\u0010 \u001a\u00020\u0001*\u00020\u00022\b\u0010!\u001a\u0004\u0018\u00010\u00052\u0012\u0010\u001d\u001a\u000e\u0012\u0004\u0012\u00020\u0005\u0012\u0004\u0012\u00020\"0\u0004\u001a\u0016\u0010#\u001a\u00020\u0005*\u00020\u00102\n\b\u0002\u0010$\u001a\u0004\u0018\u00010\u0005\u0082\u0002\u0004\n\u0002\b\u0019¨\u0006%"}, d2 = {"addHeaders", PackageDocumentBase.PREFIX_OPF, "Lokhttp3/Request$Builder;", "headers", PackageDocumentBase.PREFIX_OPF, PackageDocumentBase.PREFIX_OPF, "await", "Lokhttp3/Response;", "Lokhttp3/Call;", "(Lokhttp3/Call;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "get", RSSKeywords.RSS_ITEM_URL, "queryMap", "encoded", PackageDocumentBase.PREFIX_OPF, "newCall", "Lokhttp3/ResponseBody;", "Lokhttp3/OkHttpClient;", "retry", PackageDocumentBase.PREFIX_OPF, "builder", "Lkotlin/Function1;", "Lkotlin/ExtensionFunctionType;", "(Lokhttp3/OkHttpClient;ILkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "newCallResponse", "newCallResponseBody", "newCallStrResponse", "Lio/legado/app/help/http/StrResponse;", "postForm", "form", "postJson", "json", "postMultipart", "type", PackageDocumentBase.PREFIX_OPF, NCXDocumentV2.NCXTags.text, "encode", "reader-pro"})
 public final class OkHttpUtilsKt {
 
     /* JADX INFO: renamed from: io.legado.app.help.http.OkHttpUtilsKt$newCall$1, reason: invalid class name */
     /* JADX INFO: compiled from: OkHttpUtils.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/help/http/OkHttpUtilsKt$newCall$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/help/http/OkHttpUtilsKt$newCall$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "OkHttpUtils.kt", l = {59}, i = {0}, s = {"I$2"}, n = {"i"}, m = "newCall", c = "io.legado.app.help.http.OkHttpUtilsKt")
     static final class AnonymousClass1 extends ContinuationImpl {
@@ -76,7 +74,7 @@ public final class OkHttpUtilsKt {
 
     /* JADX INFO: renamed from: io.legado.app.help.http.OkHttpUtilsKt$newCallResponseBody$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: OkHttpUtils.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/help/http/OkHttpUtilsKt$newCallResponseBody$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/help/http/OkHttpUtilsKt$newCallResponseBody$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "OkHttpUtils.kt", l = {46}, i = {}, s = {}, n = {}, m = "newCallResponseBody", c = "io.legado.app.help.http.OkHttpUtilsKt")
     static final class C01501 extends ContinuationImpl {
@@ -97,7 +95,7 @@ public final class OkHttpUtilsKt {
 
     /* JADX INFO: renamed from: io.legado.app.help.http.OkHttpUtilsKt$newCallStrResponse$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: OkHttpUtils.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/help/http/OkHttpUtilsKt$newCallStrResponse$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/help/http/OkHttpUtilsKt$newCallStrResponse$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "OkHttpUtils.kt", l = {76}, i = {}, s = {}, n = {}, m = "newCallStrResponse", c = "io.legado.app.help.http.OkHttpUtilsKt")
     static final class C01511 extends ContinuationImpl {
@@ -130,7 +128,7 @@ public final class OkHttpUtilsKt {
 
     /* JADX INFO: renamed from: io.legado.app.help.http.OkHttpUtilsKt$newCallResponse$2, reason: invalid class name */
     /* JADX INFO: compiled from: OkHttpUtils.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/help/http/OkHttpUtilsKt$newCallResponse$2.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/help/http/OkHttpUtilsKt$newCallResponse$2.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\n\n\u0000\n\u0002\u0018\u0002\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H\u008a@"}, d2 = {"<anonymous>", "Lokhttp3/Response;", "Lkotlinx/coroutines/CoroutineScope;"})
     @DebugMetadata(f = "OkHttpUtils.kt", l = {33}, i = {0}, s = {"I$1"}, n = {"i"}, m = "invokeSuspend", c = "io.legado.app.help.http.OkHttpUtilsKt$newCallResponse$2")
     static final class AnonymousClass2 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super Response>, Object> {
@@ -161,24 +159,24 @@ public final class OkHttpUtilsKt {
         }
 
         /* JADX WARN: Code restructure failed: missing block: B:16:0x00b5, code lost:
-
+        
             if (r10 == r5.$retry) goto L17;
          */
         /* JADX WARN: Code restructure failed: missing block: B:17:0x00b8, code lost:
-
+        
             r0 = r8;
             kotlin.jvm.internal.Intrinsics.checkNotNull(r0);
          */
         /* JADX WARN: Code restructure failed: missing block: B:18:0x00bd, code lost:
-
+        
             return r0;
          */
         /* JADX WARN: Code restructure failed: missing block: B:5:0x004e, code lost:
-
+        
             if (0 <= r5.$retry) goto L6;
          */
         /* JADX WARN: Code restructure failed: missing block: B:6:0x0051, code lost:
-
+        
             r10 = r9;
             r9 = r9 + 1;
             r5.L$0 = r7;
@@ -188,11 +186,11 @@ public final class OkHttpUtilsKt {
             r0 = io.legado.app.help.http.OkHttpUtilsKt.await(r5.$this_newCallResponse.newCall(r7.build()), (kotlin.coroutines.Continuation) r5);
          */
         /* JADX WARN: Code restructure failed: missing block: B:7:0x0083, code lost:
-
+        
             if (r0 != r0) goto L11;
          */
         /* JADX WARN: Code restructure failed: missing block: B:9:0x0088, code lost:
-
+        
             return r0;
          */
         /* JADX WARN: Unsupported multi-entry loop pattern (BACK_EDGE: B:16:0x00b5 -> B:6:0x0051). Please report as a decompilation issue!!! */
@@ -285,11 +283,11 @@ public final class OkHttpUtilsKt {
     }
 
     /* JADX WARN: Code restructure failed: missing block: B:11:0x0082, code lost:
-
+    
         if (0 <= r6) goto L12;
      */
     /* JADX WARN: Code restructure failed: missing block: B:12:0x0085, code lost:
-
+    
         r12 = r11;
         r11 = r11 + 1;
         r14.L$0 = r5;
@@ -301,33 +299,33 @@ public final class OkHttpUtilsKt {
         r0 = await(r5.newCall(r9.build()), r14);
      */
     /* JADX WARN: Code restructure failed: missing block: B:13:0x00c4, code lost:
-
+    
         if (r0 != r0) goto L17;
      */
     /* JADX WARN: Code restructure failed: missing block: B:15:0x00c9, code lost:
-
+    
         return r0;
      */
     /* JADX WARN: Code restructure failed: missing block: B:22:0x0112, code lost:
-
+    
         if (r12 == r6) goto L23;
      */
     /* JADX WARN: Code restructure failed: missing block: B:23:0x0115, code lost:
-
+    
         r0 = r10;
         kotlin.jvm.internal.Intrinsics.checkNotNull(r0);
         r0 = r0.body();
      */
     /* JADX WARN: Code restructure failed: missing block: B:24:0x0122, code lost:
-
+    
         if (r0 != null) goto L27;
      */
     /* JADX WARN: Code restructure failed: missing block: B:26:0x0131, code lost:
-
+    
         throw new java.io.IOException(r10.message());
      */
     /* JADX WARN: Code restructure failed: missing block: B:28:0x0134, code lost:
-
+    
         return r0;
      */
     /* JADX WARN: Removed duplicated region for block: B:7:0x0027  */
@@ -387,11 +385,11 @@ public final class OkHttpUtilsKt {
     }
 
     /* JADX WARN: Code restructure failed: missing block: B:11:0x0082, code lost:
-
+    
         if (0 <= r9) goto L12;
      */
     /* JADX WARN: Code restructure failed: missing block: B:12:0x0085, code lost:
-
+    
         r15 = r14;
         r14 = r14 + 1;
         kotlinx.coroutines.JobKt.ensureActive(r17.getContext());
@@ -404,37 +402,37 @@ public final class OkHttpUtilsKt {
         r0 = await(r8.newCall(r12.build()), r17);
      */
     /* JADX WARN: Code restructure failed: missing block: B:13:0x00ce, code lost:
-
+    
         if (r0 != r0) goto L17;
      */
     /* JADX WARN: Code restructure failed: missing block: B:15:0x00d3, code lost:
-
+    
         return r0;
      */
     /* JADX WARN: Code restructure failed: missing block: B:22:0x012b, code lost:
-
+    
         if (r15 == r9) goto L23;
      */
     /* JADX WARN: Code restructure failed: missing block: B:23:0x012e, code lost:
-
+    
         r2 = r13;
         kotlin.jvm.internal.Intrinsics.checkNotNull(r2);
         r3 = r13.body();
      */
     /* JADX WARN: Code restructure failed: missing block: B:24:0x0141, code lost:
-
+    
         if (r3 != null) goto L26;
      */
     /* JADX WARN: Code restructure failed: missing block: B:25:0x0144, code lost:
-
+    
         r3 = r13.message();
      */
     /* JADX WARN: Code restructure failed: missing block: B:26:0x014c, code lost:
-
+    
         r3 = text$default(r3, null, 1, null);
      */
     /* JADX WARN: Code restructure failed: missing block: B:28:0x0157, code lost:
-
+    
         return new io.legado.app.help.http.StrResponse(r2, r3);
      */
     /* JADX WARN: Removed duplicated region for block: B:7:0x0027  */
@@ -494,42 +492,12 @@ public final class OkHttpUtilsKt {
     }
 
     @Nullable
-    public static final Object await(@NotNull final Call $this$await, @NotNull Continuation<? super Response> $completion) {
+    public static final Object await(@NotNull Call $this$await, @NotNull Continuation<? super Response> $completion) {
         CancellableContinuation cancellableContinuationImpl = new CancellableContinuationImpl(IntrinsicsKt.intercepted($completion), 1);
         cancellableContinuationImpl.initCancellability();
-        final CancellableContinuation block = cancellableContinuationImpl;
-        block.invokeOnCancellation(new Function1<Throwable, Unit>() { // from class: io.legado.app.help.http.OkHttpUtilsKt$await$2$1
-            /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-            {
-                super(1);
-            }
-
-            public /* bridge */ /* synthetic */ Object invoke(Object p1) {
-                invoke((Throwable) p1);
-                return Unit.INSTANCE;
-            }
-
-            public final void invoke(@Nullable Throwable it) {
-                $this$await.cancel();
-            }
-        });
-        $this$await.enqueue(new Callback() { // from class: io.legado.app.help.http.OkHttpUtilsKt$await$2$2
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Intrinsics.checkNotNullParameter(call, "call");
-                Intrinsics.checkNotNullParameter(e, "e");
-                Continuation continuation = block;
-                Result.Companion companion = Result.Companion;
-                continuation.resumeWith(Result.constructor-impl(ResultKt.createFailure(e)));
-            }
-
-            public void onResponse(@NotNull Call call, @NotNull Response response) {
-                Intrinsics.checkNotNullParameter(call, "call");
-                Intrinsics.checkNotNullParameter(response, "response");
-                Continuation continuation = block;
-                Result.Companion companion = Result.Companion;
-                continuation.resumeWith(Result.constructor-impl(response));
-            }
-        });
+        CancellableContinuation block = cancellableContinuationImpl;
+        block.invokeOnCancellation(new OkHttpUtilsKt$await$2$1($this$await));
+        $this$await.enqueue(new OkHttpUtilsKt$await$2$2(block));
         Object result = cancellableContinuationImpl.getResult();
         if (result == IntrinsicsKt.getCOROUTINE_SUSPENDED()) {
             DebugProbesKt.probeCoroutineSuspended($completion);

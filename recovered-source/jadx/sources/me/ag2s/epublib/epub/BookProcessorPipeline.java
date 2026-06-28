@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import me.ag2s.epublib.domain.EpubBook;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/epub/BookProcessorPipeline.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/epub/BookProcessorPipeline.class */
 public class BookProcessorPipeline implements BookProcessor {
     private static final String TAG = BookProcessorPipeline.class.getName();
     private List<BookProcessor> bookProcessors;

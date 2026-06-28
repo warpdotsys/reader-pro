@@ -5,7 +5,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
-/* JADX INFO: loaded from: app-classes.jar:org/kxml2/kdom/Document.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:org/kxml2/kdom/Document.class */
 public class Document extends Node {
     protected int rootIndex = -1;
     String encoding;

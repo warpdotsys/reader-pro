@@ -7,7 +7,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
-/* JADX INFO: loaded from: app-classes.jar:org/kxml2/kdom/Node.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:org/kxml2/kdom/Node.class */
 public class Node {
     public static final int DOCUMENT = 0;
     public static final int ELEMENT = 2;

@@ -1,12 +1,11 @@
-# Recovered source
+# Recovered backend source
 
-This directory contains authorized decompiler output from `app/reader-pro-3.2.14.jar`.
+This directory contains audit-oriented JADX output generated from a class-only JAR created from `BOOT-INF/classes` in `app/reader-pro-3.2.14.jar`.
 
-- Decompiler: JADX `1.5.5`
-- Input: application classes repackaged from `BOOT-INF/classes` in `reader-pro-3.2.14.jar`
-- Input SHA-256: `b26fb4769d689d98ff26408ce79a275d719f360906c84acf52ff404e98030c8c`
-- Java files emitted: `302`
-- Decompiled resource files committed: `0`
-- JADX reported errors: `19`
+- Decompiler: JADX 1.5.5
+- Java source files emitted: 440
+- Total emitted files/resources: 1535
+- JADX reported errors: 19
+- Full decompiler log: `recovered-source/jadx.log`
 
-The original application was Kotlin/JVM plus Java libraries. Decompiled files are Java approximations of bytecode, so they are for audit, comparison, and future source-level reconstruction. JADX-copied resources are intentionally omitted here because the full resource set is already preserved under `recovered-assets/` and in the authoritative JAR. The checked-in JAR remains the authoritative runnable artifact until a clean source build is reconstructed and verified.
+The generated Java is not official upstream source and is not guaranteed to compile. Treat it as a searchable view of the 3.2.14 artifact for audit and future reconstruction.

@@ -2,7 +2,7 @@ package me.ag2s.epublib.util.commons.io;
 
 import java.io.IOException;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/util/commons/io/XmlStreamReaderException.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/util/commons/io/XmlStreamReaderException.class */
 public class XmlStreamReaderException extends IOException {
     private static final long serialVersionUID = 1;
     private final String bomEncoding;

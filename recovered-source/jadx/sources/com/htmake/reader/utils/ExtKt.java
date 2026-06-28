@@ -57,7 +57,6 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.Enumeration;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -80,7 +79,6 @@ import kotlin.collections.IntIterator;
 import kotlin.io.CloseableKt;
 import kotlin.io.FilesKt;
 import kotlin.io.TextStreamsKt;
-import kotlin.jvm.functions.Function0;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function3;
 import kotlin.jvm.internal.Intrinsics;
@@ -106,27 +104,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /* JADX INFO: compiled from: Ext.kt */
-/* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/utils/ExtKt.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/utils/ExtKt.class */
 @Metadata(mv = {1, 5, 1}, k = 2, xi = 48, d1 = {"\u0000§\u0001\n\u0000\n\u0002\u0010\b\n\u0000\n\u0002\u0010\u000b\n\u0002\b\u0005\n\u0002\u0018\u0002\n\u0002\b\u0004\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0002\b\u0005\n\u0002\u0010\u000e\n\u0002\b\u000b\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\u0000\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0004\n\u0002\u0018\u0002\n\u0002\b\u0005\n\u0002\u0018\u0002\n\u0002\b\u0006\n\u0002\u0010 \n\u0002\u0018\u0002\n\u0002\b\u0006\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0004\n\u0002\u0010\u0011\n\u0002\b\u0010\n\u0002\u0010\"\n\u0002\b\u0005\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\t\n\u0002\u0010\u0002\n\u0002\b\r\n\u0002\u0018\u0002\n\u0002\b\n\n\u0002\u0018\u0002\n\u0002\b\u0004\n\u0002\u0010$\n\u0002\b\n*\u0001\u000e\u001a\u0012\u0010\"\u001a\u0004\u0018\u00010#2\b\u0010$\u001a\u0004\u0018\u00010%\u001a\u0012\u0010&\u001a\u0004\u0018\u00010'2\b\u0010$\u001a\u0004\u0018\u00010%\u001a\u0016\u0010(\u001a\u00020\u00012\u0006\u0010)\u001a\u00020\u00172\u0006\u0010*\u001a\u00020\u0017\u001a\u000e\u0010+\u001a\u00020,2\u0006\u0010-\u001a\u00020\u0017\u001a\u000e\u0010.\u001a\u00020,2\u0006\u0010-\u001a\u00020\u0017\u001a\u0010\u0010/\u001a\u0004\u0018\u00010\u00172\u0006\u00100\u001a\u00020\u0017\u001a\u0010\u00101\u001a\u0004\u0018\u0001022\u0006\u00100\u001a\u00020\u0017\u001a\u000e\u00103\u001a\u00020\u00172\u0006\u00104\u001a\u00020\u0017\u001a\u0016\u00105\u001a\u00020\u00172\u0006\u00106\u001a\u00020\u00172\u0006\u00107\u001a\u00020\u0017\u001a6\u00108\u001a\u0014\u0012\u0010\u0012\u000e\u0012\u0004\u0012\u00020\u0017\u0012\u0004\u0012\u00020\u00010:092\f\u0010;\u001a\b\u0012\u0004\u0012\u00020\u0017092\u0006\u0010<\u001a\u00020\u00172\u0006\u0010=\u001a\u00020\u0017\u001a\u0010\u0010>\u001a\u0002022\b\b\u0002\u0010?\u001a\u00020\u0003\u001a\u000e\u0010@\u001a\n\u0012\u0004\u0012\u00020B\u0018\u00010A\u001a\u000e\u0010C\u001a\u00020\u00172\u0006\u0010D\u001a\u00020\u0001\u001a\u001f\u0010E\u001a\u00020\u00172\u0012\u0010F\u001a\n\u0012\u0006\b\u0001\u0012\u00020\u00170G\"\u00020\u0017¢\u0006\u0002\u0010H\u001a+\u0010I\u001a\u0004\u0018\u00010\u00172\u0012\u0010J\u001a\n\u0012\u0006\b\u0001\u0012\u00020\u00170G\"\u00020\u00172\b\b\u0002\u0010K\u001a\u00020\u0017¢\u0006\u0002\u0010L\u001a)\u0010M\u001a\u00020,2\u0012\u0010J\u001a\n\u0012\u0006\b\u0001\u0012\u00020\u00170G\"\u00020\u00172\b\b\u0002\u0010K\u001a\u00020\u0017¢\u0006\u0002\u0010N\u001a\u0006\u0010O\u001a\u00020\u0017\u001a\u0006\u0010P\u001a\u00020\u0017\u001a\u001f\u0010Q\u001a\u00020\u00172\u0012\u0010F\u001a\n\u0012\u0006\b\u0001\u0012\u00020\u00170G\"\u00020\u0017¢\u0006\u0002\u0010H\u001a\u0010\u0010Q\u001a\u00020\u00172\b\b\u0002\u0010R\u001a\u00020\u0017\u001a\u0018\u0010S\u001a\u00020\u00172\u0006\u0010$\u001a\u00020%2\b\b\u0002\u0010T\u001a\u00020\u0003\u001ar\u0010U\u001a\u0004\u0018\u00010#2\u0006\u0010V\u001a\u00020,2\u0010\b\u0002\u0010W\u001a\n\u0012\u0004\u0012\u00020\u0017\u0018\u00010X2\u0010\b\u0002\u0010Y\u001a\n\u0012\u0004\u0012\u00020\u0017\u0018\u00010X2\b\b\u0002\u0010Z\u001a\u00020\u00012\b\b\u0002\u0010[\u001a\u00020\u00012\u0010\b\u0002\u0010\\\u001a\n\u0012\u0004\u0012\u00020\u0017\u0018\u00010X2\u0016\b\u0002\u0010]\u001a\u0010\u0012\u0004\u0012\u00020_\u0012\u0004\u0012\u00020\u0003\u0018\u00010^\u001a!\u0010`\u001a\u0002Ha\"\u0004\b\u0000\u0010a2\u0006\u0010b\u001a\u00020%2\u0006\u0010c\u001a\u00020\u0017¢\u0006\u0002\u0010d\u001a\u0010\u0010e\u001a\u0004\u0018\u00010\u00172\u0006\u0010f\u001a\u00020\u0017\u001a\u0016\u0010g\u001a\u00020\u00032\u0006\u0010f\u001a\u00020\u00172\u0006\u00100\u001a\u00020\u0017\u001a;\u0010h\u001a\u00020i2\u0012\u0010J\u001a\n\u0012\u0006\b\u0001\u0012\u00020\u00170G\"\u00020\u00172\u0006\u0010$\u001a\u00020%2\b\b\u0002\u0010T\u001a\u00020\u00032\b\b\u0002\u0010K\u001a\u00020\u0017¢\u0006\u0002\u0010j\u001a\u001e\u0010k\u001a\u00020\u00032\u0006\u0010l\u001a\u00020\u00172\u0006\u0010<\u001a\u00020\u00172\u0006\u0010=\u001a\u00020\u0017\u001a\u001e\u0010m\u001a\u00020i2\u0006\u0010b\u001a\u00020%2\u0006\u0010c\u001a\u00020\u00172\u0006\u0010n\u001a\u00020%\u001a\u000e\u0010o\u001a\u00020i2\u0006\u0010p\u001a\u00020\u0003\u001a\u000e\u0010q\u001a\u00020\u00032\u0006\u0010r\u001a\u00020\u0017\u001a\u001c\u0010s\u001a\u00020\u00032\f\u0010t\u001a\b\u0012\u0004\u0012\u00020,092\u0006\u0010u\u001a\u00020\u0017\u001a)\u0010v\u001a\u0010\u0012\f\u0012\n \n*\u0004\u0018\u00010%0%0w\"\u0006\b\u0000\u0010x\u0018\u0001*\b\u0012\u0004\u0012\u0002Hx0wH\u0086\b\u001a \u0010y\u001a\u0002Hz\"\u0004\b\u0000\u0010{\"\u0006\b\u0001\u0010z\u0018\u0001*\u0002H{H\u0086\b¢\u0006\u0002\u0010|\u001a%\u0010}\u001a\b\u0012\u0004\u0012\u00020,09*\u00020,2\u000e\u0010~\u001a\n\u0012\u0004\u0012\u00020\u0017\u0018\u00010G¢\u0006\u0002\u0010\u007f\u001a\u000b\u0010\u0080\u0001\u001a\u00020i*\u00020,\u001a&\u0010\u0081\u0001\u001a\u00030\u0082\u0001*\u00030\u0082\u00012\b\u0010\u0083\u0001\u001a\u00030\u0082\u00012\r\u0010\u0084\u0001\u001a\b\u0012\u0004\u0012\u00020\u001709\u001a\u0011\u0010\u0085\u0001\u001a\b\u0012\u0004\u0012\u00020,09*\u00020,\u001a$\u0010\u0086\u0001\u001a\u000f\u0012\u0004\u0012\u00020\u0017\u0012\u0004\u0012\u00020%0\u0087\u0001\"\u0004\b\u0000\u0010x*\u0002Hx¢\u0006\u0003\u0010\u0088\u0001\u001a)\u0010\u0089\u0001\u001a\u0002Hx\"\u0006\b\u0000\u0010x\u0018\u0001*\u000f\u0012\u0004\u0012\u00020\u0017\u0012\u0004\u0012\u00020%0\u0087\u0001H\u0086\b¢\u0006\u0003\u0010\u008a\u0001\u001a\u0016\u0010\u008b\u0001\u001a\u00020\u0017*\u00020\u00172\t\b\u0002\u0010\u008c\u0001\u001a\u00020\u0003\u001a$\u0010\u008d\u0001\u001a\u000f\u0012\u0004\u0012\u00020\u0017\u0012\u0004\u0012\u00020%0\u0087\u0001\"\u0004\b\u0000\u0010x*\u0002Hx¢\u0006\u0003\u0010\u0088\u0001\u001a\u0014\u0010\u008e\u0001\u001a\u00020\u0003*\u00020,2\u0007\u0010\u008f\u0001\u001a\u00020\u0017\u001a\u000b\u0010\u0090\u0001\u001a\u00020\u0017*\u00020\u0017\u001a\u0012\u0010s\u001a\u00020\u0003*\u00020,2\u0006\u0010u\u001a\u00020\u0017\"\u000e\u0010\u0000\u001a\u00020\u0001X\u0082T¢\u0006\u0002\n\u0000\"\u001a\u0010\u0002\u001a\u00020\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\u0004\u0010\u0005\"\u0004\b\u0006\u0010\u0007\"\u0019\u0010\b\u001a\n \n*\u0004\u0018\u00010\t0\t¢\u0006\b\n\u0000\u001a\u0004\b\u000b\u0010\f\"\u0010\u0010\r\u001a\u00020\u000eX\u0082\u0004¢\u0006\u0004\n\u0002\u0010\u000f\"\u0011\u0010\u0010\u001a\u00020\u0011¢\u0006\b\n\u0000\u001a\u0004\b\u0012\u0010\u0013\"\u0019\u0010\u0014\u001a\n \n*\u0004\u0018\u00010\t0\t¢\u0006\b\n\u0000\u001a\u0004\b\u0015\u0010\f\"\u001a\u0010\u0016\u001a\u00020\u0017X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\u0018\u0010\u0019\"\u0004\b\u001a\u0010\u001b\"\u001a\u0010\u001c\u001a\u00020\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\u001d\u0010\u0005\"\u0004\b\u001e\u0010\u0007\"\u001a\u0010\u001f\u001a\u00020\u0017X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b \u0010\u0019\"\u0004\b!\u0010\u001b¨\u0006\u0091\u0001"}, d2 = {"MAX_CACHE_SIZE", PackageDocumentBase.PREFIX_OPF, "_licenseValid", PackageDocumentBase.PREFIX_OPF, "get_licenseValid", "()Z", "set_licenseValid", "(Z)V", "gson", "Lcom/google/gson/Gson;", "kotlin.jvm.PlatformType", "getGson", "()Lcom/google/gson/Gson;", "lockMap", "com/htmake/reader/utils/ExtKt$lockMap$1", "Lcom/htmake/reader/utils/ExtKt$lockMap$1;", "logger", "Lmu/KLogger;", "getLogger", "()Lmu/KLogger;", "prettyGson", "getPrettyGson", "storageFinalPath", PackageDocumentBase.PREFIX_OPF, "getStorageFinalPath", "()Ljava/lang/String;", "setStorageFinalPath", "(Ljava/lang/String;)V", "workDirInit", "getWorkDirInit", "setWorkDirInit", "workDirPath", "getWorkDirPath", "setWorkDirPath", "asJsonArray", "Lio/vertx/core/json/JsonArray;", "value", PackageDocumentBase.PREFIX_OPF, "asJsonObject", "Lio/vertx/core/json/JsonObject;", "countOccurrences", "str", "subStr", "createDir", "Ljava/io/File;", "filePath", "createFile", "decryptData", "content", "decryptToLicense", "Lcom/htmake/reader/entity/License;", "encodeBase64", NCXDocumentV2.NCXTags.text, "genEncryptedPassword", "password", "salt", "getCommand", PackageDocumentBase.PREFIX_OPF, "Lkotlin/Pair;", "to", PackageDocumentBase.DCTags.subject, NCXDocumentV3.XHTMLTgs.body, "getInstalledLicense", "ignoreInvalid", "getMongoFileStorage", "Lcom/mongodb/client/MongoCollection;", "Lcom/htmake/reader/entity/MongoFile;", "getRandomString", "length", "getRelativePath", "subDirFiles", PackageDocumentBase.PREFIX_OPF, "([Ljava/lang/String;)Ljava/lang/String;", "getStorage", "name", "ext", "([Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;", "getStorageFile", "([Ljava/lang/String;Ljava/lang/String;)Ljava/io/File;", "getStoragePath", "getTraceId", "getWorkDir", "subPath", "jsonEncode", "pretty", "parseJsonStringList", "file", "fields", PackageDocumentBase.PREFIX_OPF, "exclude", "startIndex", "endIndex", "checkNotEmpty", "filter", "Lkotlin/Function1;", "Lcom/fasterxml/jackson/databind/node/ObjectNode;", "readInstanceProperty", "R", "instance", "propertyName", "(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;", "readMongoFile", "path", "saveMongoFile", "saveStorage", PackageDocumentBase.PREFIX_OPF, "([Ljava/lang/String;Ljava/lang/Object;ZLjava/lang/String;)V", "sendEmail", "toEmail", "setInstanceProperty", "propertyValue", "setLicenseValid", "isValid", "validateEmail", "email", "zip", "files", "zipFilePath", "arrayType", "Ljava/lang/Class;", "T", "convert", "O", "I", "(Ljava/lang/Object;)Ljava/lang/Object;", "deepListFiles", "allowExtensions", "(Ljava/io/File;[Ljava/lang/String;)Ljava/util/List;", "deleteRecursively", "fillData", "Lio/legado/app/data/entities/Book;", "newBook", "keys", "listFilesRecursively", "serializeToMap", PackageDocumentBase.PREFIX_OPF, "(Ljava/lang/Object;)Ljava/util/Map;", "toDataClass", "(Ljava/util/Map;)Ljava/lang/Object;", "toDir", "absolute", "toMap", "unzip", "descDir", RSSKeywords.RSS_ITEM_URL, "reader-pro"})
 public final class ExtKt {
     private static boolean workDirInit;
     private static final int MAX_CACHE_SIZE = 1000;
 
     @NotNull
-    private static final KLogger logger = KotlinLogging.INSTANCE.logger(new Function0<Unit>() { // from class: com.htmake.reader.utils.ExtKt$logger$1
-        public final void invoke() {
-        }
-
-        /* JADX INFO: renamed from: invoke, reason: collision with other method in class */
-        public /* bridge */ /* synthetic */ Object m91invoke() {
-            invoke();
-            return Unit.INSTANCE;
-        }
-    });
-    private static final Gson gson = new GsonBuilder().registerTypeAdapter(new TypeToken<Map<String, ? extends Object>>() { // from class: com.htmake.reader.utils.ExtKt$gson$1
-    }.getType(), new MapDeserializerDoubleAsIntFix()).registerTypeAdapter(Integer.TYPE, new IntTypeAdapter()).registerTypeAdapter(Long.TYPE, new LongTypeAdapter()).disableHtmlEscaping().create();
-    private static final Gson prettyGson = new GsonBuilder().registerTypeAdapter(new TypeToken<Map<String, ? extends Object>>() { // from class: com.htmake.reader.utils.ExtKt$prettyGson$1
-    }.getType(), new MapDeserializerDoubleAsIntFix()).registerTypeAdapter(Integer.TYPE, new IntTypeAdapter()).registerTypeAdapter(Long.TYPE, new LongTypeAdapter()).disableHtmlEscaping().setPrettyPrinting().create();
+    private static final KLogger logger = KotlinLogging.INSTANCE.logger(ExtKt$logger$1.INSTANCE);
+    private static final Gson gson = new GsonBuilder().registerTypeAdapter(new ExtKt$gson$1().getType(), new MapDeserializerDoubleAsIntFix()).registerTypeAdapter(Integer.TYPE, new IntTypeAdapter()).registerTypeAdapter(Long.TYPE, new LongTypeAdapter()).disableHtmlEscaping().create();
+    private static final Gson prettyGson = new GsonBuilder().registerTypeAdapter(new ExtKt$prettyGson$1().getType(), new MapDeserializerDoubleAsIntFix()).registerTypeAdapter(Integer.TYPE, new IntTypeAdapter()).registerTypeAdapter(Long.TYPE, new LongTypeAdapter()).disableHtmlEscaping().setPrettyPrinting().create();
 
     @NotNull
     private static String storageFinalPath = PackageDocumentBase.PREFIX_OPF;
@@ -135,117 +122,16 @@ public final class ExtKt {
     private static String workDirPath = PackageDocumentBase.PREFIX_OPF;
 
     @NotNull
-    private static final ExtKt$lockMap$1 lockMap = new LinkedHashMap<String, ReadWriteLock>() { // from class: com.htmake.reader.utils.ExtKt$lockMap$1
-        public /* bridge */ boolean containsKey(String key) {
-            return super.containsKey((Object) key);
-        }
-
-        @Override // java.util.HashMap, java.util.AbstractMap, java.util.Map
-        public final /* bridge */ boolean containsKey(Object key) {
-            if (key instanceof String) {
-                return containsKey((String) key);
-            }
-            return false;
-        }
-
-        public /* bridge */ boolean containsValue(ReadWriteLock value) {
-            return super.containsValue((Object) value);
-        }
-
-        @Override // java.util.LinkedHashMap, java.util.HashMap, java.util.AbstractMap, java.util.Map
-        public final /* bridge */ boolean containsValue(Object value) {
-            if (value instanceof ReadWriteLock) {
-                return containsValue((ReadWriteLock) value);
-            }
-            return false;
-        }
-
-        public /* bridge */ ReadWriteLock get(String key) {
-            return (ReadWriteLock) super.get((Object) key);
-        }
-
-        @Override // java.util.LinkedHashMap, java.util.HashMap, java.util.AbstractMap, java.util.Map
-        public final /* bridge */ ReadWriteLock get(Object key) {
-            if (key instanceof String) {
-                return get((String) key);
-            }
-            return null;
-        }
-
-        public /* bridge */ ReadWriteLock getOrDefault(String key, ReadWriteLock defaultValue) {
-            return (ReadWriteLock) super.getOrDefault((Object) key, defaultValue);
-        }
-
-        public final /* bridge */ ReadWriteLock getOrDefault(Object key, ReadWriteLock defaultValue) {
-            return !(key instanceof String) ? defaultValue : getOrDefault((String) key, defaultValue);
-        }
-
-        public /* bridge */ ReadWriteLock remove(String key) {
-            return (ReadWriteLock) super.remove((Object) key);
-        }
-
-        @Override // java.util.HashMap, java.util.AbstractMap, java.util.Map
-        public final /* bridge */ ReadWriteLock remove(Object key) {
-            if (key instanceof String) {
-                return remove((String) key);
-            }
-            return null;
-        }
-
-        public /* bridge */ boolean remove(String key, ReadWriteLock value) {
-            return super.remove((Object) key, (Object) value);
-        }
-
-        @Override // java.util.HashMap, java.util.Map
-        public final /* bridge */ boolean remove(Object key, Object value) {
-            if ((key instanceof String) && (value instanceof ReadWriteLock)) {
-                return remove((String) key, (ReadWriteLock) value);
-            }
-            return false;
-        }
-
-        public /* bridge */ Set<Map.Entry<String, ReadWriteLock>> getEntries() {
-            return super.entrySet();
-        }
-
-        @Override // java.util.LinkedHashMap, java.util.HashMap, java.util.AbstractMap, java.util.Map
-        public final /* bridge */ Set<Map.Entry<String, ReadWriteLock>> entrySet() {
-            return getEntries();
-        }
-
-        public /* bridge */ Set<String> getKeys() {
-            return super.keySet();
-        }
-
-        @Override // java.util.LinkedHashMap, java.util.HashMap, java.util.AbstractMap, java.util.Map
-        public final /* bridge */ Set<String> keySet() {
-            return getKeys();
-        }
-
-        public /* bridge */ int getSize() {
-            return super.size();
-        }
-
-        @Override // java.util.HashMap, java.util.AbstractMap, java.util.Map
-        public final /* bridge */ int size() {
-            return getSize();
-        }
-
-        public /* bridge */ Collection<ReadWriteLock> getValues() {
-            return super.values();
-        }
-
-        @Override // java.util.LinkedHashMap, java.util.HashMap, java.util.AbstractMap, java.util.Map
-        public final /* bridge */ Collection<ReadWriteLock> values() {
-            return getValues();
-        }
-
-        @Override // java.util.LinkedHashMap
-        protected boolean removeEldestEntry(@Nullable Map.Entry<String, ReadWriteLock> eldest) {
-            return size() > 1000;
-        }
-    };
+    private static final ExtKt$lockMap$1 lockMap = new ExtKt$lockMap$1();
     private static boolean _licenseValid = true;
+
+    /* JADX INFO: Add missing generic type declarations: [O] */
+    /* JADX INFO: renamed from: com.htmake.reader.utils.ExtKt$convert$1, reason: invalid class name */
+    /* JADX INFO: compiled from: Ext.kt */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/utils/ExtKt$convert$1.class */
+    @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u0000\u000b\n\u0000\n\u0002\u0018\u0002\n\u0000*\u0001\u0000\b\n\u0018\u00002\b\u0012\u0004\u0012\u00028\u00000\u0001¨\u0006\u0002"}, d2 = {"com/htmake/reader/utils/ExtKt$convert$1", "Lcom/google/gson/reflect/TypeToken;", "reader-pro"})
+    public static final class AnonymousClass1<O> extends TypeToken<O> {
+    }
 
     @NotNull
     public static final KLogger getLogger() {
@@ -995,8 +881,8 @@ public final class ExtKt {
 
     /*  JADX ERROR: JadxRuntimeException in pass: BlockSplitter
         jadx.core.utils.exceptions.JadxRuntimeException: Unexpected missing predecessor for block: B:8:0x0013
-            at jadx.core.dex.visitors.blocks.BlockSplitter.addTempConnectionsForExcHandlers(BlockSplitter.java:280)
-            at jadx.core.dex.visitors.blocks.BlockSplitter.visit(BlockSplitter.java:79)
+        	at jadx.core.dex.visitors.blocks.BlockSplitter.addTempConnectionsForExcHandlers(BlockSplitter.java:280)
+        	at jadx.core.dex.visitors.blocks.BlockSplitter.visit(BlockSplitter.java:79)
         */
     @org.jetbrains.annotations.Nullable
     public static final io.vertx.core.json.JsonArray asJsonArray(@org.jetbrains.annotations.Nullable java.lang.Object r5) {
@@ -1158,8 +1044,8 @@ public final class ExtKt {
 
     /*  JADX ERROR: JadxRuntimeException in pass: BlockSplitter
         jadx.core.utils.exceptions.JadxRuntimeException: Unexpected missing predecessor for block: B:8:0x0013
-            at jadx.core.dex.visitors.blocks.BlockSplitter.addTempConnectionsForExcHandlers(BlockSplitter.java:280)
-            at jadx.core.dex.visitors.blocks.BlockSplitter.visit(BlockSplitter.java:79)
+        	at jadx.core.dex.visitors.blocks.BlockSplitter.addTempConnectionsForExcHandlers(BlockSplitter.java:280)
+        	at jadx.core.dex.visitors.blocks.BlockSplitter.visit(BlockSplitter.java:79)
         */
     @org.jetbrains.annotations.Nullable
     public static final io.vertx.core.json.JsonObject asJsonObject(@org.jetbrains.annotations.Nullable java.lang.Object r5) {
@@ -1198,7 +1084,6 @@ public final class ExtKt {
     }
 
     /* JADX WARN: Multi-variable type inference failed */
-    /* JADX WARN: Type inference failed for: r2v0, types: [com.htmake.reader.utils.ExtKt$serializeToMap$$inlined$convert$1] */
     @NotNull
     public static final <T> Map<String, Object> serializeToMap(T $this$serializeToMap) {
         String json;
@@ -1208,12 +1093,10 @@ public final class ExtKt {
             json = (String) $this$serializeToMap;
         }
         String json$iv = json;
-        return (Map) getGson().fromJson(json$iv, new TypeToken<Map<String, ? extends Object>>() { // from class: com.htmake.reader.utils.ExtKt$serializeToMap$$inlined$convert$1
-        }.getType());
+        return (Map) getGson().fromJson(json$iv, new ExtKt$serializeToMap$$inlined$convert$1().getType());
     }
 
     /* JADX WARN: Multi-variable type inference failed */
-    /* JADX WARN: Type inference failed for: r2v0, types: [com.htmake.reader.utils.ExtKt$toMap$$inlined$convert$1] */
     @NotNull
     public static final <T> Map<String, Object> toMap(T $this$toMap) {
         String json;
@@ -1223,8 +1106,7 @@ public final class ExtKt {
             json = (String) $this$toMap;
         }
         String json$iv = json;
-        return (Map) getGson().fromJson(json$iv, new TypeToken<Map<String, ? extends Object>>() { // from class: com.htmake.reader.utils.ExtKt$toMap$$inlined$convert$1
-        }.getType());
+        return (Map) getGson().fromJson(json$iv, new ExtKt$toMap$$inlined$convert$1().getType());
     }
 
     /* JADX WARN: Multi-variable type inference failed */
@@ -1239,8 +1121,7 @@ public final class ExtKt {
         String str = json;
         Gson gson2 = getGson();
         Intrinsics.needClassReification();
-        return (T) gson2.fromJson(str, new TypeToken<T>() { // from class: com.htmake.reader.utils.ExtKt$toDataClass$$inlined$convert$1
-        }.getType());
+        return (T) gson2.fromJson(str, new ExtKt$toDataClass$$inlined$convert$1().getType());
     }
 
     /* JADX WARN: Multi-variable type inference failed */
@@ -1254,8 +1135,7 @@ public final class ExtKt {
         String str = json;
         Gson gson2 = getGson();
         Intrinsics.needClassReification();
-        return (O) gson2.fromJson(str, new TypeToken<O>() { // from class: com.htmake.reader.utils.ExtKt.convert.1
-        }.getType());
+        return (O) gson2.fromJson(str, new AnonymousClass1().getType());
     }
 
     public static final /* synthetic */ <T> Class<Object> arrayType(Class<T> cls) {
@@ -1420,7 +1300,6 @@ public final class ExtKt {
         return license;
     }
 
-    /* JADX WARN: Type inference failed for: r2v0, types: [com.htmake.reader.utils.ExtKt$decryptToLicense$lambda-19$$inlined$toDataClass$1] */
     @Nullable
     public static final License decryptToLicense(@NotNull String content) {
         String it;
@@ -1430,8 +1309,7 @@ public final class ExtKt {
         }
         Object map = toMap(it);
         String json$iv$iv = map instanceof String ? (String) map : getGson().toJson(map);
-        License license = (License) getGson().fromJson(json$iv$iv, new TypeToken<License>() { // from class: com.htmake.reader.utils.ExtKt$decryptToLicense$lambda-19$$inlined$toDataClass$1
-        }.getType());
+        License license = (License) getGson().fromJson(json$iv$iv, new ExtKt$decryptToLicense$lambda19$$inlined$toDataClass$1().getType());
         if (license == null) {
             return null;
         }
@@ -1457,39 +1335,7 @@ public final class ExtKt {
         Intrinsics.checkNotNullParameter(toEmail, "toEmail");
         Intrinsics.checkNotNullParameter(subject, PackageDocumentBase.DCTags.subject);
         Intrinsics.checkNotNullParameter(body, NCXDocumentV3.XHTMLTgs.body);
-        Function3 sendCommand = new Function3<OutputStreamWriter, BufferedReader, Pair<? extends String, ? extends Integer>, Boolean>() { // from class: com.htmake.reader.utils.ExtKt$sendEmail$sendCommand$1
-            public /* bridge */ /* synthetic */ Object invoke(Object p1, Object p2, Object p3) {
-                return Boolean.valueOf(invoke((OutputStreamWriter) p1, (BufferedReader) p2, (Pair<String, Integer>) p3));
-            }
-
-            public final boolean invoke(@NotNull OutputStreamWriter writer, @NotNull BufferedReader reader, @NotNull Pair<String, Integer> command) throws IOException {
-                Intrinsics.checkNotNullParameter(writer, "writer");
-                Intrinsics.checkNotNullParameter(reader, "reader");
-                Intrinsics.checkNotNullParameter(command, "command");
-                String cmd = (String) command.getFirst();
-                int code = ((Number) command.getSecond()).intValue();
-                KLogger logger2 = ExtKt.getLogger();
-                if (cmd == null) {
-                    throw new NullPointerException("null cannot be cast to non-null type kotlin.CharSequence");
-                }
-                logger2.debug("Send command {}, expect code {}", StringsKt.trim(cmd).toString(), Integer.valueOf(code));
-                writer.write(String.valueOf(cmd));
-                writer.flush();
-                String response = reader.readLine();
-                ExtKt.getLogger().debug("Response {}", response);
-                String str = response;
-                if (!(str == null || str.length() == 0)) {
-                    Intrinsics.checkNotNullExpressionValue(response, "response");
-                    if (!StringsKt.startsWith$default(response, Intrinsics.stringPlus(PackageDocumentBase.PREFIX_OPF, Integer.valueOf(code)), false, 2, (Object) null)) {
-                        ExtKt.getLogger().error("Error response from SMTP server.");
-                        return false;
-                    }
-                    return true;
-                }
-                ExtKt.getLogger().error("SMTP server no response.");
-                return false;
-            }
-        };
+        Function3 sendCommand = ExtKt$sendEmail$sendCommand$1.INSTANCE;
         try {
             SocketFactory sslSocketFactory = SSLSocketFactory.getDefault();
             Socket socket = sslSocketFactory.createSocket("smtp.qiye.aliyun.com", 465);

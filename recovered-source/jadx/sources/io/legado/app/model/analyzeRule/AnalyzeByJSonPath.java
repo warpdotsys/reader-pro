@@ -6,14 +6,16 @@ import com.jayway.jsonpath.ReadContext;
 import java.util.ArrayList;
 import java.util.Iterator;
 import kotlin.Metadata;
+import kotlin.jvm.functions.Function1;
 import kotlin.jvm.internal.DefaultConstructorMarker;
 import kotlin.jvm.internal.Intrinsics;
+import kotlin.jvm.internal.Lambda;
 import me.ag2s.epublib.epub.PackageDocumentBase;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /* JADX INFO: compiled from: AnalyzeByJSonPath.kt */
-/* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/analyzeRule/AnalyzeByJSonPath.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/analyzeRule/AnalyzeByJSonPath.class */
 @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u0000(\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\u000e\n\u0002\b\u0005\n\u0002\u0010 \n\u0002\b\u0003\u0018\u0000 \u00112\u00020\u0001:\u0001\u0011B\r\u0012\u0006\u0010\u0002\u001a\u00020\u0001¢\u0006\u0002\u0010\u0003J\u001d\u0010\u0006\u001a\n\u0012\u0004\u0012\u00020\u0001\u0018\u00010\u00072\u0006\u0010\b\u001a\u00020\tH\u0000¢\u0006\u0002\b\nJ\u0015\u0010\u000b\u001a\u00020\u00012\u0006\u0010\b\u001a\u00020\tH\u0000¢\u0006\u0002\b\fJ\u0010\u0010\r\u001a\u0004\u0018\u00010\t2\u0006\u0010\b\u001a\u00020\tJ\u001b\u0010\u000e\u001a\b\u0012\u0004\u0012\u00020\t0\u000f2\u0006\u0010\b\u001a\u00020\tH\u0000¢\u0006\u0002\b\u0010R\u000e\u0010\u0004\u001a\u00020\u0005X\u0082\u000e¢\u0006\u0002\n\u0000¨\u0006\u0012"}, d2 = {"Lio/legado/app/model/analyzeRule/AnalyzeByJSonPath;", PackageDocumentBase.PREFIX_OPF, "json", "(Ljava/lang/Object;)V", "ctx", "Lcom/jayway/jsonpath/ReadContext;", "getList", "Ljava/util/ArrayList;", "rule", PackageDocumentBase.PREFIX_OPF, "getList$reader_pro", "getObject", "getObject$reader_pro", "getString", "getStringList", PackageDocumentBase.PREFIX_OPF, "getStringList$reader_pro", "Companion", "reader-pro"})
 public final class AnalyzeByJSonPath {
 
@@ -30,7 +32,7 @@ public final class AnalyzeByJSonPath {
     }
 
     /* JADX INFO: compiled from: AnalyzeByJSonPath.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/analyzeRule/AnalyzeByJSonPath$Companion.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/analyzeRule/AnalyzeByJSonPath$Companion.class */
     @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u0000\u0014\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\b\u0086\u0003\u0018\u00002\u00020\u0001B\u0007\b\u0002¢\u0006\u0002\u0010\u0002J\u000e\u0010\u0003\u001a\u00020\u00042\u0006\u0010\u0005\u001a\u00020\u0001¨\u0006\u0006"}, d2 = {"Lio/legado/app/model/analyzeRule/AnalyzeByJSonPath$Companion;", PackageDocumentBase.PREFIX_OPF, "()V", "parse", "Lcom/jayway/jsonpath/ReadContext;", "json", "reader-pro"})
     public static final class Companion {
         public /* synthetic */ Companion(DefaultConstructorMarker $constructor_marker) {
@@ -59,8 +61,8 @@ public final class AnalyzeByJSonPath {
 
     /*  JADX ERROR: JadxRuntimeException in pass: BlockSplitter
         jadx.core.utils.exceptions.JadxRuntimeException: Unexpected missing predecessor for block: B:16:0x0085
-            at jadx.core.dex.visitors.blocks.BlockSplitter.addTempConnectionsForExcHandlers(BlockSplitter.java:280)
-            at jadx.core.dex.visitors.blocks.BlockSplitter.visit(BlockSplitter.java:79)
+        	at jadx.core.dex.visitors.blocks.BlockSplitter.addTempConnectionsForExcHandlers(BlockSplitter.java:280)
+        	at jadx.core.dex.visitors.blocks.BlockSplitter.visit(BlockSplitter.java:79)
         */
     @org.jetbrains.annotations.Nullable
     public final java.lang.String getString(@org.jetbrains.annotations.NotNull java.lang.String r11) {
@@ -71,10 +73,26 @@ public final class AnalyzeByJSonPath {
         throw new UnsupportedOperationException("Method not decompiled: io.legado.app.model.analyzeRule.AnalyzeByJSonPath.getString(java.lang.String):java.lang.String");
     }
 
+    /* JADX INFO: renamed from: io.legado.app.model.analyzeRule.AnalyzeByJSonPath$getString$1, reason: invalid class name */
+    /* JADX INFO: compiled from: AnalyzeByJSonPath.kt */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/analyzeRule/AnalyzeByJSonPath$getString$1.class */
+    @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\b\n\u0000\n\u0002\u0010\u000e\n\u0000\u0010\u0000\u001a\u0004\u0018\u00010\u00012\u0006\u0010\u0002\u001a\u00020\u0001H\n"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "it"})
+    static final class AnonymousClass1 extends Lambda implements Function1<String, String> {
+        AnonymousClass1() {
+            super(1);
+        }
+
+        @Nullable
+        public final String invoke(@NotNull String it) {
+            Intrinsics.checkNotNullParameter(it, "it");
+            return AnalyzeByJSonPath.this.getString(it);
+        }
+    }
+
     /*  JADX ERROR: JadxRuntimeException in pass: BlockSplitter
         jadx.core.utils.exceptions.JadxRuntimeException: Unexpected missing predecessor for block: B:16:0x0097
-            at jadx.core.dex.visitors.blocks.BlockSplitter.addTempConnectionsForExcHandlers(BlockSplitter.java:280)
-            at jadx.core.dex.visitors.blocks.BlockSplitter.visit(BlockSplitter.java:79)
+        	at jadx.core.dex.visitors.blocks.BlockSplitter.addTempConnectionsForExcHandlers(BlockSplitter.java:280)
+        	at jadx.core.dex.visitors.blocks.BlockSplitter.visit(BlockSplitter.java:79)
         */
     @org.jetbrains.annotations.NotNull
     public final java.util.List<java.lang.String> getStringList$reader_pro(@org.jetbrains.annotations.NotNull java.lang.String r9) {

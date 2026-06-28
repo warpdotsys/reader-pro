@@ -1,6 +1,6 @@
 package com.htmake.reader.lib.tts.constant;
 
-/* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/lib/tts/constant/TtsStyleEnum.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/lib/tts/constant/TtsStyleEnum.class */
 public enum TtsStyleEnum {
     advertisement_upbeat("advertisement_upbeat"),
     affectionate("affectionate"),

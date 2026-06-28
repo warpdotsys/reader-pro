@@ -12,7 +12,7 @@ import me.ag2s.umdlib.tool.UmdUtils;
 import me.ag2s.umdlib.tool.WrapOutputStream;
 import org.kxml2.wap.Wbxml;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/umdlib/domain/UmdChapters.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/umdlib/domain/UmdChapters.class */
 public class UmdChapters {
     private static final int DEFAULT_CHUNK_INIT_SIZE = 32768;
     private int TotalContentLen;

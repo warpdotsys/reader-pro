@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.Random;
 import java.util.zip.InflaterInputStream;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/umdlib/tool/UmdUtils.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/umdlib/tool/UmdUtils.class */
 public class UmdUtils {
     private static final int EOF = -1;
     private static final int BUFFER_SIZE = 8192;

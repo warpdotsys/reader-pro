@@ -1,6 +1,6 @@
 package com.htmake.reader.lib.tts.constant;
 
-/* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/lib/tts/constant/VoiceEnum.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/lib/tts/constant/VoiceEnum.class */
 public enum VoiceEnum {
     zh_HK_HiuGaaiNeural("zh-HK-HiuGaaiNeural", "女", "zh-HK"),
     zh_HK_HiuMaanNeural("zh-HK-HiuMaanNeural", "女", "zh-HK"),

@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /* JADX INFO: compiled from: Coroutine.kt */
-/* JADX INFO: loaded from: app-classes.jar:io/legado/app/help/coroutine/Coroutine$cancel$1$1.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/help/coroutine/Coroutine$cancel$1$1.class */
 @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\f\n\u0000\n\u0002\u0010\u0002\n\u0000\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u0001\"\u0004\b\u0000\u0010\u0002*\u00020\u0003H\u008a@"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "T", "Lkotlinx/coroutines/CoroutineScope;"})
 @DebugMetadata(f = "Coroutine.kt", l = {117, 119}, i = {}, s = {}, n = {}, m = "invokeSuspend", c = "io.legado.app.help.coroutine.Coroutine$cancel$1$1")
 final class Coroutine$cancel$1$1 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super Unit>, Object> {
@@ -73,7 +73,7 @@ final class Coroutine$cancel$1$1 extends SuspendLambda implements Function2<Coro
 
     /* JADX INFO: renamed from: io.legado.app.help.coroutine.Coroutine$cancel$1$1$1, reason: invalid class name */
     /* JADX INFO: compiled from: Coroutine.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/help/coroutine/Coroutine$cancel$1$1$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/help/coroutine/Coroutine$cancel$1$1$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\f\n\u0000\n\u0002\u0010\u0002\n\u0000\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u0001\"\u0004\b\u0000\u0010\u0002*\u00020\u0003H\u008a@"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "T", "Lkotlinx/coroutines/CoroutineScope;"})
     @DebugMetadata(f = "Coroutine.kt", l = {120}, i = {}, s = {}, n = {}, m = "invokeSuspend", c = "io.legado.app.help.coroutine.Coroutine$cancel$1$1$1")
     static final class AnonymousClass1 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super Unit>, Object> {

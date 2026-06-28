@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
-/* JADX INFO: loaded from: app-classes.jar:io/legado/app/lib/icu4j/CharsetMatch.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/lib/icu4j/CharsetMatch.class */
 public class CharsetMatch implements Comparable<CharsetMatch> {
     private final int fConfidence;
     private byte[] fRawInput;

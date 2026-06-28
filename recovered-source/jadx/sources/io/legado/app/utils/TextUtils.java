@@ -3,7 +3,7 @@ package io.legado.app.utils;
 import java.util.Iterator;
 import me.ag2s.epublib.epub.PackageDocumentBase;
 
-/* JADX INFO: loaded from: app-classes.jar:io/legado/app/utils/TextUtils.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/utils/TextUtils.class */
 public class TextUtils {
     public static boolean isEmpty(CharSequence str) {
         return str == null || str.length() == 0;

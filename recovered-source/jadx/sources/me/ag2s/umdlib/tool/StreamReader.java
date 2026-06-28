@@ -3,7 +3,7 @@ package me.ag2s.umdlib.tool;
 import java.io.IOException;
 import java.io.InputStream;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/umdlib/tool/StreamReader.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/umdlib/tool/StreamReader.class */
 public class StreamReader {
     private InputStream is;
     private long offset;

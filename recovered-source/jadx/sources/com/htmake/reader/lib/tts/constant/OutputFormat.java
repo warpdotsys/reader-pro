@@ -1,6 +1,6 @@
 package com.htmake.reader.lib.tts.constant;
 
-/* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/lib/tts/constant/OutputFormat.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/lib/tts/constant/OutputFormat.class */
 public enum OutputFormat {
     amr_wb_16000hz("amr-wb-16000hz"),
     audio_16khz_16bit_32kbps_mono_opus("audio-16khz-16bit-32kbps-mono-opus"),

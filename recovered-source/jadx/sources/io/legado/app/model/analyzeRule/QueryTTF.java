@@ -12,16 +12,16 @@ import me.ag2s.epublib.epub.PackageDocumentBase;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 
-/* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/analyzeRule/QueryTTF.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/analyzeRule/QueryTTF.class */
 public class QueryTTF {
     private final ByteArrayReader fontReader;
-    private final Header fileHeader = new Header();
+    private final Header fileHeader = new Header(null);
     private final List<Directory> directorys = new LinkedList();
-    private final NameLayout name = new NameLayout();
-    private final HeadLayout head = new HeadLayout();
-    private final MaxpLayout maxp = new MaxpLayout();
+    private final NameLayout name = new NameLayout(null);
+    private final HeadLayout head = new HeadLayout(null);
+    private final MaxpLayout maxp = new MaxpLayout(null);
     private final List<Integer> loca = new LinkedList();
-    private final CmapLayout Cmap = new CmapLayout();
+    private final CmapLayout Cmap = new CmapLayout(null);
     private final List<GlyfLayout> glyf = new LinkedList();
     private final Pair<Integer, Integer>[] pps = {Pair.of(3, 10), Pair.of(0, 4), Pair.of(3, 1), Pair.of(1, 0), Pair.of(0, 3), Pair.of(0, 1)};
     public final Map<Integer, String> codeToGlyph = new HashMap();
@@ -34,7 +34,7 @@ public class QueryTTF {
         $assertionsDisabled = !QueryTTF.class.desiredAssertionStatus();
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/analyzeRule/QueryTTF$Header.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/analyzeRule/QueryTTF$Header.class */
     private static class Header {
         public int majorVersion;
         public int minorVersion;
@@ -45,9 +45,13 @@ public class QueryTTF {
 
         private Header() {
         }
+
+        /* synthetic */ Header(AnonymousClass1 x0) {
+            this();
+        }
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/analyzeRule/QueryTTF$Directory.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/analyzeRule/QueryTTF$Directory.class */
     private static class Directory {
         public String tag;
         public int checkSum;
@@ -56,9 +60,13 @@ public class QueryTTF {
 
         private Directory() {
         }
+
+        /* synthetic */ Directory(AnonymousClass1 x0) {
+            this();
+        }
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/analyzeRule/QueryTTF$NameLayout.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/analyzeRule/QueryTTF$NameLayout.class */
     private static class NameLayout {
         public int format;
         public int count;
@@ -68,9 +76,13 @@ public class QueryTTF {
         private NameLayout() {
             this.records = new LinkedList();
         }
+
+        /* synthetic */ NameLayout(AnonymousClass1 x0) {
+            this();
+        }
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/analyzeRule/QueryTTF$NameRecord.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/analyzeRule/QueryTTF$NameRecord.class */
     private static class NameRecord {
         public int platformID;
         public int encodingID;
@@ -81,9 +93,13 @@ public class QueryTTF {
 
         private NameRecord() {
         }
+
+        /* synthetic */ NameRecord(AnonymousClass1 x0) {
+            this();
+        }
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/analyzeRule/QueryTTF$HeadLayout.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/analyzeRule/QueryTTF$HeadLayout.class */
     private static class HeadLayout {
         public int majorVersion;
         public int minorVersion;
@@ -106,9 +122,13 @@ public class QueryTTF {
 
         private HeadLayout() {
         }
+
+        /* synthetic */ HeadLayout(AnonymousClass1 x0) {
+            this();
+        }
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/analyzeRule/QueryTTF$MaxpLayout.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/analyzeRule/QueryTTF$MaxpLayout.class */
     private static class MaxpLayout {
         public int majorVersion;
         public int minorVersion;
@@ -129,9 +149,13 @@ public class QueryTTF {
 
         private MaxpLayout() {
         }
+
+        /* synthetic */ MaxpLayout(AnonymousClass1 x0) {
+            this();
+        }
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/analyzeRule/QueryTTF$CmapLayout.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/analyzeRule/QueryTTF$CmapLayout.class */
     private static class CmapLayout {
         public int version;
         public int numTables;
@@ -142,9 +166,13 @@ public class QueryTTF {
             this.records = new LinkedList();
             this.tables = new HashMap();
         }
+
+        /* synthetic */ CmapLayout(AnonymousClass1 x0) {
+            this();
+        }
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/analyzeRule/QueryTTF$CmapRecord.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/analyzeRule/QueryTTF$CmapRecord.class */
     private static class CmapRecord {
         public int platformID;
         public int encodingID;
@@ -152,9 +180,13 @@ public class QueryTTF {
 
         private CmapRecord() {
         }
+
+        /* synthetic */ CmapRecord(AnonymousClass1 x0) {
+            this();
+        }
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/analyzeRule/QueryTTF$CmapFormat.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/analyzeRule/QueryTTF$CmapFormat.class */
     private static class CmapFormat {
         public int format;
         public int length;
@@ -163,9 +195,13 @@ public class QueryTTF {
 
         private CmapFormat() {
         }
+
+        /* synthetic */ CmapFormat(AnonymousClass1 x0) {
+            this();
+        }
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/analyzeRule/QueryTTF$CmapFormat4.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/analyzeRule/QueryTTF$CmapFormat4.class */
     private static class CmapFormat4 extends CmapFormat {
         public int segCountX2;
         public int searchRange;
@@ -179,22 +215,30 @@ public class QueryTTF {
         public int[] glyphIdArray;
 
         private CmapFormat4() {
-            super();
+            super(null);
+        }
+
+        /* synthetic */ CmapFormat4(AnonymousClass1 x0) {
+            this();
         }
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/analyzeRule/QueryTTF$CmapFormat6.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/analyzeRule/QueryTTF$CmapFormat6.class */
     private static class CmapFormat6 extends CmapFormat {
         public int firstCode;
         public int entryCount;
         public int[] glyphIdArray;
 
         private CmapFormat6() {
-            super();
+            super(null);
+        }
+
+        /* synthetic */ CmapFormat6(AnonymousClass1 x0) {
+            this();
         }
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/analyzeRule/QueryTTF$CmapFormat12.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/analyzeRule/QueryTTF$CmapFormat12.class */
     private static class CmapFormat12 extends CmapFormat {
         public int reserved;
         public int length;
@@ -203,11 +247,15 @@ public class QueryTTF {
         public List<Triple<Integer, Integer, Integer>> groups;
 
         private CmapFormat12() {
-            super();
+            super(null);
+        }
+
+        /* synthetic */ CmapFormat12(AnonymousClass1 x0) {
+            this();
         }
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/analyzeRule/QueryTTF$GlyfLayout.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/analyzeRule/QueryTTF$GlyfLayout.class */
     private static class GlyfLayout {
         public short numberOfContours;
         public short xMin;
@@ -223,9 +271,13 @@ public class QueryTTF {
 
         private GlyfLayout() {
         }
+
+        /* synthetic */ GlyfLayout(AnonymousClass1 x0) {
+            this();
+        }
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/analyzeRule/QueryTTF$ByteArrayReader.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/analyzeRule/QueryTTF$ByteArrayReader.class */
     private static class ByteArrayReader {
         public int index;
         public byte[] buffer;
@@ -329,7 +381,7 @@ public class QueryTTF {
         this.fileHeader.entrySelector = this.fontReader.ReadUInt16();
         this.fileHeader.rangeShift = this.fontReader.ReadUInt16();
         for (int i = 0; i < this.fileHeader.numOfTables; i++) {
-            Directory d = new Directory();
+            Directory d = new Directory(null);
             d.tag = this.fontReader.ReadStrings(4, StandardCharsets.US_ASCII);
             d.checkSum = this.fontReader.ReadUInt32();
             d.offset = this.fontReader.ReadUInt32();
@@ -343,7 +395,7 @@ public class QueryTTF {
                 this.name.count = this.fontReader.ReadUInt16();
                 this.name.stringOffset = this.fontReader.ReadUInt16();
                 for (int i2 = 0; i2 < this.name.count; i2++) {
-                    NameRecord record = new NameRecord();
+                    NameRecord record = new NameRecord(null);
                     record.platformID = this.fontReader.ReadUInt16();
                     record.encodingID = this.fontReader.ReadUInt16();
                     record.languageID = this.fontReader.ReadUInt16();
@@ -418,7 +470,7 @@ public class QueryTTF {
                 this.Cmap.version = this.fontReader.ReadUInt16();
                 this.Cmap.numTables = this.fontReader.ReadUInt16();
                 for (int i4 = 0; i4 < this.Cmap.numTables; i4++) {
-                    CmapRecord record2 = new CmapRecord();
+                    CmapRecord record2 = new CmapRecord(null);
                     record2.platformID = this.fontReader.ReadUInt16();
                     record2.encodingID = this.fontReader.ReadUInt16();
                     record2.offset = this.fontReader.ReadUInt32();
@@ -431,14 +483,14 @@ public class QueryTTF {
                     int format = this.fontReader.ReadUInt16();
                     if (!this.Cmap.tables.containsKey(Integer.valueOf(fmtOffset))) {
                         if (format == 0) {
-                            CmapFormat f = new CmapFormat();
+                            CmapFormat f = new CmapFormat(null);
                             f.format = format;
                             f.length = this.fontReader.ReadUInt16();
                             f.language = this.fontReader.ReadUInt16();
                             f.glyphIdArray = this.fontReader.GetBytes(f.length - 6);
                             this.Cmap.tables.put(Integer.valueOf(fmtOffset), f);
                         } else if (format == 4) {
-                            CmapFormat4 f2 = new CmapFormat4();
+                            CmapFormat4 f2 = new CmapFormat4(null);
                             f2.format = format;
                             f2.length = this.fontReader.ReadUInt16();
                             f2.language = this.fontReader.ReadUInt16();
@@ -455,7 +507,7 @@ public class QueryTTF {
                             f2.glyphIdArray = this.fontReader.GetUInt16Array(((EndIndex + f2.length) - this.fontReader.index) >> 1);
                             this.Cmap.tables.put(Integer.valueOf(fmtOffset), f2);
                         } else if (format == 6) {
-                            CmapFormat6 f3 = new CmapFormat6();
+                            CmapFormat6 f3 = new CmapFormat6(null);
                             f3.format = format;
                             f3.length = this.fontReader.ReadUInt16();
                             f3.language = this.fontReader.ReadUInt16();
@@ -464,7 +516,7 @@ public class QueryTTF {
                             f3.glyphIdArray = this.fontReader.GetUInt16Array(f3.entryCount);
                             this.Cmap.tables.put(Integer.valueOf(fmtOffset), f3);
                         } else if (format == 12) {
-                            CmapFormat12 f4 = new CmapFormat12();
+                            CmapFormat12 f4 = new CmapFormat12(null);
                             f4.format = format;
                             f4.reserved = this.fontReader.ReadUInt16();
                             f4.length = this.fontReader.ReadUInt32();
@@ -487,7 +539,7 @@ public class QueryTTF {
                     this.fontReader.index = Temp6.offset + this.loca.get(i6).intValue();
                     short numberOfContours = this.fontReader.ReadInt16();
                     if (numberOfContours > 0) {
-                        GlyfLayout g = new GlyfLayout();
+                        GlyfLayout g = new GlyfLayout(null);
                         g.numberOfContours = numberOfContours;
                         g.xMin = this.fontReader.ReadInt16();
                         g.yMin = this.fontReader.ReadInt16();

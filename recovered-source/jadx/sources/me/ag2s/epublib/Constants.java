@@ -1,6 +1,6 @@
 package me.ag2s.epublib;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/Constants.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/Constants.class */
 public interface Constants {
     public static final String CHARACTER_ENCODING = "UTF-8";
     public static final String DOCTYPE_XHTML = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">";

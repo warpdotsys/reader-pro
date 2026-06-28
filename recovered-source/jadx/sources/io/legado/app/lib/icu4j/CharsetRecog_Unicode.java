@@ -1,6 +1,6 @@
 package io.legado.app.lib.icu4j;
 
-/* JADX INFO: loaded from: app-classes.jar:io/legado/app/lib/icu4j/CharsetRecog_Unicode.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/lib/icu4j/CharsetRecog_Unicode.class */
 abstract class CharsetRecog_Unicode extends CharsetRecognizer {
     @Override // io.legado.app.lib.icu4j.CharsetRecognizer
     abstract String getName();
@@ -29,7 +29,7 @@ abstract class CharsetRecog_Unicode extends CharsetRecognizer {
         return confidence;
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/lib/icu4j/CharsetRecog_Unicode$CharsetRecog_UTF_16_BE.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/lib/icu4j/CharsetRecog_Unicode$CharsetRecog_UTF_16_BE.class */
     static class CharsetRecog_UTF_16_BE extends CharsetRecog_Unicode {
         CharsetRecog_UTF_16_BE() {
         }
@@ -70,7 +70,7 @@ abstract class CharsetRecog_Unicode extends CharsetRecognizer {
         }
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/lib/icu4j/CharsetRecog_Unicode$CharsetRecog_UTF_16_LE.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/lib/icu4j/CharsetRecog_Unicode$CharsetRecog_UTF_16_LE.class */
     static class CharsetRecog_UTF_16_LE extends CharsetRecog_Unicode {
         CharsetRecog_UTF_16_LE() {
         }
@@ -111,7 +111,7 @@ abstract class CharsetRecog_Unicode extends CharsetRecognizer {
         }
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/lib/icu4j/CharsetRecog_Unicode$CharsetRecog_UTF_32.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/lib/icu4j/CharsetRecog_Unicode$CharsetRecog_UTF_32.class */
     static abstract class CharsetRecog_UTF_32 extends CharsetRecog_Unicode {
         abstract int getChar(byte[] input, int index);
 
@@ -161,7 +161,7 @@ abstract class CharsetRecog_Unicode extends CharsetRecognizer {
         }
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/lib/icu4j/CharsetRecog_Unicode$CharsetRecog_UTF_32_BE.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/lib/icu4j/CharsetRecog_Unicode$CharsetRecog_UTF_32_BE.class */
     static class CharsetRecog_UTF_32_BE extends CharsetRecog_UTF_32 {
         CharsetRecog_UTF_32_BE() {
         }
@@ -177,7 +177,7 @@ abstract class CharsetRecog_Unicode extends CharsetRecognizer {
         }
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/lib/icu4j/CharsetRecog_Unicode$CharsetRecog_UTF_32_LE.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/lib/icu4j/CharsetRecog_Unicode$CharsetRecog_UTF_32_LE.class */
     static class CharsetRecog_UTF_32_LE extends CharsetRecog_UTF_32 {
         CharsetRecog_UTF_32_LE() {
         }

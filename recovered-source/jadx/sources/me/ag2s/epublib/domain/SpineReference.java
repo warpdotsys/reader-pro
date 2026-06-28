@@ -2,7 +2,7 @@ package me.ag2s.epublib.domain;
 
 import java.io.Serializable;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/domain/SpineReference.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/domain/SpineReference.class */
 public class SpineReference extends ResourceReference implements Serializable {
     private static final long serialVersionUID = -7921609197351510248L;
     private boolean linear;

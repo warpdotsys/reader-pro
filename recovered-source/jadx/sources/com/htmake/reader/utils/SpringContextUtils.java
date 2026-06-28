@@ -5,7 +5,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
-/* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/utils/SpringContextUtils.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/utils/SpringContextUtils.class */
 @Component
 public class SpringContextUtils implements ApplicationContextAware {
     private static ApplicationContext applicationContext;

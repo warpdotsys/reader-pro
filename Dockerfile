@@ -1,12 +1,16 @@
 FROM eclipse-temurin:8-jre-jammy
 
-ENV TZ=Asia/Shanghai     READER_APP_WORKDIR=/data     READER_SERVER_PORT=8080
+WORKDIR /opt/reader-pro
 
-WORKDIR /app
-COPY app/reader-pro-3.2.14.jar /app/reader-pro.jar
+ENV READER_APP_WORKDIR=/data \
+    READER_SERVER_PORT=8080 \
+    JAVA_OPTS=""
 
-RUN mkdir -p /data
-VOLUME ["/data"]
+COPY app/reader-pro-3.2.14.jar /opt/reader-pro/reader-pro.jar
+
+RUN mkdir -p /data && chown -R 10001:0 /data /opt/reader-pro
+
+USER 10001
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-Dreader.app.workDir=/data", "-Dreader.server.port=8080", "-jar", "/app/reader-pro.jar"]
+ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS -Dreader.app.workDir=${READER_APP_WORKDIR} -Dreader.server.port=${READER_SERVER_PORT} -jar /opt/reader-pro/reader-pro.jar"]

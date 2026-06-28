@@ -38,7 +38,7 @@ import org.jetbrains.annotations.Nullable;
 import org.kxml2.wap.Wbxml;
 
 /* JADX INFO: compiled from: BookChapterList.kt */
-/* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/webBook/BookChapterList.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/webBook/BookChapterList.class */
 @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u0000D\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\u0010 \n\u0002\u0018\u0002\n\u0002\u0010\u000e\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0004\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\u000b\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0003\bÆ\u0002\u0018\u00002\u00020\u0001B\u0007\b\u0002¢\u0006\u0002\u0010\u0002J\u0081\u0001\u0010\u0003\u001a\u001a\u0012\n\u0012\b\u0012\u0004\u0012\u00020\u00060\u0005\u0012\n\u0012\b\u0012\u0004\u0012\u00020\u00070\u00050\u00042\u0006\u0010\b\u001a\u00020\t2\u0006\u0010\n\u001a\u00020\u00072\u0006\u0010\u000b\u001a\u00020\u00072\u0006\u0010\f\u001a\u00020\u00072\u0006\u0010\r\u001a\u00020\u000e2\u0006\u0010\u000f\u001a\u00020\u00072\u0006\u0010\u0010\u001a\u00020\u00112\b\b\u0002\u0010\u0012\u001a\u00020\u00132\b\b\u0002\u0010\u0014\u001a\u00020\u00132\n\b\u0002\u0010\u0015\u001a\u0004\u0018\u00010\u0016H\u0082@ø\u0001\u0000¢\u0006\u0002\u0010\u0017JM\u0010\u0003\u001a\b\u0012\u0004\u0012\u00020\u00060\u00052\u0006\u0010\b\u001a\u00020\t2\b\u0010\f\u001a\u0004\u0018\u00010\u00072\u0006\u0010\u0010\u001a\u00020\u00112\u0006\u0010\n\u001a\u00020\u00072\u0006\u0010\u000b\u001a\u00020\u00072\n\b\u0002\u0010\u0015\u001a\u0004\u0018\u00010\u0016H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0018\u0082\u0002\u0004\n\u0002\b\u0019¨\u0006\u0019"}, d2 = {"Lio/legado/app/model/webBook/BookChapterList;", PackageDocumentBase.PREFIX_OPF, "()V", "analyzeChapterList", "Lkotlin/Pair;", PackageDocumentBase.PREFIX_OPF, "Lio/legado/app/data/entities/BookChapter;", PackageDocumentBase.PREFIX_OPF, "book", "Lio/legado/app/data/entities/Book;", "baseUrl", "redirectUrl", NCXDocumentV3.XHTMLTgs.body, "tocRule", "Lio/legado/app/data/entities/rule/TocRule;", "listRule", "bookSource", "Lio/legado/app/data/entities/BookSource;", "getNextUrl", PackageDocumentBase.PREFIX_OPF, "log", "debugLog", "Lio/legado/app/model/DebugLog;", "(Lio/legado/app/data/entities/Book;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/legado/app/data/entities/rule/TocRule;Ljava/lang/String;Lio/legado/app/data/entities/BookSource;ZZLio/legado/app/model/DebugLog;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "(Lio/legado/app/data/entities/Book;Ljava/lang/String;Lio/legado/app/data/entities/BookSource;Ljava/lang/String;Ljava/lang/String;Lio/legado/app/model/DebugLog;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "reader-pro"})
 public final class BookChapterList {
 
@@ -47,7 +47,7 @@ public final class BookChapterList {
 
     /* JADX INFO: renamed from: io.legado.app.model.webBook.BookChapterList$analyzeChapterList$1, reason: invalid class name */
     /* JADX INFO: compiled from: BookChapterList.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/webBook/BookChapterList$analyzeChapterList$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/webBook/BookChapterList$analyzeChapterList$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookChapterList.kt", l = {50, Wbxml.PI, Wbxml.LITERAL_C, 80}, i = {0}, s = {"L$7"}, n = {"chapterData"}, m = "analyzeChapterList", c = "io.legado.app.model.webBook.BookChapterList")
     static final class AnonymousClass1 extends ContinuationImpl {
@@ -98,23 +98,23 @@ public final class BookChapterList {
     /* JADX WARN: Unsupported multi-entry loop pattern (BACK_EDGE: B:59:0x040a -> B:45:0x02cc). Please report as a decompilation issue!!! */
     /*  JADX ERROR: UnsupportedOperationException in pass: RegionMakerVisitor
         java.lang.UnsupportedOperationException
-            at java.base/java.util.Collections$UnmodifiableCollection.add(Collections.java:1092)
-            at jadx.core.dex.visitors.regions.maker.SwitchRegionMaker$1.leaveRegion(SwitchRegionMaker.java:390)
-            at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:70)
-            at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:68)
-            at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
-            at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:68)
-            at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverse(DepthRegionTraversal.java:23)
-            at jadx.core.dex.visitors.regions.maker.SwitchRegionMaker.insertBreaksForCase(SwitchRegionMaker.java:370)
-            at jadx.core.dex.visitors.regions.maker.SwitchRegionMaker.insertBreaks(SwitchRegionMaker.java:85)
-            at jadx.core.dex.visitors.regions.PostProcessRegions.leaveRegion(PostProcessRegions.java:33)
-            at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:70)
-            at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:68)
-            at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
-            at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:68)
-            at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverse(DepthRegionTraversal.java:19)
-            at jadx.core.dex.visitors.regions.PostProcessRegions.process(PostProcessRegions.java:23)
-            at jadx.core.dex.visitors.regions.RegionMakerVisitor.visit(RegionMakerVisitor.java:31)
+        	at java.base/java.util.Collections$UnmodifiableCollection.add(Collections.java:1092)
+        	at jadx.core.dex.visitors.regions.maker.SwitchRegionMaker$1.leaveRegion(SwitchRegionMaker.java:390)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:70)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:68)
+        	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:68)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverse(DepthRegionTraversal.java:23)
+        	at jadx.core.dex.visitors.regions.maker.SwitchRegionMaker.insertBreaksForCase(SwitchRegionMaker.java:370)
+        	at jadx.core.dex.visitors.regions.maker.SwitchRegionMaker.insertBreaks(SwitchRegionMaker.java:85)
+        	at jadx.core.dex.visitors.regions.PostProcessRegions.leaveRegion(PostProcessRegions.java:33)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:70)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:68)
+        	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:68)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverse(DepthRegionTraversal.java:19)
+        	at jadx.core.dex.visitors.regions.PostProcessRegions.process(PostProcessRegions.java:23)
+        	at jadx.core.dex.visitors.regions.RegionMakerVisitor.visit(RegionMakerVisitor.java:31)
         */
     @org.jetbrains.annotations.Nullable
     /*
@@ -128,7 +128,7 @@ public final class BookChapterList {
         throw new UnsupportedOperationException("Method not decompiled: io.legado.app.model.webBook.BookChapterList.analyzeChapterList(io.legado.app.data.entities.Book, java.lang.String, io.legado.app.data.entities.BookSource, java.lang.String, java.lang.String, io.legado.app.model.DebugLog, kotlin.coroutines.Continuation):java.lang.Object");
     }
 
-    public static /* synthetic */ Object analyzeChapterList$default(BookChapterList bookChapterList, Book book, String str, BookSource bookSource, String str2, String str3, DebugLog debugLog, Continuation continuation, int i, Object obj) {
+    public static /* synthetic */ Object analyzeChapterList$default(BookChapterList bookChapterList, Book book, String str, BookSource bookSource, String str2, String str3, DebugLog debugLog, Continuation continuation, int i, Object obj) throws Exception {
         if ((i & 32) != 0) {
             debugLog = null;
         }
@@ -137,7 +137,7 @@ public final class BookChapterList {
 
     /* JADX INFO: renamed from: io.legado.app.model.webBook.BookChapterList$analyzeChapterList$3, reason: invalid class name */
     /* JADX INFO: compiled from: BookChapterList.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/webBook/BookChapterList$analyzeChapterList$3.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/webBook/BookChapterList$analyzeChapterList$3.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\n\n\u0000\n\u0002\u0010\u0002\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H\u008a@"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "Lkotlinx/coroutines/CoroutineScope;"})
     @DebugMetadata(f = "BookChapterList.kt", l = {99}, i = {}, s = {}, n = {}, m = "invokeSuspend", c = "io.legado.app.model.webBook.BookChapterList$analyzeChapterList$3")
     static final class AnonymousClass3 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super Unit>, Object> {

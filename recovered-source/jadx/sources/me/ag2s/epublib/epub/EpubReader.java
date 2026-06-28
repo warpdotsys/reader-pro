@@ -17,7 +17,7 @@ import me.ag2s.epublib.util.StringUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/epub/EpubReader.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/epub/EpubReader.class */
 public class EpubReader {
     private static final String TAG = EpubReader.class.getName();
     private final BookProcessor bookProcessor = BookProcessor.IDENTITY_BOOKPROCESSOR;

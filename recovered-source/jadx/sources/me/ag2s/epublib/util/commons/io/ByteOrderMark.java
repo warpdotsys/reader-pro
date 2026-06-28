@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Locale;
 import me.ag2s.epublib.Constants;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/util/commons/io/ByteOrderMark.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/util/commons/io/ByteOrderMark.class */
 public class ByteOrderMark implements Serializable {
     private static final long serialVersionUID = 1;
     public static final ByteOrderMark UTF_8 = new ByteOrderMark(Constants.CHARACTER_ENCODING, 239, 187, 191);

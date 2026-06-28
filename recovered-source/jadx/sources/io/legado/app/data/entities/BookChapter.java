@@ -1,24 +1,18 @@
 package io.legado.app.data.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import io.legado.app.constant.RSSKeywords;
 import io.legado.app.model.analyzeRule.AnalyzeUrl;
 import io.legado.app.model.analyzeRule.RuleDataInterface;
 import io.legado.app.utils.GsonExtensionsKt;
 import io.legado.app.utils.MD5Utils;
 import io.legado.app.utils.NetworkUtils;
-import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import kotlin.Lazy;
 import kotlin.LazyKt;
 import kotlin.Metadata;
-import kotlin.Result;
-import kotlin.ResultKt;
-import kotlin.jvm.functions.Function0;
 import kotlin.jvm.internal.DefaultConstructorMarker;
 import kotlin.jvm.internal.Intrinsics;
 import kotlin.jvm.internal.StringCompanionObject;
@@ -28,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 import org.kxml2.wap.Wbxml;
 
 /* JADX INFO: compiled from: BookChapter.kt */
-/* JADX INFO: loaded from: app-classes.jar:io/legado/app/data/entities/BookChapter.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/data/entities/BookChapter.class */
 @JsonIgnoreProperties({"variableMap", "_userNameSpace", "userNameSpace"})
 @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u0000F\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\u000e\n\u0002\b\u0002\n\u0002\u0010\u000b\n\u0002\b\u0003\n\u0002\u0010\b\n\u0002\b\u0003\n\u0002\u0010\t\n\u0002\b)\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0015\n\u0002\u0010\u0000\n\u0002\b\u0005\n\u0002\u0010\u0002\n\u0002\b\u0006\b\u0087\b\u0018\u00002\u00020\u0001B\u0095\u0001\u0012\b\b\u0002\u0010\u0002\u001a\u00020\u0003\u0012\b\b\u0002\u0010\u0004\u001a\u00020\u0003\u0012\b\b\u0002\u0010\u0005\u001a\u00020\u0006\u0012\b\b\u0002\u0010\u0007\u001a\u00020\u0003\u0012\b\b\u0002\u0010\b\u001a\u00020\u0003\u0012\b\b\u0002\u0010\t\u001a\u00020\n\u0012\n\b\u0002\u0010\u000b\u001a\u0004\u0018\u00010\u0003\u0012\n\b\u0002\u0010\f\u001a\u0004\u0018\u00010\u0003\u0012\n\b\u0002\u0010\r\u001a\u0004\u0018\u00010\u000e\u0012\n\b\u0002\u0010\u000f\u001a\u0004\u0018\u00010\u000e\u0012\n\b\u0002\u0010\u0010\u001a\u0004\u0018\u00010\u0003\u0012\n\b\u0002\u0010\u0011\u001a\u0004\u0018\u00010\u0003\u0012\n\b\u0002\u0010\u0012\u001a\u0004\u0018\u00010\u0003¢\u0006\u0002\u0010\u0013J\t\u0010>\u001a\u00020\u0003HÆ\u0003J\u0010\u0010?\u001a\u0004\u0018\u00010\u000eHÆ\u0003¢\u0006\u0002\u0010\u001cJ\u000b\u0010@\u001a\u0004\u0018\u00010\u0003HÆ\u0003J\u000b\u0010A\u001a\u0004\u0018\u00010\u0003HÆ\u0003J\u000b\u0010B\u001a\u0004\u0018\u00010\u0003HÆ\u0003J\t\u0010C\u001a\u00020\u0003HÆ\u0003J\t\u0010D\u001a\u00020\u0006HÆ\u0003J\t\u0010E\u001a\u00020\u0003HÆ\u0003J\t\u0010F\u001a\u00020\u0003HÆ\u0003J\t\u0010G\u001a\u00020\nHÆ\u0003J\u000b\u0010H\u001a\u0004\u0018\u00010\u0003HÆ\u0003J\u000b\u0010I\u001a\u0004\u0018\u00010\u0003HÆ\u0003J\u0010\u0010J\u001a\u0004\u0018\u00010\u000eHÆ\u0003¢\u0006\u0002\u0010\u001cJ\u009e\u0001\u0010K\u001a\u00020\u00002\b\b\u0002\u0010\u0002\u001a\u00020\u00032\b\b\u0002\u0010\u0004\u001a\u00020\u00032\b\b\u0002\u0010\u0005\u001a\u00020\u00062\b\b\u0002\u0010\u0007\u001a\u00020\u00032\b\b\u0002\u0010\b\u001a\u00020\u00032\b\b\u0002\u0010\t\u001a\u00020\n2\n\b\u0002\u0010\u000b\u001a\u0004\u0018\u00010\u00032\n\b\u0002\u0010\f\u001a\u0004\u0018\u00010\u00032\n\b\u0002\u0010\r\u001a\u0004\u0018\u00010\u000e2\n\b\u0002\u0010\u000f\u001a\u0004\u0018\u00010\u000e2\n\b\u0002\u0010\u0010\u001a\u0004\u0018\u00010\u00032\n\b\u0002\u0010\u0011\u001a\u0004\u0018\u00010\u00032\n\b\u0002\u0010\u0012\u001a\u0004\u0018\u00010\u0003HÆ\u0001¢\u0006\u0002\u0010LJ\u0013\u0010M\u001a\u00020\u00062\b\u0010N\u001a\u0004\u0018\u00010OH\u0096\u0002J\u0006\u0010P\u001a\u00020\u0003J\u0006\u0010Q\u001a\u00020\u0003J\b\u0010R\u001a\u00020\u0003H\u0016J\b\u0010S\u001a\u00020\nH\u0016J\u001a\u0010T\u001a\u00020U2\u0006\u0010V\u001a\u00020\u00032\b\u0010W\u001a\u0004\u0018\u00010\u0003H\u0016J\u000e\u0010X\u001a\u00020U2\u0006\u0010Y\u001a\u00020\u0003J\t\u0010Z\u001a\u00020\u0003HÖ\u0001R\u000e\u0010\u0014\u001a\u00020\u0003X\u0082\u000e¢\u0006\u0002\n\u0000R\u001a\u0010\u0007\u001a\u00020\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\u0015\u0010\u0016\"\u0004\b\u0017\u0010\u0018R\u001a\u0010\b\u001a\u00020\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\u0019\u0010\u0016\"\u0004\b\u001a\u0010\u0018R\u001e\u0010\u000f\u001a\u0004\u0018\u00010\u000eX\u0086\u000e¢\u0006\u0010\n\u0002\u0010\u001f\u001a\u0004\b\u001b\u0010\u001c\"\u0004\b\u001d\u0010\u001eR\u001c\u0010\u0011\u001a\u0004\u0018\u00010\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b \u0010\u0016\"\u0004\b!\u0010\u0018R\u001a\u0010\t\u001a\u00020\nX\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\"\u0010#\"\u0004\b$\u0010%R\u001a\u0010\u0005\u001a\u00020\u0006X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\u0005\u0010&\"\u0004\b'\u0010(R\u001c\u0010\u000b\u001a\u0004\u0018\u00010\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b)\u0010\u0016\"\u0004\b*\u0010\u0018R\u001e\u0010\r\u001a\u0004\u0018\u00010\u000eX\u0086\u000e¢\u0006\u0010\n\u0002\u0010\u001f\u001a\u0004\b+\u0010\u001c\"\u0004\b,\u0010\u001eR\u001c\u0010\u0010\u001a\u0004\u0018\u00010\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b-\u0010\u0016\"\u0004\b.\u0010\u0018R\u001c\u0010\f\u001a\u0004\u0018\u00010\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b/\u0010\u0016\"\u0004\b0\u0010\u0018R\u001a\u0010\u0004\u001a\u00020\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b1\u0010\u0016\"\u0004\b2\u0010\u0018R\u001a\u0010\u0002\u001a\u00020\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b3\u0010\u0016\"\u0004\b4\u0010\u0018R\u001c\u0010\u0012\u001a\u0004\u0018\u00010\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b5\u0010\u0016\"\u0004\b6\u0010\u0018R7\u00107\u001a\u001e\u0012\u0004\u0012\u00020\u0003\u0012\u0004\u0012\u00020\u000308j\u000e\u0012\u0004\u0012\u00020\u0003\u0012\u0004\u0012\u00020\u0003`98VX\u0096\u0084\u0002¢\u0006\f\n\u0004\b<\u0010=\u001a\u0004\b:\u0010;¨\u0006["}, d2 = {"Lio/legado/app/data/entities/BookChapter;", "Lio/legado/app/model/analyzeRule/RuleDataInterface;", RSSKeywords.RSS_ITEM_URL, PackageDocumentBase.PREFIX_OPF, "title", "isVolume", PackageDocumentBase.PREFIX_OPF, "baseUrl", "bookUrl", "index", PackageDocumentBase.PREFIX_OPF, "resourceUrl", "tag", "start", PackageDocumentBase.PREFIX_OPF, "end", "startFragmentId", "endFragmentId", "variable", "(Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V", "_userNameSpace", "getBaseUrl", "()Ljava/lang/String;", "setBaseUrl", "(Ljava/lang/String;)V", "getBookUrl", "setBookUrl", "getEnd", "()Ljava/lang/Long;", "setEnd", "(Ljava/lang/Long;)V", "Ljava/lang/Long;", "getEndFragmentId", "setEndFragmentId", "getIndex", "()I", "setIndex", "(I)V", "()Z", "setVolume", "(Z)V", "getResourceUrl", "setResourceUrl", "getStart", "setStart", "getStartFragmentId", "setStartFragmentId", "getTag", "setTag", "getTitle", "setTitle", "getUrl", "setUrl", "getVariable", "setVariable", "variableMap", "Ljava/util/HashMap;", "Lkotlin/collections/HashMap;", "getVariableMap", "()Ljava/util/HashMap;", "variableMap$delegate", "Lkotlin/Lazy;", "component1", "component10", "component11", "component12", "component13", "component2", "component3", "component4", "component5", "component6", "component7", "component8", "component9", "copy", "(Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lio/legado/app/data/entities/BookChapter;", "equals", "other", PackageDocumentBase.PREFIX_OPF, "getAbsoluteURL", "getFileName", "getUserNameSpace", "hashCode", "putVariable", PackageDocumentBase.PREFIX_OPF, "key", "value", "setUserNameSpace", "nameSpace", "toString", "reader-pro"})
 public final /* data */ class BookChapter implements RuleDataInterface {
@@ -220,37 +214,7 @@ public final /* data */ class BookChapter implements RuleDataInterface {
         this.startFragmentId = startFragmentId;
         this.endFragmentId = endFragmentId;
         this.variable = variable;
-        this.variableMap = LazyKt.lazy(new Function0<HashMap<String, String>>() { // from class: io.legado.app.data.entities.BookChapter$variableMap$2
-            {
-                super(0);
-            }
-
-            /* JADX WARN: Type inference failed for: r2v1, types: [io.legado.app.data.entities.BookChapter$variableMap$2$invoke$$inlined$fromJsonObject$1] */
-            @NotNull
-            /* JADX INFO: renamed from: invoke, reason: merged with bridge method [inline-methods] */
-            public final HashMap<String, String> m146invoke() {
-                Object obj;
-                Gson $this$fromJsonObject$iv = GsonExtensionsKt.getGSON();
-                String json$iv = this.this$0.getVariable();
-                try {
-                    Result.Companion companion = Result.Companion;
-                    Type type = new TypeToken<HashMap<String, String>>() { // from class: io.legado.app.data.entities.BookChapter$variableMap$2$invoke$$inlined$fromJsonObject$1
-                    }.getType();
-                    Intrinsics.checkNotNullExpressionValue(type, "object : TypeToken<T>() {}.type");
-                    Object objFromJson = $this$fromJsonObject$iv.fromJson(json$iv, type);
-                    if (!(objFromJson instanceof HashMap)) {
-                        objFromJson = null;
-                    }
-                    obj = Result.constructor-impl((HashMap) objFromJson);
-                } catch (Throwable th) {
-                    Result.Companion companion2 = Result.Companion;
-                    obj = Result.constructor-impl(ResultKt.createFailure(th));
-                }
-                Object obj2 = obj;
-                HashMap<String, String> map = (HashMap) (Result.isFailure-impl(obj2) ? null : obj2);
-                return map == null ? new HashMap<>() : map;
-            }
-        });
+        this.variableMap = LazyKt.lazy(new BookChapter$variableMap$2(this));
         this._userNameSpace = PackageDocumentBase.PREFIX_OPF;
     }
 

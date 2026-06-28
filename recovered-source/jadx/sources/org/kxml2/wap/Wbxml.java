@@ -1,6 +1,6 @@
 package org.kxml2.wap;
 
-/* JADX INFO: loaded from: app-classes.jar:org/kxml2/wap/Wbxml.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:org/kxml2/wap/Wbxml.class */
 public interface Wbxml {
     public static final int SWITCH_PAGE = 0;
     public static final int END = 1;

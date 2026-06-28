@@ -1,6 +1,5 @@
 package com.htmake.reader.api.controller;
 
-import com.google.gson.reflect.TypeToken;
 import com.htmake.reader.config.AppConfig;
 import com.htmake.reader.entity.User;
 import com.htmake.reader.utils.ExtKt;
@@ -34,6 +33,7 @@ import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
 import kotlin.jvm.functions.Function3;
 import kotlin.jvm.internal.Intrinsics;
+import kotlin.jvm.internal.Lambda;
 import kotlin.jvm.internal.SpreadBuilder;
 import kotlin.jvm.internal.TypeIntrinsics;
 import kotlin.text.StringsKt;
@@ -51,7 +51,7 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.core.env.Environment;
 
 /* JADX INFO: compiled from: BaseController.kt */
-/* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BaseController.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BaseController.class */
 @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u0000\u008e\u0001\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0005\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0010\b\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0010\u000b\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0010%\n\u0002\u0010\u000e\n\u0002\u0010\u0000\n\u0002\b\u0005\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0010$\n\u0002\b\u0003\n\u0002\u0010\u0011\n\u0002\b\u0003\n\u0002\u0010\u0002\n\u0002\b\u0004\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\b\b\u0016\u0018\u00002\u00020\u0001B\r\u0012\u0006\u0010\u0002\u001a\u00020\u0003¢\u0006\u0002\u0010\u0004J\u0019\u0010\u0015\u001a\u00020\u00162\u0006\u0010\u0017\u001a\u00020\u0018H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0019J\u000e\u0010\u001a\u001a\u00020\u00162\u0006\u0010\u0017\u001a\u00020\u0018J\u001a\u0010\u001b\u001a\u000e\u0012\u0004\u0012\u00020\u001d\u0012\u0004\u0012\u00020\u001e0\u001c2\u0006\u0010\u001f\u001a\u00020\u001eJ\u0018\u0010 \u001a\u00020\u001d2\u0006\u0010!\u001a\u00020\u001d2\b\b\u0002\u0010\"\u001a\u00020\u001dJ\u0010\u0010#\u001a\u0004\u0018\u00010$2\u0006\u0010%\u001a\u00020\u001dJ\u001c\u0010&\u001a\u0010\u0012\u0004\u0012\u00020\u001d\u0012\u0004\u0012\u00020\u001e\u0018\u00010'2\u0006\u0010%\u001a\u00020\u001dJ\u000e\u0010(\u001a\u00020\u001d2\u0006\u0010\u0017\u001a\u00020\u0018J)\u0010)\u001a\u0004\u0018\u00010\u001d2\u0006\u0010\u0017\u001a\u00020\u001e2\u0012\u0010*\u001a\n\u0012\u0006\b\u0001\u0012\u00020\u001d0+\"\u00020\u001d¢\u0006\u0002\u0010,J\u000e\u0010-\u001a\u00020\u001d2\u0006\u0010\u0017\u001a\u00020\u001eJX\u0010.\u001a\u00020/2\u0006\u00100\u001a\u00020\u00102\u0006\u00101\u001a\u00020\u00102\u0006\u00102\u001a\u00020\u00102-\u00103\u001a)\b\u0001\u0012\u0004\u0012\u00020\u0001\u0012\u0004\u0012\u00020\u0010\u0012\n\u0012\b\u0012\u0004\u0012\u00020\u001e05\u0012\u0006\u0012\u0004\u0018\u00010\u001e04¢\u0006\u0002\b6H\u0086@ø\u0001\u0000¢\u0006\u0002\u00107J\u0082\u0001\u0010.\u001a\u00020/2\u0006\u00100\u001a\u00020\u00102\u0006\u00101\u001a\u00020\u00102\u0006\u00102\u001a\u00020\u00102-\u00103\u001a)\b\u0001\u0012\u0004\u0012\u00020\u0001\u0012\u0004\u0012\u00020\u0010\u0012\n\u0012\b\u0012\u0004\u0012\u00020\u001e05\u0012\u0006\u0012\u0004\u0018\u00010\u001e04¢\u0006\u0002\b62(\u00108\u001a$\u0012\u0014\u0012\u0012\u0012\u0004\u0012\u00020\u001e0:j\b\u0012\u0004\u0012\u00020\u001e`;\u0012\u0004\u0012\u00020\u0010\u0012\u0004\u0012\u00020\u001609H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010<J7\u0010=\u001a\u000e\u0012\u0004\u0012\u00020\u001d\u0012\u0004\u0012\u00020\u001e0'2\u0006\u0010\u0017\u001a\u00020\u00182\u0006\u0010>\u001a\u00020$2\b\b\u0002\u0010?\u001a\u00020\u0016H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010@J\u001e\u0010A\u001a\u00020/2\u0006\u0010\u0017\u001a\u00020\u001e2\u0006\u0010*\u001a\u00020\u001d2\u0006\u0010B\u001a\u00020\u001eR\u0011\u0010\u0005\u001a\u00020\u0006¢\u0006\b\n\u0000\u001a\u0004\b\u0007\u0010\bR\u0014\u0010\u0002\u001a\u00020\u0003X\u0096\u0004¢\u0006\b\n\u0000\u001a\u0004\b\t\u0010\nR\u0011\u0010\u000b\u001a\u00020\f¢\u0006\b\n\u0000\u001a\u0004\b\r\u0010\u000eR\u000e\u0010\u000f\u001a\u00020\u0010X\u0082\u000e¢\u0006\u0002\n\u0000R\u0011\u0010\u0011\u001a\u00020\u0012¢\u0006\b\n\u0000\u001a\u0004\b\u0013\u0010\u0014\u0082\u0002\u0004\n\u0002\b\u0019¨\u0006C"}, d2 = {"Lcom/htmake/reader/api/controller/BaseController;", "Lkotlinx/coroutines/CoroutineScope;", "coroutineContext", "Lkotlin/coroutines/CoroutineContext;", "(Lkotlin/coroutines/CoroutineContext;)V", "appConfig", "Lcom/htmake/reader/config/AppConfig;", "getAppConfig", "()Lcom/htmake/reader/config/AppConfig;", "getCoroutineContext", "()Lkotlin/coroutines/CoroutineContext;", "env", "Lorg/springframework/core/env/Environment;", "getEnv", "()Lorg/springframework/core/env/Environment;", "loginExpireDays", PackageDocumentBase.PREFIX_OPF, "userMutex", "Lkotlinx/coroutines/sync/Mutex;", "getUserMutex", "()Lkotlinx/coroutines/sync/Mutex;", "checkAuth", PackageDocumentBase.PREFIX_OPF, "context", "Lio/vertx/ext/web/RoutingContext;", "(Lio/vertx/ext/web/RoutingContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "checkManagerAuth", "formatUser", PackageDocumentBase.PREFIX_OPF, PackageDocumentBase.PREFIX_OPF, PackageDocumentBase.PREFIX_OPF, "userInfo", "getFileExt", RSSKeywords.RSS_ITEM_URL, "defaultExt", "getUserInfoClass", "Lcom/htmake/reader/entity/User;", "username", "getUserInfoMap", PackageDocumentBase.PREFIX_OPF, "getUserNameSpace", "getUserStorage", "path", PackageDocumentBase.PREFIX_OPF, "(Ljava/lang/Object;[Ljava/lang/String;)Ljava/lang/String;", "getUserWebdavHome", "limitConcurrent", PackageDocumentBase.PREFIX_OPF, "concurrentCount", "startIndex", "endIndex", "handler", "Lkotlin/Function3;", "Lkotlin/coroutines/Continuation;", "Lkotlin/ExtensionFunctionType;", "(IIILkotlin/jvm/functions/Function3;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "needContinue", "Lkotlin/Function2;", "Ljava/util/ArrayList;", "Lkotlin/collections/ArrayList;", "(IIILkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "saveUserSession", "user", "regenerateToken", "(Lio/vertx/ext/web/RoutingContext;Lcom/htmake/reader/entity/User;ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;", "saveUserStorage", "value", "reader-pro"})
 public class BaseController implements CoroutineScope {
 
@@ -70,7 +70,7 @@ public class BaseController implements CoroutineScope {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BaseController$checkAuth$1, reason: invalid class name */
     /* JADX INFO: compiled from: BaseController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BaseController$checkAuth$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BaseController$checkAuth$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BaseController.kt", l = {117}, i = {}, s = {}, n = {}, m = "checkAuth", c = "com.htmake.reader.api.controller.BaseController")
     static final class AnonymousClass1 extends ContinuationImpl {
@@ -94,7 +94,7 @@ public class BaseController implements CoroutineScope {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BaseController$limitConcurrent$3, reason: invalid class name */
     /* JADX INFO: compiled from: BaseController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BaseController$limitConcurrent$3.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BaseController$limitConcurrent$3.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BaseController.kt", l = {289, 320}, i = {0}, s = {"L$4"}, n = {"resultList"}, m = "limitConcurrent", c = "com.htmake.reader.api.controller.BaseController")
     static final class AnonymousClass3 extends ContinuationImpl {
@@ -127,7 +127,7 @@ public class BaseController implements CoroutineScope {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BaseController$saveUserSession$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BaseController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BaseController$saveUserSession$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BaseController$saveUserSession$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BaseController.kt", l = {33}, i = {0, 0, 0, 0}, s = {"L$0", "L$1", "L$2", "Z$0"}, n = {"this", "context", "user", "regenerateToken"}, m = "saveUserSession", c = "com.htmake.reader.api.controller.BaseController")
     static final class C00101 extends ContinuationImpl {
@@ -237,20 +237,7 @@ public class BaseController implements CoroutineScope {
                 } else {
                     mapMutableMapOf.put(user.getToken(), Boxing.boxLong(expire));
                 }
-                final User user2 = user;
-                CollectionsKt.removeAll(mapMutableMapOf.values(), new Function1<Long, Boolean>() { // from class: com.htmake.reader.api.controller.BaseController.saveUserSession.2
-                    {
-                        super(1);
-                    }
-
-                    public final boolean invoke(long it) {
-                        return it < user2.getLast_login_at();
-                    }
-
-                    public /* bridge */ /* synthetic */ Object invoke(Object p1) {
-                        return Boolean.valueOf(invoke(((Number) p1).longValue()));
-                    }
-                });
+                CollectionsKt.removeAll(mapMutableMapOf.values(), new C00112(user));
                 user.setToken_map(mapMutableMapOf);
             }
             Map userMap = new LinkedHashMap();
@@ -266,11 +253,11 @@ public class BaseController implements CoroutineScope {
             String strEncode = Json.encode(userMap);
             Intrinsics.checkNotNullExpressionValue(strEncode, "encode(userMap)");
             ExtKt.saveStorage$default(new String[]{"data", "users"}, strEncode, false, null, 12, null);
-            Map<String, Object> user3 = this.formatUser(user);
+            Map<String, Object> user2 = this.formatUser(user);
             context.session().put("username", user.getUsername());
             context.put("username", user.getUsername());
             Mutex.DefaultImpls.unlock$default(this.getUserMutex(), (Object) null, 1, (Object) null);
-            return user3;
+            return user2;
         } catch (Throwable th) {
             Mutex.DefaultImpls.unlock$default(getUserMutex(), (Object) null, 1, (Object) null);
             throw th;
@@ -287,10 +274,31 @@ public class BaseController implements CoroutineScope {
         return baseController.saveUserSession(routingContext, user, z, continuation);
     }
 
+    /* JADX INFO: renamed from: com.htmake.reader.api.controller.BaseController$saveUserSession$2, reason: invalid class name and case insensitive filesystem */
+    /* JADX INFO: compiled from: BaseController.kt */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BaseController$saveUserSession$2.class */
+    @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\f\n\u0000\n\u0002\u0010\u000b\n\u0000\n\u0002\u0010\t\u0010\u0000\u001a\u00020\u00012\u0006\u0010\u0002\u001a\u00020\u0003H\n"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "it", PackageDocumentBase.PREFIX_OPF})
+    static final class C00112 extends Lambda implements Function1<Long, Boolean> {
+        final /* synthetic */ User $user;
+
+        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+        C00112(User $user) {
+            super(1);
+            this.$user = $user;
+        }
+
+        public final boolean invoke(long it) {
+            return it < this.$user.getLast_login_at();
+        }
+
+        public /* bridge */ /* synthetic */ Object invoke(Object p1) {
+            return Boolean.valueOf(invoke(((Number) p1).longValue()));
+        }
+    }
+
     /* JADX WARN: Removed duplicated region for block: B:7:0x0027  */
     /* JADX WARN: Removed duplicated region for block: B:94:0x035e  */
     /* JADX WARN: Removed duplicated region for block: B:95:0x0362  */
-    /* JADX WARN: Type inference failed for: r2v11, types: [com.htmake.reader.api.controller.BaseController$checkAuth$$inlined$toDataClass$1] */
     @Nullable
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -351,8 +359,7 @@ public class BaseController implements CoroutineScope {
                                 json = (String) obj;
                             }
                             String json$iv$iv = json;
-                            user = (User) ExtKt.getGson().fromJson(json$iv$iv, new TypeToken<User>() { // from class: com.htmake.reader.api.controller.BaseController$checkAuth$$inlined$toDataClass$1
-                            }.getType());
+                            user = (User) ExtKt.getGson().fromJson(json$iv$iv, new BaseController$checkAuth$$inlined$toDataClass$1().getType());
                         }
                         existedUser = user;
                         if (existedUser != null) {
@@ -490,7 +497,6 @@ public class BaseController implements CoroutineScope {
         }
     }
 
-    /* JADX WARN: Type inference failed for: r2v0, types: [com.htmake.reader.api.controller.BaseController$getUserInfoClass$$inlined$toDataClass$1] */
     @Nullable
     public final User getUserInfoClass(@NotNull String username) {
         String json;
@@ -506,8 +512,7 @@ public class BaseController implements CoroutineScope {
                 json = (String) userInfoMap;
             }
             String json$iv$iv = json;
-            user = (User) ExtKt.getGson().fromJson(json$iv$iv, new TypeToken<User>() { // from class: com.htmake.reader.api.controller.BaseController$getUserInfoClass$$inlined$toDataClass$1
-            }.getType());
+            user = (User) ExtKt.getGson().fromJson(json$iv$iv, new BaseController$getUserInfoClass$$inlined$toDataClass$1().getType());
         }
         User user2 = user;
         return user2;
@@ -535,7 +540,6 @@ public class BaseController implements CoroutineScope {
         return (Map) map2.getOrDefault(username, null);
     }
 
-    /* JADX WARN: Type inference failed for: r2v20, types: [com.htmake.reader.api.controller.BaseController$formatUser$$inlined$toDataClass$1] */
     @NotNull
     public final Map<String, Object> formatUser(@NotNull Object userInfo) {
         Intrinsics.checkNotNullParameter(userInfo, "userInfo");
@@ -546,8 +550,7 @@ public class BaseController implements CoroutineScope {
             Object obj = userInfo instanceof Map ? (Map) userInfo : null;
             if (obj != null) {
                 String json$iv$iv = obj instanceof String ? (String) obj : ExtKt.getGson().toJson(obj);
-                user = (User) ExtKt.getGson().fromJson(json$iv$iv, new TypeToken<User>() { // from class: com.htmake.reader.api.controller.BaseController$formatUser$$inlined$toDataClass$1
-                }.getType());
+                user = (User) ExtKt.getGson().fromJson(json$iv$iv, new BaseController$formatUser$$inlined$toDataClass$1().getType());
             }
         }
         return user == null ? new LinkedHashMap() : MapsKt.mutableMapOf(new Pair[]{TuplesKt.to("username", user.getUsername()), TuplesKt.to("lastLoginAt", Long.valueOf(user.getLast_login_at())), TuplesKt.to("accessToken", user.getUsername() + ':' + user.getToken()), TuplesKt.to("enableWebdav", Boolean.valueOf(user.getEnable_webdav())), TuplesKt.to("enableLocalStore", Boolean.valueOf(user.getEnable_local_store())), TuplesKt.to("enableBookSource", Boolean.valueOf(user.getEnable_book_source())), TuplesKt.to("enableRssSource", Boolean.valueOf(user.getEnable_rss_source())), TuplesKt.to("bookSourceLimit", Integer.valueOf(user.getBook_source_limit())), TuplesKt.to("bookLimit", Integer.valueOf(user.getBook_limit())), TuplesKt.to("createdAt", Long.valueOf(user.getCreated_at()))});
@@ -591,32 +594,44 @@ public class BaseController implements CoroutineScope {
         return FileUtils.INSTANCE.getFileExtetion(url, defaultExt);
     }
 
+    /* JADX INFO: renamed from: com.htmake.reader.api.controller.BaseController$limitConcurrent$2, reason: invalid class name */
+    /* JADX INFO: compiled from: BaseController.kt */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BaseController$limitConcurrent$2.class */
+    @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\u001a\n\u0000\n\u0002\u0010\u000b\n\u0000\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\b\u0010\u0000\u001a\u00020\u00012\u0016\u0010\u0002\u001a\u0012\u0012\u0004\u0012\u00020\u00040\u0003j\b\u0012\u0004\u0012\u00020\u0004`\u00052\u0006\u0010\u0006\u001a\u00020\u0007H\n"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "<anonymous parameter 0>", "Ljava/util/ArrayList;", PackageDocumentBase.PREFIX_OPF, "Lkotlin/collections/ArrayList;", "<anonymous parameter 1>", PackageDocumentBase.PREFIX_OPF})
+    static final class AnonymousClass2 extends Lambda implements Function2<ArrayList<Object>, Integer, Boolean> {
+        public static final AnonymousClass2 INSTANCE = new AnonymousClass2();
+
+        AnonymousClass2() {
+            super(2);
+        }
+
+        public /* bridge */ /* synthetic */ Object invoke(Object p1, Object p2) {
+            return Boolean.valueOf(invoke((ArrayList<Object>) p1, ((Number) p2).intValue()));
+        }
+
+        public final boolean invoke(@NotNull ArrayList<Object> $noName_0, int $noName_1) {
+            Intrinsics.checkNotNullParameter($noName_0, "$noName_0");
+            return true;
+        }
+    }
+
     @Nullable
     public final Object limitConcurrent(int concurrentCount, int startIndex, int endIndex, @NotNull Function3<? super CoroutineScope, ? super Integer, ? super Continuation<Object>, ? extends Object> handler, @NotNull Continuation<? super Unit> $completion) {
-        Object objLimitConcurrent = limitConcurrent(concurrentCount, startIndex, endIndex, handler, new Function2<ArrayList<Object>, Integer, Boolean>() { // from class: com.htmake.reader.api.controller.BaseController.limitConcurrent.2
-            public /* bridge */ /* synthetic */ Object invoke(Object p1, Object p2) {
-                return Boolean.valueOf(invoke((ArrayList<Object>) p1, ((Number) p2).intValue()));
-            }
-
-            public final boolean invoke(@NotNull ArrayList<Object> $noName_0, int $noName_1) {
-                Intrinsics.checkNotNullParameter($noName_0, "$noName_0");
-                return true;
-            }
-        }, $completion);
+        Object objLimitConcurrent = limitConcurrent(concurrentCount, startIndex, endIndex, handler, AnonymousClass2.INSTANCE, $completion);
         return objLimitConcurrent == IntrinsicsKt.getCOROUTINE_SUSPENDED() ? objLimitConcurrent : Unit.INSTANCE;
     }
 
     /* JADX WARN: Code restructure failed: missing block: B:48:0x02d3, code lost:
-
+    
         if (0 < r28) goto L49;
      */
     /* JADX WARN: Code restructure failed: missing block: B:49:0x02d6, code lost:
-
+    
         r0 = r27;
         r27 = r27 + 1;
      */
     /* JADX WARN: Code restructure failed: missing block: B:50:0x02dd, code lost:
-
+    
         r33 = r26;
         r36.L$0 = r15;
         r36.L$1 = r24;
@@ -630,29 +645,29 @@ public class BaseController implements CoroutineScope {
         r0 = ((kotlinx.coroutines.Deferred) r24.get(r0)).await(r36);
      */
     /* JADX WARN: Code restructure failed: missing block: B:52:0x0333, code lost:
-
+    
         if (r0 != r0) goto L57;
      */
     /* JADX WARN: Code restructure failed: missing block: B:54:0x0338, code lost:
-
+    
         return r0;
      */
     /* JADX WARN: Code restructure failed: missing block: B:60:0x0391, code lost:
-
+    
         if (r27 >= r28) goto L61;
      */
     /* JADX WARN: Code restructure failed: missing block: B:61:0x0394, code lost:
-
+    
         r24.clear();
         r15.invoke(r26, kotlin.coroutines.jvm.internal.Boxing.boxInt(r18));
      */
     /* JADX WARN: Code restructure failed: missing block: B:76:0x00e3, code lost:
-
+    
         r24.clear();
         r24.addAll(r0);
      */
     /* JADX WARN: Code restructure failed: missing block: B:77:0x0082, code lost:
-
+    
         r17 = r17 + 1;
      */
     /* JADX WARN: Removed duplicated region for block: B:13:0x0090  */
@@ -826,7 +841,7 @@ public class BaseController implements CoroutineScope {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BaseController$limitConcurrent$4, reason: invalid class name */
     /* JADX INFO: compiled from: BaseController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BaseController$limitConcurrent$4.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BaseController$limitConcurrent$4.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\n\n\u0000\n\u0002\u0010\u0000\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H\u008a@"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "Lkotlinx/coroutines/CoroutineScope;"})
     @DebugMetadata(f = "BaseController.kt", l = {276}, i = {}, s = {}, n = {}, m = "invokeSuspend", c = "com.htmake.reader.api.controller.BaseController$limitConcurrent$4")
     static final class AnonymousClass4 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super Object>, Object> {

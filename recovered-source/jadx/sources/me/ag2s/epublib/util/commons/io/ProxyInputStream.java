@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import me.ag2s.epublib.util.IOUtil;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/util/commons/io/ProxyInputStream.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/util/commons/io/ProxyInputStream.class */
 public abstract class ProxyInputStream extends FilterInputStream {
     public ProxyInputStream(final InputStream proxy) {
         super(proxy);

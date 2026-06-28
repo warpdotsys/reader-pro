@@ -11,7 +11,7 @@ import me.ag2s.epublib.Constants;
 import me.ag2s.epublib.epub.PackageDocumentBase;
 import org.xmlpull.v1.XmlSerializer;
 
-/* JADX INFO: loaded from: app-classes.jar:org/kxml2/wap/WbxmlSerializer.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:org/kxml2/wap/WbxmlSerializer.class */
 public class WbxmlSerializer implements XmlSerializer {
     OutputStream out;
     String pending;

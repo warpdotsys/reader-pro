@@ -10,7 +10,7 @@ import me.ag2s.epublib.util.IOUtil;
 import me.ag2s.epublib.util.StringUtil;
 import me.ag2s.epublib.util.commons.io.XmlStreamReader;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/domain/Resource.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/domain/Resource.class */
 public class Resource implements Serializable {
     private static final long serialVersionUID = 1043946707835004037L;
     private String id;

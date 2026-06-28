@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import me.ag2s.epublib.util.StringUtil;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/domain/MediaTypes.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/domain/MediaTypes.class */
 public class MediaTypes {
     public static final MediaType XHTML = new MediaType("application/xhtml+xml", ".xhtml", new String[]{".htm", ".html", ".xhtml"});
     public static final MediaType EPUB = new MediaType("application/epub+zip", ".epub");

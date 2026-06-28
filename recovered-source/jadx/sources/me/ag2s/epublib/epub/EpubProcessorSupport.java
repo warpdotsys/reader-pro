@@ -17,7 +17,7 @@ import org.xml.sax.InputSource;
 import org.xmlpull.v1.XmlPullParserFactory;
 import org.xmlpull.v1.XmlSerializer;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/epub/EpubProcessorSupport.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/epub/EpubProcessorSupport.class */
 public class EpubProcessorSupport {
     private static final String TAG = EpubProcessorSupport.class.getName();
     protected static DocumentBuilderFactory documentBuilderFactory;
@@ -26,7 +26,7 @@ public class EpubProcessorSupport {
         init();
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/epub/EpubProcessorSupport$EntityResolverImpl.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/epub/EpubProcessorSupport$EntityResolverImpl.class */
     static class EntityResolverImpl implements EntityResolver {
         private String previousLocation;
 

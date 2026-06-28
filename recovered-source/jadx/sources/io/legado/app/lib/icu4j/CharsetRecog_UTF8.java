@@ -2,7 +2,7 @@ package io.legado.app.lib.icu4j;
 
 import me.ag2s.epublib.Constants;
 
-/* JADX INFO: loaded from: app-classes.jar:io/legado/app/lib/icu4j/CharsetRecog_UTF8.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/lib/icu4j/CharsetRecog_UTF8.class */
 class CharsetRecog_UTF8 extends CharsetRecognizer {
     CharsetRecog_UTF8() {
     }

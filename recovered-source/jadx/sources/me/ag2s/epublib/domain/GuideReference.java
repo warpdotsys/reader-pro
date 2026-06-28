@@ -4,7 +4,7 @@ import java.io.Serializable;
 import me.ag2s.epublib.epub.NCXDocumentV2;
 import me.ag2s.epublib.util.StringUtil;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/domain/GuideReference.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/domain/GuideReference.class */
 public class GuideReference extends TitledResourceReference implements Serializable {
     private static final long serialVersionUID = -316179702440631834L;
     public static final String COVER = "cover";

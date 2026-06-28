@@ -13,7 +13,7 @@ import me.ag2s.epublib.epub.PackageDocumentBase;
 import me.ag2s.epublib.util.StringUtil;
 import org.xmlpull.v1.XmlSerializer;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/epub/PackageDocumentMetadataWriter.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/epub/PackageDocumentMetadataWriter.class */
 public class PackageDocumentMetadataWriter extends PackageDocumentBase {
     public static void writeMetaData(EpubBook book, XmlSerializer serializer) throws IllegalStateException, IOException, IllegalArgumentException {
         serializer.startTag(PackageDocumentBase.NAMESPACE_OPF, PackageDocumentBase.OPFTags.metadata);

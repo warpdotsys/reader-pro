@@ -5,9 +5,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.htmake.reader.api.ReturnData;
 import com.htmake.reader.entity.User;
 import com.htmake.reader.lib.tts.constant.TtsStyleEnum;
@@ -20,7 +18,6 @@ import com.htmake.reader.utils.SpringContextUtils;
 import com.htmake.reader.utils.UserMutex;
 import com.htmake.reader.utils.VertExtKt;
 import com.script.ScriptException;
-import io.legado.app.constant.AppConst;
 import io.legado.app.constant.AppPattern;
 import io.legado.app.constant.BookType;
 import io.legado.app.constant.RSSKeywords;
@@ -52,8 +49,6 @@ import io.legado.app.utils.MD5Utils;
 import io.legado.app.utils.NetworkUtils;
 import io.legado.app.utils.ParameterizedTypeImpl;
 import io.legado.app.utils.ZipUtils;
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.CaseInsensitiveHeaders;
 import io.vertx.core.http.HttpMethod;
@@ -87,7 +82,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -96,7 +90,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CancellationException;
-import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
 import javax.imageio.ImageIO;
 import kotlin.Lazy;
@@ -111,7 +104,6 @@ import kotlin.Unit;
 import kotlin.collections.ArraysKt;
 import kotlin.collections.CollectionsKt;
 import kotlin.collections.MapsKt;
-import kotlin.comparisons.ComparisonsKt;
 import kotlin.coroutines.Continuation;
 import kotlin.coroutines.CoroutineContext;
 import kotlin.coroutines.intrinsics.IntrinsicsKt;
@@ -130,6 +122,7 @@ import kotlin.jvm.functions.Function3;
 import kotlin.jvm.internal.AdaptedFunctionReference;
 import kotlin.jvm.internal.DefaultConstructorMarker;
 import kotlin.jvm.internal.Intrinsics;
+import kotlin.jvm.internal.Lambda;
 import kotlin.jvm.internal.Ref;
 import kotlin.jvm.internal.TypeIntrinsics;
 import kotlin.text.Charsets;
@@ -173,7 +166,7 @@ import org.kxml2.kdom.Node;
 import org.mozilla.javascript.WrappedException;
 
 /* JADX INFO: compiled from: BookController.kt */
-/* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController.class */
 @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u0000\u008a\u0002\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0010\u0011\n\u0002\u0010\u000e\n\u0002\b\u0005\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\b\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0010\u0002\n\u0002\b\u0002\n\u0002\u0010$\n\u0002\u0010\u0000\n\u0002\b\u0005\n\u0002\u0018\u0002\n\u0002\b\u0004\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0010\u000b\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\b\n\u0002\u0018\u0002\n\u0002\b\r\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\b\n\u0002\u0010 \n\u0002\b\b\n\u0002\u0010#\n\u0002\b\u0004\n\u0002\u0018\u0002\n\u0002\b\u0007\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0007\n\u0002\u0018\u0002\n\u0002\b\u0007\n\u0002\u0018\u0002\n\u0002\b\u0014\n\u0002\u0018\u0002\n\u0002\b\u0007\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\u0007\n\u0002\b\u0012\n\u0002\u0018\u0002\n\u0002\b\u0013\n\u0002\u0018\u0002\n\u0002\b\u0007\u0018\u00002\u00020\u0001B\r\u0012\u0006\u0010\u0002\u001a\u00020\u0003¢\u0006\u0002\u0010\u0004J\u0019\u0010\u0012\u001a\u00020\u00132\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J,\u0010\u0017\u001a\u00020\u00182\u0006\u0010\u0019\u001a\u00020\u00072\u0012\u0010\u001a\u001a\u000e\u0012\u0004\u0012\u00020\u0007\u0012\u0004\u0012\u00020\u001c0\u001b2\u0006\u0010\u001d\u001a\u00020\u0007H\u0002J\u0019\u0010\u001e\u001a\u00020\u00132\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J\u0019\u0010\u001f\u001a\u00020\u00182\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J!\u0010 \u001a\u00020\u00182\u0006\u0010!\u001a\u00020\"2\u0006\u0010\u001d\u001a\u00020\u0007H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010#J\u0019\u0010 \u001a\u00020\u00132\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J\u0019\u0010$\u001a\u00020\u00182\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J \u0010%\u001a\u00020\u00182\u0006\u0010&\u001a\u00020'2\u0006\u0010(\u001a\u00020\u000f2\b\b\u0002\u0010)\u001a\u00020*J\u0018\u0010+\u001a\u00020*2\u0006\u0010&\u001a\u00020'2\b\b\u0002\u0010)\u001a\u00020*J/\u0010,\u001a\u0004\u0018\u00010-2\u0006\u0010\u001d\u001a\u00020\u00072\u0006\u0010.\u001a\u00020\u00072\n\b\u0002\u0010/\u001a\u0004\u0018\u00010\u0007H\u0086@ø\u0001\u0000¢\u0006\u0002\u00100J\u0019\u00101\u001a\u00020\u00132\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J\u0019\u00102\u001a\u00020\u00132\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J\u0019\u00103\u001a\u00020\u00132\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J7\u00104\u001a\u0004\u0018\u00010'2\u0006\u0010&\u001a\u00020'2\u0006\u0010\u001d\u001a\u00020\u00072\u0012\u00105\u001a\u000e\u0012\u0004\u0012\u00020'\u0012\u0004\u0012\u00020'06H\u0086@ø\u0001\u0000¢\u0006\u0002\u00107J\u0019\u00108\u001a\u00020\u00132\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J\u0019\u00109\u001a\u00020\u00182\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J3\u0010:\u001a\u00020-2\u0006\u0010;\u001a\u00020-2\u0006\u0010&\u001a\u00020'2\b\u0010<\u001a\u0004\u0018\u00010\u00072\u0006\u0010\u001d\u001a\u00020\u0007H\u0082@ø\u0001\u0000¢\u0006\u0002\u0010=J1\u0010>\u001a\u00020-2\u0006\u0010;\u001a\u00020-2\u0006\u0010?\u001a\u00020'2\u0006\u0010<\u001a\u00020\u00072\u0006\u0010\u001d\u001a\u00020\u0007H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010=J\u0018\u0010@\u001a\u00020*2\u0006\u0010&\u001a\u00020'2\b\b\u0002\u0010)\u001a\u00020*J\u0018\u0010A\u001a\u00020*2\u0006\u0010&\u001a\u00020'2\b\b\u0002\u0010)\u001a\u00020*J(\u0010B\u001a\u00020\u00072\u0006\u0010C\u001a\u00020D2\u0006\u0010&\u001a\u00020'2\u0006\u0010E\u001a\u00020\u00072\u0006\u0010F\u001a\u00020GH\u0002J\u0099\u0001\u0010H\u001a\u00020\u00182\u0006\u0010&\u001a\u00020'2\u0006\u0010I\u001a\u00020\u00072\u0006\u0010\u001d\u001a\u00020\u00072n\u0010J\u001aj\u0012\u0013\u0012\u00110\u0007¢\u0006\f\bL\u0012\b\bM\u0012\u0004\b\b(N\u0012K\u0012I\u0012\u0016\u0012\u0014\u0012\u0004\u0012\u00020\u0007\u0012\u0004\u0012\u00020\u000f\u0012\u0004\u0012\u00020\u00070P\u0018\u00010Oj\u001c\u0012\u0016\u0012\u0014\u0012\u0004\u0012\u00020\u0007\u0012\u0004\u0012\u00020\u000f\u0012\u0004\u0012\u00020\u00070P\u0018\u0001`Q¢\u0006\f\bL\u0012\b\bM\u0012\u0004\b\b(R\u0012\u0004\u0012\u00020\u00180KH\u0082@ø\u0001\u0000¢\u0006\u0002\u0010SJ\u0019\u0010T\u001a\u00020\u00132\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J\u0010\u0010U\u001a\u00020\r2\u0006\u0010\u001d\u001a\u00020\u0007H\u0002J\u0019\u0010V\u001a\u00020\u00132\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J\u0019\u0010W\u001a\u00020\u00182\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J\u0019\u0010X\u001a\u00020\u00132\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J)\u0010Y\u001a\b\u0012\u0004\u0012\u00020'0Z2\b\b\u0002\u0010[\u001a\u00020*2\u0006\u0010\u001d\u001a\u00020\u0007H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\\J/\u0010]\u001a\u0004\u0018\u00010\u00072\u0006\u0010\u0014\u001a\u00020\u00152\b\b\u0002\u0010\u0019\u001a\u00020\u00072\b\b\u0002\u0010^\u001a\u00020*H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010_J\u0018\u0010`\u001a\u0004\u0018\u00010\u00072\u0006\u0010\u0019\u001a\u00020\u00072\u0006\u0010\u001d\u001a\u00020\u0007J\u0019\u0010a\u001a\u00020\u00132\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J\u001c\u0010b\u001a\b\u0012\u0004\u0012\u00020\u000f0c2\u0006\u0010?\u001a\u00020'2\u0006\u0010\u001d\u001a\u00020\u0007J\u0016\u0010d\u001a\u00020-2\u0006\u0010?\u001a\u00020'2\u0006\u0010\u001d\u001a\u00020\u0007J\u0019\u0010e\u001a\u00020\u00132\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J\u0019\u0010f\u001a\u00020\u00132\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J\u0018\u0010g\u001a\u0004\u0018\u00010h2\u0006\u0010M\u001a\u00020\u00072\u0006\u0010\u001d\u001a\u00020\u0007J\u0010\u0010i\u001a\u00020\r2\u0006\u0010\u001d\u001a\u00020\u0007H\u0002J\u0019\u0010j\u001a\u00020\u00132\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J\u001b\u0010k\u001a\u0004\u0018\u00010\u00072\u0006\u0010\u001d\u001a\u00020\u0007H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010lJQ\u0010m\u001a\b\u0012\u0004\u0012\u00020G0Z2\u0006\u0010&\u001a\u00020'2\b\u0010<\u001a\u0004\u0018\u00010\u00072\b\b\u0002\u0010[\u001a\u00020*2\u0006\u0010\u001d\u001a\u00020\u00072\b\b\u0002\u0010n\u001a\u00020*2\n\b\u0002\u0010o\u001a\u0004\u0018\u00010pH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010qJ,\u0010r\u001a\u000e\u0012\u0004\u0012\u00020\u000f\u0012\u0004\u0012\u00020\u00070s2\u0006\u0010E\u001a\u00020\u00072\u0006\u0010t\u001a\u00020\u000f2\u0006\u0010u\u001a\u00020\u0007H\u0002J\u0019\u0010v\u001a\u00020\u00132\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J\u0018\u0010w\u001a\u0004\u0018\u00010'2\u0006\u0010x\u001a\u00020\u00072\u0006\u0010\u001d\u001a\u00020\u0007J\u0019\u0010y\u001a\u00020\u00132\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J+\u0010z\u001a\u0004\u0018\u00010{2\u0006\u0010|\u001a\u00020h2\u0006\u0010}\u001a\u00020\u00072\u0006\u0010~\u001a\u00020\u000fH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u007fJ\u001a\u0010\u0080\u0001\u001a\u00020\u00132\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J\u001a\u0010\u0081\u0001\u001a\u00020\u00132\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J\u001a\u0010\u0082\u0001\u001a\u00020*2\u0007\u0010<\u001a\u00030\u0083\u00012\u0006\u0010\u001d\u001a\u00020\u0007H\u0002J\u001b\u0010\u0084\u0001\u001a\u00020'2\u0006\u0010&\u001a\u00020'H\u0086@ø\u0001\u0000¢\u0006\u0003\u0010\u0085\u0001J\u001a\u0010\u0086\u0001\u001a\u00020\u00132\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J\u001a\u0010\u0087\u0001\u001a\u00020\u00132\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J\u001a\u0010\u0088\u0001\u001a\u00020\u00132\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J\u001a\u0010\u0089\u0001\u001a\u00020\u00132\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J\u001a\u0010\u008a\u0001\u001a\u00020\u00132\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J\u001a\u0010\u008b\u0001\u001a\u00020\u00132\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J/\u0010\u008c\u0001\u001a\u00020\u00182\u0006\u0010&\u001a\u00020'2\u0006\u0010\u001d\u001a\u00020\u00072\n\b\u0002\u0010<\u001a\u0004\u0018\u00010\u0007H\u0086@ø\u0001\u0000¢\u0006\u0003\u0010\u008d\u0001J\u001a\u0010\u008e\u0001\u001a\u00020\u00132\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J(\u0010\u008f\u0001\u001a\b\u0012\u0004\u0012\u00020'0Z2\r\u0010\u0090\u0001\u001a\b\u0012\u0004\u0012\u00020'0ZH\u0086@ø\u0001\u0000¢\u0006\u0003\u0010\u0091\u0001J\u001a\u0010\u0092\u0001\u001a\u00020\u00132\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J,\u0010\u0093\u0001\u001a\u00020\u00182\u0006\u0010&\u001a\u00020'2\u0007\u0010\u0094\u0001\u001a\u00020G2\u0006\u0010\u001d\u001a\u00020\u0007H\u0086@ø\u0001\u0000¢\u0006\u0003\u0010\u0095\u0001J2\u0010\u0096\u0001\u001a\u00020\u00182\u0006\u0010&\u001a\u00020'2\u000e\u0010\u0097\u0001\u001a\t\u0012\u0005\u0012\u00030\u0098\u00010Z2\u0006\u0010\u001d\u001a\u00020\u00072\t\b\u0002\u0010\u0099\u0001\u001a\u00020*J.\u0010\u009a\u0001\u001a\u0010\u0012\u0004\u0012\u00020'\u0012\u0006\u0012\u0004\u0018\u00010\u00070s2\u0007\u0010\u009b\u0001\u001a\u00020'2\u0006\u0010\u001d\u001a\u00020\u00072\u0006\u0010\u0014\u001a\u00020\u0015J#\u0010\u009c\u0001\u001a\u00020\u00182\u0006\u0010&\u001a\u00020'2\u0006\u0010\u001d\u001a\u00020\u0007H\u0082@ø\u0001\u0000¢\u0006\u0003\u0010\u009d\u0001J?\u0010\u009e\u0001\u001a\u00020\u00182\b\u0010\u009f\u0001\u001a\u00030 \u00012\b\u0010¡\u0001\u001a\u00030¢\u00012\u0006\u0010(\u001a\u00020\u000f2\b\u0010£\u0001\u001a\u00030¤\u00012\u0007\u0010¥\u0001\u001a\u00020\u00072\u0007\u0010¦\u0001\u001a\u00020-J>\u0010§\u0001\u001a\u00020\u00182\u0006\u0010&\u001a\u00020'2\r\u0010¨\u0001\u001a\b\u0012\u0004\u0012\u00020G0Z2\u0006\u0010\u001d\u001a\u00020\u00072\n\b\u0002\u0010o\u001a\u0004\u0018\u00010pH\u0086@ø\u0001\u0000¢\u0006\u0003\u0010©\u0001J,\u0010ª\u0001\u001a\u00020\u00182\u0006\u0010&\u001a\u00020'2\u0007\u0010\u0094\u0001\u001a\u00020G2\u0006\u0010\u001d\u001a\u00020\u0007H\u0086@ø\u0001\u0000¢\u0006\u0003\u0010\u0095\u0001J'\u0010«\u0001\u001a\u00020*2\u0006\u0010\u001d\u001a\u00020\u00072\n\b\u0002\u0010/\u001a\u0004\u0018\u00010\u0007H\u0086@ø\u0001\u0000¢\u0006\u0003\u0010¬\u0001J\u001a\u0010\u00ad\u0001\u001a\u00020\u00132\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J\u001a\u0010®\u0001\u001a\u00020\u00132\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J\u001a\u0010¯\u0001\u001a\u00020\u00132\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J\u001a\u0010°\u0001\u001a\u00020\u00182\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J\u001a\u0010±\u0001\u001a\u00020\u00132\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J\u001a\u0010²\u0001\u001a\u00020\u00182\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016JJ\u0010³\u0001\u001a\u0014\u0012\u0005\u0012\u00030\u0098\u00010Oj\t\u0012\u0005\u0012\u00030\u0098\u0001`Q2\u0006\u0010I\u001a\u00020\u00072\u0006\u0010&\u001a\u00020'2\t\b\u0002\u0010´\u0001\u001a\u00020*2\b\b\u0002\u0010\u001d\u001a\u00020\u0007H\u0086@ø\u0001\u0000¢\u0006\u0003\u0010µ\u0001J2\u0010¶\u0001\u001a\t\u0012\u0005\u0012\u00030·\u00010Z2\u0006\u0010&\u001a\u00020'2\u0006\u0010F\u001a\u00020G2\u0006\u0010u\u001a\u00020\u0007H\u0086@ø\u0001\u0000¢\u0006\u0003\u0010\u0095\u0001J+\u0010¸\u0001\u001a\b\u0012\u0004\u0012\u00020\u000f0Z2\u0007\u0010¹\u0001\u001a\u00020\u00072\u0007\u0010º\u0001\u001a\u00020\u0007H\u0082@ø\u0001\u0000¢\u0006\u0003\u0010¬\u0001J\u0019\u0010»\u0001\u001a\u00020\u00072\u0006\u0010&\u001a\u00020'2\u0006\u0010C\u001a\u00020DH\u0002J\u001a\u0010¼\u0001\u001a\u00020\u00132\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016J-\u0010½\u0001\u001a\u00020\u00182\u0006\u0010&\u001a\u00020'2\u0006\u0010C\u001a\u00020D2\b\u0010I\u001a\u0004\u0018\u00010\u0007H\u0082@ø\u0001\u0000¢\u0006\u0003\u0010¾\u0001J>\u0010¿\u0001\u001a\u00020\u00182\u0007\u0010À\u0001\u001a\u00020\u00072\u0006\u0010&\u001a\u00020'2\u0006\u0010C\u001a\u00020D2\b\u0010I\u001a\u0004\u0018\u00010\u00072\u0006\u0010\u001d\u001a\u00020\u0007H\u0082@ø\u0001\u0000¢\u0006\u0003\u0010Á\u0001J\u0019\u0010Â\u0001\u001a\u00020\u00182\u0006\u0010&\u001a\u00020'2\u0006\u0010C\u001a\u00020DH\u0002J$\u0010Ã\u0001\u001a\u00020\u00182\u0007\u0010Ä\u0001\u001a\u00020\u001c2\u0006\u0010\u001d\u001a\u00020\u0007H\u0086@ø\u0001\u0000¢\u0006\u0003\u0010Å\u0001J$\u0010Æ\u0001\u001a\u00020*2\u0007\u0010Ç\u0001\u001a\u00020\u00072\u0006\u0010\u001d\u001a\u00020\u0007H\u0086@ø\u0001\u0000¢\u0006\u0003\u0010¬\u0001J\u001a\u0010È\u0001\u001a\u00020\u00182\u0006\u0010\u0014\u001a\u00020\u0015H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0016JF\u0010É\u0001\u001a\u00020\u00182\b\u0010Ê\u0001\u001a\u00030Ë\u00012\u0006\u0010N\u001a\u00020\u00072\u0006\u0010\u001d\u001a\u00020\u00072\u0017\b\u0002\u0010Ì\u0001\u001a\u0010\u0012\u0004\u0012\u00020\u0007\u0012\u0004\u0012\u00020\u0007\u0018\u00010\u001bH\u0086@ø\u0001\u0000¢\u0006\u0003\u0010Í\u0001J>\u0010Î\u0001\u001a\u00020\u00182\b\u0010Ê\u0001\u001a\u00030Ë\u00012\u0006\u0010N\u001a\u00020\u00072\u0017\b\u0002\u0010Ì\u0001\u001a\u0010\u0012\u0004\u0012\u00020\u0007\u0012\u0004\u0012\u00020\u0007\u0018\u00010\u001bH\u0086@ø\u0001\u0000¢\u0006\u0003\u0010Ï\u0001J>\u0010Ð\u0001\u001a\u00020\u00182\b\u0010Ê\u0001\u001a\u00030Ë\u00012\u0006\u0010N\u001a\u00020\u00072\u0017\b\u0002\u0010Ì\u0001\u001a\u0010\u0012\u0004\u0012\u00020\u0007\u0012\u0004\u0012\u00020\u0007\u0018\u00010\u001bH\u0086@ø\u0001\u0000¢\u0006\u0003\u0010Ï\u0001J!\u0010Ñ\u0001\u001a\u00020\u00072\u0006\u0010&\u001a\u00020'2\u0006\u0010F\u001a\u00020G2\u0006\u0010E\u001a\u00020\u0007H\u0002R!\u0010\u0005\u001a\b\u0012\u0004\u0012\u00020\u00070\u00068BX\u0082\u0084\u0002¢\u0006\f\n\u0004\b\n\u0010\u000b\u001a\u0004\b\b\u0010\tR\u000e\u0010\f\u001a\u00020\rX\u0082\u000e¢\u0006\u0002\n\u0000R\u000e\u0010\u000e\u001a\u00020\u000fX\u0082D¢\u0006\u0002\n\u0000R\u000e\u0010\u0010\u001a\u00020\u0011X\u0082\u000e¢\u0006\u0002\n\u0000\u0082\u0002\u0004\n\u0002\b\u0019¨\u0006Ò\u0001"}, d2 = {"Lcom/htmake/reader/api/controller/BookController;", "Lcom/htmake/reader/api/controller/BaseController;", "coroutineContext", "Lkotlin/coroutines/CoroutineContext;", "(Lkotlin/coroutines/CoroutineContext;)V", "backupFileNames", PackageDocumentBase.PREFIX_OPF, PackageDocumentBase.PREFIX_OPF, "getBackupFileNames", "()[Ljava/lang/String;", "backupFileNames$delegate", "Lkotlin/Lazy;", "bookInfoCache", "Lio/legado/app/utils/ACache;", "concurrentLoopCount", PackageDocumentBase.PREFIX_OPF, "webClient", "Lio/vertx/ext/web/client/WebClient;", "addBookGroupMulti", "Lcom/htmake/reader/api/ReturnData;", "context", "Lio/vertx/ext/web/RoutingContext;", "(Lio/vertx/ext/web/RoutingContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "addInvalidBookSource", PackageDocumentBase.PREFIX_OPF, "sourceUrl", "invalidInfo", PackageDocumentBase.PREFIX_OPF, PackageDocumentBase.PREFIX_OPF, "userNameSpace", "backupToMongodb", "bookSourceDebugSSE", "cacheBookOnServer", "bookUrlList", "Lio/vertx/core/json/JsonArray;", "(Lio/vertx/core/json/JsonArray;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "cacheBookSSE", "convertPdfPageToImage", "book", "Lio/legado/app/data/entities/Book;", "index", "force", PackageDocumentBase.PREFIX_OPF, "convertPdfToImage", "createUserBackup", "Ljava/io/File;", "backupDir", "latestZipFilePath", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "deleteBook", "deleteBookCache", "deleteBooks", "editShelfBook", "handler", "Lkotlin/Function1;", "(Lio/legado/app/data/entities/Book;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "exploreBook", "exportBook", "exportToEpub", "exportDir", "bookSource", "(Ljava/io/File;Lio/legado/app/data/entities/Book;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "exportToTxt", "bookInfo", "extractCbz", "extractEpub", "fixPic", "epubBook", "Lme/ag2s/epublib/domain/EpubBook;", "content", NCXDocumentV2.NCXAttributeValues.chapter, "Lio/legado/app/data/entities/BookChapter;", "getAllContents", "bookSourceString", "append", "Lkotlin/Function2;", "Lkotlin/ParameterName;", "name", NCXDocumentV2.NCXTags.text, "Ljava/util/ArrayList;", "Lkotlin/Triple;", "Lkotlin/collections/ArrayList;", "srcList", "(Lio/legado/app/data/entities/Book;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "getAvailableBookSource", "getBookChaptersCache", "getBookContent", "getBookCover", "getBookInfo", "getBookShelfBooks", PackageDocumentBase.PREFIX_OPF, "refresh", "(ZLjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "getBookSourceString", "withExploreUrl", "(Lio/vertx/ext/web/RoutingContext;Ljava/lang/String;ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;", "getBookSourceStringBySourceURLOpt", "getBookshelf", "getCachedChapterContentSet", PackageDocumentBase.PREFIX_OPF, "getChapterCacheDir", "getChapterList", "getChapterListByRule", "getHttpTTSByName", "Lio/legado/app/data/entities/HttpTTS;", "getInvalidBookSourceCache", "getInvalidBookSources", "getLastBackFileFromWebdav", "(Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "getLocalChapterList", "debugLog", "mutex", "Lkotlinx/coroutines/sync/Mutex;", "(Lio/legado/app/data/entities/Book;Ljava/lang/String;ZLjava/lang/String;ZLkotlinx/coroutines/sync/Mutex;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "getResultAndQueryIndex", "Lkotlin/Pair;", "queryIndexInContent", "query", "getShelfBook", "getShelfBookByURL", RSSKeywords.RSS_ITEM_URL, "getShelfBookWithCacheInfo", "getSpeakStream", "Ljava/io/InputStream;", "httpTts", "speakText", "speechRate", "(Lio/legado/app/data/entities/HttpTTS;Ljava/lang/String;ILkotlin/coroutines/Continuation;)Ljava/lang/Object;", "getTxtTocRules", "importBookPreview", "isInvalidBookSource", "Lio/legado/app/data/entities/BookSource;", "mergeBookCacheInfo", "(Lio/legado/app/data/entities/Book;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "refreshLocalBook", "removeBookGroupMulti", "restoreFromMongodb", "saveBook", "saveBookConfig", "saveBookContent", "saveBookCover", "(Lio/legado/app/data/entities/Book;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "saveBookGroupId", "saveBookInfoCache", "bookList", "(Ljava/util/List;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "saveBookProgress", "saveBookProgressToWebdav", "bookChapter", "(Lio/legado/app/data/entities/Book;Lio/legado/app/data/entities/BookChapter;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "saveBookSources", "sourceList", "Lio/legado/app/data/entities/SearchBook;", "replace", "saveBookToShelf", "_book", "saveLocalBookCover", "(Lio/legado/app/data/entities/Book;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "savePdfPageToImage", "document", "Lorg/apache/pdfbox/pdmodel/PDDocument;", "renderer", "Lorg/apache/pdfbox/rendering/PDFRenderer;", "targetWidth", PackageDocumentBase.PREFIX_OPF, "imageFormat", "output", "saveShelfBookLatestChapter", "bookChapterList", "(Lio/legado/app/data/entities/Book;Ljava/util/List;Ljava/lang/String;Lkotlinx/coroutines/sync/Mutex;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "saveShelfBookProgress", "saveToWebdav", "(Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "searchBook", "searchBookContent", "searchBookMulti", "searchBookMultiSSE", "searchBookSource", "searchBookSourceSSE", "searchBookWithSource", "accurate", "(Ljava/lang/String;Lio/legado/app/data/entities/Book;ZLjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "searchChapter", "Lio/legado/app/data/entities/SearchResult;", "searchPosition", "mContent", "pattern", "setAssets", "setBookSource", "setCover", "(Lio/legado/app/data/entities/Book;Lme/ag2s/epublib/domain/EpubBook;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "setEpubContent", "contentModel", "(Ljava/lang/String;Lio/legado/app/data/entities/Book;Lme/ag2s/epublib/domain/EpubBook;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "setEpubMetadata", "syncBookProgressFromWebdav", "progressFilePath", "(Ljava/lang/Object;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "syncFromWebdav", "zipFilePath", "textToSpeech", "ttsByApi", "response", "Lio/vertx/core/http/HttpServerResponse;", "options", "(Lio/vertx/core/http/HttpServerResponse;Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "ttsByEdge", "(Lio/vertx/core/http/HttpServerResponse;Ljava/lang/String;Ljava/util/Map;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "ttsByTextToSpeechCn", "updateImageLinkInContent", "reader-pro"})
 public final class BookController extends BaseController {
 
@@ -190,7 +183,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$addBookGroupMulti$1, reason: invalid class name */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$addBookGroupMulti$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$addBookGroupMulti$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {1792, 1803}, i = {0, 0, 0, 1, 1}, s = {"L$0", "L$1", "L$2", "L$2", "L$3"}, n = {"this", "context", "returnData", "userNameSpace", "bookJsonArray"}, m = "addBookGroupMulti", c = "com.htmake.reader.api.controller.BookController")
     static final class AnonymousClass1 extends ContinuationImpl {
@@ -218,7 +211,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$backupToMongodb$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$backupToMongodb$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$backupToMongodb$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {3700}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "backupToMongodb", c = "com.htmake.reader.api.controller.BookController")
     static final class C00121 extends ContinuationImpl {
@@ -242,7 +235,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$bookSourceDebugSSE$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$bookSourceDebugSSE$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$bookSourceDebugSSE$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {2617, 2656}, i = {0, 0, 0, 0}, s = {"L$0", "L$1", "L$2", "L$3"}, n = {"this", "context", "returnData", "response"}, m = "bookSourceDebugSSE", c = "com.htmake.reader.api.controller.BookController")
     static final class C00131 extends ContinuationImpl {
@@ -267,7 +260,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$cacheBookOnServer$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$cacheBookOnServer$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$cacheBookOnServer$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {2785}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "cacheBookOnServer", c = "com.htmake.reader.api.controller.BookController")
     static final class C00141 extends ContinuationImpl {
@@ -291,7 +284,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$cacheBookOnServer$3, reason: invalid class name */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$cacheBookOnServer$3.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$cacheBookOnServer$3.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {2823, 2836, 2840}, i = {1, 1, 1, 1, 1}, s = {"L$5", "L$6", "L$7", "L$8", "I$4"}, n = {"chapterList", "cachedChapterContentSet", "localCacheDir", "chapterInfo", "chapterIndex"}, m = "cacheBookOnServer", c = "com.htmake.reader.api.controller.BookController")
     static final class AnonymousClass3 extends ContinuationImpl {
@@ -326,7 +319,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$cacheBookSSE$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$cacheBookSSE$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$cacheBookSSE$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {2669, 2706, 2713, 2731}, i = {0, 0, 0, 0, 1, 2, 3, 3}, s = {"L$0", "L$1", "L$2", "L$3", "L$6", "L$6", "L$2", "L$3"}, n = {"this", "context", "returnData", "response", "bookSource", "chapterList", "successCount", "failedCount"}, m = "cacheBookSSE", c = "com.htmake.reader.api.controller.BookController")
     static final class C00161 extends ContinuationImpl {
@@ -357,7 +350,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$deleteBook$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$deleteBook$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$deleteBook$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {1838}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "deleteBook", c = "com.htmake.reader.api.controller.BookController")
     static final class C00181 extends ContinuationImpl {
@@ -381,7 +374,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$deleteBookCache$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$deleteBookCache$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$deleteBookCache$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {2859}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "deleteBookCache", c = "com.htmake.reader.api.controller.BookController")
     static final class C00191 extends ContinuationImpl {
@@ -405,7 +398,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$deleteBooks$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$deleteBooks$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$deleteBooks$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {1888}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "deleteBooks", c = "com.htmake.reader.api.controller.BookController")
     static final class C00201 extends ContinuationImpl {
@@ -429,7 +422,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$editShelfBook$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$editShelfBook$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$editShelfBook$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {2236, 2239}, i = {0, 0, 0, 0, 1, 1, 1, 1, 1}, s = {"L$0", "L$1", "L$2", "L$3", "L$0", "L$1", "L$2", "L$3", "L$4"}, n = {"this", "book", "userNameSpace", "handler", "this", "book", "userNameSpace", "handler", "mutex"}, m = "editShelfBook", c = "com.htmake.reader.api.controller.BookController")
     static final class C00211 extends ContinuationImpl {
@@ -455,7 +448,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$exploreBook$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$exploreBook$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$exploreBook$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {727, 728, 745}, i = {0, 0, 0, 1, 1, 1}, s = {"L$0", "L$1", "L$2", "L$0", "L$1", "L$2"}, n = {"this", "context", "returnData", "this", "context", "returnData"}, m = "exploreBook", c = "com.htmake.reader.api.controller.BookController")
     static final class C00221 extends ContinuationImpl {
@@ -479,7 +472,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$exportBook$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$exportBook$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$exportBook$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {3201, 3242, 3250, 3252}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "exportBook", c = "com.htmake.reader.api.controller.BookController")
     static final class C00231 extends ContinuationImpl {
@@ -506,7 +499,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$exportToEpub$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$exportToEpub$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$exportToEpub$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {3356, 3361}, i = {0, 0, 0, 0, 0, 0, 1, 1}, s = {"L$0", "L$1", "L$2", "L$3", "L$4", "L$5", "L$0", "L$1"}, n = {"this", "book", "bookSource", "userNameSpace", "bookFile", "epubBook", "bookFile", "epubBook"}, m = "exportToEpub", c = "com.htmake.reader.api.controller.BookController")
     static final class C00241 extends ContinuationImpl {
@@ -533,7 +526,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$exportToTxt$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$exportToTxt$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$exportToTxt$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {3264}, i = {0}, s = {"L$0"}, n = {"bookFile"}, m = "exportToTxt", c = "com.htmake.reader.api.controller.BookController")
     static final class C00251 extends ContinuationImpl {
@@ -555,7 +548,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$getAllContents$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$getAllContents$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$getAllContents$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {3298}, i = {0, 0, 0, 0}, s = {"L$0", "L$1", "L$2", "L$3"}, n = {"this", "book", "userNameSpace", "append"}, m = "getAllContents", c = "com.htmake.reader.api.controller.BookController")
     static final class C00271 extends ContinuationImpl {
@@ -580,7 +573,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$getAvailableBookSource$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$getAvailableBookSource$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$getAvailableBookSource$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {1280, 1314}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "getAvailableBookSource", c = "com.htmake.reader.api.controller.BookController")
     static final class C00281 extends ContinuationImpl {
@@ -606,7 +599,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$getBookContent$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$getBookContent$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$getBookContent$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {456, 485, 502, 512, 512, 513, 518, 520, 632, 636}, i = {0, 0, 0, 6, 7}, s = {"L$0", "L$1", "L$2", "L$6", "L$6"}, n = {"this", "context", "returnData", "chapterList", "chapterList"}, m = "getBookContent", c = "com.htmake.reader.api.controller.BookController")
     static final class C00311 extends ContinuationImpl {
@@ -639,7 +632,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$getBookInfo$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$getBookInfo$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$getBookInfo$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {147, 156, 158, 163, 163, 167}, i = {0}, s = {"L$4"}, n = {"userNameSpace"}, m = "getBookInfo", c = "com.htmake.reader.api.controller.BookController")
     static final class C00331 extends ContinuationImpl {
@@ -665,7 +658,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$getBookShelfBooks$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$getBookShelfBooks$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$getBookShelfBooks$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {1954}, i = {}, s = {}, n = {}, m = "getBookShelfBooks", c = "com.htmake.reader.api.controller.BookController")
     static final class C00341 extends ContinuationImpl {
@@ -687,7 +680,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$getBookshelf$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$getBookshelf$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$getBookshelf$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {1345, 1356}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "getBookshelf", c = "com.htmake.reader.api.controller.BookController")
     static final class C00371 extends ContinuationImpl {
@@ -711,7 +704,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$getChapterList$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$getChapterList$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$getChapterList$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {353, 379, 382, 387, 387, 389, 391, 407}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "getChapterList", c = "com.htmake.reader.api.controller.BookController")
     static final class C00381 extends ContinuationImpl {
@@ -739,7 +732,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$getChapterListByRule$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$getChapterListByRule$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$getChapterListByRule$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {302}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "getChapterListByRule", c = "com.htmake.reader.api.controller.BookController")
     static final class C00391 extends ContinuationImpl {
@@ -763,7 +756,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$getInvalidBookSources$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$getInvalidBookSources$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$getInvalidBookSources$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {112}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "getInvalidBookSources", c = "com.htmake.reader.api.controller.BookController")
     static final class C00401 extends ContinuationImpl {
@@ -787,7 +780,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$getLocalChapterList$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$getLocalChapterList$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$getLocalChapterList$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {2019, 2022, 2033, 2035, 2051}, i = {}, s = {}, n = {}, m = "getLocalChapterList", c = "com.htmake.reader.api.controller.BookController")
     static final class C00411 extends ContinuationImpl {
@@ -816,7 +809,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$getShelfBook$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$getShelfBook$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$getShelfBook$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {1362}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "getShelfBook", c = "com.htmake.reader.api.controller.BookController")
     static final class C00431 extends ContinuationImpl {
@@ -840,7 +833,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$getShelfBookWithCacheInfo$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$getShelfBookWithCacheInfo$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$getShelfBookWithCacheInfo$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {3179, 3183}, i = {0, 0, 0, 1}, s = {"L$0", "L$1", "L$2", "L$2"}, n = {"this", "context", "returnData", "userNameSpace"}, m = "getShelfBookWithCacheInfo", c = "com.htmake.reader.api.controller.BookController")
     static final class C00441 extends ContinuationImpl {
@@ -864,7 +857,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$getSpeakStream$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$getSpeakStream$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$getSpeakStream$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {3048}, i = {0, 0, 0, 0, 0, 0, 0}, s = {"L$0", "L$1", "L$2", "L$3", "L$4", "L$5", "I$0"}, n = {"this", "httpTts", "speakText", "downloadErrorNo", "analyzeUrl", "response", "speechRate"}, m = "getSpeakStream", c = "com.htmake.reader.api.controller.BookController")
     static final class C00451 extends ContinuationImpl {
@@ -893,7 +886,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$getTxtTocRules$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$getTxtTocRules$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$getTxtTocRules$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {285}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "getTxtTocRules", c = "com.htmake.reader.api.controller.BookController")
     static final class C00461 extends ContinuationImpl {
@@ -917,7 +910,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$importBookPreview$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$importBookPreview$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$importBookPreview$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {224}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "importBookPreview", c = "com.htmake.reader.api.controller.BookController")
     static final class C00471 extends ContinuationImpl {
@@ -941,7 +934,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$refreshLocalBook$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$refreshLocalBook$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$refreshLocalBook$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {320, 342}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "refreshLocalBook", c = "com.htmake.reader.api.controller.BookController")
     static final class C00481 extends ContinuationImpl {
@@ -965,7 +958,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$removeBookGroupMulti$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$removeBookGroupMulti$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$removeBookGroupMulti$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {1815, 1826}, i = {0, 0, 0, 1, 1}, s = {"L$0", "L$1", "L$2", "L$2", "L$3"}, n = {"this", "context", "returnData", "userNameSpace", "bookJsonArray"}, m = "removeBookGroupMulti", c = "com.htmake.reader.api.controller.BookController")
     static final class C00501 extends ContinuationImpl {
@@ -993,7 +986,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$restoreFromMongodb$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$restoreFromMongodb$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$restoreFromMongodb$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {3748}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "restoreFromMongodb", c = "com.htmake.reader.api.controller.BookController")
     static final class C00521 extends ContinuationImpl {
@@ -1017,7 +1010,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$saveBook$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$saveBook$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$saveBook$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {1386, 1399, 1400, 1404, 1407}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "saveBook", c = "com.htmake.reader.api.controller.BookController")
     static final class C00531 extends ContinuationImpl {
@@ -1044,7 +1037,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$saveBookConfig$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$saveBookConfig$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$saveBookConfig$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {1715, 1742}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "saveBookConfig", c = "com.htmake.reader.api.controller.BookController")
     static final class C00541 extends ContinuationImpl {
@@ -1068,7 +1061,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$saveBookContent$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$saveBookContent$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$saveBookContent$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {665}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "saveBookContent", c = "com.htmake.reader.api.controller.BookController")
     static final class C00551 extends ContinuationImpl {
@@ -1092,7 +1085,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$saveBookCover$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$saveBookCover$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$saveBookCover$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {1610}, i = {}, s = {}, n = {}, m = "saveBookCover", c = "com.htmake.reader.api.controller.BookController")
     static final class C00561 extends ContinuationImpl {
@@ -1116,7 +1109,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$saveBookGroupId$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$saveBookGroupId$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$saveBookGroupId$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {1753, 1780}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "saveBookGroupId", c = "com.htmake.reader.api.controller.BookController")
     static final class C00571 extends ContinuationImpl {
@@ -1140,7 +1133,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$saveBookProgress$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$saveBookProgress$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$saveBookProgress$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {414, 442, 448, 450}, i = {0, 0, 0, 2}, s = {"L$0", "L$1", "L$2", "L$4"}, n = {"this", "context", "returnData", "chapterInfo"}, m = "saveBookProgress", c = "com.htmake.reader.api.controller.BookController")
     static final class C00591 extends ContinuationImpl {
@@ -1167,7 +1160,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$saveLocalBookCover$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$saveLocalBookCover$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$saveLocalBookCover$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {1583}, i = {}, s = {}, n = {}, m = "saveLocalBookCover", c = "com.htmake.reader.api.controller.BookController")
     static final class C00601 extends ContinuationImpl {
@@ -1191,7 +1184,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$saveShelfBookLatestChapter$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$saveShelfBookLatestChapter$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$saveShelfBookLatestChapter$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {2206, 2207}, i = {0, 0, 0, 0, 0, 1}, s = {"L$0", "L$1", "L$2", "L$3", "L$4", "L$0"}, n = {"this", "book", "bookChapterList", "userNameSpace", "mutex", "mutex"}, m = "saveShelfBookLatestChapter", c = "com.htmake.reader.api.controller.BookController")
     static final class C00611 extends ContinuationImpl {
@@ -1217,7 +1210,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$saveToWebdav$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$saveToWebdav$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$saveToWebdav$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {2528, 2539}, i = {0, 0, 0, 0}, s = {"L$0", "L$1", "L$2", "L$3"}, n = {"this", "userNameSpace", "userHome", "legadoHome"}, m = "saveToWebdav", c = "com.htmake.reader.api.controller.BookController")
     static final class C00641 extends ContinuationImpl {
@@ -1242,7 +1235,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$searchBook$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$searchBook$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$searchBook$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {752, 753, 773}, i = {0, 0, 0, 1, 1, 1}, s = {"L$0", "L$1", "L$2", "L$0", "L$1", "L$2"}, n = {"this", "context", "returnData", "this", "context", "returnData"}, m = "searchBook", c = "com.htmake.reader.api.controller.BookController")
     static final class C00651 extends ContinuationImpl {
@@ -1266,7 +1259,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$searchBookContent$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$searchBookContent$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$searchBookContent$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {3551, 3585, 3591, 3610}, i = {0, 0, 0, 3}, s = {"L$0", "L$1", "L$2", "L$6"}, n = {"this", "context", "returnData", "resultList"}, m = "searchBookContent", c = "com.htmake.reader.api.controller.BookController")
     static final class C00661 extends ContinuationImpl {
@@ -1298,7 +1291,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$searchBookMulti$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$searchBookMulti$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$searchBookMulti$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {779, 840}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "searchBookMulti", c = "com.htmake.reader.api.controller.BookController")
     static final class C00671 extends ContinuationImpl {
@@ -1322,7 +1315,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$searchBookMultiSSE$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$searchBookMultiSSE$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$searchBookMultiSSE$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {887, 959}, i = {0, 0, 0, 0, 1}, s = {"L$0", "L$1", "L$2", "L$3", "L$2"}, n = {"this", "context", "returnData", "response", "maxSize"}, m = "searchBookMultiSSE", c = "com.htmake.reader.api.controller.BookController")
     static final class C00701 extends ContinuationImpl {
@@ -1347,7 +1340,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$searchBookSource$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$searchBookSource$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$searchBookSource$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {1007, 1071}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "searchBookSource", c = "com.htmake.reader.api.controller.BookController")
     static final class C00731 extends ContinuationImpl {
@@ -1374,7 +1367,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$searchBookSourceSSE$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$searchBookSourceSSE$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$searchBookSourceSSE$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {1113, 1196}, i = {0, 0, 0, 0, 1}, s = {"L$0", "L$1", "L$2", "L$3", "L$6"}, n = {"this", "context", "returnData", "response", "maxSize"}, m = "searchBookSourceSSE", c = "com.htmake.reader.api.controller.BookController")
     static final class C00761 extends ContinuationImpl {
@@ -1402,7 +1395,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$searchBookWithSource$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$searchBookWithSource$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$searchBookWithSource$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {1247}, i = {}, s = {}, n = {}, m = "searchBookWithSource", c = "com.htmake.reader.api.controller.BookController")
     static final class C00791 extends ContinuationImpl {
@@ -1424,7 +1417,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$searchChapter$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$searchChapter$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$searchChapter$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {3639}, i = {0, 0}, s = {"L$3", "L$4"}, n = {"searchResultsWithinChapter", "chapterContent"}, m = "searchChapter", c = "com.htmake.reader.api.controller.BookController")
     static final class C00811 extends ContinuationImpl {
@@ -1450,7 +1443,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$setBookSource$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$setBookSource$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$setBookSource$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {1624, 1684, 1687, 1706}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "setBookSource", c = "com.htmake.reader.api.controller.BookController")
     static final class C00821 extends ContinuationImpl {
@@ -1478,7 +1471,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$setCover$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$setCover$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$setCover$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {3436}, i = {}, s = {}, n = {}, m = "setCover", c = "com.htmake.reader.api.controller.BookController")
     static final class C00841 extends ContinuationImpl {
@@ -1500,7 +1493,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$setEpubContent$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$setEpubContent$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$setEpubContent$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {3462}, i = {0, 0, 0, 0, 0}, s = {"L$0", "L$1", "L$2", "L$3", "L$4"}, n = {"this", "contentModel", "book", "epubBook", "userNameSpace"}, m = "setEpubContent", c = "com.htmake.reader.api.controller.BookController")
     static final class C00851 extends ContinuationImpl {
@@ -1526,7 +1519,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$syncFromWebdav$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$syncFromWebdav$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$syncFromWebdav$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {2512}, i = {}, s = {}, n = {}, m = "syncFromWebdav", c = "com.htmake.reader.api.controller.BookController")
     static final class C00871 extends ContinuationImpl {
@@ -1553,7 +1546,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$textToSpeech$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$textToSpeech$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$textToSpeech$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {2891}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "response"}, m = "textToSpeech", c = "com.htmake.reader.api.controller.BookController")
     static final class C00881 extends ContinuationImpl {
@@ -1577,7 +1570,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$ttsByApi$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$ttsByApi$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$ttsByApi$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {3018}, i = {}, s = {}, n = {}, m = "ttsByApi", c = "com.htmake.reader.api.controller.BookController")
     static final class C00901 extends ContinuationImpl {
@@ -1601,7 +1594,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$ttsByTextToSpeechCn$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$ttsByTextToSpeechCn$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$ttsByTextToSpeechCn$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookController.kt", l = {3124}, i = {0}, s = {"L$0"}, n = {"response"}, m = "ttsByTextToSpeechCn", c = "com.htmake.reader.api.controller.BookController")
     static final class C00911 extends ContinuationImpl {
@@ -1627,13 +1620,7 @@ public final class BookController extends BaseController {
         Intrinsics.checkNotNullParameter(coroutineContext, "coroutineContext");
         this.bookInfoCache = ACache.INSTANCE.get("bookInfoCache", 2000000L, 10000);
         this.concurrentLoopCount = 8;
-        this.backupFileNames = LazyKt.lazy(new Function0<String[]>() { // from class: com.htmake.reader.api.controller.BookController$backupFileNames$2
-            @NotNull
-            /* JADX INFO: renamed from: invoke, reason: merged with bridge method [inline-methods] */
-            public final String[] m27invoke() {
-                return new String[]{"bookSource.json", "bookshelf.json", "bookGroup.json", "rssSources.json", "replaceRule.json", "bookmark.json", "userConfig.json", "httpTTS.json", "remoteBookSourceSub.json", DefaultData.txtTocRuleFileName};
-            }
-        });
+        this.backupFileNames = LazyKt.lazy(BookController$backupFileNames$2.INSTANCE);
         Object bean = SpringContextUtils.getBean("webClient", WebClient.class);
         Intrinsics.checkNotNullExpressionValue(bean, "getBean(\"webClient\", WebClient::class.java)");
         this.webClient = (WebClient) bean;
@@ -1740,7 +1727,6 @@ public final class BookController extends BaseController {
     /* JADX WARN: Removed duplicated region for block: B:7:0x0027  */
     /* JADX WARN: Removed duplicated region for block: B:84:0x03ca  */
     /* JADX WARN: Removed duplicated region for block: B:90:0x0431  */
-    /* JADX WARN: Type inference failed for: r2v11, types: [com.htmake.reader.api.controller.BookController$getBookInfo$$inlined$toDataClass$1] */
     @Nullable
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -1811,8 +1797,7 @@ public final class BookController extends BaseController {
                         book = null;
                     } else {
                         String json$iv$iv = map instanceof String ? (String) map : ExtKt.getGson().toJson(map);
-                        book = (Book) ExtKt.getGson().fromJson(json$iv$iv, new TypeToken<Book>() { // from class: com.htmake.reader.api.controller.BookController$getBookInfo$$inlined$toDataClass$1
-                        }.getType());
+                        book = (Book) ExtKt.getGson().fromJson(json$iv$iv, new BookController$getBookInfo$$inlined$toDataClass$1().getType());
                     }
                     Book cacheInfo = book;
                     if (cacheInfo == null) {
@@ -2001,7 +1986,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$getBookCover$2, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$getBookCover$2.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$getBookCover$2.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\n\n\u0000\n\u0002\u0010\u0002\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H\u008a@"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "Lkotlinx/coroutines/CoroutineScope;"})
     @DebugMetadata(f = "BookController.kt", l = {197}, i = {}, s = {}, n = {}, m = "invokeSuspend", c = "com.htmake.reader.api.controller.BookController$getBookCover$2")
     static final class C00322 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super Unit>, Object> {
@@ -2037,25 +2022,8 @@ public final class BookController extends BaseController {
             switch (this.label) {
                 case 0:
                     ResultKt.throwOnFailure($result);
-                    final BookController bookController = this.this$0;
-                    final String str = this.$coverUrl;
                     this.label = 1;
-                    objAwaitResult = VertxCoroutineKt.awaitResult(new Function1<Handler<AsyncResult<HttpResponse<Buffer>>>, Unit>() { // from class: com.htmake.reader.api.controller.BookController$getBookCover$2$result$1
-                        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-                        {
-                            super(1);
-                        }
-
-                        public /* bridge */ /* synthetic */ Object invoke(Object p1) {
-                            invoke((Handler<AsyncResult<HttpResponse<Buffer>>>) p1);
-                            return Unit.INSTANCE;
-                        }
-
-                        public final void invoke(@NotNull Handler<AsyncResult<HttpResponse<Buffer>>> handler) {
-                            Intrinsics.checkNotNullParameter(handler, "handler");
-                            bookController.webClient.getAbs(str).timeout(3000L).send(handler);
-                        }
-                    }, (Continuation) this);
+                    objAwaitResult = VertxCoroutineKt.awaitResult(new BookController$getBookCover$2$result$1(this.this$0, this.$coverUrl), (Continuation) this);
                     if (objAwaitResult == coroutine_suspended) {
                         return coroutine_suspended;
                     }
@@ -2330,7 +2298,7 @@ public final class BookController extends BaseController {
     */
     public final Object refreshLocalBook(@NotNull RoutingContext context, @NotNull Continuation<? super ReturnData> $completion) {
         C00481 c00481;
-        final Book bookInfo;
+        Book bookInfo;
         ReturnData returnData;
         Object objCheckAuth;
         String bookUrl;
@@ -2382,19 +2350,7 @@ public final class BookController extends BaseController {
                 c00481.L$1 = bookInfo;
                 c00481.L$2 = null;
                 c00481.label = 2;
-                if (this.editShelfBook(bookInfo, userNameSpace, new Function1<Book, Book>() { // from class: com.htmake.reader.api.controller.BookController.refreshLocalBook.2
-                    {
-                        super(1);
-                    }
-
-                    @NotNull
-                    public final Book invoke(@NotNull Book existBook) {
-                        Intrinsics.checkNotNullParameter(existBook, "existBook");
-                        existBook.setCoverUrl(bookInfo.getCoverUrl());
-                        BookControllerKt.logger.info("refreshLocalBook: {}", existBook);
-                        return existBook;
-                    }
-                }, c00481) == coroutine_suspended) {
+                if (this.editShelfBook(bookInfo, userNameSpace, new C00492(bookInfo), c00481) == coroutine_suspended) {
                     return coroutine_suspended;
                 }
                 return ReturnData.setData$default(returnData, bookInfo, null, 2, null);
@@ -2417,6 +2373,28 @@ public final class BookController extends BaseController {
         }
     }
 
+    /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$refreshLocalBook$2, reason: invalid class name and case insensitive filesystem */
+    /* JADX INFO: compiled from: BookController.kt */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$refreshLocalBook$2.class */
+    @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\b\n\u0000\n\u0002\u0018\u0002\n\u0000\u0010\u0000\u001a\u00020\u00012\u0006\u0010\u0002\u001a\u00020\u0001H\n"}, d2 = {"<anonymous>", "Lio/legado/app/data/entities/Book;", "existBook"})
+    static final class C00492 extends Lambda implements Function1<Book, Book> {
+        final /* synthetic */ Book $bookInfo;
+
+        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+        C00492(Book $bookInfo) {
+            super(1);
+            this.$bookInfo = $bookInfo;
+        }
+
+        @NotNull
+        public final Book invoke(@NotNull Book existBook) {
+            Intrinsics.checkNotNullParameter(existBook, "existBook");
+            existBook.setCoverUrl(this.$bookInfo.getCoverUrl());
+            BookControllerKt.logger.info("refreshLocalBook: {}", existBook);
+            return existBook;
+        }
+    }
+
     /* JADX WARN: Removed duplicated region for block: B:109:0x0614  */
     /* JADX WARN: Removed duplicated region for block: B:120:0x065a  */
     /* JADX WARN: Removed duplicated region for block: B:126:0x0697  */
@@ -2433,7 +2411,6 @@ public final class BookController extends BaseController {
     /* JADX WARN: Removed duplicated region for block: B:85:0x03af  */
     /* JADX WARN: Removed duplicated region for block: B:92:0x049c  */
     /* JADX WARN: Removed duplicated region for block: B:97:0x0536  */
-    /* JADX WARN: Type inference failed for: r2v24, types: [com.htmake.reader.api.controller.BookController$getChapterList$$inlined$toDataClass$1] */
     @Nullable
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -2552,8 +2529,7 @@ public final class BookController extends BaseController {
                     book = null;
                 } else {
                     String json$iv$iv = map instanceof String ? (String) map : ExtKt.getGson().toJson(map);
-                    book = (Book) ExtKt.getGson().fromJson(json$iv$iv, new TypeToken<Book>() { // from class: com.htmake.reader.api.controller.BookController$getChapterList$$inlined$toDataClass$1
-                    }.getType());
+                    book = (Book) ExtKt.getGson().fromJson(json$iv$iv, new BookController$getChapterList$$inlined$toDataClass$1().getType());
                 }
                 Book cacheInfo = book;
                 if (cacheInfo == null) {
@@ -3080,7 +3056,6 @@ public final class BookController extends BaseController {
     /* JADX WARN: Removed duplicated region for block: B:93:0x04a0  */
     /* JADX WARN: Removed duplicated region for block: B:94:0x04a4  */
     /* JADX WARN: Removed duplicated region for block: B:96:0x04a8  */
-    /* JADX WARN: Type inference failed for: r2v126, types: [com.htmake.reader.api.controller.BookController$getBookContent$$inlined$toDataClass$1] */
     @Nullable
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -3255,8 +3230,7 @@ public final class BookController extends BaseController {
                             book2 = null;
                         } else {
                             String json$iv$iv = map instanceof String ? (String) map : ExtKt.getGson().toJson(map);
-                            book2 = (Book) ExtKt.getGson().fromJson(json$iv$iv, new TypeToken<Book>() { // from class: com.htmake.reader.api.controller.BookController$getBookContent$$inlined$toDataClass$1
-                            }.getType());
+                            book2 = (Book) ExtKt.getGson().fromJson(json$iv$iv, new BookController$getBookContent$$inlined$toDataClass$1().getType());
                         }
                         Book cacheInfo = book2;
                         if (cacheInfo != null) {
@@ -4213,7 +4187,7 @@ public final class BookController extends BaseController {
     */
     public final Object searchBookMulti(@NotNull RoutingContext context, @NotNull Continuation<? super ReturnData> $completion) {
         C00671 c00671;
-        final Ref.ObjectRef resultList;
+        Ref.ObjectRef resultList;
         Ref.IntRef lastIndex;
         ReturnData returnData;
         Object objCheckAuth;
@@ -4248,7 +4222,7 @@ public final class BookController extends BaseController {
                     return ReturnData.setData$default(returnData, "NEED_LOGIN", null, 2, null).setErrorMsg("请登录后使用");
                 }
                 lastIndex = new Ref.IntRef();
-                final Ref.IntRef searchSize = new Ref.IntRef();
+                Ref.IntRef searchSize = new Ref.IntRef();
                 Ref.ObjectRef bookSourceGroup = new Ref.ObjectRef();
                 if (context.request().method() == HttpMethod.POST) {
                     String string = context.getBodyAsJson().getString("key", PackageDocumentBase.PREFIX_OPF);
@@ -4315,14 +4289,14 @@ public final class BookController extends BaseController {
                 searchSize.element = searchSize.element > 0 ? searchSize.element : 20;
                 int concurrentCount2 = concurrentCount > 0 ? concurrentCount : 36;
                 BookControllerKt.logger.info("searchBookMulti from lastIndex: {} searchSize: {}", Boxing.boxInt(lastIndex.element), Boxing.boxInt(searchSize.element));
-                final Ref.BooleanRef isEnd = new Ref.BooleanRef();
+                Ref.BooleanRef isEnd = new Ref.BooleanRef();
                 BookController bookController = this;
                 context.request().connection().closeHandler((v2) -> {
                     m18searchBookMulti$lambda5(r1, r2, v2);
                 });
                 resultList = new Ref.ObjectRef();
                 resultList.element = new ArrayList();
-                final Ref.ObjectRef resultMap = new Ref.ObjectRef();
+                Ref.ObjectRef resultMap = new Ref.ObjectRef();
                 resultMap.element = new LinkedHashMap();
                 Book book = new Book(null, null, null, null, null, null, null, null, null, null, null, null, null, 0, 0L, null, 0L, 0L, 0, 0, null, 0, 0, 0L, null, false, 0, 0, false, null, null, false, null, -1, 1, null);
                 book.setName(key);
@@ -4333,43 +4307,11 @@ public final class BookController extends BaseController {
                 if (!((File) bookSourceFile.element).exists()) {
                     bookSourceFile.element = ExtKt.getStorageFile$default(new String[]{"data", "default", "bookSource"}, null, 2, null);
                 }
-                final BookController bookController2 = this;
                 c00671.L$0 = returnData;
                 c00671.L$1 = lastIndex;
                 c00671.L$2 = resultList;
                 c00671.label = 2;
-                if (this.limitConcurrent(concurrentCount2, lastIndex.element + 1, bookSourceMap.size(), new C00683(maxSize, lastIndex, bookSourceFile, bookSourceGroup, this, book, accurate, userNameSpace, null), new Function2<ArrayList<Object>, Integer, Boolean>() { // from class: com.htmake.reader.api.controller.BookController.searchBookMulti.4
-                    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-                    {
-                        super(2);
-                    }
-
-                    public /* bridge */ /* synthetic */ Object invoke(Object p1, Object p2) {
-                        return Boolean.valueOf(invoke((ArrayList<Object>) p1, ((Number) p2).intValue()));
-                    }
-
-                    public final boolean invoke(@NotNull ArrayList<Object> list, int loopCount) {
-                        Intrinsics.checkNotNullParameter(list, "list");
-                        ArrayList<Object> $this$forEach$iv = list;
-                        Ref.ObjectRef<Map<String, Integer>> objectRef = resultMap;
-                        Ref.ObjectRef<ArrayList<SearchBook>> objectRef2 = resultList;
-                        for (Object element$iv : $this$forEach$iv) {
-                            Iterable bookList = element$iv instanceof Collection ? (Collection) element$iv : null;
-                            if (bookList != null) {
-                                Iterable<SearchBook> $this$forEach$iv2 = bookList;
-                                for (SearchBook book2 : $this$forEach$iv2) {
-                                    String bookKey = book2.getName() + '_' + book2.getAuthor();
-                                    if (!((Map) objectRef.element).containsKey(bookKey)) {
-                                        ((ArrayList) objectRef2.element).add(book2);
-                                        ((Map) objectRef.element).put(bookKey, 1);
-                                    }
-                                }
-                            }
-                        }
-                        BookControllerKt.logger.info("Loop: {} resultList.size: {}", Integer.valueOf(loopCount), Integer.valueOf(((ArrayList) resultList.element).size()));
-                        return !isEnd.element && loopCount < bookController2.concurrentLoopCount && ((ArrayList) resultList.element).size() < searchSize.element;
-                    }
-                }, c00671) == coroutine_suspended) {
+                if (this.limitConcurrent(concurrentCount2, lastIndex.element + 1, bookSourceMap.size(), new C00683(maxSize, lastIndex, bookSourceFile, bookSourceGroup, this, book, accurate, userNameSpace, null), new C00694(resultList, isEnd, this, searchSize, resultMap), c00671) == coroutine_suspended) {
                     return coroutine_suspended;
                 }
                 return ReturnData.setData$default(returnData, MapsKt.mapOf(new Pair[]{TuplesKt.to("lastIndex", Boxing.boxInt(lastIndex.element)), TuplesKt.to("list", resultList.element)}), null, 2, null);
@@ -4404,7 +4346,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$searchBookMulti$3, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$searchBookMulti$3.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$searchBookMulti$3.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\u0010\n\u0000\n\u0002\u0010\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\b\u0010\u0000\u001a\u00020\u0001*\u00020\u00022\u0006\u0010\u0003\u001a\u00020\u0004H\u008a@"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "Lkotlinx/coroutines/CoroutineScope;", "it", PackageDocumentBase.PREFIX_OPF})
     @DebugMetadata(f = "BookController.kt", l = {853}, i = {}, s = {}, n = {}, m = "invokeSuspend", c = "com.htmake.reader.api.controller.BookController$searchBookMulti$3")
     static final class C00683 extends SuspendLambda implements Function3<CoroutineScope, Integer, Continuation<? super Object>, Object> {
@@ -4446,7 +4388,6 @@ public final class BookController extends BaseController {
         @Nullable
         public final Object invokeSuspend(@NotNull Object $result) {
             Object objSearchBookWithSource;
-            Function1<ObjectNode, Boolean> function1;
             Object coroutine_suspended = IntrinsicsKt.getCOROUTINE_SUSPENDED();
             switch (this.label) {
                 case 0:
@@ -4456,30 +4397,7 @@ public final class BookController extends BaseController {
                         return new ArrayList();
                     }
                     this.$lastIndex.element = Math.max(this.$lastIndex.element, it);
-                    File file = (File) this.$bookSourceFile.element;
-                    if (((CharSequence) this.$bookSourceGroup.element).length() == 0) {
-                        function1 = null;
-                    } else {
-                        final Ref.ObjectRef<String> objectRef = this.$bookSourceGroup;
-                        function1 = new Function1<ObjectNode, Boolean>() { // from class: com.htmake.reader.api.controller.BookController$searchBookMulti$3$bookSourceList$1
-                            /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-                            {
-                                super(1);
-                            }
-
-                            public /* bridge */ /* synthetic */ Object invoke(Object p1) {
-                                return Boolean.valueOf(invoke((ObjectNode) p1));
-                            }
-
-                            public final boolean invoke(@NotNull ObjectNode it2) {
-                                Intrinsics.checkNotNullParameter(it2, "it");
-                                String _bookSourceGroup = it2.get("bookSourceGroup").asText();
-                                String str = _bookSourceGroup;
-                                return !(str == null || str.length() == 0) && StringsKt.indexOf$default(Intrinsics.stringPlus(_bookSourceGroup, ","), Intrinsics.stringPlus((String) objectRef.element, ","), 0, false, 6, (Object) null) >= 0;
-                            }
-                        };
-                    }
-                    JsonArray bookSourceList = ExtKt.parseJsonStringList$default(file, null, null, it, it, null, function1, 38, null);
+                    JsonArray bookSourceList = ExtKt.parseJsonStringList$default((File) this.$bookSourceFile.element, null, null, it, it, null, ((CharSequence) this.$bookSourceGroup.element).length() == 0 ? null : new BookController$searchBookMulti$3$bookSourceList$1(this.$bookSourceGroup), 38, null);
                     if (bookSourceList == null || bookSourceList.isEmpty()) {
                         this.$maxSize.element = it;
                         return new ArrayList();
@@ -4504,6 +4422,54 @@ public final class BookController extends BaseController {
         }
     }
 
+    /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$searchBookMulti$4, reason: invalid class name and case insensitive filesystem */
+    /* JADX INFO: compiled from: BookController.kt */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$searchBookMulti$4.class */
+    @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\u001a\n\u0000\n\u0002\u0010\u000b\n\u0000\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\b\u0010\u0000\u001a\u00020\u00012\u0016\u0010\u0002\u001a\u0012\u0012\u0004\u0012\u00020\u00040\u0003j\b\u0012\u0004\u0012\u00020\u0004`\u00052\u0006\u0010\u0006\u001a\u00020\u0007H\n"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "list", "Ljava/util/ArrayList;", PackageDocumentBase.PREFIX_OPF, "Lkotlin/collections/ArrayList;", "loopCount", PackageDocumentBase.PREFIX_OPF})
+    static final class C00694 extends Lambda implements Function2<ArrayList<Object>, Integer, Boolean> {
+        final /* synthetic */ Ref.ObjectRef<ArrayList<SearchBook>> $resultList;
+        final /* synthetic */ Ref.BooleanRef $isEnd;
+        final /* synthetic */ BookController this$0;
+        final /* synthetic */ Ref.IntRef $searchSize;
+        final /* synthetic */ Ref.ObjectRef<Map<String, Integer>> $resultMap;
+
+        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+        C00694(Ref.ObjectRef<ArrayList<SearchBook>> $resultList, Ref.BooleanRef $isEnd, BookController this$0, Ref.IntRef $searchSize, Ref.ObjectRef<Map<String, Integer>> $resultMap) {
+            super(2);
+            this.$resultList = $resultList;
+            this.$isEnd = $isEnd;
+            this.this$0 = this$0;
+            this.$searchSize = $searchSize;
+            this.$resultMap = $resultMap;
+        }
+
+        public /* bridge */ /* synthetic */ Object invoke(Object p1, Object p2) {
+            return Boolean.valueOf(invoke((ArrayList<Object>) p1, ((Number) p2).intValue()));
+        }
+
+        public final boolean invoke(@NotNull ArrayList<Object> list, int loopCount) {
+            Intrinsics.checkNotNullParameter(list, "list");
+            ArrayList<Object> $this$forEach$iv = list;
+            Ref.ObjectRef<Map<String, Integer>> objectRef = this.$resultMap;
+            Ref.ObjectRef<ArrayList<SearchBook>> objectRef2 = this.$resultList;
+            for (Object element$iv : $this$forEach$iv) {
+                Iterable bookList = element$iv instanceof Collection ? (Collection) element$iv : null;
+                if (bookList != null) {
+                    Iterable<SearchBook> $this$forEach$iv2 = bookList;
+                    for (SearchBook book : $this$forEach$iv2) {
+                        String bookKey = book.getName() + '_' + book.getAuthor();
+                        if (!((Map) objectRef.element).containsKey(bookKey)) {
+                            ((ArrayList) objectRef2.element).add(book);
+                            ((Map) objectRef.element).put(bookKey, 1);
+                        }
+                    }
+                }
+            }
+            BookControllerKt.logger.info("Loop: {} resultList.size: {}", Integer.valueOf(loopCount), Integer.valueOf(((ArrayList) this.$resultList.element).size()));
+            return !this.$isEnd.element && loopCount < this.this$0.concurrentLoopCount && ((ArrayList) this.$resultList.element).size() < this.$searchSize.element;
+        }
+    }
+
     /* JADX WARN: Removed duplicated region for block: B:17:0x00f1  */
     /* JADX WARN: Removed duplicated region for block: B:19:0x0132  */
     /* JADX WARN: Removed duplicated region for block: B:7:0x0027  */
@@ -4516,7 +4482,7 @@ public final class BookController extends BaseController {
     public final Object searchBookMultiSSE(@NotNull RoutingContext context, @NotNull Continuation<? super Unit> $completion) {
         C00701 c00701;
         Ref.IntRef maxSize;
-        final Ref.IntRef lastIndex;
+        Ref.IntRef lastIndex;
         HttpServerResponse response;
         ReturnData returnData;
         Object objCheckAuth;
@@ -4555,7 +4521,7 @@ public final class BookController extends BaseController {
                     return Unit.INSTANCE;
                 }
                 lastIndex = new Ref.IntRef();
-                final Ref.IntRef searchSize = new Ref.IntRef();
+                Ref.IntRef searchSize = new Ref.IntRef();
                 Ref.ObjectRef bookSourceGroup = new Ref.ObjectRef();
                 if (context.request().method() == HttpMethod.POST) {
                     String string = context.getBodyAsJson().getString("key", PackageDocumentBase.PREFIX_OPF);
@@ -4630,12 +4596,12 @@ public final class BookController extends BaseController {
                 searchSize.element = searchSize.element > 0 ? searchSize.element : 50;
                 int concurrentCount2 = concurrentCount > 0 ? concurrentCount : 24;
                 BookControllerKt.logger.info("searchBookMulti from lastIndex: {} concurrentCount: {} searchSize: {}", new Object[]{Boxing.boxInt(lastIndex.element), Boxing.boxInt(concurrentCount2), Boxing.boxInt(searchSize.element)});
-                final Ref.BooleanRef isEnd = new Ref.BooleanRef();
+                Ref.BooleanRef isEnd = new Ref.BooleanRef();
                 BookController bookController = this;
                 context.request().connection().closeHandler((v2) -> {
                     m19searchBookMultiSSE$lambda6(r1, r2, v2);
                 });
-                final Ref.ObjectRef resultList = new Ref.ObjectRef();
+                Ref.ObjectRef resultList = new Ref.ObjectRef();
                 resultList.element = new ArrayList();
                 Book book = new Book(null, null, null, null, null, null, null, null, null, null, null, null, null, 0, 0L, null, 0L, 0L, 0, 0, null, 0, 0, 0L, null, false, 0, 0, false, null, null, false, null, -1, 1, null);
                 book.setName(key);
@@ -4646,53 +4612,21 @@ public final class BookController extends BaseController {
                 if (!((File) bookSourceFile.element).exists()) {
                     bookSourceFile.element = ExtKt.getStorageFile$default(new String[]{"data", "default", "bookSource"}, null, 2, null);
                 }
-                final HttpServerResponse httpServerResponse = response;
-                final BookController bookController2 = this;
                 c00701.L$0 = response;
                 c00701.L$1 = lastIndex;
                 c00701.L$2 = maxSize;
                 c00701.L$3 = null;
                 c00701.label = 2;
-                if (this.limitConcurrent(concurrentCount2, lastIndex.element + 1, bookSourceMap.size(), new C00713(maxSize, lastIndex, bookSourceFile, bookSourceGroup, this, book, accurate, userNameSpace, null), new Function2<ArrayList<Object>, Integer, Boolean>() { // from class: com.htmake.reader.api.controller.BookController.searchBookMultiSSE.4
-                    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-                    {
-                        super(2);
-                    }
-
-                    public /* bridge */ /* synthetic */ Object invoke(Object p1, Object p2) {
-                        return Boolean.valueOf(invoke((ArrayList<Object>) p1, ((Number) p2).intValue()));
-                    }
-
-                    public final boolean invoke(@NotNull ArrayList<Object> list, int loopCount) {
-                        Intrinsics.checkNotNullParameter(list, "list");
-                        ArrayList loopResult = new ArrayList();
-                        ArrayList<Object> $this$forEach$iv = list;
-                        Ref.ObjectRef<ArrayList<SearchBook>> objectRef = resultList;
-                        for (Object element$iv : $this$forEach$iv) {
-                            Iterable bookList = element$iv instanceof Collection ? (Collection) element$iv : null;
-                            if (bookList != null) {
-                                Iterable<SearchBook> $this$forEach$iv2 = bookList;
-                                for (SearchBook book2 : $this$forEach$iv2) {
-                                    String str7 = book2.getName() + '_' + book2.getAuthor();
-                                    ((ArrayList) objectRef.element).add(book2);
-                                    loopResult.add(book2);
-                                }
-                            }
-                        }
-                        httpServerResponse.write("data: " + ExtKt.jsonEncode(MapsKt.mapOf(new Pair[]{TuplesKt.to("lastIndex", Integer.valueOf(lastIndex.element)), TuplesKt.to("data", loopResult)}), false) + "\n\n");
-                        BookControllerKt.logger.info("Loop: {} resultList.size: {}", Integer.valueOf(loopCount), Integer.valueOf(((ArrayList) resultList.element).size()));
-                        return !isEnd.element && loopCount < bookController2.concurrentLoopCount && ((ArrayList) resultList.element).size() < searchSize.element;
-                    }
-                }, c00701) == coroutine_suspended) {
+                if (this.limitConcurrent(concurrentCount2, lastIndex.element + 1, bookSourceMap.size(), new C00713(maxSize, lastIndex, bookSourceFile, bookSourceGroup, this, book, accurate, userNameSpace, null), new C00724(response, lastIndex, resultList, isEnd, this, searchSize), c00701) == coroutine_suspended) {
                     return coroutine_suspended;
                 }
                 response.write("event: end\n");
-                HttpServerResponse httpServerResponse2 = response;
+                HttpServerResponse httpServerResponse = response;
                 StringBuilder sbAppend = new StringBuilder().append("data: ");
                 Pair[] pairArr = new Pair[2];
                 pairArr[0] = TuplesKt.to("lastIndex", Boxing.boxInt(lastIndex.element));
                 pairArr[1] = TuplesKt.to("isEnd", Boxing.boxBoolean(lastIndex.element < maxSize.element));
-                httpServerResponse2.end(sbAppend.append(ExtKt.jsonEncode(MapsKt.mapOf(pairArr), false)).append("\n\n").toString());
+                httpServerResponse.end(sbAppend.append(ExtKt.jsonEncode(MapsKt.mapOf(pairArr), false)).append("\n\n").toString());
                 return Unit.INSTANCE;
             case 1:
                 response = (HttpServerResponse) c00701.L$3;
@@ -4710,12 +4644,12 @@ public final class BookController extends BaseController {
                 response = (HttpServerResponse) c00701.L$0;
                 ResultKt.throwOnFailure($result);
                 response.write("event: end\n");
-                HttpServerResponse httpServerResponse22 = response;
+                HttpServerResponse httpServerResponse2 = response;
                 StringBuilder sbAppend2 = new StringBuilder().append("data: ");
                 Pair[] pairArr2 = new Pair[2];
                 pairArr2[0] = TuplesKt.to("lastIndex", Boxing.boxInt(lastIndex.element));
                 pairArr2[1] = TuplesKt.to("isEnd", Boxing.boxBoolean(lastIndex.element < maxSize.element));
-                httpServerResponse22.end(sbAppend2.append(ExtKt.jsonEncode(MapsKt.mapOf(pairArr2), false)).append("\n\n").toString());
+                httpServerResponse2.end(sbAppend2.append(ExtKt.jsonEncode(MapsKt.mapOf(pairArr2), false)).append("\n\n").toString());
                 return Unit.INSTANCE;
             default:
                 throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
@@ -4733,7 +4667,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$searchBookMultiSSE$3, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$searchBookMultiSSE$3.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$searchBookMultiSSE$3.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\u0010\n\u0000\n\u0002\u0010\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\b\u0010\u0000\u001a\u00020\u0001*\u00020\u00022\u0006\u0010\u0003\u001a\u00020\u0004H\u008a@"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "Lkotlinx/coroutines/CoroutineScope;", "it", PackageDocumentBase.PREFIX_OPF})
     @DebugMetadata(f = "BookController.kt", l = {972}, i = {}, s = {}, n = {}, m = "invokeSuspend", c = "com.htmake.reader.api.controller.BookController$searchBookMultiSSE$3")
     static final class C00713 extends SuspendLambda implements Function3<CoroutineScope, Integer, Continuation<? super Object>, Object> {
@@ -4775,7 +4709,6 @@ public final class BookController extends BaseController {
         @Nullable
         public final Object invokeSuspend(@NotNull Object $result) {
             Object objSearchBookWithSource;
-            Function1<ObjectNode, Boolean> function1;
             Object coroutine_suspended = IntrinsicsKt.getCOROUTINE_SUSPENDED();
             switch (this.label) {
                 case 0:
@@ -4785,30 +4718,7 @@ public final class BookController extends BaseController {
                         return new ArrayList();
                     }
                     this.$lastIndex.element = Math.max(this.$lastIndex.element, it);
-                    File file = (File) this.$bookSourceFile.element;
-                    if (((CharSequence) this.$bookSourceGroup.element).length() == 0) {
-                        function1 = null;
-                    } else {
-                        final Ref.ObjectRef<String> objectRef = this.$bookSourceGroup;
-                        function1 = new Function1<ObjectNode, Boolean>() { // from class: com.htmake.reader.api.controller.BookController$searchBookMultiSSE$3$bookSourceList$1
-                            /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-                            {
-                                super(1);
-                            }
-
-                            public /* bridge */ /* synthetic */ Object invoke(Object p1) {
-                                return Boolean.valueOf(invoke((ObjectNode) p1));
-                            }
-
-                            public final boolean invoke(@NotNull ObjectNode it2) {
-                                Intrinsics.checkNotNullParameter(it2, "it");
-                                String _bookSourceGroup = it2.get("bookSourceGroup").asText();
-                                String str = _bookSourceGroup;
-                                return !(str == null || str.length() == 0) && StringsKt.indexOf$default(Intrinsics.stringPlus(_bookSourceGroup, ","), Intrinsics.stringPlus((String) objectRef.element, ","), 0, false, 6, (Object) null) >= 0;
-                            }
-                        };
-                    }
-                    JsonArray bookSourceList = ExtKt.parseJsonStringList$default(file, null, null, it, it, null, function1, 38, null);
+                    JsonArray bookSourceList = ExtKt.parseJsonStringList$default((File) this.$bookSourceFile.element, null, null, it, it, null, ((CharSequence) this.$bookSourceGroup.element).length() == 0 ? null : new BookController$searchBookMultiSSE$3$bookSourceList$1(this.$bookSourceGroup), 38, null);
                     if (bookSourceList == null || bookSourceList.isEmpty()) {
                         this.$maxSize.element = it;
                         return new ArrayList();
@@ -4833,17 +4743,65 @@ public final class BookController extends BaseController {
         }
     }
 
+    /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$searchBookMultiSSE$4, reason: invalid class name and case insensitive filesystem */
+    /* JADX INFO: compiled from: BookController.kt */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$searchBookMultiSSE$4.class */
+    @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\u001a\n\u0000\n\u0002\u0010\u000b\n\u0000\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\b\u0010\u0000\u001a\u00020\u00012\u0016\u0010\u0002\u001a\u0012\u0012\u0004\u0012\u00020\u00040\u0003j\b\u0012\u0004\u0012\u00020\u0004`\u00052\u0006\u0010\u0006\u001a\u00020\u0007H\n"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "list", "Ljava/util/ArrayList;", PackageDocumentBase.PREFIX_OPF, "Lkotlin/collections/ArrayList;", "loopCount", PackageDocumentBase.PREFIX_OPF})
+    static final class C00724 extends Lambda implements Function2<ArrayList<Object>, Integer, Boolean> {
+        final /* synthetic */ HttpServerResponse $response;
+        final /* synthetic */ Ref.IntRef $lastIndex;
+        final /* synthetic */ Ref.ObjectRef<ArrayList<SearchBook>> $resultList;
+        final /* synthetic */ Ref.BooleanRef $isEnd;
+        final /* synthetic */ BookController this$0;
+        final /* synthetic */ Ref.IntRef $searchSize;
+
+        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+        C00724(HttpServerResponse $response, Ref.IntRef $lastIndex, Ref.ObjectRef<ArrayList<SearchBook>> $resultList, Ref.BooleanRef $isEnd, BookController this$0, Ref.IntRef $searchSize) {
+            super(2);
+            this.$response = $response;
+            this.$lastIndex = $lastIndex;
+            this.$resultList = $resultList;
+            this.$isEnd = $isEnd;
+            this.this$0 = this$0;
+            this.$searchSize = $searchSize;
+        }
+
+        public /* bridge */ /* synthetic */ Object invoke(Object p1, Object p2) {
+            return Boolean.valueOf(invoke((ArrayList<Object>) p1, ((Number) p2).intValue()));
+        }
+
+        public final boolean invoke(@NotNull ArrayList<Object> list, int loopCount) {
+            Intrinsics.checkNotNullParameter(list, "list");
+            ArrayList loopResult = new ArrayList();
+            ArrayList<Object> $this$forEach$iv = list;
+            Ref.ObjectRef<ArrayList<SearchBook>> objectRef = this.$resultList;
+            for (Object element$iv : $this$forEach$iv) {
+                Iterable bookList = element$iv instanceof Collection ? (Collection) element$iv : null;
+                if (bookList != null) {
+                    Iterable<SearchBook> $this$forEach$iv2 = bookList;
+                    for (SearchBook book : $this$forEach$iv2) {
+                        String str = book.getName() + '_' + book.getAuthor();
+                        ((ArrayList) objectRef.element).add(book);
+                        loopResult.add(book);
+                    }
+                }
+            }
+            this.$response.write("data: " + ExtKt.jsonEncode(MapsKt.mapOf(new Pair[]{TuplesKt.to("lastIndex", Integer.valueOf(this.$lastIndex.element)), TuplesKt.to("data", loopResult)}), false) + "\n\n");
+            BookControllerKt.logger.info("Loop: {} resultList.size: {}", Integer.valueOf(loopCount), Integer.valueOf(((ArrayList) this.$resultList.element).size()));
+            return !this.$isEnd.element && loopCount < this.this$0.concurrentLoopCount && ((ArrayList) this.$resultList.element).size() < this.$searchSize.element;
+        }
+    }
+
     /* JADX WARN: Removed duplicated region for block: B:17:0x00bc  */
     /* JADX WARN: Removed duplicated region for block: B:19:0x00cb  */
     /* JADX WARN: Removed duplicated region for block: B:7:0x0027  */
-    /* JADX WARN: Type inference failed for: r3v25, types: [com.htmake.reader.api.controller.BookController$searchBookSource$$inlined$toDataClass$1] */
     @Nullable
     /*
         Code decompiled incorrectly, please refer to instructions dump.
     */
     public final Object searchBookSource(@NotNull RoutingContext context, @NotNull Continuation<? super ReturnData> $completion) {
         C00731 c00731;
-        final Ref.ObjectRef resultList;
+        Ref.ObjectRef resultList;
         Ref.ObjectRef book;
         Ref.ObjectRef userNameSpace;
         Ref.IntRef lastIndex;
@@ -4881,7 +4839,7 @@ public final class BookController extends BaseController {
                     return ReturnData.setData$default(returnData, "NEED_LOGIN", null, 2, null).setErrorMsg("请登录后使用");
                 }
                 lastIndex = new Ref.IntRef();
-                final Ref.IntRef searchSize = new Ref.IntRef();
+                Ref.IntRef searchSize = new Ref.IntRef();
                 Ref.ObjectRef bookSourceGroup = new Ref.ObjectRef();
                 if (context.request().method() == HttpMethod.POST) {
                     String string = context.getBodyAsJson().getString(RSSKeywords.RSS_ITEM_URL);
@@ -4941,14 +4899,13 @@ public final class BookController extends BaseController {
                             json = (String) map;
                         }
                         String json$iv$iv = json;
-                        book2 = (Book) ExtKt.getGson().fromJson(json$iv$iv, new TypeToken<Book>() { // from class: com.htmake.reader.api.controller.BookController$searchBookSource$$inlined$toDataClass$1
-                        }.getType());
+                        book2 = (Book) ExtKt.getGson().fromJson(json$iv$iv, new BookController$searchBookSource$$inlined$toDataClass$1().getType());
                     }
                     book.element = book2;
                 }
                 if (book.element != null) {
                     BookControllerKt.logger.info("searchBookSource from lastIndex: {}", Boxing.boxInt(lastIndex.element));
-                    final Ref.BooleanRef isEnd = new Ref.BooleanRef();
+                    Ref.BooleanRef isEnd = new Ref.BooleanRef();
                     BookController bookController = this;
                     context.request().connection().closeHandler((v2) -> {
                         m20searchBookSource$lambda7(r1, r2, v2);
@@ -4964,7 +4921,6 @@ public final class BookController extends BaseController {
                     if (!((File) bookSourceFile.element).exists()) {
                         bookSourceFile.element = ExtKt.getStorageFile$default(new String[]{"data", "default", "bookSource"}, null, 2, null);
                     }
-                    final BookController bookController2 = this;
                     c00731.L$0 = this;
                     c00731.L$1 = returnData;
                     c00731.L$2 = lastIndex;
@@ -4972,29 +4928,7 @@ public final class BookController extends BaseController {
                     c00731.L$4 = book;
                     c00731.L$5 = resultList;
                     c00731.label = 2;
-                    if (this.limitConcurrent(concurrentCount, lastIndex.element + 1, bookSourceMap.size(), new C00743(maxSize, lastIndex, bookSourceFile, bookSourceGroup, this, book, userNameSpace, null), new Function2<ArrayList<Object>, Integer, Boolean>() { // from class: com.htmake.reader.api.controller.BookController.searchBookSource.4
-                        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-                        {
-                            super(2);
-                        }
-
-                        public /* bridge */ /* synthetic */ Object invoke(Object p1, Object p2) {
-                            return Boolean.valueOf(invoke((ArrayList<Object>) p1, ((Number) p2).intValue()));
-                        }
-
-                        public final boolean invoke(@NotNull ArrayList<Object> list, int loopCount) {
-                            Intrinsics.checkNotNullParameter(list, "list");
-                            ArrayList<Object> $this$forEach$iv = list;
-                            Ref.ObjectRef<ArrayList<SearchBook>> objectRef = resultList;
-                            for (Object element$iv : $this$forEach$iv) {
-                                Collection bookList = element$iv instanceof Collection ? (Collection) element$iv : null;
-                                if (bookList != null) {
-                                    ((ArrayList) objectRef.element).addAll(bookList);
-                                }
-                            }
-                            return !isEnd.element && loopCount < bookController2.concurrentLoopCount && ((ArrayList) resultList.element).size() < searchSize.element;
-                        }
-                    }, c00731) == coroutine_suspended) {
+                    if (this.limitConcurrent(concurrentCount, lastIndex.element + 1, bookSourceMap.size(), new C00743(maxSize, lastIndex, bookSourceFile, bookSourceGroup, this, book, userNameSpace, null), new C00754(isEnd, this, resultList, searchSize), c00731) == coroutine_suspended) {
                         return coroutine_suspended;
                     }
                     saveBookSources$default(this, (Book) book.element, (List) resultList.element, (String) userNameSpace.element, false, 8, null);
@@ -5036,7 +4970,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$searchBookSource$3, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$searchBookSource$3.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$searchBookSource$3.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\u0010\n\u0000\n\u0002\u0010\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\b\u0010\u0000\u001a\u00020\u0001*\u00020\u00022\u0006\u0010\u0003\u001a\u00020\u0004H\u008a@"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "Lkotlinx/coroutines/CoroutineScope;", "it", PackageDocumentBase.PREFIX_OPF})
     @DebugMetadata(f = "BookController.kt", l = {1084}, i = {}, s = {}, n = {}, m = "invokeSuspend", c = "com.htmake.reader.api.controller.BookController$searchBookSource$3")
     static final class C00743 extends SuspendLambda implements Function3<CoroutineScope, Integer, Continuation<? super Object>, Object> {
@@ -5076,7 +5010,6 @@ public final class BookController extends BaseController {
         @Nullable
         public final Object invokeSuspend(@NotNull Object $result) {
             Object objSearchBookWithSource$default;
-            Function1<ObjectNode, Boolean> function1;
             Object coroutine_suspended = IntrinsicsKt.getCOROUTINE_SUSPENDED();
             switch (this.label) {
                 case 0:
@@ -5086,30 +5019,7 @@ public final class BookController extends BaseController {
                         return new ArrayList();
                     }
                     this.$lastIndex.element = Math.max(this.$lastIndex.element, it);
-                    File file = (File) this.$bookSourceFile.element;
-                    if (((CharSequence) this.$bookSourceGroup.element).length() == 0) {
-                        function1 = null;
-                    } else {
-                        final Ref.ObjectRef<String> objectRef = this.$bookSourceGroup;
-                        function1 = new Function1<ObjectNode, Boolean>() { // from class: com.htmake.reader.api.controller.BookController$searchBookSource$3$bookSourceList$1
-                            /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-                            {
-                                super(1);
-                            }
-
-                            public /* bridge */ /* synthetic */ Object invoke(Object p1) {
-                                return Boolean.valueOf(invoke((ObjectNode) p1));
-                            }
-
-                            public final boolean invoke(@NotNull ObjectNode it2) {
-                                Intrinsics.checkNotNullParameter(it2, "it");
-                                String _bookSourceGroup = it2.get("bookSourceGroup").asText();
-                                String str = _bookSourceGroup;
-                                return !(str == null || str.length() == 0) && StringsKt.indexOf$default(Intrinsics.stringPlus(_bookSourceGroup, ","), Intrinsics.stringPlus((String) objectRef.element, ","), 0, false, 6, (Object) null) >= 0;
-                            }
-                        };
-                    }
-                    JsonArray bookSourceList = ExtKt.parseJsonStringList$default(file, null, null, it, it, null, function1, 38, null);
+                    JsonArray bookSourceList = ExtKt.parseJsonStringList$default((File) this.$bookSourceFile.element, null, null, it, it, null, ((CharSequence) this.$bookSourceGroup.element).length() == 0 ? null : new BookController$searchBookSource$3$bookSourceList$1(this.$bookSourceGroup), 38, null);
                     if (bookSourceList == null || bookSourceList.isEmpty()) {
                         this.$maxSize.element = it;
                         return new ArrayList();
@@ -5134,12 +5044,48 @@ public final class BookController extends BaseController {
         }
     }
 
+    /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$searchBookSource$4, reason: invalid class name and case insensitive filesystem */
+    /* JADX INFO: compiled from: BookController.kt */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$searchBookSource$4.class */
+    @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\u001a\n\u0000\n\u0002\u0010\u000b\n\u0000\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\b\u0010\u0000\u001a\u00020\u00012\u0016\u0010\u0002\u001a\u0012\u0012\u0004\u0012\u00020\u00040\u0003j\b\u0012\u0004\u0012\u00020\u0004`\u00052\u0006\u0010\u0006\u001a\u00020\u0007H\n"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "list", "Ljava/util/ArrayList;", PackageDocumentBase.PREFIX_OPF, "Lkotlin/collections/ArrayList;", "loopCount", PackageDocumentBase.PREFIX_OPF})
+    static final class C00754 extends Lambda implements Function2<ArrayList<Object>, Integer, Boolean> {
+        final /* synthetic */ Ref.BooleanRef $isEnd;
+        final /* synthetic */ BookController this$0;
+        final /* synthetic */ Ref.ObjectRef<ArrayList<SearchBook>> $resultList;
+        final /* synthetic */ Ref.IntRef $searchSize;
+
+        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+        C00754(Ref.BooleanRef $isEnd, BookController this$0, Ref.ObjectRef<ArrayList<SearchBook>> $resultList, Ref.IntRef $searchSize) {
+            super(2);
+            this.$isEnd = $isEnd;
+            this.this$0 = this$0;
+            this.$resultList = $resultList;
+            this.$searchSize = $searchSize;
+        }
+
+        public /* bridge */ /* synthetic */ Object invoke(Object p1, Object p2) {
+            return Boolean.valueOf(invoke((ArrayList<Object>) p1, ((Number) p2).intValue()));
+        }
+
+        public final boolean invoke(@NotNull ArrayList<Object> list, int loopCount) {
+            Intrinsics.checkNotNullParameter(list, "list");
+            ArrayList<Object> $this$forEach$iv = list;
+            Ref.ObjectRef<ArrayList<SearchBook>> objectRef = this.$resultList;
+            for (Object element$iv : $this$forEach$iv) {
+                Collection bookList = element$iv instanceof Collection ? (Collection) element$iv : null;
+                if (bookList != null) {
+                    ((ArrayList) objectRef.element).addAll(bookList);
+                }
+            }
+            return !this.$isEnd.element && loopCount < this.this$0.concurrentLoopCount && ((ArrayList) this.$resultList.element).size() < this.$searchSize.element;
+        }
+    }
+
     /* JADX WARN: Removed duplicated region for block: B:100:0x078c  */
     /* JADX WARN: Removed duplicated region for block: B:17:0x00f1  */
     /* JADX WARN: Removed duplicated region for block: B:19:0x0132  */
     /* JADX WARN: Removed duplicated region for block: B:7:0x0027  */
     /* JADX WARN: Removed duplicated region for block: B:99:0x0788  */
-    /* JADX WARN: Type inference failed for: r3v33, types: [com.htmake.reader.api.controller.BookController$searchBookSourceSSE$$inlined$toDataClass$1] */
     @Nullable
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -5147,10 +5093,10 @@ public final class BookController extends BaseController {
     public final Object searchBookSourceSSE(@NotNull RoutingContext context, @NotNull Continuation<? super Unit> $completion) {
         C00761 c00761;
         Ref.IntRef maxSize;
-        final Ref.ObjectRef resultList;
+        Ref.ObjectRef resultList;
         Ref.ObjectRef book;
         Ref.ObjectRef userNameSpace;
-        final Ref.IntRef lastIndex;
+        Ref.IntRef lastIndex;
         HttpServerResponse response;
         ReturnData returnData;
         Object objCheckAuth;
@@ -5191,7 +5137,7 @@ public final class BookController extends BaseController {
                     return Unit.INSTANCE;
                 }
                 lastIndex = new Ref.IntRef();
-                final Ref.IntRef searchSize = new Ref.IntRef();
+                Ref.IntRef searchSize = new Ref.IntRef();
                 Ref.ObjectRef bookSourceGroup = new Ref.ObjectRef();
                 if (context.request().method() == HttpMethod.POST) {
                     String string = context.getBodyAsJson().getString(RSSKeywords.RSS_ITEM_URL);
@@ -5259,8 +5205,7 @@ public final class BookController extends BaseController {
                             json = (String) map;
                         }
                         String json$iv$iv = json;
-                        book2 = (Book) ExtKt.getGson().fromJson(json$iv$iv, new TypeToken<Book>() { // from class: com.htmake.reader.api.controller.BookController$searchBookSourceSSE$$inlined$toDataClass$1
-                        }.getType());
+                        book2 = (Book) ExtKt.getGson().fromJson(json$iv$iv, new BookController$searchBookSourceSSE$$inlined$toDataClass$1().getType());
                     }
                     book.element = book2;
                 }
@@ -5279,7 +5224,7 @@ public final class BookController extends BaseController {
                 resultList.element = new ArrayList();
                 int concurrentCount = Math.max(searchSize.element * 2, 24);
                 BookControllerKt.logger.info("searchBookMulti from lastIndex: {} concurrentCount: {} searchSize: {}", new Object[]{Boxing.boxInt(lastIndex.element), Boxing.boxInt(concurrentCount), Boxing.boxInt(searchSize.element)});
-                final Ref.BooleanRef isEnd = new Ref.BooleanRef();
+                Ref.BooleanRef isEnd = new Ref.BooleanRef();
                 BookController bookController = this;
                 context.request().connection().closeHandler((v2) -> {
                     m21searchBookSourceSSE$lambda8(r1, r2, v2);
@@ -5291,8 +5236,6 @@ public final class BookController extends BaseController {
                 }
                 maxSize = new Ref.IntRef();
                 maxSize.element = bookSourceMap.size();
-                final HttpServerResponse httpServerResponse = response;
-                final BookController bookController2 = this;
                 c00761.L$0 = this;
                 c00761.L$1 = response;
                 c00761.L$2 = lastIndex;
@@ -5301,43 +5244,17 @@ public final class BookController extends BaseController {
                 c00761.L$5 = resultList;
                 c00761.L$6 = maxSize;
                 c00761.label = 2;
-                if (this.limitConcurrent(concurrentCount, lastIndex.element + 1, bookSourceMap.size(), new C00773(maxSize, lastIndex, bookSourceFile, bookSourceGroup, this, book, userNameSpace, null), new Function2<ArrayList<Object>, Integer, Boolean>() { // from class: com.htmake.reader.api.controller.BookController.searchBookSourceSSE.4
-                    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-                    {
-                        super(2);
-                    }
-
-                    public /* bridge */ /* synthetic */ Object invoke(Object p1, Object p2) {
-                        return Boolean.valueOf(invoke((ArrayList<Object>) p1, ((Number) p2).intValue()));
-                    }
-
-                    public final boolean invoke(@NotNull ArrayList<Object> list, int loopCount) {
-                        Intrinsics.checkNotNullParameter(list, "list");
-                        ArrayList loopResult = new ArrayList();
-                        ArrayList<Object> $this$forEach$iv = list;
-                        Ref.ObjectRef<ArrayList<SearchBook>> objectRef = resultList;
-                        for (Object element$iv : $this$forEach$iv) {
-                            Collection bookList = element$iv instanceof Collection ? (Collection) element$iv : null;
-                            if (bookList != null) {
-                                ((ArrayList) objectRef.element).addAll(bookList);
-                                loopResult.addAll(bookList);
-                            }
-                        }
-                        httpServerResponse.write("data: " + ExtKt.jsonEncode(MapsKt.mapOf(new Pair[]{TuplesKt.to("lastIndex", Integer.valueOf(lastIndex.element)), TuplesKt.to("data", loopResult)}), false) + "\n\n");
-                        BookControllerKt.logger.info("Loop: {} resultList.size: {}", Integer.valueOf(loopCount), Integer.valueOf(((ArrayList) resultList.element).size()));
-                        return !isEnd.element && loopCount < bookController2.concurrentLoopCount && ((ArrayList) resultList.element).size() < searchSize.element;
-                    }
-                }, c00761) == coroutine_suspended) {
+                if (this.limitConcurrent(concurrentCount, lastIndex.element + 1, bookSourceMap.size(), new C00773(maxSize, lastIndex, bookSourceFile, bookSourceGroup, this, book, userNameSpace, null), new C00784(response, lastIndex, resultList, isEnd, this, searchSize), c00761) == coroutine_suspended) {
                     return coroutine_suspended;
                 }
                 saveBookSources$default(this, (Book) book.element, (List) resultList.element, (String) userNameSpace.element, false, 8, null);
                 response.write("event: end\n");
-                HttpServerResponse httpServerResponse2 = response;
+                HttpServerResponse httpServerResponse = response;
                 StringBuilder sbAppend = new StringBuilder().append("data: ");
                 Pair[] pairArr = new Pair[2];
                 pairArr[0] = TuplesKt.to("lastIndex", Boxing.boxInt(lastIndex.element));
                 pairArr[1] = TuplesKt.to("isEnd", Boxing.boxBoolean(lastIndex.element < maxSize.element));
-                httpServerResponse2.end(sbAppend.append(ExtKt.jsonEncode(MapsKt.mapOf(pairArr), false)).append("\n\n").toString());
+                httpServerResponse.end(sbAppend.append(ExtKt.jsonEncode(MapsKt.mapOf(pairArr), false)).append("\n\n").toString());
                 return Unit.INSTANCE;
             case 1:
                 response = (HttpServerResponse) c00761.L$3;
@@ -5360,12 +5277,12 @@ public final class BookController extends BaseController {
                 ResultKt.throwOnFailure($result);
                 saveBookSources$default(this, (Book) book.element, (List) resultList.element, (String) userNameSpace.element, false, 8, null);
                 response.write("event: end\n");
-                HttpServerResponse httpServerResponse22 = response;
+                HttpServerResponse httpServerResponse2 = response;
                 StringBuilder sbAppend2 = new StringBuilder().append("data: ");
                 Pair[] pairArr2 = new Pair[2];
                 pairArr2[0] = TuplesKt.to("lastIndex", Boxing.boxInt(lastIndex.element));
                 pairArr2[1] = TuplesKt.to("isEnd", Boxing.boxBoolean(lastIndex.element < maxSize.element));
-                httpServerResponse22.end(sbAppend2.append(ExtKt.jsonEncode(MapsKt.mapOf(pairArr2), false)).append("\n\n").toString());
+                httpServerResponse2.end(sbAppend2.append(ExtKt.jsonEncode(MapsKt.mapOf(pairArr2), false)).append("\n\n").toString());
                 return Unit.INSTANCE;
             default:
                 throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
@@ -5383,7 +5300,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$searchBookSourceSSE$3, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$searchBookSourceSSE$3.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$searchBookSourceSSE$3.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\u0010\n\u0000\n\u0002\u0010\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\b\u0010\u0000\u001a\u00020\u0001*\u00020\u00022\u0006\u0010\u0003\u001a\u00020\u0004H\u008a@"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "Lkotlinx/coroutines/CoroutineScope;", "it", PackageDocumentBase.PREFIX_OPF})
     @DebugMetadata(f = "BookController.kt", l = {1209}, i = {}, s = {}, n = {}, m = "invokeSuspend", c = "com.htmake.reader.api.controller.BookController$searchBookSourceSSE$3")
     static final class C00773 extends SuspendLambda implements Function3<CoroutineScope, Integer, Continuation<? super Object>, Object> {
@@ -5423,7 +5340,6 @@ public final class BookController extends BaseController {
         @Nullable
         public final Object invokeSuspend(@NotNull Object $result) {
             Object objSearchBookWithSource$default;
-            Function1<ObjectNode, Boolean> function1;
             Object coroutine_suspended = IntrinsicsKt.getCOROUTINE_SUSPENDED();
             switch (this.label) {
                 case 0:
@@ -5433,30 +5349,7 @@ public final class BookController extends BaseController {
                         return new ArrayList();
                     }
                     this.$lastIndex.element = Math.max(this.$lastIndex.element, it);
-                    File file = (File) this.$bookSourceFile.element;
-                    if (((CharSequence) this.$bookSourceGroup.element).length() == 0) {
-                        function1 = null;
-                    } else {
-                        final Ref.ObjectRef<String> objectRef = this.$bookSourceGroup;
-                        function1 = new Function1<ObjectNode, Boolean>() { // from class: com.htmake.reader.api.controller.BookController$searchBookSourceSSE$3$bookSourceList$1
-                            /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-                            {
-                                super(1);
-                            }
-
-                            public /* bridge */ /* synthetic */ Object invoke(Object p1) {
-                                return Boolean.valueOf(invoke((ObjectNode) p1));
-                            }
-
-                            public final boolean invoke(@NotNull ObjectNode it2) {
-                                Intrinsics.checkNotNullParameter(it2, "it");
-                                String _bookSourceGroup = it2.get("bookSourceGroup").asText();
-                                String str = _bookSourceGroup;
-                                return !(str == null || str.length() == 0) && StringsKt.indexOf$default(Intrinsics.stringPlus(_bookSourceGroup, ","), Intrinsics.stringPlus((String) objectRef.element, ","), 0, false, 6, (Object) null) >= 0;
-                            }
-                        };
-                    }
-                    JsonArray bookSourceList = ExtKt.parseJsonStringList$default(file, null, null, it, it, null, function1, 38, null);
+                    JsonArray bookSourceList = ExtKt.parseJsonStringList$default((File) this.$bookSourceFile.element, null, null, it, it, null, ((CharSequence) this.$bookSourceGroup.element).length() == 0 ? null : new BookController$searchBookSourceSSE$3$bookSourceList$1(this.$bookSourceGroup), 38, null);
                     if (bookSourceList == null || bookSourceList.isEmpty()) {
                         this.$maxSize.element = it;
                         return new ArrayList();
@@ -5478,6 +5371,51 @@ public final class BookController extends BaseController {
                     throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
             }
             return (ArrayList) objSearchBookWithSource$default;
+        }
+    }
+
+    /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$searchBookSourceSSE$4, reason: invalid class name and case insensitive filesystem */
+    /* JADX INFO: compiled from: BookController.kt */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$searchBookSourceSSE$4.class */
+    @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\u001a\n\u0000\n\u0002\u0010\u000b\n\u0000\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\b\u0010\u0000\u001a\u00020\u00012\u0016\u0010\u0002\u001a\u0012\u0012\u0004\u0012\u00020\u00040\u0003j\b\u0012\u0004\u0012\u00020\u0004`\u00052\u0006\u0010\u0006\u001a\u00020\u0007H\n"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "list", "Ljava/util/ArrayList;", PackageDocumentBase.PREFIX_OPF, "Lkotlin/collections/ArrayList;", "loopCount", PackageDocumentBase.PREFIX_OPF})
+    static final class C00784 extends Lambda implements Function2<ArrayList<Object>, Integer, Boolean> {
+        final /* synthetic */ HttpServerResponse $response;
+        final /* synthetic */ Ref.IntRef $lastIndex;
+        final /* synthetic */ Ref.ObjectRef<ArrayList<SearchBook>> $resultList;
+        final /* synthetic */ Ref.BooleanRef $isEnd;
+        final /* synthetic */ BookController this$0;
+        final /* synthetic */ Ref.IntRef $searchSize;
+
+        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+        C00784(HttpServerResponse $response, Ref.IntRef $lastIndex, Ref.ObjectRef<ArrayList<SearchBook>> $resultList, Ref.BooleanRef $isEnd, BookController this$0, Ref.IntRef $searchSize) {
+            super(2);
+            this.$response = $response;
+            this.$lastIndex = $lastIndex;
+            this.$resultList = $resultList;
+            this.$isEnd = $isEnd;
+            this.this$0 = this$0;
+            this.$searchSize = $searchSize;
+        }
+
+        public /* bridge */ /* synthetic */ Object invoke(Object p1, Object p2) {
+            return Boolean.valueOf(invoke((ArrayList<Object>) p1, ((Number) p2).intValue()));
+        }
+
+        public final boolean invoke(@NotNull ArrayList<Object> list, int loopCount) {
+            Intrinsics.checkNotNullParameter(list, "list");
+            ArrayList loopResult = new ArrayList();
+            ArrayList<Object> $this$forEach$iv = list;
+            Ref.ObjectRef<ArrayList<SearchBook>> objectRef = this.$resultList;
+            for (Object element$iv : $this$forEach$iv) {
+                Collection bookList = element$iv instanceof Collection ? (Collection) element$iv : null;
+                if (bookList != null) {
+                    ((ArrayList) objectRef.element).addAll(bookList);
+                    loopResult.addAll(bookList);
+                }
+            }
+            this.$response.write("data: " + ExtKt.jsonEncode(MapsKt.mapOf(new Pair[]{TuplesKt.to("lastIndex", Integer.valueOf(this.$lastIndex.element)), TuplesKt.to("data", loopResult)}), false) + "\n\n");
+            BookControllerKt.logger.info("Loop: {} resultList.size: {}", Integer.valueOf(loopCount), Integer.valueOf(((ArrayList) this.$resultList.element).size()));
+            return !this.$isEnd.element && loopCount < this.this$0.concurrentLoopCount && ((ArrayList) this.$resultList.element).size() < this.$searchSize.element;
         }
     }
 
@@ -5543,7 +5481,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$searchBookWithSource$2, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$searchBookWithSource$2.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$searchBookWithSource$2.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\n\n\u0000\n\u0002\u0010\u0002\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H\u008a@"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "Lkotlinx/coroutines/CoroutineScope;"})
     @DebugMetadata(f = "BookController.kt", l = {1251}, i = {0}, s = {"J$0"}, n = {"start"}, m = "invokeSuspend", c = "com.htmake.reader.api.controller.BookController$searchBookWithSource$2")
     static final class C00802 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super Unit>, Object> {
@@ -5640,14 +5578,13 @@ public final class BookController extends BaseController {
     /* JADX WARN: Removed duplicated region for block: B:17:0x00bc  */
     /* JADX WARN: Removed duplicated region for block: B:19:0x00cb  */
     /* JADX WARN: Removed duplicated region for block: B:7:0x0027  */
-    /* JADX WARN: Type inference failed for: r3v19, types: [com.htmake.reader.api.controller.BookController$getAvailableBookSource$$inlined$toDataClass$1] */
     @Nullable
     /*
         Code decompiled incorrectly, please refer to instructions dump.
     */
     public final Object getAvailableBookSource(@NotNull RoutingContext context, @NotNull Continuation<? super ReturnData> $completion) {
         C00281 c00281;
-        final Ref.ObjectRef resultList;
+        Ref.ObjectRef resultList;
         Ref.ObjectRef book;
         Ref.ObjectRef userNameSpace;
         ReturnData returnData;
@@ -5719,8 +5656,7 @@ public final class BookController extends BaseController {
                             json = (String) map;
                         }
                         String json$iv$iv = json;
-                        book2 = (Book) ExtKt.getGson().fromJson(json$iv$iv, new TypeToken<Book>() { // from class: com.htmake.reader.api.controller.BookController$getAvailableBookSource$$inlined$toDataClass$1
-                        }.getType());
+                        book2 = (Book) ExtKt.getGson().fromJson(json$iv$iv, new BookController$getAvailableBookSource$$inlined$toDataClass$1().getType());
                     }
                     book.element = book2;
                 }
@@ -5743,29 +5679,7 @@ public final class BookController extends BaseController {
                     c00281.L$3 = book;
                     c00281.L$4 = resultList;
                     c00281.label = 2;
-                    if (this.limitConcurrent(16, 0, ((JsonArray) bookSourceList.element).size(), new C00292(bookSourceList, this, userNameSpace, book, null), new Function2<ArrayList<Object>, Integer, Boolean>() { // from class: com.htmake.reader.api.controller.BookController.getAvailableBookSource.3
-                        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-                        {
-                            super(2);
-                        }
-
-                        public /* bridge */ /* synthetic */ Object invoke(Object p1, Object p2) {
-                            return Boolean.valueOf(invoke((ArrayList<Object>) p1, ((Number) p2).intValue()));
-                        }
-
-                        public final boolean invoke(@NotNull ArrayList<Object> list2, int $noName_1) {
-                            Intrinsics.checkNotNullParameter(list2, "list");
-                            ArrayList<Object> $this$forEach$iv = list2;
-                            Ref.ObjectRef<ArrayList<SearchBook>> objectRef = resultList;
-                            for (Object element$iv : $this$forEach$iv) {
-                                Collection bookList = element$iv instanceof Collection ? (Collection) element$iv : null;
-                                if (bookList != null) {
-                                    ((ArrayList) objectRef.element).addAll(bookList);
-                                }
-                            }
-                            return true;
-                        }
-                    }, c00281) == coroutine_suspended) {
+                    if (this.limitConcurrent(16, 0, ((JsonArray) bookSourceList.element).size(), new C00292(bookSourceList, this, userNameSpace, book, null), new C00303(resultList), c00281) == coroutine_suspended) {
                         return coroutine_suspended;
                     }
                     this.saveBookSources((Book) book.element, (List) resultList.element, (String) userNameSpace.element, true);
@@ -5797,7 +5711,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$getAvailableBookSource$2, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$getAvailableBookSource$2.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$getAvailableBookSource$2.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\u0010\n\u0000\n\u0002\u0010\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\b\u0010\u0000\u001a\u00020\u0001*\u00020\u00022\u0006\u0010\u0003\u001a\u00020\u0004H\u008a@"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "Lkotlinx/coroutines/CoroutineScope;", "it", PackageDocumentBase.PREFIX_OPF})
     @DebugMetadata(f = "BookController.kt", l = {1321}, i = {}, s = {}, n = {}, m = "invokeSuspend", c = "com.htmake.reader.api.controller.BookController$getAvailableBookSource$2")
     static final class C00292 extends SuspendLambda implements Function3<CoroutineScope, Integer, Continuation<? super Object>, Object> {
@@ -5858,6 +5772,37 @@ public final class BookController extends BaseController {
                     throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
             }
             return (ArrayList) objSearchBookWithSource$default;
+        }
+    }
+
+    /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$getAvailableBookSource$3, reason: invalid class name and case insensitive filesystem */
+    /* JADX INFO: compiled from: BookController.kt */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$getAvailableBookSource$3.class */
+    @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\u001a\n\u0000\n\u0002\u0010\u000b\n\u0000\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\b\u0010\u0000\u001a\u00020\u00012\u0016\u0010\u0002\u001a\u0012\u0012\u0004\u0012\u00020\u00040\u0003j\b\u0012\u0004\u0012\u00020\u0004`\u00052\u0006\u0010\u0006\u001a\u00020\u0007H\n"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "list", "Ljava/util/ArrayList;", PackageDocumentBase.PREFIX_OPF, "Lkotlin/collections/ArrayList;", "<anonymous parameter 1>", PackageDocumentBase.PREFIX_OPF})
+    static final class C00303 extends Lambda implements Function2<ArrayList<Object>, Integer, Boolean> {
+        final /* synthetic */ Ref.ObjectRef<ArrayList<SearchBook>> $resultList;
+
+        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+        C00303(Ref.ObjectRef<ArrayList<SearchBook>> $resultList) {
+            super(2);
+            this.$resultList = $resultList;
+        }
+
+        public /* bridge */ /* synthetic */ Object invoke(Object p1, Object p2) {
+            return Boolean.valueOf(invoke((ArrayList<Object>) p1, ((Number) p2).intValue()));
+        }
+
+        public final boolean invoke(@NotNull ArrayList<Object> list, int $noName_1) {
+            Intrinsics.checkNotNullParameter(list, "list");
+            ArrayList<Object> $this$forEach$iv = list;
+            Ref.ObjectRef<ArrayList<SearchBook>> objectRef = this.$resultList;
+            for (Object element$iv : $this$forEach$iv) {
+                Collection bookList = element$iv instanceof Collection ? (Collection) element$iv : null;
+                if (bookList != null) {
+                    ((ArrayList) objectRef.element).addAll(bookList);
+                }
+            }
+            return true;
         }
     }
 
@@ -6400,7 +6345,7 @@ public final class BookController extends BaseController {
         switch (c00601.label) {
             case 0:
                 ResultKt.throwOnFailure($result);
-                final String coverUrl = book.getDisplayCover();
+                String coverUrl = book.getDisplayCover();
                 if (coverUrl != null && !StringsKt.startsWith$default(coverUrl, TableOfContents.DEFAULT_PATH_SEPARATOR, false, 2, (Object) null)) {
                     String ext = getFileExt(coverUrl, "jpg");
                     String md5Encode = MD5Utils.INSTANCE.md5Encode(coverUrl).toString();
@@ -6415,22 +6360,7 @@ public final class BookController extends BaseController {
                     c00601.L$1 = cachedCoverUrl;
                     c00601.L$2 = cacheFile;
                     c00601.label = 1;
-                    objAwaitResult = VertxCoroutineKt.awaitResult(new Function1<Handler<AsyncResult<HttpResponse<Buffer>>>, Unit>() { // from class: com.htmake.reader.api.controller.BookController$saveLocalBookCover$result$1
-                        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-                        {
-                            super(1);
-                        }
-
-                        public /* bridge */ /* synthetic */ Object invoke(Object p1) {
-                            invoke((Handler<AsyncResult<HttpResponse<Buffer>>>) p1);
-                            return Unit.INSTANCE;
-                        }
-
-                        public final void invoke(@NotNull Handler<AsyncResult<HttpResponse<Buffer>>> handler) {
-                            Intrinsics.checkNotNullParameter(handler, "handler");
-                            this.this$0.webClient.getAbs(coverUrl).timeout(3000L).send(handler);
-                        }
-                    }, c00601);
+                    objAwaitResult = VertxCoroutineKt.awaitResult(new BookController$saveLocalBookCover$result$1(this, coverUrl), c00601);
                     if (objAwaitResult == coroutine_suspended) {
                         return coroutine_suspended;
                     }
@@ -6499,15 +6429,10 @@ public final class BookController extends BaseController {
                         book.setCoverUrl(cachedCoverUrl);
                         return Unit.INSTANCE;
                     }
-                    String str = null;
-                    Integer num = null;
-                    String str2 = null;
-                    Integer num2 = null;
-                    String str3 = null;
                     BookSource.Companion companion = BookSource.INSTANCE;
                     Intrinsics.checkNotNull(bookSource2);
                     Object objM151fromJsonIoAF18A = companion.m151fromJsonIoAF18A(bookSource2);
-                    AnalyzeUrl analyzeUrl = new AnalyzeUrl(coverUrl, str, num, str2, num2, str3, (BaseSource) (Result.isFailure-impl(objM151fromJsonIoAF18A) ? null : objM151fromJsonIoAF18A), null, null, null, null, 1982, null);
+                    AnalyzeUrl analyzeUrl = new AnalyzeUrl(coverUrl, null, null, null, null, null, (BaseSource) (Result.isFailure-impl(objM151fromJsonIoAF18A) ? null : objM151fromJsonIoAF18A), null, null, null, null, 1982, null);
                     c00561.L$0 = book;
                     c00561.L$1 = cachePath;
                     c00561.L$2 = cachedCoverUrl;
@@ -6570,7 +6495,6 @@ public final class BookController extends BaseController {
         BookController bookController;
         Book book3;
         String str;
-        final Ref.ObjectRef objectRef3;
         String bookUrl;
         String newBookUrl;
         String bookSourceUrl;
@@ -6666,7 +6590,6 @@ public final class BookController extends BaseController {
                 if (searchBook != null) {
                     book2 = searchBook;
                     objectRef2.element = book2;
-                    objectRef3 = newBookInfo;
                     c00821.L$0 = this;
                     c00821.L$1 = returnData;
                     c00821.L$2 = userNameSpace;
@@ -6675,32 +6598,7 @@ public final class BookController extends BaseController {
                     c00821.L$5 = null;
                     c00821.L$6 = null;
                     c00821.label = 3;
-                    if (this.editShelfBook(book, userNameSpace, new Function1<Book, Book>() { // from class: com.htmake.reader.api.controller.BookController.setBookSource.2
-                        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-                        {
-                            super(1);
-                        }
-
-                        @NotNull
-                        public final Book invoke(@NotNull Book existBook) {
-                            Intrinsics.checkNotNullParameter(existBook, "existBook");
-                            existBook.setOrigin(((Book) objectRef3.element).getOrigin());
-                            existBook.setOriginName(((Book) objectRef3.element).getOriginName());
-                            existBook.setBookUrl(((Book) objectRef3.element).getBookUrl());
-                            existBook.setTocUrl(((Book) objectRef3.element).getTocUrl());
-                            existBook.setInShelf(true);
-                            String coverUrl = existBook.getCoverUrl();
-                            if (coverUrl == null || coverUrl.length() == 0) {
-                                String coverUrl2 = ((Book) objectRef3.element).getCoverUrl();
-                                if (!(coverUrl2 == null || coverUrl2.length() == 0)) {
-                                    existBook.setCoverUrl(((Book) objectRef3.element).getCoverUrl());
-                                }
-                            }
-                            BookControllerKt.logger.info("setBookSource: {}", existBook);
-                            objectRef3.element = existBook;
-                            return existBook;
-                        }
-                    }, c00821) == coroutine_suspended) {
+                    if (this.editShelfBook(book, userNameSpace, new C00832(newBookInfo), c00821) == coroutine_suspended) {
                         return coroutine_suspended;
                     }
                     bookController = this;
@@ -6739,7 +6637,6 @@ public final class BookController extends BaseController {
                 objectRef2 = objectRef;
                 book2 = (Book) obj;
                 objectRef2.element = book2;
-                objectRef3 = newBookInfo;
                 c00821.L$0 = this;
                 c00821.L$1 = returnData;
                 c00821.L$2 = userNameSpace;
@@ -6748,32 +6645,7 @@ public final class BookController extends BaseController {
                 c00821.L$5 = null;
                 c00821.L$6 = null;
                 c00821.label = 3;
-                if (this.editShelfBook(book, userNameSpace, new Function1<Book, Book>() { // from class: com.htmake.reader.api.controller.BookController.setBookSource.2
-                    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-                    {
-                        super(1);
-                    }
-
-                    @NotNull
-                    public final Book invoke(@NotNull Book existBook) {
-                        Intrinsics.checkNotNullParameter(existBook, "existBook");
-                        existBook.setOrigin(((Book) objectRef3.element).getOrigin());
-                        existBook.setOriginName(((Book) objectRef3.element).getOriginName());
-                        existBook.setBookUrl(((Book) objectRef3.element).getBookUrl());
-                        existBook.setTocUrl(((Book) objectRef3.element).getTocUrl());
-                        existBook.setInShelf(true);
-                        String coverUrl = existBook.getCoverUrl();
-                        if (coverUrl == null || coverUrl.length() == 0) {
-                            String coverUrl2 = ((Book) objectRef3.element).getCoverUrl();
-                            if (!(coverUrl2 == null || coverUrl2.length() == 0)) {
-                                existBook.setCoverUrl(((Book) objectRef3.element).getCoverUrl());
-                            }
-                        }
-                        BookControllerKt.logger.info("setBookSource: {}", existBook);
-                        objectRef3.element = existBook;
-                        return existBook;
-                    }
-                }, c00821) == coroutine_suspended) {
+                if (this.editShelfBook(book, userNameSpace, new C00832(newBookInfo), c00821) == coroutine_suspended) {
                 }
                 bookController = this;
                 book3 = (Book) newBookInfo.element;
@@ -6812,7 +6684,6 @@ public final class BookController extends BaseController {
                 objectRef2 = objectRef;
                 book2 = (Book) obj2;
                 objectRef2.element = book2;
-                objectRef3 = newBookInfo;
                 c00821.L$0 = this;
                 c00821.L$1 = returnData;
                 c00821.L$2 = userNameSpace;
@@ -6821,32 +6692,7 @@ public final class BookController extends BaseController {
                 c00821.L$5 = null;
                 c00821.L$6 = null;
                 c00821.label = 3;
-                if (this.editShelfBook(book, userNameSpace, new Function1<Book, Book>() { // from class: com.htmake.reader.api.controller.BookController.setBookSource.2
-                    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-                    {
-                        super(1);
-                    }
-
-                    @NotNull
-                    public final Book invoke(@NotNull Book existBook) {
-                        Intrinsics.checkNotNullParameter(existBook, "existBook");
-                        existBook.setOrigin(((Book) objectRef3.element).getOrigin());
-                        existBook.setOriginName(((Book) objectRef3.element).getOriginName());
-                        existBook.setBookUrl(((Book) objectRef3.element).getBookUrl());
-                        existBook.setTocUrl(((Book) objectRef3.element).getTocUrl());
-                        existBook.setInShelf(true);
-                        String coverUrl = existBook.getCoverUrl();
-                        if (coverUrl == null || coverUrl.length() == 0) {
-                            String coverUrl2 = ((Book) objectRef3.element).getCoverUrl();
-                            if (!(coverUrl2 == null || coverUrl2.length() == 0)) {
-                                existBook.setCoverUrl(((Book) objectRef3.element).getCoverUrl());
-                            }
-                        }
-                        BookControllerKt.logger.info("setBookSource: {}", existBook);
-                        objectRef3.element = existBook;
-                        return existBook;
-                    }
-                }, c00821) == coroutine_suspended) {
+                if (this.editShelfBook(book, userNameSpace, new C00832(newBookInfo), c00821) == coroutine_suspended) {
                 }
                 bookController = this;
                 book3 = (Book) newBookInfo.element;
@@ -6893,6 +6739,40 @@ public final class BookController extends BaseController {
         }
     }
 
+    /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$setBookSource$2, reason: invalid class name and case insensitive filesystem */
+    /* JADX INFO: compiled from: BookController.kt */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$setBookSource$2.class */
+    @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\b\n\u0000\n\u0002\u0018\u0002\n\u0000\u0010\u0000\u001a\u00020\u00012\u0006\u0010\u0002\u001a\u00020\u0001H\n"}, d2 = {"<anonymous>", "Lio/legado/app/data/entities/Book;", "existBook"})
+    static final class C00832 extends Lambda implements Function1<Book, Book> {
+        final /* synthetic */ Ref.ObjectRef<Book> $newBookInfo;
+
+        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+        C00832(Ref.ObjectRef<Book> $newBookInfo) {
+            super(1);
+            this.$newBookInfo = $newBookInfo;
+        }
+
+        @NotNull
+        public final Book invoke(@NotNull Book existBook) {
+            Intrinsics.checkNotNullParameter(existBook, "existBook");
+            existBook.setOrigin(((Book) this.$newBookInfo.element).getOrigin());
+            existBook.setOriginName(((Book) this.$newBookInfo.element).getOriginName());
+            existBook.setBookUrl(((Book) this.$newBookInfo.element).getBookUrl());
+            existBook.setTocUrl(((Book) this.$newBookInfo.element).getTocUrl());
+            existBook.setInShelf(true);
+            String coverUrl = existBook.getCoverUrl();
+            if (coverUrl == null || coverUrl.length() == 0) {
+                String coverUrl2 = ((Book) this.$newBookInfo.element).getCoverUrl();
+                if (!(coverUrl2 == null || coverUrl2.length() == 0)) {
+                    existBook.setCoverUrl(((Book) this.$newBookInfo.element).getCoverUrl());
+                }
+            }
+            BookControllerKt.logger.info("setBookSource: {}", existBook);
+            this.$newBookInfo.element = existBook;
+            return existBook;
+        }
+    }
+
     /* JADX WARN: Removed duplicated region for block: B:17:0x00bc  */
     /* JADX WARN: Removed duplicated region for block: B:19:0x00cb  */
     /* JADX WARN: Removed duplicated region for block: B:56:0x025a  */
@@ -6935,7 +6815,7 @@ public final class BookController extends BaseController {
                 if (((Boolean) objCheckAuth).booleanValue()) {
                     return ReturnData.setData$default(returnData, "NEED_LOGIN", null, 2, null).setErrorMsg("请登录后使用");
                 }
-                final Ref.FloatRef pdfImageWidth = new Ref.FloatRef();
+                Ref.FloatRef pdfImageWidth = new Ref.FloatRef();
                 if (context.request().method() == HttpMethod.POST) {
                     String string = context.getBodyAsJson().getString("bookUrl");
                     Intrinsics.checkNotNullExpressionValue(string, "context.bodyAsJson.getString(\"bookUrl\")");
@@ -6969,20 +6849,7 @@ public final class BookController extends BaseController {
                 c00541.L$1 = book;
                 c00541.L$2 = null;
                 c00541.label = 2;
-                objEditShelfBook = this.editShelfBook(book, userNameSpace, new Function1<Book, Book>() { // from class: com.htmake.reader.api.controller.BookController$saveBookConfig$newBook$1
-                    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-                    {
-                        super(1);
-                    }
-
-                    @NotNull
-                    public final Book invoke(@NotNull Book existBook) {
-                        Intrinsics.checkNotNullParameter(existBook, "existBook");
-                        existBook.setPdfImageWidth(pdfImageWidth.element);
-                        BookControllerKt.logger.info("saveBookConfig: {}", existBook);
-                        return existBook;
-                    }
-                }, c00541);
+                objEditShelfBook = this.editShelfBook(book, userNameSpace, new BookController$saveBookConfig$newBook$1(pdfImageWidth), c00541);
                 if (objEditShelfBook == coroutine_suspended) {
                     return coroutine_suspended;
                 }
@@ -7019,7 +6886,7 @@ public final class BookController extends BaseController {
     public final Object saveBookGroupId(@NotNull RoutingContext context, @NotNull Continuation<? super ReturnData> $completion) {
         C00571 c00571;
         Book book;
-        final Ref.LongRef groupId;
+        Ref.LongRef groupId;
         ReturnData returnData;
         Object objCheckAuth;
         String bookUrl;
@@ -7081,20 +6948,7 @@ public final class BookController extends BaseController {
                     c00571.L$1 = groupId;
                     c00571.L$2 = book;
                     c00571.label = 2;
-                    if (this.editShelfBook(book, userNameSpace, new Function1<Book, Book>() { // from class: com.htmake.reader.api.controller.BookController.saveBookGroupId.2
-                        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-                        {
-                            super(1);
-                        }
-
-                        @NotNull
-                        public final Book invoke(@NotNull Book existBook) {
-                            Intrinsics.checkNotNullParameter(existBook, "existBook");
-                            existBook.setGroup(groupId.element);
-                            BookControllerKt.logger.info("saveBookGroupId: {}", existBook);
-                            return existBook;
-                        }
-                    }, c00571) == coroutine_suspended) {
+                    if (this.editShelfBook(book, userNameSpace, new C00582(groupId), c00571) == coroutine_suspended) {
                         return coroutine_suspended;
                     }
                     book.setGroup(groupId.element);
@@ -7122,17 +6976,38 @@ public final class BookController extends BaseController {
         }
     }
 
-    /* JADX WARN: Code restructure failed: missing block: B:24:0x0128, code lost:
+    /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$saveBookGroupId$2, reason: invalid class name and case insensitive filesystem */
+    /* JADX INFO: compiled from: BookController.kt */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$saveBookGroupId$2.class */
+    @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\b\n\u0000\n\u0002\u0018\u0002\n\u0000\u0010\u0000\u001a\u00020\u00012\u0006\u0010\u0002\u001a\u00020\u0001H\n"}, d2 = {"<anonymous>", "Lio/legado/app/data/entities/Book;", "existBook"})
+    static final class C00582 extends Lambda implements Function1<Book, Book> {
+        final /* synthetic */ Ref.LongRef $groupId;
 
+        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+        C00582(Ref.LongRef $groupId) {
+            super(1);
+            this.$groupId = $groupId;
+        }
+
+        @NotNull
+        public final Book invoke(@NotNull Book existBook) {
+            Intrinsics.checkNotNullParameter(existBook, "existBook");
+            existBook.setGroup(this.$groupId.element);
+            BookControllerKt.logger.info("saveBookGroupId: {}", existBook);
+            return existBook;
+        }
+    }
+
+    /* JADX WARN: Code restructure failed: missing block: B:24:0x0128, code lost:
+    
         if (0 < r18) goto L25;
      */
     /* JADX WARN: Code restructure failed: missing block: B:25:0x012b, code lost:
-
+    
         r0 = r17;
         r17 = r17 + 1;
         r0 = (io.legado.app.data.entities.Book) r16.getJsonObject(r0).mapTo(io.legado.app.data.entities.Book.class);
         kotlin.jvm.internal.Intrinsics.checkNotNullExpressionValue(r0, "book");
-        r5 = r13;
         r23.L$0 = r9;
         r23.L$1 = r12;
         r23.L$2 = r15;
@@ -7143,19 +7018,19 @@ public final class BookController extends BaseController {
         r23.label = 2;
      */
     /* JADX WARN: Code restructure failed: missing block: B:26:0x019e, code lost:
-
-        if (r9.editShelfBook(r0, r15, new com.htmake.reader.api.controller.BookController.AnonymousClass2(), r23) != r0) goto L30;
+    
+        if (r9.editShelfBook(r0, r15, new com.htmake.reader.api.controller.BookController.AnonymousClass2(r13), r23) != r0) goto L30;
      */
     /* JADX WARN: Code restructure failed: missing block: B:28:0x01a3, code lost:
-
+    
         return r0;
      */
     /* JADX WARN: Code restructure failed: missing block: B:31:0x01eb, code lost:
-
+    
         if (r17 >= r18) goto L32;
      */
     /* JADX WARN: Code restructure failed: missing block: B:33:0x01f8, code lost:
-
+    
         return com.htmake.reader.api.ReturnData.setData$default(r12, me.ag2s.epublib.epub.PackageDocumentBase.PREFIX_OPF, null, 2, null);
      */
     /* JADX WARN: Removed duplicated region for block: B:17:0x00bc  */
@@ -7236,17 +7111,38 @@ public final class BookController extends BaseController {
         }
     }
 
-    /* JADX WARN: Code restructure failed: missing block: B:24:0x0128, code lost:
+    /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$addBookGroupMulti$2, reason: invalid class name */
+    /* JADX INFO: compiled from: BookController.kt */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$addBookGroupMulti$2.class */
+    @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\b\n\u0000\n\u0002\u0018\u0002\n\u0000\u0010\u0000\u001a\u00020\u00012\u0006\u0010\u0002\u001a\u00020\u0001H\n"}, d2 = {"<anonymous>", "Lio/legado/app/data/entities/Book;", "existBook"})
+    static final class AnonymousClass2 extends Lambda implements Function1<Book, Book> {
+        final /* synthetic */ long $groupId;
 
+        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+        AnonymousClass2(long $groupId) {
+            super(1);
+            this.$groupId = $groupId;
+        }
+
+        @NotNull
+        public final Book invoke(@NotNull Book existBook) {
+            Intrinsics.checkNotNullParameter(existBook, "existBook");
+            existBook.setGroup(existBook.getGroup() | this.$groupId);
+            BookControllerKt.logger.info("saveBookGroupId: {}", existBook);
+            return existBook;
+        }
+    }
+
+    /* JADX WARN: Code restructure failed: missing block: B:24:0x0128, code lost:
+    
         if (0 < r18) goto L25;
      */
     /* JADX WARN: Code restructure failed: missing block: B:25:0x012b, code lost:
-
+    
         r0 = r17;
         r17 = r17 + 1;
         r0 = (io.legado.app.data.entities.Book) r16.getJsonObject(r0).mapTo(io.legado.app.data.entities.Book.class);
         kotlin.jvm.internal.Intrinsics.checkNotNullExpressionValue(r0, "book");
-        r5 = r13;
         r23.L$0 = r9;
         r23.L$1 = r12;
         r23.L$2 = r15;
@@ -7257,19 +7153,19 @@ public final class BookController extends BaseController {
         r23.label = 2;
      */
     /* JADX WARN: Code restructure failed: missing block: B:26:0x019e, code lost:
-
-        if (r9.editShelfBook(r0, r15, new com.htmake.reader.api.controller.BookController.C00512(), r23) != r0) goto L30;
+    
+        if (r9.editShelfBook(r0, r15, new com.htmake.reader.api.controller.BookController.C00512(r13), r23) != r0) goto L30;
      */
     /* JADX WARN: Code restructure failed: missing block: B:28:0x01a3, code lost:
-
+    
         return r0;
      */
     /* JADX WARN: Code restructure failed: missing block: B:31:0x01eb, code lost:
-
+    
         if (r17 >= r18) goto L32;
      */
     /* JADX WARN: Code restructure failed: missing block: B:33:0x01f8, code lost:
-
+    
         return com.htmake.reader.api.ReturnData.setData$default(r12, me.ag2s.epublib.epub.PackageDocumentBase.PREFIX_OPF, null, 2, null);
      */
     /* JADX WARN: Removed duplicated region for block: B:17:0x00bc  */
@@ -7347,6 +7243,28 @@ public final class BookController extends BaseController {
                 break;
             default:
                 throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
+        }
+    }
+
+    /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$removeBookGroupMulti$2, reason: invalid class name and case insensitive filesystem */
+    /* JADX INFO: compiled from: BookController.kt */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$removeBookGroupMulti$2.class */
+    @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\b\n\u0000\n\u0002\u0018\u0002\n\u0000\u0010\u0000\u001a\u00020\u00012\u0006\u0010\u0002\u001a\u00020\u0001H\n"}, d2 = {"<anonymous>", "Lio/legado/app/data/entities/Book;", "existBook"})
+    static final class C00512 extends Lambda implements Function1<Book, Book> {
+        final /* synthetic */ long $groupId;
+
+        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+        C00512(long $groupId) {
+            super(1);
+            this.$groupId = $groupId;
+        }
+
+        @NotNull
+        public final Book invoke(@NotNull Book existBook) {
+            Intrinsics.checkNotNullParameter(existBook, "existBook");
+            existBook.setGroup(existBook.getGroup() ^ this.$groupId);
+            BookControllerKt.logger.info("saveBookGroupId: {}", existBook);
+            return existBook;
         }
     }
 
@@ -7558,7 +7476,6 @@ public final class BookController extends BaseController {
         return bookList;
     }
 
-    /* JADX WARN: Type inference failed for: r2v0, types: [com.htmake.reader.api.controller.BookController$mergeBookCacheInfo$$inlined$toDataClass$1] */
     @Nullable
     public final Object mergeBookCacheInfo(@NotNull Book book, @NotNull Continuation<? super Book> $completion) {
         Object map;
@@ -7574,8 +7491,7 @@ public final class BookController extends BaseController {
                 json = (String) map;
             }
             String json$iv$iv = json;
-            book2 = (Book) ExtKt.getGson().fromJson(json$iv$iv, new TypeToken<Book>() { // from class: com.htmake.reader.api.controller.BookController$mergeBookCacheInfo$$inlined$toDataClass$1
-            }.getType());
+            book2 = (Book) ExtKt.getGson().fromJson(json$iv$iv, new BookController$mergeBookCacheInfo$$inlined$toDataClass$1().getType());
         }
         Book cacheInfo = book2;
         if (cacheInfo != null) {
@@ -7640,7 +7556,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$getBookShelfBooks$2, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$getBookShelfBooks$2.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$getBookShelfBooks$2.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\u0010\n\u0000\n\u0002\u0010\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\b\u0010\u0000\u001a\u00020\u0001*\u00020\u00022\u0006\u0010\u0003\u001a\u00020\u0004H\u008a@"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "Lkotlinx/coroutines/CoroutineScope;", "it", PackageDocumentBase.PREFIX_OPF})
     @DebugMetadata(f = "BookController.kt", l = {1961, 1970}, i = {0, 1}, s = {"L$0", "L$0"}, n = {"book", "book"}, m = "invokeSuspend", c = "com.htmake.reader.api.controller.BookController$getBookShelfBooks$2")
     static final class C00352 extends SuspendLambda implements Function3<CoroutineScope, Integer, Continuation<? super Object>, Object> {
@@ -7680,8 +7596,8 @@ public final class BookController extends BaseController {
 
         /*  JADX ERROR: JadxRuntimeException in pass: BlockSplitter
             jadx.core.utils.exceptions.JadxRuntimeException: Unexpected missing predecessor for block: B:10:0x0078
-                at jadx.core.dex.visitors.blocks.BlockSplitter.addTempConnectionsForExcHandlers(BlockSplitter.java:280)
-                at jadx.core.dex.visitors.blocks.BlockSplitter.visit(BlockSplitter.java:79)
+            	at jadx.core.dex.visitors.blocks.BlockSplitter.addTempConnectionsForExcHandlers(BlockSplitter.java:280)
+            	at jadx.core.dex.visitors.blocks.BlockSplitter.visit(BlockSplitter.java:79)
             */
         @org.jetbrains.annotations.Nullable
         public final java.lang.Object invokeSuspend(@org.jetbrains.annotations.NotNull java.lang.Object r12) {
@@ -7694,7 +7610,7 @@ public final class BookController extends BaseController {
 
         /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$getBookShelfBooks$2$1, reason: invalid class name */
         /* JADX INFO: compiled from: BookController.kt */
-        /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$getBookShelfBooks$2$1.class */
+        /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$getBookShelfBooks$2$1.class */
         @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\u000e\n\u0000\n\u0002\u0010 \n\u0002\u0018\u0002\n\u0002\u0018\u0002\u0010\u0000\u001a\b\u0012\u0004\u0012\u00020\u00020\u0001*\u00020\u0003H\u008a@"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "Lio/legado/app/data/entities/BookChapter;", "Lkotlinx/coroutines/CoroutineScope;"})
         @DebugMetadata(f = "BookController.kt", l = {1962}, i = {}, s = {}, n = {}, m = "invokeSuspend", c = "com.htmake.reader.api.controller.BookController$getBookShelfBooks$2$1")
         static final class AnonymousClass1 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super List<? extends BookChapter>>, Object> {
@@ -7992,7 +7908,6 @@ public final class BookController extends BaseController {
                     this = (BookController) c00411.L$0;
                     ResultKt.throwOnFailure($result);
                     book.setLastCheckError(e.toString());
-                    final Exception exc = e;
                     c00411.L$0 = mutex;
                     c00411.L$1 = e;
                     c00411.L$2 = null;
@@ -8001,19 +7916,7 @@ public final class BookController extends BaseController {
                     c00411.L$5 = null;
                     c00411.L$6 = null;
                     c00411.label = 4;
-                    if (this.editShelfBook(book, userNameSpace, new Function1<Book, Book>() { // from class: com.htmake.reader.api.controller.BookController.getLocalChapterList.3
-                        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-                        {
-                            super(1);
-                        }
-
-                        @NotNull
-                        public final Book invoke(@NotNull Book existBook) {
-                            Intrinsics.checkNotNullParameter(existBook, "existBook");
-                            existBook.setLastCheckError(exc.toString());
-                            return existBook;
-                        }
-                    }, c00411) == coroutine_suspended) {
+                    if (this.editShelfBook(book, userNameSpace, new C00423(e), c00411) == coroutine_suspended) {
                         return coroutine_suspended;
                     }
                     mutex2 = mutex;
@@ -8056,6 +7959,27 @@ public final class BookController extends BaseController {
             mutex = null;
         }
         return bookController.getLocalChapterList(book, str, z, str2, z2, mutex, continuation);
+    }
+
+    /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$getLocalChapterList$3, reason: invalid class name and case insensitive filesystem */
+    /* JADX INFO: compiled from: BookController.kt */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$getLocalChapterList$3.class */
+    @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\b\n\u0000\n\u0002\u0018\u0002\n\u0000\u0010\u0000\u001a\u00020\u00012\u0006\u0010\u0002\u001a\u00020\u0001H\n"}, d2 = {"<anonymous>", "Lio/legado/app/data/entities/Book;", "existBook"})
+    static final class C00423 extends Lambda implements Function1<Book, Book> {
+        final /* synthetic */ Exception $e;
+
+        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+        C00423(Exception $e) {
+            super(1);
+            this.$e = $e;
+        }
+
+        @NotNull
+        public final Book invoke(@NotNull Book existBook) {
+            Intrinsics.checkNotNullParameter(existBook, "existBook");
+            existBook.setLastCheckError(this.$e.toString());
+            return existBook;
+        }
     }
 
     public static /* synthetic */ Object getBookSourceString$default(BookController bookController, RoutingContext routingContext, String str, boolean z, Continuation continuation, int i, Object obj) {
@@ -8120,7 +8044,7 @@ public final class BookController extends BaseController {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonFactory factory = objectMapper.getFactory();
-            final Ref.ObjectRef bookSourceString = new Ref.ObjectRef();
+            Ref.ObjectRef bookSourceString = new Ref.ObjectRef();
             JsonParser jsonParser = (Closeable) factory.createParser(file);
             Throwable th = (Throwable) null;
             try {
@@ -8144,17 +8068,7 @@ public final class BookController extends BaseController {
                     }
                     Unit unit = Unit.INSTANCE;
                     CloseableKt.closeFinally(jsonParser, th);
-                    BookControllerKt.logger.info(new Function0<Object>() { // from class: com.htmake.reader.api.controller.BookController.getBookSourceStringBySourceURLOpt.2
-                        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-                        {
-                            super(0);
-                        }
-
-                        @Nullable
-                        public final Object invoke() {
-                            return bookSourceString.element;
-                        }
-                    });
+                    BookControllerKt.logger.info(new C00362(bookSourceString));
                     return (String) bookSourceString.element;
                 } finally {
                 }
@@ -8168,7 +8082,25 @@ public final class BookController extends BaseController {
         }
     }
 
-    /* JADX WARN: Type inference failed for: r2v4, types: [com.htmake.reader.api.controller.BookController$getShelfBookByURL$$inlined$toDataClass$1] */
+    /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$getBookSourceStringBySourceURLOpt$2, reason: invalid class name and case insensitive filesystem */
+    /* JADX INFO: compiled from: BookController.kt */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$getBookSourceStringBySourceURLOpt$2.class */
+    @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\u0006\n\u0000\n\u0002\u0010\u0000\u0010\u0000\u001a\u0004\u0018\u00010\u0001H\n"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF})
+    static final class C00362 extends Lambda implements Function0<Object> {
+        final /* synthetic */ Ref.ObjectRef<String> $bookSourceString;
+
+        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+        C00362(Ref.ObjectRef<String> $bookSourceString) {
+            super(0);
+            this.$bookSourceString = $bookSourceString;
+        }
+
+        @Nullable
+        public final Object invoke() {
+            return this.$bookSourceString.element;
+        }
+    }
+
     @Nullable
     public final Book getShelfBookByURL(@NotNull String url, @NotNull String userNameSpace) {
         JsonArray bookshelf;
@@ -8192,8 +8124,7 @@ public final class BookController extends BaseController {
                     json = (String) map;
                 }
                 String json$iv$iv = json;
-                Book _book = (Book) ExtKt.getGson().fromJson(json$iv$iv, new TypeToken<Book>() { // from class: com.htmake.reader.api.controller.BookController$getShelfBookByURL$$inlined$toDataClass$1
-                }.getType());
+                Book _book = (Book) ExtKt.getGson().fromJson(json$iv$iv, new BookController$getShelfBookByURL$$inlined$toDataClass$1().getType());
                 if (_book.getBookUrl().equals(url)) {
                     _book.setRootDir(ExtKt.getWorkDir$default(null, 1, null));
                     _book.setUserNameSpace(userNameSpace);
@@ -8206,22 +8137,32 @@ public final class BookController extends BaseController {
         return null;
     }
 
-    @Nullable
-    public final Object saveShelfBookProgress(@NotNull Book book, @NotNull final BookChapter bookChapter, @NotNull String userNameSpace, @NotNull Continuation<? super Unit> $completion) {
-        Object objEditShelfBook = editShelfBook(book, userNameSpace, new Function1<Book, Book>() { // from class: com.htmake.reader.api.controller.BookController.saveShelfBookProgress.2
-            {
-                super(1);
-            }
+    /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$saveShelfBookProgress$2, reason: invalid class name and case insensitive filesystem */
+    /* JADX INFO: compiled from: BookController.kt */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$saveShelfBookProgress$2.class */
+    @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\b\n\u0000\n\u0002\u0018\u0002\n\u0000\u0010\u0000\u001a\u00020\u00012\u0006\u0010\u0002\u001a\u00020\u0001H\n"}, d2 = {"<anonymous>", "Lio/legado/app/data/entities/Book;", "existBook"})
+    static final class C00632 extends Lambda implements Function1<Book, Book> {
+        final /* synthetic */ BookChapter $bookChapter;
 
-            @NotNull
-            public final Book invoke(@NotNull Book existBook) {
-                Intrinsics.checkNotNullParameter(existBook, "existBook");
-                existBook.setDurChapterIndex(bookChapter.getIndex());
-                existBook.setDurChapterTitle(bookChapter.getTitle());
-                existBook.setDurChapterTime(System.currentTimeMillis());
-                return existBook;
-            }
-        }, $completion);
+        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+        C00632(BookChapter $bookChapter) {
+            super(1);
+            this.$bookChapter = $bookChapter;
+        }
+
+        @NotNull
+        public final Book invoke(@NotNull Book existBook) {
+            Intrinsics.checkNotNullParameter(existBook, "existBook");
+            existBook.setDurChapterIndex(this.$bookChapter.getIndex());
+            existBook.setDurChapterTitle(this.$bookChapter.getTitle());
+            existBook.setDurChapterTime(System.currentTimeMillis());
+            return existBook;
+        }
+    }
+
+    @Nullable
+    public final Object saveShelfBookProgress(@NotNull Book book, @NotNull BookChapter bookChapter, @NotNull String userNameSpace, @NotNull Continuation<? super Unit> $completion) {
+        Object objEditShelfBook = editShelfBook(book, userNameSpace, new C00632(bookChapter), $completion);
         return objEditShelfBook == IntrinsicsKt.getCOROUTINE_SUSPENDED() ? objEditShelfBook : Unit.INSTANCE;
     }
 
@@ -8235,8 +8176,6 @@ public final class BookController extends BaseController {
     public final Object saveShelfBookLatestChapter(@NotNull Book book, @NotNull List<BookChapter> bookChapterList, @NotNull String userNameSpace, @Nullable Mutex mutex, @NotNull Continuation<? super Unit> $completion) {
         C00611 c00611;
         Mutex mutex2;
-        final List<BookChapter> list;
-        final Book book2;
         if ($completion instanceof C00611) {
             c00611 = (C00611) $completion;
             if ((c00611.label & Integer.MIN_VALUE) != 0) {
@@ -8262,41 +8201,13 @@ public final class BookController extends BaseController {
                             return coroutine_suspended;
                         }
                     }
-                    list = bookChapterList;
-                    book2 = book;
                     c00611.L$0 = mutex;
                     c00611.L$1 = null;
                     c00611.L$2 = null;
                     c00611.L$3 = null;
                     c00611.L$4 = null;
                     c00611.label = 2;
-                    if (this.editShelfBook(book, userNameSpace, new Function1<Book, Book>() { // from class: com.htmake.reader.api.controller.BookController.saveShelfBookLatestChapter.2
-                        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-                        {
-                            super(1);
-                        }
-
-                        @NotNull
-                        public final Book invoke(@NotNull Book existBook) {
-                            Intrinsics.checkNotNullParameter(existBook, "existBook");
-                            if (list.size() > 0) {
-                                BookChapter bookChapter = (BookChapter) CollectionsKt.last(list);
-                                existBook.setLatestChapterTitle(bookChapter.getTitle());
-                            }
-                            if (list.size() - existBook.getTotalChapterNum() > 0) {
-                                existBook.setLastCheckCount(list.size() - existBook.getTotalChapterNum());
-                                existBook.setLastCheckTime(System.currentTimeMillis());
-                            }
-                            existBook.setLastCheckError(null);
-                            existBook.setTotalChapterNum(list.size());
-                            book2.setLatestChapterTitle(existBook.getLatestChapterTitle());
-                            book2.setLastCheckCount(existBook.getLastCheckCount());
-                            book2.setLastCheckTime(existBook.getLastCheckTime());
-                            book2.setLastCheckError(existBook.getLastCheckError());
-                            book2.setTotalChapterNum(existBook.getTotalChapterNum());
-                            return existBook;
-                        }
-                    }, c00611) == coroutine_suspended) {
+                    if (this.editShelfBook(book, userNameSpace, new C00622(bookChapterList, book), c00611) == coroutine_suspended) {
                         return coroutine_suspended;
                     }
                     mutex2 = mutex;
@@ -8311,41 +8222,13 @@ public final class BookController extends BaseController {
                     book = (Book) c00611.L$1;
                     this = (BookController) c00611.L$0;
                     ResultKt.throwOnFailure($result);
-                    list = bookChapterList;
-                    book2 = book;
                     c00611.L$0 = mutex;
                     c00611.L$1 = null;
                     c00611.L$2 = null;
                     c00611.L$3 = null;
                     c00611.L$4 = null;
                     c00611.label = 2;
-                    if (this.editShelfBook(book, userNameSpace, new Function1<Book, Book>() { // from class: com.htmake.reader.api.controller.BookController.saveShelfBookLatestChapter.2
-                        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-                        {
-                            super(1);
-                        }
-
-                        @NotNull
-                        public final Book invoke(@NotNull Book existBook) {
-                            Intrinsics.checkNotNullParameter(existBook, "existBook");
-                            if (list.size() > 0) {
-                                BookChapter bookChapter = (BookChapter) CollectionsKt.last(list);
-                                existBook.setLatestChapterTitle(bookChapter.getTitle());
-                            }
-                            if (list.size() - existBook.getTotalChapterNum() > 0) {
-                                existBook.setLastCheckCount(list.size() - existBook.getTotalChapterNum());
-                                existBook.setLastCheckTime(System.currentTimeMillis());
-                            }
-                            existBook.setLastCheckError(null);
-                            existBook.setTotalChapterNum(list.size());
-                            book2.setLatestChapterTitle(existBook.getLatestChapterTitle());
-                            book2.setLastCheckCount(existBook.getLastCheckCount());
-                            book2.setLastCheckTime(existBook.getLastCheckTime());
-                            book2.setLastCheckError(existBook.getLastCheckError());
-                            book2.setTotalChapterNum(existBook.getTotalChapterNum());
-                            return existBook;
-                        }
-                    }, c00611) == coroutine_suspended) {
+                    if (this.editShelfBook(book, userNameSpace, new C00622(bookChapterList, book), c00611) == coroutine_suspended) {
                     }
                     mutex2 = mutex;
                     if (mutex2 != null) {
@@ -8374,6 +8257,43 @@ public final class BookController extends BaseController {
             mutex = null;
         }
         return bookController.saveShelfBookLatestChapter(book, list, str, mutex, continuation);
+    }
+
+    /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$saveShelfBookLatestChapter$2, reason: invalid class name and case insensitive filesystem */
+    /* JADX INFO: compiled from: BookController.kt */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$saveShelfBookLatestChapter$2.class */
+    @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\b\n\u0000\n\u0002\u0018\u0002\n\u0000\u0010\u0000\u001a\u00020\u00012\u0006\u0010\u0002\u001a\u00020\u0001H\n"}, d2 = {"<anonymous>", "Lio/legado/app/data/entities/Book;", "existBook"})
+    static final class C00622 extends Lambda implements Function1<Book, Book> {
+        final /* synthetic */ List<BookChapter> $bookChapterList;
+        final /* synthetic */ Book $book;
+
+        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+        C00622(List<BookChapter> $bookChapterList, Book $book) {
+            super(1);
+            this.$bookChapterList = $bookChapterList;
+            this.$book = $book;
+        }
+
+        @NotNull
+        public final Book invoke(@NotNull Book existBook) {
+            Intrinsics.checkNotNullParameter(existBook, "existBook");
+            if (this.$bookChapterList.size() > 0) {
+                BookChapter bookChapter = (BookChapter) CollectionsKt.last(this.$bookChapterList);
+                existBook.setLatestChapterTitle(bookChapter.getTitle());
+            }
+            if (this.$bookChapterList.size() - existBook.getTotalChapterNum() > 0) {
+                existBook.setLastCheckCount(this.$bookChapterList.size() - existBook.getTotalChapterNum());
+                existBook.setLastCheckTime(System.currentTimeMillis());
+            }
+            existBook.setLastCheckError(null);
+            existBook.setTotalChapterNum(this.$bookChapterList.size());
+            this.$book.setLatestChapterTitle(existBook.getLatestChapterTitle());
+            this.$book.setLastCheckCount(existBook.getLastCheckCount());
+            this.$book.setLastCheckTime(existBook.getLastCheckTime());
+            this.$book.setLastCheckError(existBook.getLastCheckError());
+            this.$book.setTotalChapterNum(existBook.getTotalChapterNum());
+            return existBook;
+        }
     }
 
     /* JADX WARN: Finally extract failed */
@@ -8709,30 +8629,39 @@ public final class BookController extends BaseController {
         if (progressFile == null) {
             return Unit.INSTANCE;
         }
-        final Ref.ObjectRef book = new Ref.ObjectRef();
+        Ref.ObjectRef book = new Ref.ObjectRef();
         JsonObject jsonObjectAsJsonObject = ExtKt.asJsonObject(FilesKt.readText$default(progressFile, (Charset) null, 1, (Object) null));
         book.element = jsonObjectAsJsonObject == null ? null : (Book) jsonObjectAsJsonObject.mapTo(Book.class);
         if (book.element == null) {
             return Unit.INSTANCE;
         }
-        Object objEditShelfBook = editShelfBook((Book) book.element, userNameSpace, new Function1<Book, Book>() { // from class: com.htmake.reader.api.controller.BookController.syncBookProgressFromWebdav.2
-            /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-            {
-                super(1);
-            }
-
-            @NotNull
-            public final Book invoke(@NotNull Book existBook) {
-                Intrinsics.checkNotNullParameter(existBook, "existBook");
-                existBook.setDurChapterIndex(((Book) book.element).getDurChapterIndex());
-                existBook.setDurChapterPos(((Book) book.element).getDurChapterPos());
-                existBook.setDurChapterTime(((Book) book.element).getDurChapterTime());
-                existBook.setDurChapterTitle(((Book) book.element).getDurChapterTitle());
-                BookControllerKt.logger.info("syncShelfBookProgress: {}", existBook);
-                return existBook;
-            }
-        }, $completion);
+        Object objEditShelfBook = editShelfBook((Book) book.element, userNameSpace, new C00862(book), $completion);
         return objEditShelfBook == IntrinsicsKt.getCOROUTINE_SUSPENDED() ? objEditShelfBook : Unit.INSTANCE;
+    }
+
+    /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$syncBookProgressFromWebdav$2, reason: invalid class name and case insensitive filesystem */
+    /* JADX INFO: compiled from: BookController.kt */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$syncBookProgressFromWebdav$2.class */
+    @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\b\n\u0000\n\u0002\u0018\u0002\n\u0000\u0010\u0000\u001a\u00020\u00012\u0006\u0010\u0002\u001a\u00020\u0001H\n"}, d2 = {"<anonymous>", "Lio/legado/app/data/entities/Book;", "existBook"})
+    static final class C00862 extends Lambda implements Function1<Book, Book> {
+        final /* synthetic */ Ref.ObjectRef<Book> $book;
+
+        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+        C00862(Ref.ObjectRef<Book> $book) {
+            super(1);
+            this.$book = $book;
+        }
+
+        @NotNull
+        public final Book invoke(@NotNull Book existBook) {
+            Intrinsics.checkNotNullParameter(existBook, "existBook");
+            existBook.setDurChapterIndex(((Book) this.$book.element).getDurChapterIndex());
+            existBook.setDurChapterPos(((Book) this.$book.element).getDurChapterPos());
+            existBook.setDurChapterTime(((Book) this.$book.element).getDurChapterTime());
+            existBook.setDurChapterTitle(((Book) this.$book.element).getDurChapterTitle());
+            BookControllerKt.logger.info("syncShelfBookProgress: {}", existBook);
+            return existBook;
+        }
     }
 
     @Nullable
@@ -9052,15 +8981,7 @@ public final class BookController extends BaseController {
         Object[] it = legadoHome.listFiles();
         Intrinsics.checkNotNullExpressionValue(it, "it");
         if (it.length > 1) {
-            ArraysKt.sortWith(it, new Comparator<T>() { // from class: com.htmake.reader.api.controller.BookController$getLastBackFileFromWebdav$lambda-16$$inlined$sortByDescending$1
-                /* JADX WARN: Multi-variable type inference failed */
-                @Override // java.util.Comparator
-                public final int compare(T t, T t2) {
-                    File it2 = (File) t2;
-                    File it3 = (File) t;
-                    return ComparisonsKt.compareValues(Long.valueOf(it2.lastModified()), Long.valueOf(it3.lastModified()));
-                }
-            });
+            ArraysKt.sortWith(it, new BookController$getLastBackFileFromWebdav$lambda16$$inlined$sortByDescending$1());
         }
         Intrinsics.checkNotNullExpressionValue(it, "legadoHome.listFiles().also{\n            it.sortByDescending {\n                it.lastModified()\n            }\n        }");
         Object[] $this$forEach$iv = it;
@@ -9147,23 +9068,7 @@ public final class BookController extends BaseController {
                     m22bookSourceDebugSSE$lambda18(r1, v1);
                 });
                 BookControllerKt.logger.info("bookSourceDebugSSE bookSource: {} keyword: {}", bookSourceString, keyword);
-                final HttpServerResponse httpServerResponse = response;
-                Debugger debugger = new Debugger(new Function1<String, Unit>() { // from class: com.htmake.reader.api.controller.BookController$bookSourceDebugSSE$debugger$1
-                    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-                    {
-                        super(1);
-                    }
-
-                    public /* bridge */ /* synthetic */ Object invoke(Object p1) {
-                        invoke((String) p1);
-                        return Unit.INSTANCE;
-                    }
-
-                    public final void invoke(@NotNull String msg) {
-                        Intrinsics.checkNotNullParameter(msg, "msg");
-                        httpServerResponse.write("data: " + ExtKt.jsonEncode(MapsKt.mapOf(TuplesKt.to("msg", msg)), false) + "\n\n");
-                    }
-                });
+                Debugger debugger = new Debugger(new BookController$bookSourceDebugSSE$debugger$1(response));
                 WebBook webBook = new WebBook(bookSourceString, false, (DebugLog) null, userNameSpace, 6, (DefaultConstructorMarker) null);
                 c00131.L$0 = response;
                 c00131.L$1 = null;
@@ -9220,9 +9125,9 @@ public final class BookController extends BaseController {
     */
     public final Object cacheBookSSE(@NotNull RoutingContext context, @NotNull Continuation<? super Unit> $completion) {
         C00161 c00161;
-        final Ref.IntRef failedCount;
-        final Ref.IntRef successCount;
-        final Ref.ObjectRef cachedChapterContentSet;
+        Ref.IntRef failedCount;
+        Ref.IntRef successCount;
+        Ref.ObjectRef cachedChapterContentSet;
         HttpServerResponse response;
         int concurrentCount;
         int refresh;
@@ -9236,11 +9141,9 @@ public final class BookController extends BaseController {
         ReturnData returnData;
         Object bookSourceString$default;
         Object objCheckAuth;
-        final Ref.BooleanRef isEnd;
+        File localCacheDir;
+        Ref.BooleanRef isEnd;
         int i;
-        int size;
-        C00173 c00173;
-        final HttpServerResponse httpServerResponse;
         CharSequence charSequence;
         String bookUrl;
         Integer numBoxInt;
@@ -9365,7 +9268,7 @@ public final class BookController extends BaseController {
                 if (refresh <= 0) {
                     cachedChapterContentSet.element = this.getCachedChapterContentSet(bookInfo, (String) userNameSpace.element);
                 }
-                File localCacheDir = this.getChapterCacheDir(bookInfo, (String) userNameSpace.element);
+                localCacheDir = this.getChapterCacheDir(bookInfo, (String) userNameSpace.element);
                 isEnd = new Ref.BooleanRef();
                 successCount = new Ref.IntRef();
                 failedCount = new Ref.IntRef();
@@ -9375,9 +9278,6 @@ public final class BookController extends BaseController {
                 });
                 i = concurrentCount <= 0 ? concurrentCount : 24;
                 BookControllerKt.logger.info("cacheBookSSE concurrentCount: {} refresh: {}", Boxing.boxInt(i), Boxing.boxInt(refresh));
-                size = ((List) chapterList.element).size();
-                c00173 = new C00173(cachedChapterContentSet, chapterList, bookSource, this, userNameSpace, bookInfo, localCacheDir, successCount, isEnd, failedCount, null);
-                httpServerResponse = response;
                 c00161.L$0 = response;
                 c00161.L$1 = cachedChapterContentSet;
                 c00161.L$2 = successCount;
@@ -9387,27 +9287,7 @@ public final class BookController extends BaseController {
                 c00161.L$6 = null;
                 c00161.L$7 = null;
                 c00161.label = 4;
-                if (this.limitConcurrent(i, 0, size, c00173, new Function2<ArrayList<Object>, Integer, Boolean>() { // from class: com.htmake.reader.api.controller.BookController.cacheBookSSE.4
-                    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-                    {
-                        super(2);
-                    }
-
-                    public /* bridge */ /* synthetic */ Object invoke(Object p1, Object p2) {
-                        return Boolean.valueOf(invoke((ArrayList<Object>) p1, ((Number) p2).intValue()));
-                    }
-
-                    public final boolean invoke(@NotNull ArrayList<Object> list, int loopCount) {
-                        Intrinsics.checkNotNullParameter(list, "list");
-                        if (isEnd.element) {
-                            return false;
-                        }
-                        Map result = MapsKt.mapOf(new Pair[]{TuplesKt.to("cachedCount", Integer.valueOf(((Set) cachedChapterContentSet.element).size())), TuplesKt.to("successCount", Integer.valueOf(successCount.element)), TuplesKt.to("failedCount", Integer.valueOf(failedCount.element))});
-                        httpServerResponse.write("data: " + ExtKt.jsonEncode(result, false) + "\n\n");
-                        BookControllerKt.logger.info("Loop: {} list.size: {} result: {}", new Object[]{Integer.valueOf(loopCount), Integer.valueOf(list.size()), result});
-                        return true;
-                    }
-                }, c00161) == coroutine_suspended) {
+                if (this.limitConcurrent(i, 0, ((List) chapterList.element).size(), new C00173(cachedChapterContentSet, chapterList, bookSource, this, userNameSpace, bookInfo, localCacheDir, successCount, isEnd, failedCount, null), new AnonymousClass4(isEnd, cachedChapterContentSet, successCount, failedCount, response), c00161) == coroutine_suspended) {
                     return coroutine_suspended;
                 }
                 response.write("event: end\n");
@@ -9463,7 +9343,7 @@ public final class BookController extends BaseController {
                 cachedChapterContentSet.element = new LinkedHashSet();
                 if (refresh <= 0) {
                 }
-                File localCacheDir2 = this.getChapterCacheDir(bookInfo, (String) userNameSpace.element);
+                localCacheDir = this.getChapterCacheDir(bookInfo, (String) userNameSpace.element);
                 isEnd = new Ref.BooleanRef();
                 successCount = new Ref.IntRef();
                 failedCount = new Ref.IntRef();
@@ -9473,9 +9353,6 @@ public final class BookController extends BaseController {
                 });
                 i = concurrentCount <= 0 ? concurrentCount : 24;
                 BookControllerKt.logger.info("cacheBookSSE concurrentCount: {} refresh: {}", Boxing.boxInt(i), Boxing.boxInt(refresh));
-                size = ((List) chapterList.element).size();
-                c00173 = new C00173(cachedChapterContentSet, chapterList, bookSource, this, userNameSpace, bookInfo, localCacheDir2, successCount, isEnd, failedCount, null);
-                httpServerResponse = response;
                 c00161.L$0 = response;
                 c00161.L$1 = cachedChapterContentSet;
                 c00161.L$2 = successCount;
@@ -9485,27 +9362,7 @@ public final class BookController extends BaseController {
                 c00161.L$6 = null;
                 c00161.L$7 = null;
                 c00161.label = 4;
-                if (this.limitConcurrent(i, 0, size, c00173, new Function2<ArrayList<Object>, Integer, Boolean>() { // from class: com.htmake.reader.api.controller.BookController.cacheBookSSE.4
-                    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-                    {
-                        super(2);
-                    }
-
-                    public /* bridge */ /* synthetic */ Object invoke(Object p1, Object p2) {
-                        return Boolean.valueOf(invoke((ArrayList<Object>) p1, ((Number) p2).intValue()));
-                    }
-
-                    public final boolean invoke(@NotNull ArrayList<Object> list, int loopCount) {
-                        Intrinsics.checkNotNullParameter(list, "list");
-                        if (isEnd.element) {
-                            return false;
-                        }
-                        Map result = MapsKt.mapOf(new Pair[]{TuplesKt.to("cachedCount", Integer.valueOf(((Set) cachedChapterContentSet.element).size())), TuplesKt.to("successCount", Integer.valueOf(successCount.element)), TuplesKt.to("failedCount", Integer.valueOf(failedCount.element))});
-                        httpServerResponse.write("data: " + ExtKt.jsonEncode(result, false) + "\n\n");
-                        BookControllerKt.logger.info("Loop: {} list.size: {} result: {}", new Object[]{Integer.valueOf(loopCount), Integer.valueOf(list.size()), result});
-                        return true;
-                    }
-                }, c00161) == coroutine_suspended) {
+                if (this.limitConcurrent(i, 0, ((List) chapterList.element).size(), new C00173(cachedChapterContentSet, chapterList, bookSource, this, userNameSpace, bookInfo, localCacheDir, successCount, isEnd, failedCount, null), new AnonymousClass4(isEnd, cachedChapterContentSet, successCount, failedCount, response), c00161) == coroutine_suspended) {
                 }
                 response.write("event: end\n");
                 response.end("data: " + ExtKt.jsonEncode(MapsKt.mapOf(new Pair[]{TuplesKt.to("cachedCount", Boxing.boxInt(((Set) cachedChapterContentSet.element).size())), TuplesKt.to("successCount", Boxing.boxInt(successCount.element)), TuplesKt.to("failedCount", Boxing.boxInt(failedCount.element))}), false) + "\n\n");
@@ -9535,7 +9392,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$cacheBookSSE$3, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$cacheBookSSE$3.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$cacheBookSSE$3.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\u0010\n\u0000\n\u0002\u0010\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\b\u0010\u0000\u001a\u00020\u0001*\u00020\u00022\u0006\u0010\u0003\u001a\u00020\u0004H\u008a@"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "Lkotlinx/coroutines/CoroutineScope;", "it", PackageDocumentBase.PREFIX_OPF})
     @DebugMetadata(f = "BookController.kt", l = {2741, 2745}, i = {0, 0, 0, 0}, s = {"L$0", "L$1", "I$0", "I$1"}, n = {"$this$limitConcurrent", "chapterInfo", "it", "chapterIndex"}, m = "invokeSuspend", c = "com.htmake.reader.api.controller.BookController$cacheBookSSE$3")
     static final class C00173 extends SuspendLambda implements Function3<CoroutineScope, Integer, Continuation<? super Object>, Object> {
@@ -9689,6 +9546,43 @@ public final class BookController extends BaseController {
         }
     }
 
+    /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$cacheBookSSE$4, reason: invalid class name */
+    /* JADX INFO: compiled from: BookController.kt */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$cacheBookSSE$4.class */
+    @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\u001a\n\u0000\n\u0002\u0010\u000b\n\u0000\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\b\u0010\u0000\u001a\u00020\u00012\u0016\u0010\u0002\u001a\u0012\u0012\u0004\u0012\u00020\u00040\u0003j\b\u0012\u0004\u0012\u00020\u0004`\u00052\u0006\u0010\u0006\u001a\u00020\u0007H\n"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "list", "Ljava/util/ArrayList;", PackageDocumentBase.PREFIX_OPF, "Lkotlin/collections/ArrayList;", "loopCount", PackageDocumentBase.PREFIX_OPF})
+    static final class AnonymousClass4 extends Lambda implements Function2<ArrayList<Object>, Integer, Boolean> {
+        final /* synthetic */ Ref.BooleanRef $isEnd;
+        final /* synthetic */ Ref.ObjectRef<Set<Integer>> $cachedChapterContentSet;
+        final /* synthetic */ Ref.IntRef $successCount;
+        final /* synthetic */ Ref.IntRef $failedCount;
+        final /* synthetic */ HttpServerResponse $response;
+
+        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+        AnonymousClass4(Ref.BooleanRef $isEnd, Ref.ObjectRef<Set<Integer>> $cachedChapterContentSet, Ref.IntRef $successCount, Ref.IntRef $failedCount, HttpServerResponse $response) {
+            super(2);
+            this.$isEnd = $isEnd;
+            this.$cachedChapterContentSet = $cachedChapterContentSet;
+            this.$successCount = $successCount;
+            this.$failedCount = $failedCount;
+            this.$response = $response;
+        }
+
+        public /* bridge */ /* synthetic */ Object invoke(Object p1, Object p2) {
+            return Boolean.valueOf(invoke((ArrayList<Object>) p1, ((Number) p2).intValue()));
+        }
+
+        public final boolean invoke(@NotNull ArrayList<Object> list, int loopCount) {
+            Intrinsics.checkNotNullParameter(list, "list");
+            if (this.$isEnd.element) {
+                return false;
+            }
+            Map result = MapsKt.mapOf(new Pair[]{TuplesKt.to("cachedCount", Integer.valueOf(((Set) this.$cachedChapterContentSet.element).size())), TuplesKt.to("successCount", Integer.valueOf(this.$successCount.element)), TuplesKt.to("failedCount", Integer.valueOf(this.$failedCount.element))});
+            this.$response.write("data: " + ExtKt.jsonEncode(result, false) + "\n\n");
+            BookControllerKt.logger.info("Loop: {} list.size: {} result: {}", new Object[]{Integer.valueOf(loopCount), Integer.valueOf(list.size()), result});
+            return true;
+        }
+    }
+
     /* JADX WARN: Removed duplicated region for block: B:7:0x0027  */
     @Nullable
     /*
@@ -9747,7 +9641,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$cacheBookOnServer$2, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$cacheBookOnServer$2.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$cacheBookOnServer$2.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\n\n\u0000\n\u0002\u0010\u0002\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H\u008a@"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "Lkotlinx/coroutines/CoroutineScope;"})
     @DebugMetadata(f = "BookController.kt", l = {2800}, i = {}, s = {}, n = {}, m = "invokeSuspend", c = "com.htmake.reader.api.controller.BookController$cacheBookOnServer$2")
     static final class C00152 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super Unit>, Object> {
@@ -9794,11 +9688,11 @@ public final class BookController extends BaseController {
     }
 
     /* JADX WARN: Code restructure failed: missing block: B:11:0x0072, code lost:
-
+    
         if (0 < r40) goto L12;
      */
     /* JADX WARN: Code restructure failed: missing block: B:12:0x0075, code lost:
-
+    
         r0 = r39;
         r39 = r39 + 1;
         r0 = r36.getString(r0);
@@ -9806,53 +9700,53 @@ public final class BookController extends BaseController {
         r43 = r35.getShelfBookByURL(r0, r37);
      */
     /* JADX WARN: Code restructure failed: missing block: B:13:0x0097, code lost:
-
+    
         if (r43 != null) goto L15;
      */
     /* JADX WARN: Code restructure failed: missing block: B:14:0x009a, code lost:
-
+    
         com.htmake.reader.api.controller.BookControllerKt.logger.info("未找到书籍信息: {}", r0);
      */
     /* JADX WARN: Code restructure failed: missing block: B:16:0x00af, code lost:
-
+    
         if (r43.isLocalBook() == false) goto L18;
      */
     /* JADX WARN: Code restructure failed: missing block: B:17:0x00b2, code lost:
-
+    
         com.htmake.reader.api.controller.BookControllerKt.logger.info("本地书籍跳过缓存: {}", r0);
      */
     /* JADX WARN: Code restructure failed: missing block: B:18:0x00c2, code lost:
-
+    
         com.htmake.reader.api.controller.BookControllerKt.logger.info("开始缓存书籍: {}", r43);
         r44 = r35.getBookSourceStringBySourceURLOpt(r43.getOrigin(), r37);
         r0 = r44;
      */
     /* JADX WARN: Code restructure failed: missing block: B:19:0x00ea, code lost:
-
+    
         if (r0 == null) goto L22;
      */
     /* JADX WARN: Code restructure failed: missing block: B:21:0x00f4, code lost:
-
+    
         if (r0.length() != 0) goto L23;
      */
     /* JADX WARN: Code restructure failed: missing block: B:22:0x00f7, code lost:
-
+    
         r0 = true;
      */
     /* JADX WARN: Code restructure failed: missing block: B:23:0x00fb, code lost:
-
+    
         r0 = false;
      */
     /* JADX WARN: Code restructure failed: missing block: B:24:0x00fc, code lost:
-
+    
         if (r0 == false) goto L26;
      */
     /* JADX WARN: Code restructure failed: missing block: B:25:0x00ff, code lost:
-
+    
         com.htmake.reader.api.controller.BookControllerKt.logger.info("未找到书源信息: {}", r0);
      */
     /* JADX WARN: Code restructure failed: missing block: B:26:0x010f, code lost:
-
+    
         r60.L$0 = r35;
         r60.L$1 = r36;
         r60.L$2 = r37;
@@ -9868,46 +9762,46 @@ public final class BookController extends BaseController {
         r0 = getLocalChapterList$default(r35, r43, r44, false, r37, false, null, r60, 48, null);
      */
     /* JADX WARN: Code restructure failed: missing block: B:27:0x016f, code lost:
-
+    
         if (r0 != r0) goto L31;
      */
     /* JADX WARN: Code restructure failed: missing block: B:29:0x0174, code lost:
-
+    
         return r0;
      */
     /* JADX WARN: Code restructure failed: missing block: B:32:0x01e2, code lost:
-
+    
         if (0 <= r49) goto L33;
      */
     /* JADX WARN: Code restructure failed: missing block: B:33:0x01e5, code lost:
-
+    
         r0 = r48;
         r48 = r48 + 1;
      */
     /* JADX WARN: Code restructure failed: missing block: B:34:0x01f8, code lost:
-
+    
         if (r46.contains(kotlin.coroutines.jvm.internal.Boxing.boxInt(r0)) != false) goto L64;
      */
     /* JADX WARN: Code restructure failed: missing block: B:35:0x01fb, code lost:
-
+    
         r51 = r0;
         r52 = (io.legado.app.data.entities.BookChapter) r45.get(r0);
      */
     /* JADX WARN: Code restructure failed: missing block: B:36:0x020d, code lost:
-
+    
         r53 = null;
      */
     /* JADX WARN: Code restructure failed: missing block: B:37:0x021c, code lost:
-
+    
         if ((r51 + 1) >= r45.size()) goto L39;
      */
     /* JADX WARN: Code restructure failed: missing block: B:38:0x021f, code lost:
-
+    
         r0 = (io.legado.app.data.entities.BookChapter) r45.get(r51 + 1);
         r53 = r0.getUrl();
      */
     /* JADX WARN: Code restructure failed: missing block: B:39:0x0236, code lost:
-
+    
         r60.L$0 = r35;
         r60.L$1 = r36;
         r60.L$2 = r37;
@@ -9926,27 +9820,27 @@ public final class BookController extends BaseController {
         r0 = new io.legado.app.model.webBook.WebBook(r44, r35.getAppConfig().getDebugLog(), (io.legado.app.model.DebugLog) null, r37, 4, (kotlin.jvm.internal.DefaultConstructorMarker) null).getBookContent(r43, r52, r53, r60);
      */
     /* JADX WARN: Code restructure failed: missing block: B:41:0x02bd, code lost:
-
+    
         if (r0 != r0) goto L46;
      */
     /* JADX WARN: Code restructure failed: missing block: B:43:0x02c2, code lost:
-
+    
         return r0;
      */
     /* JADX WARN: Code restructure failed: missing block: B:65:0x04ed, code lost:
-
+    
         if (r48 <= r49) goto L33;
      */
     /* JADX WARN: Code restructure failed: missing block: B:66:0x04f0, code lost:
-
+    
         com.htmake.reader.api.controller.BookControllerKt.logger.info("缓存书籍完成: {}", r43);
      */
     /* JADX WARN: Code restructure failed: missing block: B:68:0x0501, code lost:
-
+    
         if (r39 < r40) goto L12;
      */
     /* JADX WARN: Code restructure failed: missing block: B:70:0x0507, code lost:
-
+    
         return kotlin.Unit.INSTANCE;
      */
     /* JADX WARN: Removed duplicated region for block: B:7:0x0027  */
@@ -10251,7 +10145,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$textToSpeech$2, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$textToSpeech$2.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$textToSpeech$2.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\n\n\u0000\n\u0002\u0010\u0002\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H\u008a@"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "Lkotlinx/coroutines/CoroutineScope;"})
     @DebugMetadata(f = "BookController.kt", l = {2942, 2943, 2944}, i = {}, s = {}, n = {}, m = "invokeSuspend", c = "com.htmake.reader.api.controller.BookController$textToSpeech$2")
     static final class C00892 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super Unit>, Object> {
@@ -10485,10 +10379,10 @@ public final class BookController extends BaseController {
         return bookController.ttsByApi(httpServerResponse, str, str2, map, continuation);
     }
 
-    /* JADX WARN: Not initialized variable reg: 21, insn: 0x0303: MOVE (r0 I:??[int, float, boolean, short, byte, char, OBJECT, ARRAY]) =
+    /* JADX WARN: Not initialized variable reg: 21, insn: 0x0303: MOVE (r0 I:??[int, float, boolean, short, byte, char, OBJECT, ARRAY]) = 
       (r21 I:??[int, float, boolean, short, byte, char, OBJECT, ARRAY] A[D('downloadErrorNo' kotlin.jvm.internal.Ref$IntRef)])
      (LINE:3078), block:B:79:0x0303 */
-    /* JADX WARN: Not initialized variable reg: 21, insn: 0x033b: MOVE (r0 I:??[int, float, boolean, short, byte, char, OBJECT, ARRAY]) =
+    /* JADX WARN: Not initialized variable reg: 21, insn: 0x033b: MOVE (r0 I:??[int, float, boolean, short, byte, char, OBJECT, ARRAY]) = 
       (r21 I:??[int, float, boolean, short, byte, char, OBJECT, ARRAY] A[D('downloadErrorNo' kotlin.jvm.internal.Ref$IntRef)])
      (LINE:3085), block:B:83:0x033b */
     /* JADX WARN: Removed duplicated region for block: B:21:0x0160  */
@@ -10668,33 +10562,11 @@ public final class BookController extends BaseController {
                 if (options != null) {
                     map.putAll(options);
                 }
-                final CaseInsensitiveHeaders multiMap = new CaseInsensitiveHeaders();
-                final C00922 c00922 = new C00922(multiMap);
-                map.forEach(new BiConsumer() { // from class: com.htmake.reader.api.controller.BookControllerKt$sam$java_util_function_BiConsumer$0
-                    @Override // java.util.function.BiConsumer
-                    public final /* synthetic */ void accept(Object p0, Object p1) {
-                        c00922.invoke(p0, p1);
-                    }
-                });
-                final String ttsUrl = "https://www.text-to-speech.cn/getSpeek.php";
+                CaseInsensitiveHeaders multiMap = new CaseInsensitiveHeaders();
+                map.forEach(new BookControllerKt$sam$java_util_function_BiConsumer$0(new C00922(multiMap)));
                 c00911.L$0 = response;
                 c00911.label = 1;
-                objAwaitResult = VertxCoroutineKt.awaitResult(new Function1<Handler<AsyncResult<HttpResponse<Buffer>>>, Unit>() { // from class: com.htmake.reader.api.controller.BookController$ttsByTextToSpeechCn$result$1
-                    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-                    {
-                        super(1);
-                    }
-
-                    public /* bridge */ /* synthetic */ Object invoke(Object p1) {
-                        invoke((Handler<AsyncResult<HttpResponse<Buffer>>>) p1);
-                        return Unit.INSTANCE;
-                    }
-
-                    public final void invoke(@NotNull Handler<AsyncResult<HttpResponse<Buffer>>> handler) {
-                        Intrinsics.checkNotNullParameter(handler, "handler");
-                        this.this$0.webClient.postAbs(ttsUrl).timeout(5000L).putHeader("Origin", "https://www.text-to-speech.cn").putHeader("Referer", "https://www.text-to-speech.cn/").putHeader(AppConst.UA_NAME, "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36").sendForm(multiMap, handler);
-                    }
-                }, c00911);
+                objAwaitResult = VertxCoroutineKt.awaitResult(new BookController$ttsByTextToSpeechCn$result$1(this, "https://www.text-to-speech.cn/getSpeek.php", multiMap), c00911);
                 if (objAwaitResult == coroutine_suspended) {
                     return coroutine_suspended;
                 }
@@ -10733,7 +10605,7 @@ public final class BookController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$ttsByTextToSpeechCn$2, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookController$ttsByTextToSpeechCn$2.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$ttsByTextToSpeechCn$2.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     /* synthetic */ class C00922 extends AdaptedFunctionReference implements Function2<String, String, Unit> {
         C00922(CaseInsensitiveHeaders receiver) {
@@ -11082,7 +10954,7 @@ public final class BookController extends BaseController {
     */
     public final Object exportToTxt(@NotNull File exportDir, @NotNull Book bookInfo, @NotNull String bookSource, @NotNull String userNameSpace, @NotNull Continuation<? super File> $completion) throws IOException {
         C00251 c00251;
-        final File bookFile;
+        File bookFile;
         if ($completion instanceof C00251) {
             c00251 = (C00251) $completion;
             if ((c00251.label & Integer.MIN_VALUE) != 0) {
@@ -11101,25 +10973,7 @@ public final class BookController extends BaseController {
                 bookFile = FileUtils.INSTANCE.createFileWithReplace(bookPath);
                 c00251.L$0 = bookFile;
                 c00251.label = 1;
-                if (getAllContents(bookInfo, bookSource, userNameSpace, new Function2<String, ArrayList<Triple<? extends String, ? extends Integer, ? extends String>>, Unit>() { // from class: com.htmake.reader.api.controller.BookController.exportToTxt.2
-                    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-                    {
-                        super(2);
-                    }
-
-                    public /* bridge */ /* synthetic */ Object invoke(Object p1, Object p2) {
-                        invoke((String) p1, (ArrayList<Triple<String, Integer, String>>) p2);
-                        return Unit.INSTANCE;
-                    }
-
-                    public final void invoke(@NotNull String text, @Nullable ArrayList<Triple<String, Integer, String>> srcList) {
-                        Intrinsics.checkNotNullParameter(text, NCXDocumentV2.NCXTags.text);
-                        File file = bookFile;
-                        Charset charsetForName = Charset.forName(this.getAppConfig().getExportCharset());
-                        Intrinsics.checkNotNullExpressionValue(charsetForName, "forName(appConfig.exportCharset)");
-                        FilesKt.appendText(file, text, charsetForName);
-                    }
-                }, c00251) == coroutine_suspended) {
+                if (getAllContents(bookInfo, bookSource, userNameSpace, new C00262(bookFile, this), c00251) == coroutine_suspended) {
                     return coroutine_suspended;
                 }
                 break;
@@ -11131,6 +10985,35 @@ public final class BookController extends BaseController {
                 throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
         }
         return bookFile;
+    }
+
+    /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookController$exportToTxt$2, reason: invalid class name and case insensitive filesystem */
+    /* JADX INFO: compiled from: BookController.kt */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookController$exportToTxt$2.class */
+    @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\u001e\n\u0000\n\u0002\u0010\u0002\n\u0000\n\u0002\u0010\u000e\n\u0000\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\u0010\b\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u00012\u0006\u0010\u0002\u001a\u00020\u00032>\u0010\u0004\u001a:\u0012\u0016\u0012\u0014\u0012\u0004\u0012\u00020\u0003\u0012\u0004\u0012\u00020\u0007\u0012\u0004\u0012\u00020\u00030\u0006\u0018\u00010\u0005j\u001c\u0012\u0016\u0012\u0014\u0012\u0004\u0012\u00020\u0003\u0012\u0004\u0012\u00020\u0007\u0012\u0004\u0012\u00020\u00030\u0006\u0018\u0001`\bH\n"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, NCXDocumentV2.NCXTags.text, PackageDocumentBase.PREFIX_OPF, "srcList", "Ljava/util/ArrayList;", "Lkotlin/Triple;", PackageDocumentBase.PREFIX_OPF, "Lkotlin/collections/ArrayList;"})
+    static final class C00262 extends Lambda implements Function2<String, ArrayList<Triple<? extends String, ? extends Integer, ? extends String>>, Unit> {
+        final /* synthetic */ File $bookFile;
+        final /* synthetic */ BookController this$0;
+
+        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+        C00262(File $bookFile, BookController this$0) {
+            super(2);
+            this.$bookFile = $bookFile;
+            this.this$0 = this$0;
+        }
+
+        public /* bridge */ /* synthetic */ Object invoke(Object p1, Object p2) {
+            invoke((String) p1, (ArrayList<Triple<String, Integer, String>>) p2);
+            return Unit.INSTANCE;
+        }
+
+        public final void invoke(@NotNull String text, @Nullable ArrayList<Triple<String, Integer, String>> srcList) {
+            Intrinsics.checkNotNullParameter(text, NCXDocumentV2.NCXTags.text);
+            File file = this.$bookFile;
+            Charset charsetForName = Charset.forName(this.this$0.getAppConfig().getExportCharset());
+            Intrinsics.checkNotNullExpressionValue(charsetForName, "forName(appConfig.exportCharset)");
+            FilesKt.appendText(file, text, charsetForName);
+        }
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -11369,13 +11252,8 @@ public final class BookController extends BaseController {
                             epubBook.setCoverImage(new Resource(byteArray2, "Images/cover.jpg"));
                             return Unit.INSTANCE;
                         }
-                        String str2 = null;
-                        Integer num = null;
-                        String str3 = null;
-                        Integer num2 = null;
-                        String str4 = null;
                         Object objM151fromJsonIoAF18A = BookSource.INSTANCE.m151fromJsonIoAF18A(bookSourceString);
-                        AnalyzeUrl analyzeUrl = new AnalyzeUrl(coverUrl, str2, num, str3, num2, str4, (BaseSource) (Result.isFailure-impl(objM151fromJsonIoAF18A) ? null : objM151fromJsonIoAF18A), null, null, null, null, 1982, null);
+                        AnalyzeUrl analyzeUrl = new AnalyzeUrl(coverUrl, null, null, null, null, null, (BaseSource) (Result.isFailure-impl(objM151fromJsonIoAF18A) ? null : objM151fromJsonIoAF18A), null, null, null, null, 1982, null);
                         c00841.L$0 = epubBook;
                         c00841.label = 1;
                         byteArrayAwait = analyzeUrl.getByteArrayAwait(c00841);
@@ -11521,11 +11399,11 @@ public final class BookController extends BaseController {
     }
 
     /* JADX WARN: Code restructure failed: missing block: B:105:0x04db, code lost:
-
+    
         if (r28 < r29) goto L106;
      */
     /* JADX WARN: Code restructure failed: missing block: B:106:0x04de, code lost:
-
+    
         r0 = r28;
         r28 = r28 + 1;
         r27 = r0;
@@ -11545,15 +11423,15 @@ public final class BookController extends BaseController {
         r0 = r13.searchChapter(r22, r0, r18, r34);
      */
     /* JADX WARN: Code restructure failed: missing block: B:107:0x0557, code lost:
-
+    
         if (r0 != r0) goto L111;
      */
     /* JADX WARN: Code restructure failed: missing block: B:109:0x055c, code lost:
-
+    
         return r0;
      */
     /* JADX WARN: Code restructure failed: missing block: B:120:0x05fb, code lost:
-
+    
         if (r28 < r29) goto L106;
      */
     /* JADX WARN: Path cross not found for [B:84:0x03a5, B:86:0x03af], limit reached: 124 */
@@ -11973,33 +11851,9 @@ public final class BookController extends BaseController {
             return ReturnData.setData$default(returnData, "NEED_SECURE_KEY", null, 2, null).setErrorMsg("请输入管理密码");
         }
         String[] backupFileNames = this.getBackupFileNames();
-        final ArrayList syncDataFileList = CollectionsKt.arrayListOf(Arrays.copyOf(backupFileNames, backupFileNames.length));
-        final BookController bookController = this;
-        Function1<String, Unit> function1 = new Function1<String, Unit>() { // from class: com.htmake.reader.api.controller.BookController$backupToMongodb$handler$1
-            /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-            {
-                super(1);
-            }
-
-            public /* bridge */ /* synthetic */ Object invoke(Object p1) {
-                invoke((String) p1);
-                return Unit.INSTANCE;
-            }
-
-            public final void invoke(@NotNull String userNameSpace) {
-                Intrinsics.checkNotNullParameter(userNameSpace, "userNameSpace");
-                Iterable $this$forEach$iv = syncDataFileList;
-                BookController bookController2 = bookController;
-                for (Object element$iv : $this$forEach$iv) {
-                    String it = (String) element$iv;
-                    String content = bookController2.getUserStorage(userNameSpace, it);
-                    if (content != null) {
-                        bookController2.saveUserStorage(userNameSpace, it, content);
-                    }
-                }
-            }
-        };
-        function1.invoke("default");
+        ArrayList syncDataFileList = CollectionsKt.arrayListOf(Arrays.copyOf(backupFileNames, backupFileNames.length));
+        Function1 handler = new BookController$backupToMongodb$handler$1(syncDataFileList, this);
+        handler.invoke("default");
         if (this.getAppConfig().getSecure()) {
             Map userMap = new LinkedHashMap();
             JsonObject userMapJson = ExtKt.asJsonObject(ExtKt.getStorage$default(new String[]{"data", "users"}, null, 2, null));
@@ -12016,7 +11870,7 @@ public final class BookController extends BaseController {
                     String str = (String) ((Map) element$iv.getValue()).getOrDefault("username", PackageDocumentBase.PREFIX_OPF);
                     String ns = str == null ? PackageDocumentBase.PREFIX_OPF : str;
                     if (ns.length() > 0) {
-                        function1.invoke(ns);
+                        handler.invoke(ns);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -12082,31 +11936,9 @@ public final class BookController extends BaseController {
             return ReturnData.setData$default(returnData, "NEED_SECURE_KEY", null, 2, null).setErrorMsg("请输入管理密码");
         }
         String[] backupFileNames = this.getBackupFileNames();
-        final ArrayList syncDataFileList = CollectionsKt.arrayListOf(Arrays.copyOf(backupFileNames, backupFileNames.length));
-        Function1<String, Unit> function1 = new Function1<String, Unit>() { // from class: com.htmake.reader.api.controller.BookController$restoreFromMongodb$handler$1
-            /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-            {
-                super(1);
-            }
-
-            public /* bridge */ /* synthetic */ Object invoke(Object p1) {
-                invoke((String) p1);
-                return Unit.INSTANCE;
-            }
-
-            public final void invoke(@NotNull String userNameSpace) {
-                Intrinsics.checkNotNullParameter(userNameSpace, "userNameSpace");
-                Iterable $this$forEach$iv = syncDataFileList;
-                for (Object element$iv : $this$forEach$iv) {
-                    String it = (String) element$iv;
-                    File file = new File(ExtKt.getWorkDir("storage", "data", userNameSpace, Intrinsics.stringPlus(it, ".json")));
-                    if (file.exists()) {
-                        file.delete();
-                    }
-                }
-            }
-        };
-        function1.invoke("default");
+        ArrayList syncDataFileList = CollectionsKt.arrayListOf(Arrays.copyOf(backupFileNames, backupFileNames.length));
+        Function1 handler = new BookController$restoreFromMongodb$handler$1(syncDataFileList);
+        handler.invoke("default");
         if (this.getAppConfig().getSecure()) {
             Map userMap = new LinkedHashMap();
             JsonObject userMapJson = ExtKt.asJsonObject(ExtKt.getStorage$default(new String[]{"data", "users"}, null, 2, null));
@@ -12123,7 +11955,7 @@ public final class BookController extends BaseController {
                     String str = (String) ((Map) element$iv.getValue()).getOrDefault("username", PackageDocumentBase.PREFIX_OPF);
                     String ns = str == null ? PackageDocumentBase.PREFIX_OPF : str;
                     if (ns.length() > 0) {
-                        function1.invoke(ns);
+                        handler.invoke(ns);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

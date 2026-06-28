@@ -1,11 +1,9 @@
 package com.htmake.reader.api.controller;
 
-import com.google.gson.reflect.TypeToken;
 import com.htmake.reader.api.ReturnData;
 import com.htmake.reader.entity.User;
 import com.htmake.reader.utils.ExtKt;
 import com.htmake.reader.utils.VertExtKt;
-import io.legado.app.constant.RSSKeywords;
 import io.legado.app.utils.EncoderUtils;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.JsonObject;
@@ -17,7 +15,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -52,13 +49,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /* JADX INFO: compiled from: WebdavController.kt */
-/* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/WebdavController.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/WebdavController.class */
 @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u0000>\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\u0010\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0010\u000b\n\u0002\b\n\u0018\u00002\u00020\u0001B3\u0012\u0006\u0010\u0002\u001a\u00020\u0003\u0012\u0006\u0010\u0004\u001a\u00020\u0005\u0012\u001c\u0010\u0006\u001a\u0018\u0012\u0004\u0012\u00020\b\u0012\b\u0012\u00060\tj\u0002`\n\u0012\u0004\u0012\u00020\u000b0\u0007¢\u0006\u0002\u0010\fJ\u0019\u0010\r\u001a\u00020\u000e2\u0006\u0010\u000f\u001a\u00020\bH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0010J\u000e\u0010\u0011\u001a\u00020\u00122\u0006\u0010\u000f\u001a\u00020\bJ\u0019\u0010\u0013\u001a\u00020\u000b2\u0006\u0010\u000f\u001a\u00020\bH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0010J\u0019\u0010\u0014\u001a\u00020\u000b2\u0006\u0010\u000f\u001a\u00020\bH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0010J\u0019\u0010\u0015\u001a\u00020\u000b2\u0006\u0010\u000f\u001a\u00020\bH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0010J\u0019\u0010\u0016\u001a\u00020\u000b2\u0006\u0010\u000f\u001a\u00020\bH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0010J\u0019\u0010\u0017\u001a\u00020\u000b2\u0006\u0010\u000f\u001a\u00020\bH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0010J\u0019\u0010\u0018\u001a\u00020\u000b2\u0006\u0010\u000f\u001a\u00020\bH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0010J\u0019\u0010\u0019\u001a\u00020\u000b2\u0006\u0010\u000f\u001a\u00020\bH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0010J\u0019\u0010\u001a\u001a\u00020\u000b2\u0006\u0010\u000f\u001a\u00020\bH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0010J\u0019\u0010\u001b\u001a\u00020\u000b2\u0006\u0010\u000f\u001a\u00020\bH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0010\u0082\u0002\u0004\n\u0002\b\u0019¨\u0006\u001c"}, d2 = {"Lcom/htmake/reader/api/controller/WebdavController;", "Lcom/htmake/reader/api/controller/BaseController;", "coroutineContext", "Lkotlin/coroutines/CoroutineContext;", "router", "Lio/vertx/ext/web/Router;", "onHandlerError", "Lkotlin/Function2;", "Lio/vertx/ext/web/RoutingContext;", "Ljava/lang/Exception;", "Lkotlin/Exception;", PackageDocumentBase.PREFIX_OPF, "(Lkotlin/coroutines/CoroutineContext;Lio/vertx/ext/web/Router;Lkotlin/jvm/functions/Function2;)V", "backupToWebdav", "Lcom/htmake/reader/api/ReturnData;", "context", "(Lio/vertx/ext/web/RoutingContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "checkAuthorization", PackageDocumentBase.PREFIX_OPF, "webdavCopy", "webdavDelete", "webdavDownload", "webdavList", "webdavLock", "webdavMkdir", "webdavMove", "webdavUnLock", "webdavUpload", "reader-pro"})
 public final class WebdavController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.WebdavController$backupToWebdav$1, reason: invalid class name */
     /* JADX INFO: compiled from: WebdavController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/WebdavController$backupToWebdav$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/WebdavController$backupToWebdav$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "WebdavController.kt", l = {518, 533, 537}, i = {0, 0, 0, 1, 1}, s = {"L$0", "L$1", "L$2", "L$1", "L$2"}, n = {"this", "context", "returnData", "bookController", "userNameSpace"}, m = "backupToWebdav", c = "com.htmake.reader.api.controller.WebdavController")
     static final class AnonymousClass1 extends ContinuationImpl {
@@ -82,7 +79,7 @@ public final class WebdavController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.WebdavController$webdavUpload$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: WebdavController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/WebdavController$webdavUpload$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/WebdavController$webdavUpload$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "WebdavController.kt", l = {357}, i = {}, s = {}, n = {}, m = "webdavUpload", c = "com.htmake.reader.api.controller.WebdavController")
     static final class C01441 extends ContinuationImpl {
@@ -219,7 +216,6 @@ public final class WebdavController extends BaseController {
         }
     }
 
-    /* JADX WARN: Type inference failed for: r2v9, types: [com.htmake.reader.api.controller.WebdavController$checkAuthorization$$inlined$toDataClass$1] */
     public final boolean checkAuthorization(@NotNull RoutingContext context) {
         String json;
         Intrinsics.checkNotNullParameter(context, "context");
@@ -261,8 +257,7 @@ public final class WebdavController extends BaseController {
                 json = (String) obj;
             }
             String json$iv$iv = json;
-            User userInfo = (User) ExtKt.getGson().fromJson(json$iv$iv, new TypeToken<User>() { // from class: com.htmake.reader.api.controller.WebdavController$checkAuthorization$$inlined$toDataClass$1
-            }.getType());
+            User userInfo = (User) ExtKt.getGson().fromJson(json$iv$iv, new WebdavController$checkAuthorization$$inlined$toDataClass$1().getType());
             if (userInfo == null) {
                 return false;
             }
@@ -293,42 +288,12 @@ public final class WebdavController extends BaseController {
             context.response().setStatusCode(404).end();
             return Unit.INSTANCE;
         }
-        final Ref.ObjectRef dirResponse = new Ref.ObjectRef();
+        Ref.ObjectRef dirResponse = new Ref.ObjectRef();
         dirResponse.element = "<D:response>\n                <D:href>%s</D:href>\n                <D:propstat>\n                    <D:status>HTTP/1.1 200 OK</D:status>\n                    <D:prop>\n                        <D:getlastmodified>%s</D:getlastmodified>\n                        <D:creationdate>%s</D:creationdate>\n                        <D:resourcetype>\n                            <D:collection />\n                        </D:resourcetype>\n                        <D:displayname>%s</D:displayname>\n                    </D:prop>\n                </D:propstat>\n            </D:response>\n        ";
-        final Ref.ObjectRef fileResponse = new Ref.ObjectRef();
+        Ref.ObjectRef fileResponse = new Ref.ObjectRef();
         fileResponse.element = "<D:response>\n                <D:href>%s</D:href>\n                <D:propstat>\n                    <D:status>HTTP/1.1 200 OK</D:status>\n                    <D:prop>\n                        <D:getlastmodified>%s</D:getlastmodified>\n                        <D:creationdate>%s</D:creationdate>\n                        <D:resourcetype />\n                        <D:displayname>%s</D:displayname>\n                        <D:getcontentlength>%s</D:getcontentlength>\n                        <D:getcontenttype>%s</D:getcontenttype>\n                    </D:prop>\n                </D:propstat>\n            </D:response>\n        ";
         String strAbsoluteURI = context.request().absoluteURI();
-        Object formatter = new Function3<File, String, Boolean, String>() { // from class: com.htmake.reader.api.controller.WebdavController$webdavList$formatter$1
-            /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-            {
-                super(3);
-            }
-
-            public /* bridge */ /* synthetic */ Object invoke(Object p1, Object p2, Object p3) {
-                return invoke((File) p1, (String) p2, ((Boolean) p3).booleanValue());
-            }
-
-            @NotNull
-            public final String invoke(@NotNull File f, @NotNull String url, boolean showName) {
-                Intrinsics.checkNotNullParameter(f, "f");
-                Intrinsics.checkNotNullParameter(url, RSSKeywords.RSS_ITEM_URL);
-                String name = showName ? f.getName() : PackageDocumentBase.PREFIX_OPF;
-                String modifiedDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Long.valueOf(f.lastModified()));
-                if (f.isFile()) {
-                    StringCompanionObject stringCompanionObject = StringCompanionObject.INSTANCE;
-                    String str = (String) fileResponse.element;
-                    Object[] objArr = {url, modifiedDate, modifiedDate, name, Long.valueOf(f.length()), PackageDocumentBase.PREFIX_OPF};
-                    String str2 = String.format(str, Arrays.copyOf(objArr, objArr.length));
-                    Intrinsics.checkNotNullExpressionValue(str2, "java.lang.String.format(format, *args)");
-                    return str2;
-                }
-                StringCompanionObject stringCompanionObject2 = StringCompanionObject.INSTANCE;
-                Object[] objArr2 = {url, modifiedDate, modifiedDate, name};
-                String str3 = String.format((String) dirResponse.element, Arrays.copyOf(objArr2, objArr2.length));
-                Intrinsics.checkNotNullExpressionValue(str3, "java.lang.String.format(format, *args)");
-                return str3;
-            }
-        };
+        Object formatter = new WebdavController$webdavList$formatter$1(fileResponse, dirResponse);
         if (file.isFile()) {
             StringCompanionObject stringCompanionObject = StringCompanionObject.INSTANCE;
             Intrinsics.checkNotNullExpressionValue(strAbsoluteURI, "fileUrl");

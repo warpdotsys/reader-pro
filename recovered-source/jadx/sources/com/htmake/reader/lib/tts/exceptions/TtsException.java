@@ -1,6 +1,6 @@
 package com.htmake.reader.lib.tts.exceptions;
 
-/* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/lib/tts/exceptions/TtsException.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/lib/tts/exceptions/TtsException.class */
 public class TtsException extends RuntimeException {
     private TtsException(String message) {
         super(message);

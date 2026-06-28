@@ -4,7 +4,7 @@ import java.io.Serializable;
 import me.ag2s.epublib.epub.PackageDocumentBase;
 import me.ag2s.epublib.util.StringUtil;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/domain/Author.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/domain/Author.class */
 public class Author implements Serializable {
     private static final long serialVersionUID = 6663408501416574200L;
     private String firstname;

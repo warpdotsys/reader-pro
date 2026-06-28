@@ -6,7 +6,7 @@ import me.ag2s.umdlib.tool.UmdUtils;
 import me.ag2s.umdlib.tool.WrapOutputStream;
 import org.kxml2.wap.Wbxml;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/umdlib/domain/UmdCover.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/umdlib/domain/UmdCover.class */
 public class UmdCover {
     private static int DEFAULT_COVER_WIDTH = 120;
     private static int DEFAULT_COVER_HEIGHT = 160;

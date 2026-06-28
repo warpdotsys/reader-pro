@@ -10,7 +10,7 @@ import me.ag2s.umdlib.tool.UmdUtils;
 import org.kxml2.kdom.Node;
 import org.kxml2.wap.Wbxml;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/umdlib/umd/UmdReader.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/umdlib/umd/UmdReader.class */
 public class UmdReader {
     UmdBook book;
     InputStream inputStream;

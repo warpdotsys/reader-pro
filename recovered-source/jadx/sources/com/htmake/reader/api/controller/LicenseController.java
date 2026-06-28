@@ -4,14 +4,10 @@ import com.htmake.reader.api.ReturnData;
 import com.htmake.reader.entity.ActiveLicense;
 import com.htmake.reader.entity.License;
 import com.htmake.reader.utils.ExtKt;
-import com.htmake.reader.utils.SpringContextUtils;
 import com.htmake.reader.utils.VertExtKt;
 import io.legado.app.utils.ACache;
 import io.legado.app.utils.Base64;
 import io.legado.app.utils.EncoderUtils;
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Handler;
-import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
@@ -51,8 +47,6 @@ import kotlin.coroutines.jvm.internal.Boxing;
 import kotlin.coroutines.jvm.internal.ContinuationImpl;
 import kotlin.coroutines.jvm.internal.DebugMetadata;
 import kotlin.coroutines.jvm.internal.SuspendLambda;
-import kotlin.jvm.functions.Function0;
-import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
 import kotlin.jvm.internal.DefaultConstructorMarker;
 import kotlin.jvm.internal.Intrinsics;
@@ -70,7 +64,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /* JADX INFO: compiled from: LicenseController.kt */
-/* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/LicenseController.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/LicenseController.class */
 @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u0000H\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0010\u0011\n\u0002\u0010\u000e\n\u0002\b\u0006\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0004\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0010\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u000b\u0018\u00002\u00020\u0001B\r\u0012\u0006\u0010\u0002\u001a\u00020\u0003¢\u0006\u0002\u0010\u0004J\u0019\u0010\u0014\u001a\u00020\u00152\u0006\u0010\u0016\u001a\u00020\u0017H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0018J\u0019\u0010\u0019\u001a\u00020\u001a2\u0006\u0010\u001b\u001a\u00020\u001cH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u001dJ\u0019\u0010\u001e\u001a\u00020\u00152\u0006\u0010\u0016\u001a\u00020\u0017H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0018J\u0019\u0010\u001f\u001a\u00020\u00152\u0006\u0010\u0016\u001a\u00020\u0017H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0018J\u0019\u0010 \u001a\u00020\u00152\u0006\u0010\u0016\u001a\u00020\u0017H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0018J\u0019\u0010!\u001a\u00020\u00152\u0006\u0010\u0016\u001a\u00020\u0017H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0018J\u0019\u0010\"\u001a\u00020\u001a2\u0006\u0010\u0016\u001a\u00020\u0017H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0018J\u0019\u0010#\u001a\u00020\u00152\u0006\u0010\u0016\u001a\u00020\u0017H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0018J\u0019\u0010$\u001a\u00020\u00152\u0006\u0010\u0016\u001a\u00020\u0017H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0018J\u0019\u0010%\u001a\u00020\u00152\u0006\u0010\u0016\u001a\u00020\u0017H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0018J\u0019\u0010&\u001a\u00020\u00152\u0006\u0010\u0016\u001a\u00020\u0017H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0018R!\u0010\u0005\u001a\b\u0012\u0004\u0012\u00020\u00070\u00068FX\u0086\u0084\u0002¢\u0006\f\n\u0004\b\n\u0010\u000b\u001a\u0004\b\b\u0010\tR\u000e\u0010\f\u001a\u00020\u0007X\u0082\u000e¢\u0006\u0002\n\u0000R\u000e\u0010\r\u001a\u00020\u000eX\u0082\u000e¢\u0006\u0002\n\u0000R\u001b\u0010\u000f\u001a\u00020\u00108BX\u0082\u0084\u0002¢\u0006\f\n\u0004\b\u0013\u0010\u000b\u001a\u0004\b\u0011\u0010\u0012\u0082\u0002\u0004\n\u0002\b\u0019¨\u0006'"}, d2 = {"Lcom/htmake/reader/api/controller/LicenseController;", "Lcom/htmake/reader/api/controller/BaseController;", "coroutineContext", "Lkotlin/coroutines/CoroutineContext;", "(Lkotlin/coroutines/CoroutineContext;)V", "backupFileNames", PackageDocumentBase.PREFIX_OPF, PackageDocumentBase.PREFIX_OPF, "getBackupFileNames", "()[Ljava/lang/String;", "backupFileNames$delegate", "Lkotlin/Lazy;", "privateKeyContent", "tryCodeCache", "Lio/legado/app/utils/ACache;", "webClient", "Lio/vertx/ext/web/client/WebClient;", "getWebClient", "()Lio/vertx/ext/web/client/WebClient;", "webClient$delegate", "activateLicense", "Lcom/htmake/reader/api/ReturnData;", "context", "Lio/vertx/ext/web/RoutingContext;", "(Lio/vertx/ext/web/RoutingContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "checkLicense", PackageDocumentBase.PREFIX_OPF, "license", "Lcom/htmake/reader/entity/License;", "(Lcom/htmake/reader/entity/License;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "decryptLicense", "generateKeys", "generateLicense", "getLicense", "importLicense", "isHostValid", "isLicenseValid", "sendCodeToEmail", "supplyLicense", "reader-pro"})
 public final class LicenseController extends BaseController {
 
@@ -90,7 +84,7 @@ public final class LicenseController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.LicenseController$importLicense$1, reason: invalid class name */
     /* JADX INFO: compiled from: LicenseController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/LicenseController$importLicense$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/LicenseController$importLicense$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "LicenseController.kt", l = {118}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "importLicense", c = "com.htmake.reader.api.controller.LicenseController")
     static final class AnonymousClass1 extends ContinuationImpl {
@@ -116,21 +110,10 @@ public final class LicenseController extends BaseController {
     public LicenseController(@NotNull CoroutineContext coroutineContext) {
         super(coroutineContext);
         Intrinsics.checkNotNullParameter(coroutineContext, "coroutineContext");
-        this.webClient = LazyKt.lazy(new Function0<WebClient>() { // from class: com.htmake.reader.api.controller.LicenseController$webClient$2
-            /* JADX INFO: renamed from: invoke, reason: merged with bridge method [inline-methods] */
-            public final WebClient m53invoke() {
-                return (WebClient) SpringContextUtils.getBean("webClient", WebClient.class);
-            }
-        });
+        this.webClient = LazyKt.lazy(LicenseController$webClient$2.INSTANCE);
         this.privateKeyContent = PackageDocumentBase.PREFIX_OPF;
         this.tryCodeCache = ACache.INSTANCE.get("tryCodeCache", 2000000L, 10000);
-        this.backupFileNames = LazyKt.lazy(new Function0<String[]>() { // from class: com.htmake.reader.api.controller.LicenseController$backupFileNames$2
-            @NotNull
-            /* JADX INFO: renamed from: invoke, reason: merged with bridge method [inline-methods] */
-            public final String[] m51invoke() {
-                return new String[]{"bookSource.json", "bookshelf.json", "bookGroup.json", "rssSources.json", "replaceRule.json", "bookmark.json", "userConfig.json"};
-            }
-        });
+        this.backupFileNames = LazyKt.lazy(LicenseController$backupFileNames$2.INSTANCE);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -217,7 +200,7 @@ public final class LicenseController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.LicenseController$importLicense$2, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: LicenseController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/LicenseController$importLicense$2.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/LicenseController$importLicense$2.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\n\n\u0000\n\u0002\u0010\u0002\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H\u008a@"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "Lkotlinx/coroutines/CoroutineScope;"})
     @DebugMetadata(f = "LicenseController.kt", l = {141}, i = {0}, s = {"L$0"}, n = {"$this$launch"}, m = "invokeSuspend", c = "com.htmake.reader.api.controller.LicenseController$importLicense$2")
     static final class C01242 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super Unit>, Object> {
@@ -262,27 +245,9 @@ public final class LicenseController extends BaseController {
                 case 0:
                     ResultKt.throwOnFailure($result);
                     $this$launch = (CoroutineScope) this.L$0;
-                    final LicenseController licenseController = LicenseController.this;
-                    final Ref.ObjectRef<String> objectRef = this.$checkUrl;
-                    final String str = this.$content;
                     this.L$0 = $this$launch;
                     this.label = 1;
-                    objAwaitResult = VertxCoroutineKt.awaitResult(new Function1<Handler<AsyncResult<HttpResponse<Buffer>>>, Unit>() { // from class: com.htmake.reader.api.controller.LicenseController$importLicense$2$result$1
-                        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-                        {
-                            super(1);
-                        }
-
-                        public /* bridge */ /* synthetic */ Object invoke(Object p1) {
-                            invoke((Handler<AsyncResult<HttpResponse<Buffer>>>) p1);
-                            return Unit.INSTANCE;
-                        }
-
-                        public final void invoke(@NotNull Handler<AsyncResult<HttpResponse<Buffer>>> handler) {
-                            Intrinsics.checkNotNullParameter(handler, "handler");
-                            licenseController.getWebClient().postAbs((String) objectRef.element).timeout(5000L).sendJsonObject(new JsonObject(MapsKt.mapOf(TuplesKt.to("content", str))), handler);
-                        }
-                    }, (Continuation) this);
+                    objAwaitResult = VertxCoroutineKt.awaitResult(new LicenseController$importLicense$2$result$1(LicenseController.this, this.$checkUrl, this.$content), (Continuation) this);
                     if (objAwaitResult == coroutine_suspended) {
                         return coroutine_suspended;
                     }
@@ -672,7 +637,7 @@ public final class LicenseController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.LicenseController$checkLicense$2, reason: invalid class name */
     /* JADX INFO: compiled from: LicenseController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/LicenseController$checkLicense$2.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/LicenseController$checkLicense$2.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\n\n\u0000\n\u0002\u0010\u0002\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H\u008a@"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "Lkotlinx/coroutines/CoroutineScope;"})
     @DebugMetadata(f = "LicenseController.kt", l = {431}, i = {0}, s = {"L$0"}, n = {"$this$launch"}, m = "invokeSuspend", c = "com.htmake.reader.api.controller.LicenseController$checkLicense$2")
     static final class AnonymousClass2 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super Unit>, Object> {
@@ -711,26 +676,9 @@ public final class LicenseController extends BaseController {
                 case 0:
                     ResultKt.throwOnFailure($result);
                     $this$launch = (CoroutineScope) this.L$0;
-                    final LicenseController licenseController = LicenseController.this;
-                    final Ref.ObjectRef<String> objectRef = this.$checkUrl;
                     this.L$0 = $this$launch;
                     this.label = 1;
-                    objAwaitResult = VertxCoroutineKt.awaitResult(new Function1<Handler<AsyncResult<HttpResponse<Buffer>>>, Unit>() { // from class: com.htmake.reader.api.controller.LicenseController$checkLicense$2$result$1
-                        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-                        {
-                            super(1);
-                        }
-
-                        public /* bridge */ /* synthetic */ Object invoke(Object p1) {
-                            invoke((Handler<AsyncResult<HttpResponse<Buffer>>>) p1);
-                            return Unit.INSTANCE;
-                        }
-
-                        public final void invoke(@NotNull Handler<AsyncResult<HttpResponse<Buffer>>> handler) {
-                            Intrinsics.checkNotNullParameter(handler, "handler");
-                            licenseController.getWebClient().getAbs((String) objectRef.element).timeout(5000L).send(handler);
-                        }
-                    }, (Continuation) this);
+                    objAwaitResult = VertxCoroutineKt.awaitResult(new LicenseController$checkLicense$2$result$1(LicenseController.this, this.$checkUrl), (Continuation) this);
                     if (objAwaitResult == coroutine_suspended) {
                         return coroutine_suspended;
                     }

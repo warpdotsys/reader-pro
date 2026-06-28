@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/domain/TOCReference.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/domain/TOCReference.class */
 public class TOCReference extends TitledResourceReference implements Serializable {
     private static final long serialVersionUID = 5787958246077042456L;
     private List<TOCReference> children;

@@ -1,22 +1,16 @@
 package io.legado.app.data.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import io.legado.app.constant.RSSKeywords;
 import io.legado.app.data.entities.BaseBook;
 import io.legado.app.utils.GsonExtensionsKt;
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import kotlin.Lazy;
 import kotlin.LazyKt;
 import kotlin.Metadata;
-import kotlin.Result;
-import kotlin.ResultKt;
 import kotlin.collections.SetsKt;
-import kotlin.jvm.functions.Function0;
 import kotlin.jvm.internal.DefaultConstructorMarker;
 import kotlin.jvm.internal.Intrinsics;
 import me.ag2s.epublib.epub.PackageDocumentBase;
@@ -26,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 import org.kxml2.wap.Wbxml;
 
 /* JADX INFO: compiled from: SearchBook.kt */
-/* JADX INFO: loaded from: app-classes.jar:io/legado/app/data/entities/SearchBook.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/data/entities/SearchBook.class */
 @JsonIgnoreProperties({"variableMap", "infoHtml", "tocHtml", "origins", "kindList"})
 @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u0000Z\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\u0010\u000f\n\u0000\n\u0002\u0010\u000e\n\u0002\b\u0003\n\u0002\u0010\b\n\u0002\b\t\n\u0002\u0010\t\n\u0002\b \n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0011\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0007\n\u0002\u0010\u0002\n\u0002\b\u0013\n\u0002\u0010\u000b\n\u0002\u0010\u0000\n\u0002\b\b\n\u0002\u0018\u0002\n\u0002\b\u0002\b\u0087\b\u0018\u00002\u00020\u00012\b\u0012\u0004\u0012\u00020\u00000\u0002B§\u0001\u0012\b\b\u0002\u0010\u0003\u001a\u00020\u0004\u0012\b\b\u0002\u0010\u0005\u001a\u00020\u0004\u0012\b\b\u0002\u0010\u0006\u001a\u00020\u0004\u0012\b\b\u0002\u0010\u0007\u001a\u00020\b\u0012\b\b\u0002\u0010\t\u001a\u00020\u0004\u0012\b\b\u0002\u0010\n\u001a\u00020\u0004\u0012\n\b\u0002\u0010\u000b\u001a\u0004\u0018\u00010\u0004\u0012\n\b\u0002\u0010\f\u001a\u0004\u0018\u00010\u0004\u0012\n\b\u0002\u0010\r\u001a\u0004\u0018\u00010\u0004\u0012\n\b\u0002\u0010\u000e\u001a\u0004\u0018\u00010\u0004\u0012\n\b\u0002\u0010\u000f\u001a\u0004\u0018\u00010\u0004\u0012\b\b\u0002\u0010\u0010\u001a\u00020\u0004\u0012\b\b\u0002\u0010\u0011\u001a\u00020\u0012\u0012\n\b\u0002\u0010\u0013\u001a\u0004\u0018\u00010\u0004\u0012\b\b\u0002\u0010\u0014\u001a\u00020\b¢\u0006\u0002\u0010\u0015J\u000e\u0010N\u001a\u00020O2\u0006\u0010\u0005\u001a\u00020\u0004J\u0011\u0010P\u001a\u00020\b2\u0006\u0010Q\u001a\u00020\u0000H\u0096\u0002J\t\u0010R\u001a\u00020\u0004HÆ\u0003J\u000b\u0010S\u001a\u0004\u0018\u00010\u0004HÆ\u0003J\u000b\u0010T\u001a\u0004\u0018\u00010\u0004HÆ\u0003J\t\u0010U\u001a\u00020\u0004HÆ\u0003J\t\u0010V\u001a\u00020\u0012HÆ\u0003J\u000b\u0010W\u001a\u0004\u0018\u00010\u0004HÆ\u0003J\t\u0010X\u001a\u00020\bHÆ\u0003J\t\u0010Y\u001a\u00020\u0004HÆ\u0003J\t\u0010Z\u001a\u00020\u0004HÆ\u0003J\t\u0010[\u001a\u00020\bHÆ\u0003J\t\u0010\\\u001a\u00020\u0004HÆ\u0003J\t\u0010]\u001a\u00020\u0004HÆ\u0003J\u000b\u0010^\u001a\u0004\u0018\u00010\u0004HÆ\u0003J\u000b\u0010_\u001a\u0004\u0018\u00010\u0004HÆ\u0003J\u000b\u0010`\u001a\u0004\u0018\u00010\u0004HÆ\u0003J«\u0001\u0010a\u001a\u00020\u00002\b\b\u0002\u0010\u0003\u001a\u00020\u00042\b\b\u0002\u0010\u0005\u001a\u00020\u00042\b\b\u0002\u0010\u0006\u001a\u00020\u00042\b\b\u0002\u0010\u0007\u001a\u00020\b2\b\b\u0002\u0010\t\u001a\u00020\u00042\b\b\u0002\u0010\n\u001a\u00020\u00042\n\b\u0002\u0010\u000b\u001a\u0004\u0018\u00010\u00042\n\b\u0002\u0010\f\u001a\u0004\u0018\u00010\u00042\n\b\u0002\u0010\r\u001a\u0004\u0018\u00010\u00042\n\b\u0002\u0010\u000e\u001a\u0004\u0018\u00010\u00042\n\b\u0002\u0010\u000f\u001a\u0004\u0018\u00010\u00042\b\b\u0002\u0010\u0010\u001a\u00020\u00042\b\b\u0002\u0010\u0011\u001a\u00020\u00122\n\b\u0002\u0010\u0013\u001a\u0004\u0018\u00010\u00042\b\b\u0002\u0010\u0014\u001a\u00020\bHÆ\u0001J\u0013\u0010b\u001a\u00020c2\b\u0010Q\u001a\u0004\u0018\u00010dH\u0096\u0002J\b\u0010e\u001a\u00020\u0004H\u0016J\b\u0010f\u001a\u00020\bH\u0016J\u001a\u0010g\u001a\u00020O2\u0006\u0010h\u001a\u00020\u00042\b\u0010i\u001a\u0004\u0018\u00010\u0004H\u0016J\u000e\u0010j\u001a\u00020O2\u0006\u0010k\u001a\u00020\u0004J\u0006\u0010l\u001a\u00020mJ\t\u0010n\u001a\u00020\u0004HÖ\u0001R\u000e\u0010\u0016\u001a\u00020\u0004X\u0082\u000e¢\u0006\u0002\n\u0000R\u001a\u0010\n\u001a\u00020\u0004X\u0096\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\u0017\u0010\u0018\"\u0004\b\u0019\u0010\u001aR\u001a\u0010\u0003\u001a\u00020\u0004X\u0096\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\u001b\u0010\u0018\"\u0004\b\u001c\u0010\u001aR\u001c\u0010\f\u001a\u0004\u0018\u00010\u0004X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\u001d\u0010\u0018\"\u0004\b\u001e\u0010\u001aR\u001c\u0010\u001f\u001a\u0004\u0018\u00010\u0004X\u0096\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b \u0010\u0018\"\u0004\b!\u0010\u001aR\u001c\u0010\r\u001a\u0004\u0018\u00010\u0004X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\"\u0010\u0018\"\u0004\b#\u0010\u001aR\u001c\u0010\u000b\u001a\u0004\u0018\u00010\u0004X\u0096\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b$\u0010\u0018\"\u0004\b%\u0010\u001aR\u001c\u0010\u000f\u001a\u0004\u0018\u00010\u0004X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b&\u0010\u0018\"\u0004\b'\u0010\u001aR\u001a\u0010\t\u001a\u00020\u0004X\u0096\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b(\u0010\u0018\"\u0004\b)\u0010\u001aR\u001a\u0010\u0005\u001a\u00020\u0004X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b*\u0010\u0018\"\u0004\b+\u0010\u001aR\u001a\u0010\u0006\u001a\u00020\u0004X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b,\u0010\u0018\"\u0004\b-\u0010\u001aR\u001a\u0010\u0014\u001a\u00020\bX\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b.\u0010/\"\u0004\b0\u00101RF\u00105\u001a\u0016\u0012\u0004\u0012\u00020\u0004\u0018\u000103j\n\u0012\u0004\u0012\u00020\u0004\u0018\u0001`42\u001a\u00102\u001a\u0016\u0012\u0004\u0012\u00020\u0004\u0018\u000103j\n\u0012\u0004\u0012\u00020\u0004\u0018\u0001`4@BX\u0086\u000e¢\u0006\b\n\u0000\u001a\u0004\b6\u00107R\u001a\u0010\u0011\u001a\u00020\u0012X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b8\u00109\"\u0004\b:\u0010;R\u001c\u0010<\u001a\u0004\u0018\u00010\u0004X\u0096\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b=\u0010\u0018\"\u0004\b>\u0010\u001aR\u001a\u0010\u0010\u001a\u00020\u0004X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b?\u0010\u0018\"\u0004\b@\u0010\u001aR\u001a\u0010\u0007\u001a\u00020\bX\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bA\u0010/\"\u0004\bB\u00101R\u001c\u0010\u0013\u001a\u0004\u0018\u00010\u0004X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bC\u0010\u0018\"\u0004\bD\u0010\u001aR7\u0010E\u001a\u001e\u0012\u0004\u0012\u00020\u0004\u0012\u0004\u0012\u00020\u00040Fj\u000e\u0012\u0004\u0012\u00020\u0004\u0012\u0004\u0012\u00020\u0004`G8VX\u0096\u0084\u0002¢\u0006\f\n\u0004\bJ\u0010K\u001a\u0004\bH\u0010IR\u001c\u0010\u000e\u001a\u0004\u0018\u00010\u0004X\u0096\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bL\u0010\u0018\"\u0004\bM\u0010\u001a¨\u0006o"}, d2 = {"Lio/legado/app/data/entities/SearchBook;", "Lio/legado/app/data/entities/BaseBook;", PackageDocumentBase.PREFIX_OPF, "bookUrl", PackageDocumentBase.PREFIX_OPF, "origin", "originName", "type", PackageDocumentBase.PREFIX_OPF, "name", "author", "kind", "coverUrl", "intro", "wordCount", "latestChapterTitle", "tocUrl", RSSKeywords.RSS_ITEM_TIME, PackageDocumentBase.PREFIX_OPF, "variable", "originOrder", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;JLjava/lang/String;I)V", "_userNameSpace", "getAuthor", "()Ljava/lang/String;", "setAuthor", "(Ljava/lang/String;)V", "getBookUrl", "setBookUrl", "getCoverUrl", "setCoverUrl", "infoHtml", "getInfoHtml", "setInfoHtml", "getIntro", "setIntro", "getKind", "setKind", "getLatestChapterTitle", "setLatestChapterTitle", "getName", "setName", "getOrigin", "setOrigin", "getOriginName", "setOriginName", "getOriginOrder", "()I", "setOriginOrder", "(I)V", "<set-?>", "Ljava/util/LinkedHashSet;", "Lkotlin/collections/LinkedHashSet;", "origins", "getOrigins", "()Ljava/util/LinkedHashSet;", "getTime", "()J", "setTime", "(J)V", "tocHtml", "getTocHtml", "setTocHtml", "getTocUrl", "setTocUrl", "getType", "setType", "getVariable", "setVariable", "variableMap", "Ljava/util/HashMap;", "Lkotlin/collections/HashMap;", "getVariableMap", "()Ljava/util/HashMap;", "variableMap$delegate", "Lkotlin/Lazy;", "getWordCount", "setWordCount", "addOrigin", PackageDocumentBase.PREFIX_OPF, "compareTo", "other", "component1", "component10", "component11", "component12", "component13", "component14", "component15", "component2", "component3", "component4", "component5", "component6", "component7", "component8", "component9", "copy", "equals", PackageDocumentBase.PREFIX_OPF, PackageDocumentBase.PREFIX_OPF, "getUserNameSpace", "hashCode", "putVariable", "key", "value", "setUserNameSpace", "nameSpace", "toBook", "Lio/legado/app/data/entities/Book;", "toString", "reader-pro"})
 public final /* data */ class SearchBook implements BaseBook, Comparable<SearchBook> {
@@ -252,37 +246,7 @@ public final /* data */ class SearchBook implements BaseBook, Comparable<SearchB
         this.time = time;
         this.variable = variable;
         this.originOrder = originOrder;
-        this.variableMap = LazyKt.lazy(new Function0<HashMap<String, String>>() { // from class: io.legado.app.data.entities.SearchBook$variableMap$2
-            {
-                super(0);
-            }
-
-            /* JADX WARN: Type inference failed for: r2v1, types: [io.legado.app.data.entities.SearchBook$variableMap$2$invoke$$inlined$fromJsonObject$1] */
-            @NotNull
-            /* JADX INFO: renamed from: invoke, reason: merged with bridge method [inline-methods] */
-            public final HashMap<String, String> m165invoke() {
-                Object obj;
-                Gson $this$fromJsonObject$iv = GsonExtensionsKt.getGSON();
-                String json$iv = this.this$0.getVariable();
-                try {
-                    Result.Companion companion = Result.Companion;
-                    Type type2 = new TypeToken<HashMap<String, String>>() { // from class: io.legado.app.data.entities.SearchBook$variableMap$2$invoke$$inlined$fromJsonObject$1
-                    }.getType();
-                    Intrinsics.checkNotNullExpressionValue(type2, "object : TypeToken<T>() {}.type");
-                    Object objFromJson = $this$fromJsonObject$iv.fromJson(json$iv, type2);
-                    if (!(objFromJson instanceof HashMap)) {
-                        objFromJson = null;
-                    }
-                    obj = Result.constructor-impl((HashMap) objFromJson);
-                } catch (Throwable th) {
-                    Result.Companion companion2 = Result.Companion;
-                    obj = Result.constructor-impl(ResultKt.createFailure(th));
-                }
-                Object obj2 = obj;
-                HashMap<String, String> map = (HashMap) (Result.isFailure-impl(obj2) ? null : obj2);
-                return map == null ? new HashMap<>() : map;
-            }
-        });
+        this.variableMap = LazyKt.lazy(new SearchBook$variableMap$2(this));
         this._userNameSpace = PackageDocumentBase.PREFIX_OPF;
     }
 
@@ -545,9 +509,7 @@ public final /* data */ class SearchBook implements BaseBook, Comparable<SearchB
         int i = this.type;
         String wordCount = getWordCount();
         String str3 = this.latestChapterTitle;
-        String str4 = null;
-        String str5 = null;
-        Book $this$toBook_u24lambda_u2d0 = new Book(bookUrl, this.tocUrl, str, str2, name, author, kind, str4, this.coverUrl, str5, this.intro, null, null, i, 0L, str3, 0L, 0L, 0, 0, null, 0, 0, 0L, wordCount, false, 0, 0, false, this.variable, null, false, null, -553690496, 1, null);
+        Book $this$toBook_u24lambda_u2d0 = new Book(bookUrl, this.tocUrl, str, str2, name, author, kind, null, this.coverUrl, null, this.intro, null, null, i, 0L, str3, 0L, 0L, 0, 0, null, 0, 0, 0L, wordCount, false, 0, 0, false, this.variable, null, false, null, -553690496, 1, null);
         $this$toBook_u24lambda_u2d0.setInfoHtml(getInfoHtml());
         $this$toBook_u24lambda_u2d0.setTocUrl(getTocUrl());
         $this$toBook_u24lambda_u2d0.setUserNameSpace(getUserNameSpace());

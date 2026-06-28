@@ -9,7 +9,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-/* JADX INFO: loaded from: app-classes.jar:io/legado/app/help/EncodingDetectHelp.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/help/EncodingDetectHelp.class */
 public class EncodingDetectHelp {
     public static String getHtmlEncode(byte[] bytes) {
         String charsetStr;

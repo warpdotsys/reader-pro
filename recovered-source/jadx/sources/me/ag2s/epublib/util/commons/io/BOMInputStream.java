@@ -7,7 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 import me.ag2s.epublib.util.IOUtil;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/util/commons/io/BOMInputStream.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/util/commons/io/BOMInputStream.class */
 public class BOMInputStream extends ProxyInputStream {
     private final boolean include;
     private final List<ByteOrderMark> boms;

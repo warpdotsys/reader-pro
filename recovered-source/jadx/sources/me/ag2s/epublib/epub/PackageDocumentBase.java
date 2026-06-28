@@ -1,6 +1,6 @@
 package me.ag2s.epublib.epub;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/epub/PackageDocumentBase.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/epub/PackageDocumentBase.class */
 public class PackageDocumentBase {
     public static final String BOOK_ID_ID = "duokan-book-id";
     public static final String NAMESPACE_OPF = "http://www.idpf.org/2007/opf";
@@ -10,13 +10,13 @@ public class PackageDocumentBase {
     public static final String version = "version";
     public static final String dateFormat = "yyyy-MM-dd";
 
-    /* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/epub/PackageDocumentBase$DCAttributes.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/epub/PackageDocumentBase$DCAttributes.class */
     protected interface DCAttributes {
         public static final String scheme = "scheme";
         public static final String id = "id";
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/epub/PackageDocumentBase$DCTags.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/epub/PackageDocumentBase$DCTags.class */
     protected interface DCTags {
         public static final String title = "title";
         public static final String creator = "creator";
@@ -35,7 +35,7 @@ public class PackageDocumentBase {
         public static final String rights = "rights";
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/epub/PackageDocumentBase$OPFAttributes.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/epub/PackageDocumentBase$OPFAttributes.class */
     protected interface OPFAttributes {
         public static final String uniqueIdentifier = "unique-identifier";
         public static final String idref = "idref";
@@ -57,7 +57,7 @@ public class PackageDocumentBase {
         public static final String properties = "properties";
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/epub/PackageDocumentBase$OPFTags.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/epub/PackageDocumentBase$OPFTags.class */
     protected interface OPFTags {
         public static final String metadata = "metadata";
         public static final String meta = "meta";
@@ -70,7 +70,7 @@ public class PackageDocumentBase {
         public static final String item = "item";
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/epub/PackageDocumentBase$OPFValues.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/epub/PackageDocumentBase$OPFValues.class */
     protected interface OPFValues {
         public static final String meta_cover = "cover";
         public static final String reference_cover = "cover";

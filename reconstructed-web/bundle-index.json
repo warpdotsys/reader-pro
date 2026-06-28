@@ -1,0 +1,77 @@
+[
+  {
+    "path": "bookSourceDebug/index.js",
+    "size": 23764,
+    "sha256": "251a8f4d7b0c07a6dee85a6060772eb83753efb6fc6c55a2203699fef08ea6d3"
+  },
+  {
+    "path": "js/app.54619a3e.js",
+    "size": 221937,
+    "sha256": "8d05ec94e2acc7afe4c27bcc4a5b32cb9ce7bc711c0b155a383456c2a1a9fe89"
+  },
+  {
+    "path": "js/chunk-vendors.4589d111.js",
+    "size": 842366,
+    "sha256": "68dda97988b12552522dc9d918a9badc34519875d4a911c0b935e672d3a7f67f"
+  },
+  {
+    "path": "js/dash.all.min.js",
+    "size": 793860,
+    "sha256": "3a1db51ed00412c16f9edb304db69ac84f1ffce8aa2d61caf4895aa9c9bdf0df"
+  },
+  {
+    "path": "js/flv.min.js",
+    "size": 144165,
+    "sha256": "733b9b325dbc59871a652c0a84f2f285a2cfd06cf2efcedcd87cb1e194cd1e8f"
+  },
+  {
+    "path": "js/hls.min.js",
+    "size": 412466,
+    "sha256": "286f029b4740b056eb047b8c8bd73e6cca1ca52bd658ae1cf5a587f4b19f0d8e"
+  },
+  {
+    "path": "js/index.459d9e84.js",
+    "size": 106469,
+    "sha256": "129e83725370c253d57dbdb54bf4ac1c2f644c17b48f9b17f75890bdd7bfb5b2"
+  },
+  {
+    "path": "js/index~reader.c43437ec.js",
+    "size": 37949,
+    "sha256": "0f9f00125be5243ba33b66e8007135b49584be0123562e8d8f74968512e4e1fc"
+  },
+  {
+    "path": "js/pear-player.min.js",
+    "size": 436655,
+    "sha256": "aa3f625ea6d01a1b4ae939df59c22f4f3240f091e255b6b60221df2b142f2677"
+  },
+  {
+    "path": "js/reader.6e871769.js",
+    "size": 1709365,
+    "sha256": "e64d0c9b5f0a18609b25da07b7d7e38b886b3d06fa8ddd35fc32b653918aefc3"
+  },
+  {
+    "path": "js/setting.6919980b.js",
+    "size": 12971,
+    "sha256": "7ad65ef2ff6f96aa4371129e7333f78bf478840fd68fcb7b375e23052692f3dd"
+  },
+  {
+    "path": "js/webtorrent.min.js",
+    "size": 265975,
+    "sha256": "53ee52566beac51b5b7c2883d735f7d4aff671d73d9d3c45f9ba66d3b0d1dff3"
+  },
+  {
+    "path": "precache-manifest.0d903434eaa73f94acefeef5d39c6628.js",
+    "size": 5783,
+    "sha256": "ac47c5e28266bc8a271bb267559642e4f7d14a7569d015787749d72152b07ab7"
+  },
+  {
+    "path": "service-worker.js",
+    "size": 2482,
+    "sha256": "a772c089926d5ea6f316990d2bb2f2642434c53c209e43b31f69a326c7ddb6aa"
+  },
+  {
+    "path": "sw.js",
+    "size": 3237,
+    "sha256": "c03bf6fcb34e807e5d60e7e2ccb606f14964e261b7597b62fb1bede80d182aed"
+  }
+]

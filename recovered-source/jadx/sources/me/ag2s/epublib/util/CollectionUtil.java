@@ -5,10 +5,10 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/util/CollectionUtil.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/util/CollectionUtil.class */
 public class CollectionUtil {
 
-    /* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/util/CollectionUtil$IteratorEnumerationAdapter.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/util/CollectionUtil$IteratorEnumerationAdapter.class */
     private static class IteratorEnumerationAdapter<T> implements Enumeration<T> {
         private final Iterator<T> iterator;
 

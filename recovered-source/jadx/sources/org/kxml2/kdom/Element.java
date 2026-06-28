@@ -7,7 +7,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
-/* JADX INFO: loaded from: app-classes.jar:org/kxml2/kdom/Element.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:org/kxml2/kdom/Element.class */
 public class Element extends Node {
     protected String namespace;
     protected String name;

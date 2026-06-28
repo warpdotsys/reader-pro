@@ -20,7 +20,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import me.ag2s.epublib.epub.PackageDocumentBase;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/util/commons/io/XmlStreamReader.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/util/commons/io/XmlStreamReader.class */
 public class XmlStreamReader extends Reader {
     private static final int BUFFER_SIZE = 8192;
     private static final String UTF_8 = "UTF-8";

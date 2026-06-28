@@ -16,7 +16,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/epub/PackageDocumentMetadataReader.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/epub/PackageDocumentMetadataReader.class */
 class PackageDocumentMetadataReader extends PackageDocumentBase {
     private static final String TAG = PackageDocumentMetadataReader.class.getName();
 

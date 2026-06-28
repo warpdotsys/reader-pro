@@ -15,7 +15,7 @@ import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/lib/tts/util/Tools.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/lib/tts/util/Tools.class */
 public class Tools {
     public static final String SDF = "EEE MMM dd yyyy HH:mm:ss 'GMT'Z";
     public static final Pattern NO_VOICE_PATTERN = Pattern.compile("[\\s\\p{C}\\p{P}\\p{Z}\\p{S}]");

@@ -5,13 +5,13 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 import me.ag2s.epublib.epub.PackageDocumentBase;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/domain/Date.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/domain/Date.class */
 public class Date implements Serializable {
     private static final long serialVersionUID = 7533866830395120136L;
     private Event event;
     private String dateString;
 
-    /* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/domain/Date$Event.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/domain/Date$Event.class */
     public enum Event {
         PUBLICATION("publication"),
         MODIFICATION("modification"),

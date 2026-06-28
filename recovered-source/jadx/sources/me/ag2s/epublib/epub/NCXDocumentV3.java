@@ -23,7 +23,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xmlpull.v1.XmlSerializer;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/epub/NCXDocumentV3.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/epub/NCXDocumentV3.class */
 public class NCXDocumentV3 {
     public static final String NAMESPACE_XHTML = "http://www.w3.org/1999/xhtml";
     public static final String NAMESPACE_EPUB = "http://www.idpf.org/2007/ops";
@@ -36,7 +36,7 @@ public class NCXDocumentV3 {
     private static final String TAG;
     static final /* synthetic */ boolean $assertionsDisabled;
 
-    /* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/epub/NCXDocumentV3$XHTMLAttributeValues.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/epub/NCXDocumentV3$XHTMLAttributeValues.class */
     private interface XHTMLAttributeValues {
         public static final String Content_Type = "Content-Type";
         public static final String HTML_UTF8 = "text/html; charset=utf-8";
@@ -45,7 +45,7 @@ public class NCXDocumentV3 {
         public static final String role_toc = "doc-toc";
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/epub/NCXDocumentV3$XHTMLAttributes.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/epub/NCXDocumentV3$XHTMLAttributes.class */
     private interface XHTMLAttributes {
         public static final String xmlns = "xmlns";
         public static final String xmlns_epub = "xmlns:epub";
@@ -61,7 +61,7 @@ public class NCXDocumentV3 {
         public static final String content = "content";
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/epub/NCXDocumentV3$XHTMLTgs.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/epub/NCXDocumentV3$XHTMLTgs.class */
     private interface XHTMLTgs {
         public static final String html = "html";
         public static final String head = "head";

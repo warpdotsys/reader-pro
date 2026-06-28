@@ -5,7 +5,7 @@ import me.ag2s.epublib.domain.EpubBook;
 import me.ag2s.epublib.domain.Resource;
 import me.ag2s.epublib.util.StringUtil;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/browsersupport/NavigationEvent.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/browsersupport/NavigationEvent.class */
 public class NavigationEvent extends EventObject {
     private static final long serialVersionUID = -6346750144308952762L;
     private Resource oldResource;

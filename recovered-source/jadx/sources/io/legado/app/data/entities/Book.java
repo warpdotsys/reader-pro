@@ -3,7 +3,6 @@ package io.legado.app.data.entities;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.Predicate;
 import com.jayway.jsonpath.ReadContext;
@@ -30,7 +29,6 @@ import kotlin.Metadata;
 import kotlin.Pair;
 import kotlin.Result;
 import kotlin.ResultKt;
-import kotlin.jvm.functions.Function0;
 import kotlin.jvm.internal.DefaultConstructorMarker;
 import kotlin.jvm.internal.Intrinsics;
 import kotlin.text.StringsKt;
@@ -42,7 +40,7 @@ import org.jetbrains.annotations.Nullable;
 import org.kxml2.wap.Wbxml;
 
 /* JADX INFO: compiled from: Book.kt */
-/* JADX INFO: loaded from: app-classes.jar:io/legado/app/data/entities/Book.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/data/entities/Book.class */
 @JsonIgnoreProperties({"variableMap", "infoHtml", "tocHtml", "config", "rootDir", "localBook", "epub", "epubRootDir", "onLineTxt", "localTxt", "umd", "realAuthor", "unreadChapterNum", "folderName", "pdfImageWidth", "localFile", "kindList", "_userNameSpace", "bookDir", "userNameSpace"})
 @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u0000h\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\u000e\n\u0002\b\r\n\u0002\u0010\b\n\u0000\n\u0002\u0010\t\n\u0002\b\u000b\n\u0002\u0010\u000b\n\u0002\b\u0005\n\u0002\u0018\u0002\n\u0002\bU\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b+\n\u0002\u0010\u0000\n\u0000\n\u0002\u0018\u0002\n\u0002\b\b\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\u0007\n\u0002\b\u000f\n\u0002\u0010\u0002\n\u0002\b\n\n\u0002\u0018\u0002\n\u0002\b\b\b\u0087\b\u0018\u0000 Õ\u00012\u00020\u0001:\u0006Õ\u0001Ö\u0001×\u0001Bé\u0002\u0012\b\b\u0002\u0010\u0002\u001a\u00020\u0003\u0012\b\b\u0002\u0010\u0004\u001a\u00020\u0003\u0012\b\b\u0002\u0010\u0005\u001a\u00020\u0003\u0012\b\b\u0002\u0010\u0006\u001a\u00020\u0003\u0012\b\b\u0002\u0010\u0007\u001a\u00020\u0003\u0012\b\b\u0002\u0010\b\u001a\u00020\u0003\u0012\n\b\u0002\u0010\t\u001a\u0004\u0018\u00010\u0003\u0012\n\b\u0002\u0010\n\u001a\u0004\u0018\u00010\u0003\u0012\n\b\u0002\u0010\u000b\u001a\u0004\u0018\u00010\u0003\u0012\n\b\u0002\u0010\f\u001a\u0004\u0018\u00010\u0003\u0012\n\b\u0002\u0010\r\u001a\u0004\u0018\u00010\u0003\u0012\n\b\u0002\u0010\u000e\u001a\u0004\u0018\u00010\u0003\u0012\n\b\u0002\u0010\u000f\u001a\u0004\u0018\u00010\u0003\u0012\b\b\u0002\u0010\u0010\u001a\u00020\u0011\u0012\b\b\u0002\u0010\u0012\u001a\u00020\u0013\u0012\n\b\u0002\u0010\u0014\u001a\u0004\u0018\u00010\u0003\u0012\b\b\u0002\u0010\u0015\u001a\u00020\u0013\u0012\b\b\u0002\u0010\u0016\u001a\u00020\u0013\u0012\b\b\u0002\u0010\u0017\u001a\u00020\u0011\u0012\b\b\u0002\u0010\u0018\u001a\u00020\u0011\u0012\n\b\u0002\u0010\u0019\u001a\u0004\u0018\u00010\u0003\u0012\b\b\u0002\u0010\u001a\u001a\u00020\u0011\u0012\b\b\u0002\u0010\u001b\u001a\u00020\u0011\u0012\b\b\u0002\u0010\u001c\u001a\u00020\u0013\u0012\n\b\u0002\u0010\u001d\u001a\u0004\u0018\u00010\u0003\u0012\b\b\u0002\u0010\u001e\u001a\u00020\u001f\u0012\b\b\u0002\u0010 \u001a\u00020\u0011\u0012\b\b\u0002\u0010!\u001a\u00020\u0011\u0012\b\b\u0002\u0010\"\u001a\u00020\u001f\u0012\n\b\u0002\u0010#\u001a\u0004\u0018\u00010\u0003\u0012\n\b\u0002\u0010$\u001a\u0004\u0018\u00010%\u0012\b\b\u0002\u0010&\u001a\u00020\u001f\u0012\n\b\u0002\u0010'\u001a\u0004\u0018\u00010\u0003¢\u0006\u0002\u0010(J\n\u0010\u0083\u0001\u001a\u00020\u0003HÆ\u0003J\f\u0010\u0084\u0001\u001a\u0004\u0018\u00010\u0003HÆ\u0003J\f\u0010\u0085\u0001\u001a\u0004\u0018\u00010\u0003HÆ\u0003J\f\u0010\u0086\u0001\u001a\u0004\u0018\u00010\u0003HÆ\u0003J\f\u0010\u0087\u0001\u001a\u0004\u0018\u00010\u0003HÆ\u0003J\n\u0010\u0088\u0001\u001a\u00020\u0011HÆ\u0003J\n\u0010\u0089\u0001\u001a\u00020\u0013HÆ\u0003J\f\u0010\u008a\u0001\u001a\u0004\u0018\u00010\u0003HÆ\u0003J\n\u0010\u008b\u0001\u001a\u00020\u0013HÆ\u0003J\n\u0010\u008c\u0001\u001a\u00020\u0013HÆ\u0003J\n\u0010\u008d\u0001\u001a\u00020\u0011HÆ\u0003J\n\u0010\u008e\u0001\u001a\u00020\u0003HÆ\u0003J\n\u0010\u008f\u0001\u001a\u00020\u0011HÆ\u0003J\f\u0010\u0090\u0001\u001a\u0004\u0018\u00010\u0003HÆ\u0003J\n\u0010\u0091\u0001\u001a\u00020\u0011HÆ\u0003J\n\u0010\u0092\u0001\u001a\u00020\u0011HÆ\u0003J\n\u0010\u0093\u0001\u001a\u00020\u0013HÆ\u0003J\f\u0010\u0094\u0001\u001a\u0004\u0018\u00010\u0003HÆ\u0003J\n\u0010\u0095\u0001\u001a\u00020\u001fHÆ\u0003J\n\u0010\u0096\u0001\u001a\u00020\u0011HÆ\u0003J\n\u0010\u0097\u0001\u001a\u00020\u0011HÆ\u0003J\n\u0010\u0098\u0001\u001a\u00020\u001fHÆ\u0003J\n\u0010\u0099\u0001\u001a\u00020\u0003HÆ\u0003J\f\u0010\u009a\u0001\u001a\u0004\u0018\u00010\u0003HÆ\u0003J\f\u0010\u009b\u0001\u001a\u0004\u0018\u00010%HÆ\u0003J\n\u0010\u009c\u0001\u001a\u00020\u001fHÆ\u0003J\f\u0010\u009d\u0001\u001a\u0004\u0018\u00010\u0003HÆ\u0003J\n\u0010\u009e\u0001\u001a\u00020\u0003HÆ\u0003J\n\u0010\u009f\u0001\u001a\u00020\u0003HÆ\u0003J\n\u0010 \u0001\u001a\u00020\u0003HÆ\u0003J\f\u0010¡\u0001\u001a\u0004\u0018\u00010\u0003HÆ\u0003J\f\u0010¢\u0001\u001a\u0004\u0018\u00010\u0003HÆ\u0003J\f\u0010£\u0001\u001a\u0004\u0018\u00010\u0003HÆ\u0003J\t\u0010¤\u0001\u001a\u00020%H\u0002Jî\u0002\u0010¥\u0001\u001a\u00020\u00002\b\b\u0002\u0010\u0002\u001a\u00020\u00032\b\b\u0002\u0010\u0004\u001a\u00020\u00032\b\b\u0002\u0010\u0005\u001a\u00020\u00032\b\b\u0002\u0010\u0006\u001a\u00020\u00032\b\b\u0002\u0010\u0007\u001a\u00020\u00032\b\b\u0002\u0010\b\u001a\u00020\u00032\n\b\u0002\u0010\t\u001a\u0004\u0018\u00010\u00032\n\b\u0002\u0010\n\u001a\u0004\u0018\u00010\u00032\n\b\u0002\u0010\u000b\u001a\u0004\u0018\u00010\u00032\n\b\u0002\u0010\f\u001a\u0004\u0018\u00010\u00032\n\b\u0002\u0010\r\u001a\u0004\u0018\u00010\u00032\n\b\u0002\u0010\u000e\u001a\u0004\u0018\u00010\u00032\n\b\u0002\u0010\u000f\u001a\u0004\u0018\u00010\u00032\b\b\u0002\u0010\u0010\u001a\u00020\u00112\b\b\u0002\u0010\u0012\u001a\u00020\u00132\n\b\u0002\u0010\u0014\u001a\u0004\u0018\u00010\u00032\b\b\u0002\u0010\u0015\u001a\u00020\u00132\b\b\u0002\u0010\u0016\u001a\u00020\u00132\b\b\u0002\u0010\u0017\u001a\u00020\u00112\b\b\u0002\u0010\u0018\u001a\u00020\u00112\n\b\u0002\u0010\u0019\u001a\u0004\u0018\u00010\u00032\b\b\u0002\u0010\u001a\u001a\u00020\u00112\b\b\u0002\u0010\u001b\u001a\u00020\u00112\b\b\u0002\u0010\u001c\u001a\u00020\u00132\n\b\u0002\u0010\u001d\u001a\u0004\u0018\u00010\u00032\b\b\u0002\u0010\u001e\u001a\u00020\u001f2\b\b\u0002\u0010 \u001a\u00020\u00112\b\b\u0002\u0010!\u001a\u00020\u00112\b\b\u0002\u0010\"\u001a\u00020\u001f2\n\b\u0002\u0010#\u001a\u0004\u0018\u00010\u00032\n\b\u0002\u0010$\u001a\u0004\u0018\u00010%2\b\b\u0002\u0010&\u001a\u00020\u001f2\n\b\u0002\u0010'\u001a\u0004\u0018\u00010\u0003HÆ\u0001J\u0016\u0010¦\u0001\u001a\u00020\u001f2\n\u0010§\u0001\u001a\u0005\u0018\u00010¨\u0001H\u0096\u0002J\b\u0010©\u0001\u001a\u00030ª\u0001J\u0007\u0010«\u0001\u001a\u00020\u0003J\u0010\u0010¬\u0001\u001a\u00020\u001f2\u0007\u0010\u00ad\u0001\u001a\u00020\u0013J\t\u0010®\u0001\u001a\u0004\u0018\u00010\u0003J\t\u0010¯\u0001\u001a\u0004\u0018\u00010\u0003J\u0007\u0010°\u0001\u001a\u00020\u0003J\u0007\u0010±\u0001\u001a\u00020\u0003J\b\u0010²\u0001\u001a\u00030³\u0001J\b\u0010´\u0001\u001a\u00030µ\u0001J\u0007\u0010¶\u0001\u001a\u00020\u0003J\u0007\u0010·\u0001\u001a\u00020\u001fJ\u0007\u0010¸\u0001\u001a\u00020\u0011J\t\u0010¹\u0001\u001a\u00020\u0003H\u0016J\t\u0010º\u0001\u001a\u00020\u0011H\u0016J\u0007\u0010»\u0001\u001a\u00020\u001fJ\u0007\u0010¼\u0001\u001a\u00020\u001fJ\u0007\u0010½\u0001\u001a\u00020\u001fJ\u0007\u0010¾\u0001\u001a\u00020\u001fJ\u0007\u0010¿\u0001\u001a\u00020\u001fJ\u0007\u0010À\u0001\u001a\u00020\u001fJ\u0007\u0010Á\u0001\u001a\u00020\u001fJ\u0007\u0010Â\u0001\u001a\u00020\u001fJ\u0007\u0010Ã\u0001\u001a\u00020\u001fJ\u001e\u0010Ä\u0001\u001a\u00030Å\u00012\u0007\u0010Æ\u0001\u001a\u00020\u00032\t\u0010Ç\u0001\u001a\u0004\u0018\u00010\u0003H\u0016J\u0011\u0010È\u0001\u001a\u00030Å\u00012\u0007\u0010\u00ad\u0001\u001a\u00020\u0013J\u0012\u0010É\u0001\u001a\u00030Å\u00012\b\u0010Ê\u0001\u001a\u00030µ\u0001J\u0011\u0010Ë\u0001\u001a\u00030Å\u00012\u0007\u0010Ì\u0001\u001a\u00020\u0003J\u0011\u0010Í\u0001\u001a\u00030Å\u00012\u0007\u0010Î\u0001\u001a\u00020\u0003J\b\u0010Ï\u0001\u001a\u00030Ð\u0001J\n\u0010Ñ\u0001\u001a\u00020\u0003HÖ\u0001J\u0013\u0010Ò\u0001\u001a\u00030Å\u00012\t\b\u0002\u0010Ó\u0001\u001a\u00020\u001fJ\u0007\u0010Ô\u0001\u001a\u00020\u0003R\u000e\u0010)\u001a\u00020\u0003X\u0082\u000e¢\u0006\u0002\n\u0000R\u001a\u0010\b\u001a\u00020\u0003X\u0096\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b*\u0010+\"\u0004\b,\u0010-R\u001a\u0010\u0002\u001a\u00020\u0003X\u0096\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b.\u0010+\"\u0004\b/\u0010-R\u001a\u0010\u001e\u001a\u00020\u001fX\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b0\u00101\"\u0004\b2\u00103R\u001c\u0010\u000f\u001a\u0004\u0018\u00010\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b4\u0010+\"\u0004\b5\u0010-R\u001c\u0010\u000b\u001a\u0004\u0018\u00010\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b6\u0010+\"\u0004\b7\u0010-R\u001c\u0010\f\u001a\u0004\u0018\u00010\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b8\u0010+\"\u0004\b9\u0010-R\u001c\u0010\u000e\u001a\u0004\u0018\u00010\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b:\u0010+\"\u0004\b;\u0010-R\u001c\u0010\n\u001a\u0004\u0018\u00010\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b<\u0010+\"\u0004\b=\u0010-R\u001a\u0010\u001a\u001a\u00020\u0011X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b>\u0010?\"\u0004\b@\u0010AR\u001a\u0010\u001b\u001a\u00020\u0011X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bB\u0010?\"\u0004\bC\u0010AR\u001a\u0010\u001c\u001a\u00020\u0013X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bD\u0010E\"\u0004\bF\u0010GR\u001c\u0010\u0019\u001a\u0004\u0018\u00010\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bH\u0010+\"\u0004\bI\u0010-R\u001a\u0010\u0012\u001a\u00020\u0013X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bJ\u0010E\"\u0004\bK\u0010GR\u001c\u0010L\u001a\u0004\u0018\u00010\u0003X\u0096\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bM\u0010+\"\u0004\bN\u0010-R\u001c\u0010\r\u001a\u0004\u0018\u00010\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bO\u0010+\"\u0004\bP\u0010-R\u001c\u0010&\u001a\u00020\u001f8\u0007X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b&\u00101\"\u0004\bQ\u00103R\u001c\u0010\t\u001a\u0004\u0018\u00010\u0003X\u0096\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bR\u0010+\"\u0004\bS\u0010-R\u001a\u0010\u0017\u001a\u00020\u0011X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bT\u0010?\"\u0004\bU\u0010AR\u001c\u0010'\u001a\u0004\u0018\u00010\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bV\u0010+\"\u0004\bW\u0010-R\u001a\u0010\u0016\u001a\u00020\u0013X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bX\u0010E\"\u0004\bY\u0010GR\u001a\u0010\u0015\u001a\u00020\u0013X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bZ\u0010E\"\u0004\b[\u0010GR\u001c\u0010\u0014\u001a\u0004\u0018\u00010\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\\\u0010+\"\u0004\b]\u0010-R\u001a\u0010\u0007\u001a\u00020\u0003X\u0096\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b^\u0010+\"\u0004\b_\u0010-R\u001a\u0010 \u001a\u00020\u0011X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b`\u0010?\"\u0004\ba\u0010AR\u001a\u0010\u0005\u001a\u00020\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bb\u0010+\"\u0004\bc\u0010-R\u001a\u0010\u0006\u001a\u00020\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bd\u0010+\"\u0004\be\u0010-R\u001a\u0010!\u001a\u00020\u0011X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bf\u0010?\"\u0004\bg\u0010AR\u001c\u0010$\u001a\u0004\u0018\u00010%X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bh\u0010i\"\u0004\bj\u0010kR\u000e\u0010l\u001a\u00020\u0003X\u0082\u000e¢\u0006\u0002\n\u0000R\u001c\u0010m\u001a\u0004\u0018\u00010\u0003X\u0096\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bn\u0010+\"\u0004\bo\u0010-R\u001a\u0010\u0004\u001a\u00020\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bp\u0010+\"\u0004\bq\u0010-R\u001a\u0010\u0018\u001a\u00020\u0011X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\br\u0010?\"\u0004\bs\u0010AR\u001a\u0010\u0010\u001a\u00020\u0011X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bt\u0010?\"\u0004\bu\u0010AR\u001a\u0010\"\u001a\u00020\u001fX\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bv\u00101\"\u0004\bw\u00103R\u001c\u0010#\u001a\u0004\u0018\u00010\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bx\u0010+\"\u0004\by\u0010-R8\u0010z\u001a\u001e\u0012\u0004\u0012\u00020\u0003\u0012\u0004\u0012\u00020\u00030{j\u000e\u0012\u0004\u0012\u00020\u0003\u0012\u0004\u0012\u00020\u0003`|8VX\u0096\u0084\u0002¢\u0006\r\n\u0005\b\u007f\u0010\u0080\u0001\u001a\u0004\b}\u0010~R\u001e\u0010\u001d\u001a\u0004\u0018\u00010\u0003X\u0096\u000e¢\u0006\u0010\n\u0000\u001a\u0005\b\u0081\u0001\u0010+\"\u0005\b\u0082\u0001\u0010-¨\u0006Ø\u0001"}, d2 = {"Lio/legado/app/data/entities/Book;", "Lio/legado/app/data/entities/BaseBook;", "bookUrl", PackageDocumentBase.PREFIX_OPF, "tocUrl", "origin", "originName", "name", "author", "kind", "customTag", "coverUrl", "customCoverUrl", "intro", "customIntro", "charset", "type", PackageDocumentBase.PREFIX_OPF, "group", PackageDocumentBase.PREFIX_OPF, "latestChapterTitle", "latestChapterTime", "lastCheckTime", "lastCheckCount", "totalChapterNum", "durChapterTitle", "durChapterIndex", "durChapterPos", "durChapterTime", "wordCount", "canUpdate", PackageDocumentBase.PREFIX_OPF, "order", "originOrder", "useReplaceRule", "variable", "readConfig", "Lio/legado/app/data/entities/Book$ReadConfig;", "isInShelf", "lastCheckError", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;IJLjava/lang/String;JJIILjava/lang/String;IIJLjava/lang/String;ZIIZLjava/lang/String;Lio/legado/app/data/entities/Book$ReadConfig;ZLjava/lang/String;)V", "_userNameSpace", "getAuthor", "()Ljava/lang/String;", "setAuthor", "(Ljava/lang/String;)V", "getBookUrl", "setBookUrl", "getCanUpdate", "()Z", "setCanUpdate", "(Z)V", "getCharset", "setCharset", "getCoverUrl", "setCoverUrl", "getCustomCoverUrl", "setCustomCoverUrl", "getCustomIntro", "setCustomIntro", "getCustomTag", "setCustomTag", "getDurChapterIndex", "()I", "setDurChapterIndex", "(I)V", "getDurChapterPos", "setDurChapterPos", "getDurChapterTime", "()J", "setDurChapterTime", "(J)V", "getDurChapterTitle", "setDurChapterTitle", "getGroup", "setGroup", "infoHtml", "getInfoHtml", "setInfoHtml", "getIntro", "setIntro", "setInShelf", "getKind", "setKind", "getLastCheckCount", "setLastCheckCount", "getLastCheckError", "setLastCheckError", "getLastCheckTime", "setLastCheckTime", "getLatestChapterTime", "setLatestChapterTime", "getLatestChapterTitle", "setLatestChapterTitle", "getName", "setName", "getOrder", "setOrder", "getOrigin", "setOrigin", "getOriginName", "setOriginName", "getOriginOrder", "setOriginOrder", "getReadConfig", "()Lio/legado/app/data/entities/Book$ReadConfig;", "setReadConfig", "(Lio/legado/app/data/entities/Book$ReadConfig;)V", "rootDir", "tocHtml", "getTocHtml", "setTocHtml", "getTocUrl", "setTocUrl", "getTotalChapterNum", "setTotalChapterNum", "getType", "setType", "getUseReplaceRule", "setUseReplaceRule", "getVariable", "setVariable", "variableMap", "Ljava/util/HashMap;", "Lkotlin/collections/HashMap;", "getVariableMap", "()Ljava/util/HashMap;", "variableMap$delegate", "Lkotlin/Lazy;", "getWordCount", "setWordCount", "component1", "component10", "component11", "component12", "component13", "component14", "component15", "component16", "component17", "component18", "component19", "component2", "component20", "component21", "component22", "component23", "component24", "component25", "component26", "component27", "component28", "component29", "component3", "component30", "component31", "component32", "component33", "component4", "component5", "component6", "component7", "component8", "component9", "config", "copy", "equals", "other", PackageDocumentBase.PREFIX_OPF, "fileCharset", "Ljava/nio/charset/Charset;", "getBookDir", "getDelTag", "tag", "getDisplayCover", "getDisplayIntro", "getEpubRootDir", "getFolderName", "getLocalFile", "Ljava/io/File;", "getPdfImageWidth", PackageDocumentBase.PREFIX_OPF, "getRealAuthor", "getSplitLongChapter", "getUnreadChapterNum", "getUserNameSpace", "hashCode", "isCbz", "isEpub", "isLocalBook", "isLocalEpub", "isLocalPdf", "isLocalTxt", "isOnLineTxt", "isPdf", "isUmd", "putVariable", PackageDocumentBase.PREFIX_OPF, "key", "value", "setDelTag", "setPdfImageWidth", "pdfImageWidth", "setRootDir", "root", "setUserNameSpace", "nameSpace", "toSearchBook", "Lio/legado/app/data/entities/SearchBook;", "toString", "updateFromLocal", "onlyCover", "workRoot", "Companion", "Converters", "ReadConfig", "reader-pro"})
 public final /* data */ class Book implements BaseBook {
@@ -468,37 +466,7 @@ public final /* data */ class Book implements BaseBook {
         this.readConfig = readConfig;
         this.isInShelf = isInShelf;
         this.lastCheckError = lastCheckError;
-        this.variableMap = LazyKt.lazy(new Function0<HashMap<String, String>>() { // from class: io.legado.app.data.entities.Book$variableMap$2
-            {
-                super(0);
-            }
-
-            /* JADX WARN: Type inference failed for: r2v1, types: [io.legado.app.data.entities.Book$variableMap$2$invoke$$inlined$fromJsonObject$1] */
-            @NotNull
-            /* JADX INFO: renamed from: invoke, reason: merged with bridge method [inline-methods] */
-            public final HashMap<String, String> m144invoke() {
-                Object obj;
-                Gson $this$fromJsonObject$iv = GsonExtensionsKt.getGSON();
-                String json$iv = this.this$0.getVariable();
-                try {
-                    Result.Companion companion = Result.Companion;
-                    Type type2 = new TypeToken<HashMap<String, String>>() { // from class: io.legado.app.data.entities.Book$variableMap$2$invoke$$inlined$fromJsonObject$1
-                    }.getType();
-                    Intrinsics.checkNotNullExpressionValue(type2, "object : TypeToken<T>() {}.type");
-                    Object objFromJson = $this$fromJsonObject$iv.fromJson(json$iv, type2);
-                    if (!(objFromJson instanceof HashMap)) {
-                        objFromJson = null;
-                    }
-                    obj = Result.constructor-impl((HashMap) objFromJson);
-                } catch (Throwable th) {
-                    Result.Companion companion2 = Result.Companion;
-                    obj = Result.constructor-impl(ResultKt.createFailure(th));
-                }
-                Object obj2 = obj;
-                HashMap<String, String> map = (HashMap) (Result.isFailure-impl(obj2) ? null : obj2);
-                return map == null ? new HashMap<>() : map;
-            }
-        });
+        this.variableMap = LazyKt.lazy(new Book$variableMap$2(this));
         this.rootDir = PackageDocumentBase.PREFIX_OPF;
         this._userNameSpace = PackageDocumentBase.PREFIX_OPF;
     }
@@ -1027,8 +995,8 @@ public final /* data */ class Book implements BaseBook {
 
     /*  JADX ERROR: JadxRuntimeException in pass: BlockSplitter
         jadx.core.utils.exceptions.JadxRuntimeException: Unexpected missing predecessor for block: B:4:0x0048
-            at jadx.core.dex.visitors.blocks.BlockSplitter.addTempConnectionsForExcHandlers(BlockSplitter.java:280)
-            at jadx.core.dex.visitors.blocks.BlockSplitter.visit(BlockSplitter.java:79)
+        	at jadx.core.dex.visitors.blocks.BlockSplitter.addTempConnectionsForExcHandlers(BlockSplitter.java:280)
+        	at jadx.core.dex.visitors.blocks.BlockSplitter.visit(BlockSplitter.java:79)
         */
     @org.jetbrains.annotations.NotNull
     public final java.lang.String getEpubRootDir() {
@@ -1066,7 +1034,7 @@ public final /* data */ class Book implements BaseBook {
     }
 
     /* JADX INFO: compiled from: Book.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/data/entities/Book$Companion.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/data/entities/Book$Companion.class */
     @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u0000:\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0002\b\u0002\n\u0002\u0010\t\n\u0000\n\u0002\u0010\u000e\n\u0002\b\u0005\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0004\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0004\n\u0002\u0018\u0002\n\u0002\b\u0007\b\u0086\u0003\u0018\u00002\u00020\u0001B\u0007\b\u0002¢\u0006\u0002\u0010\u0002J$\u0010\u000b\u001a\b\u0012\u0004\u0012\u00020\r0\f2\u0006\u0010\u000e\u001a\u00020\u0006ø\u0001\u0000ø\u0001\u0001ø\u0001\u0002¢\u0006\u0004\b\u000f\u0010\u0010J4\u0010\u0011\u001a\u0018\u0012\u0014\u0012\u0012\u0012\u0004\u0012\u00020\r0\u0012j\b\u0012\u0004\u0012\u00020\r`\u00130\f2\u0006\u0010\u0014\u001a\u00020\u0006ø\u0001\u0000ø\u0001\u0001ø\u0001\u0002¢\u0006\u0004\b\u0015\u0010\u0010J$\u0010\u0016\u001a\b\u0012\u0004\u0012\u00020\r0\f2\u0006\u0010\u0017\u001a\u00020\u0018ø\u0001\u0000ø\u0001\u0001ø\u0001\u0002¢\u0006\u0004\b\u0019\u0010\u001aJ \u0010\u001b\u001a\u00020\r2\u0006\u0010\u001c\u001a\u00020\u00062\u0006\u0010\u001d\u001a\u00020\u00062\b\b\u0002\u0010\u001e\u001a\u00020\u0006R\u000e\u0010\u0003\u001a\u00020\u0004X\u0086T¢\u0006\u0002\n\u0000R\u000e\u0010\u0005\u001a\u00020\u0006X\u0086T¢\u0006\u0002\n\u0000R\u000e\u0010\u0007\u001a\u00020\u0006X\u0086T¢\u0006\u0002\n\u0000R\u000e\u0010\b\u001a\u00020\u0006X\u0086T¢\u0006\u0002\n\u0000R\u000e\u0010\t\u001a\u00020\u0004X\u0086T¢\u0006\u0002\n\u0000R\u000e\u0010\n\u001a\u00020\u0004X\u0086T¢\u0006\u0002\n\u0000\u0082\u0002\u000f\n\u0002\b\u0019\n\u0002\b!\n\u0005\b¡\u001e0\u0001¨\u0006\u001f"}, d2 = {"Lio/legado/app/data/entities/Book$Companion;", PackageDocumentBase.PREFIX_OPF, "()V", "hTag", PackageDocumentBase.PREFIX_OPF, "imgStyleDefault", PackageDocumentBase.PREFIX_OPF, "imgStyleFull", "imgStyleText", "imgTag", "rubyTag", "fromJson", "Lkotlin/Result;", "Lio/legado/app/data/entities/Book;", "json", "fromJson-IoAF18A", "(Ljava/lang/String;)Ljava/lang/Object;", "fromJsonArray", "Ljava/util/ArrayList;", "Lkotlin/collections/ArrayList;", "jsonArray", "fromJsonArray-IoAF18A", "fromJsonDoc", "doc", "Lcom/jayway/jsonpath/DocumentContext;", "fromJsonDoc-IoAF18A", "(Lcom/jayway/jsonpath/DocumentContext;)Ljava/lang/Object;", "initLocalBook", "bookUrl", "localPath", "rootDir", "reader-pro"})
     public static final class Companion {
         public /* synthetic */ Companion(DefaultConstructorMarker $constructor_marker) {
@@ -1228,37 +1196,36 @@ public final /* data */ class Book implements BaseBook {
                     readConfig = null;
                 }
                 Boolean bool6 = JsonExtensionsKt.readBool((ReadContext) doc, "$.isInShelf");
-                String str7 = string17;
                 boolean z3 = zBooleanValue2;
                 int i8 = iIntValue7;
                 int i9 = iIntValue6;
                 boolean z4 = zBooleanValue;
-                String str8 = string16;
+                String str7 = string16;
                 long j5 = jCurrentTimeMillis3;
                 int i10 = iIntValue5;
                 int i11 = iIntValue4;
-                String str9 = string15;
+                String str8 = string15;
                 int i12 = iIntValue3;
                 int i13 = iIntValue2;
                 long j6 = jCurrentTimeMillis2;
                 long j7 = jCurrentTimeMillis;
-                String str10 = string14;
+                String str9 = string14;
                 long j8 = jLongValue;
                 int i14 = iIntValue;
-                String str11 = string13;
-                String str12 = string12;
-                String str13 = string11;
-                String str14 = string10;
-                String str15 = string9;
-                String str16 = string8;
-                String str17 = string7;
-                String str18 = str3;
-                String str19 = string5;
-                String str20 = str2;
-                String str21 = str;
-                String str22 = string2;
-                String str23 = string;
-                obj = Result.constructor-impl(new Book(str23, str22, str21, str20, str19, str18, str17, str16, str15, str14, str13, str12, str11, i14, j8, str10, j7, j6, i13, i12, str9, i11, i10, j5, str8, z4, i9, i8, z3, str7, readConfig, bool6 == null ? false : bool6.booleanValue(), null, 0, 1, null));
+                String str10 = string13;
+                String str11 = string12;
+                String str12 = string11;
+                String str13 = string10;
+                String str14 = string9;
+                String str15 = string8;
+                String str16 = string7;
+                String str17 = str3;
+                String str18 = string5;
+                String str19 = str2;
+                String str20 = str;
+                String str21 = string2;
+                String str22 = string;
+                obj = Result.constructor-impl(new Book(str22, str21, str20, str19, str18, str17, str16, str15, str14, str13, str12, str11, str10, i14, j8, str9, j7, j6, i13, i12, str8, i11, i10, j5, str7, z4, i9, i8, z3, string17, readConfig, bool6 == null ? false : bool6.booleanValue(), null, 0, 1, null));
             } catch (Throwable th2) {
                 Result.Companion companion4 = Result.Companion;
                 obj = Result.constructor-impl(ResultKt.createFailure(th2));
@@ -1305,7 +1272,7 @@ public final /* data */ class Book implements BaseBook {
     }
 
     /* JADX INFO: compiled from: Book.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/data/entities/Book$ReadConfig.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/data/entities/Book$ReadConfig.class */
     @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u0000.\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0000\n\u0002\u0010\u000b\n\u0000\n\u0002\u0010\b\n\u0002\b\u0002\n\u0002\u0010\u000e\n\u0002\b\u0002\n\u0002\u0010\t\n\u0000\n\u0002\u0010\u0007\n\u0002\b&\b\u0086\b\u0018\u00002\u00020\u0001BM\u0012\b\b\u0002\u0010\u0002\u001a\u00020\u0003\u0012\b\b\u0002\u0010\u0004\u001a\u00020\u0005\u0012\b\b\u0002\u0010\u0006\u001a\u00020\u0003\u0012\n\b\u0002\u0010\u0007\u001a\u0004\u0018\u00010\b\u0012\b\b\u0002\u0010\t\u001a\u00020\u0003\u0012\b\b\u0002\u0010\n\u001a\u00020\u000b\u0012\b\b\u0002\u0010\f\u001a\u00020\r¢\u0006\u0002\u0010\u000eJ\t\u0010'\u001a\u00020\u0003HÆ\u0003J\t\u0010(\u001a\u00020\u0005HÆ\u0003J\t\u0010)\u001a\u00020\u0003HÆ\u0003J\u000b\u0010*\u001a\u0004\u0018\u00010\bHÆ\u0003J\t\u0010+\u001a\u00020\u0003HÆ\u0003J\t\u0010,\u001a\u00020\u000bHÆ\u0003J\t\u0010-\u001a\u00020\rHÆ\u0003JQ\u0010.\u001a\u00020\u00002\b\b\u0002\u0010\u0002\u001a\u00020\u00032\b\b\u0002\u0010\u0004\u001a\u00020\u00052\b\b\u0002\u0010\u0006\u001a\u00020\u00032\n\b\u0002\u0010\u0007\u001a\u0004\u0018\u00010\b2\b\b\u0002\u0010\t\u001a\u00020\u00032\b\b\u0002\u0010\n\u001a\u00020\u000b2\b\b\u0002\u0010\f\u001a\u00020\rHÆ\u0001J\u0013\u0010/\u001a\u00020\u00032\b\u00100\u001a\u0004\u0018\u00010\u0001HÖ\u0003J\t\u00101\u001a\u00020\u0005HÖ\u0001J\t\u00102\u001a\u00020\bHÖ\u0001R\u001a\u0010\n\u001a\u00020\u000bX\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\u000f\u0010\u0010\"\u0004\b\u0011\u0010\u0012R\u001c\u0010\u0007\u001a\u0004\u0018\u00010\bX\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\u0013\u0010\u0014\"\u0004\b\u0015\u0010\u0016R\u001a\u0010\u0004\u001a\u00020\u0005X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\u0017\u0010\u0018\"\u0004\b\u0019\u0010\u001aR\u001a\u0010\f\u001a\u00020\rX\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\u001b\u0010\u001c\"\u0004\b\u001d\u0010\u001eR\u001a\u0010\u0006\u001a\u00020\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\u001f\u0010 \"\u0004\b!\u0010\"R\u001a\u0010\u0002\u001a\u00020\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b#\u0010 \"\u0004\b$\u0010\"R\u001a\u0010\t\u001a\u00020\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b%\u0010 \"\u0004\b&\u0010\"¨\u00063"}, d2 = {"Lio/legado/app/data/entities/Book$ReadConfig;", PackageDocumentBase.PREFIX_OPF, "reverseToc", PackageDocumentBase.PREFIX_OPF, "pageAnim", PackageDocumentBase.PREFIX_OPF, "reSegment", "imageStyle", PackageDocumentBase.PREFIX_OPF, "useReplaceRule", "delTag", PackageDocumentBase.PREFIX_OPF, "pdfImageWidth", PackageDocumentBase.PREFIX_OPF, "(ZIZLjava/lang/String;ZJF)V", "getDelTag", "()J", "setDelTag", "(J)V", "getImageStyle", "()Ljava/lang/String;", "setImageStyle", "(Ljava/lang/String;)V", "getPageAnim", "()I", "setPageAnim", "(I)V", "getPdfImageWidth", "()F", "setPdfImageWidth", "(F)V", "getReSegment", "()Z", "setReSegment", "(Z)V", "getReverseToc", "setReverseToc", "getUseReplaceRule", "setUseReplaceRule", "component1", "component2", "component3", "component4", "component5", "component6", "component7", "copy", "equals", "other", "hashCode", "toString", "reader-pro"})
     public static final /* data */ class ReadConfig {
         private boolean reverseToc;
@@ -1497,7 +1464,7 @@ public final /* data */ class Book implements BaseBook {
     }
 
     /* JADX INFO: compiled from: Book.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/data/entities/Book$Converters.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/data/entities/Book$Converters.class */
     @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u0000 \n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0002\b\u0002\n\u0002\u0010\u000e\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0004\u0018\u00002\u00020\u0001B\u0005¢\u0006\u0002\u0010\u0002J\u0010\u0010\u0003\u001a\u00020\u00042\b\u0010\u0005\u001a\u0004\u0018\u00010\u0006J(\u0010\u0007\u001a\n\u0012\u0006\u0012\u0004\u0018\u00010\u00060\b2\b\u0010\t\u001a\u0004\u0018\u00010\u0004ø\u0001\u0000ø\u0001\u0001ø\u0001\u0002¢\u0006\u0004\b\n\u0010\u000b\u0082\u0002\u000f\n\u0002\b\u0019\n\u0002\b!\n\u0005\b¡\u001e0\u0001¨\u0006\f"}, d2 = {"Lio/legado/app/data/entities/Book$Converters;", PackageDocumentBase.PREFIX_OPF, "()V", "readConfigToString", PackageDocumentBase.PREFIX_OPF, "config", "Lio/legado/app/data/entities/Book$ReadConfig;", "stringToReadConfig", "Lkotlin/Result;", "json", "stringToReadConfig-IoAF18A", "(Ljava/lang/String;)Ljava/lang/Object;", "reader-pro"})
     public static final class Converters {
         @NotNull
@@ -1507,7 +1474,6 @@ public final /* data */ class Book implements BaseBook {
             return json;
         }
 
-        /* JADX WARN: Type inference failed for: r2v1, types: [io.legado.app.data.entities.Book$Converters$stringToReadConfig-IoAF18A$$inlined$fromJsonObject$1] */
         @NotNull
         /* JADX INFO: renamed from: stringToReadConfig-IoAF18A, reason: not valid java name */
         public final Object m143stringToReadConfigIoAF18A(@Nullable String json) {
@@ -1515,8 +1481,7 @@ public final /* data */ class Book implements BaseBook {
             Gson $this$fromJsonObject$iv = GsonExtensionsKt.getGSON();
             try {
                 Result.Companion companion = Result.Companion;
-                Type type = new TypeToken<ReadConfig>() { // from class: io.legado.app.data.entities.Book$Converters$stringToReadConfig-IoAF18A$$inlined$fromJsonObject$1
-                }.getType();
+                Type type = new Book$Converters$stringToReadConfigIoAF18A$$inlined$fromJsonObject$1().getType();
                 Intrinsics.checkNotNullExpressionValue(type, "object : TypeToken<T>() {}.type");
                 Object objFromJson = $this$fromJsonObject$iv.fromJson(json, type);
                 if (!(objFromJson instanceof ReadConfig)) {

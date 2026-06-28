@@ -5,7 +5,7 @@ import java.util.List;
 import me.ag2s.epublib.domain.EpubBook;
 import me.ag2s.epublib.domain.Resource;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/browsersupport/NavigationHistory.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/browsersupport/NavigationHistory.class */
 public class NavigationHistory implements NavigationEventListener {
     public static final int DEFAULT_MAX_HISTORY_SIZE = 1000;
     private static final long DEFAULT_HISTORY_WAIT_TIME = 1000;
@@ -17,7 +17,7 @@ public class NavigationHistory implements NavigationEventListener {
     private int maxHistorySize = DEFAULT_MAX_HISTORY_SIZE;
     private long historyWaitTime = DEFAULT_HISTORY_WAIT_TIME;
 
-    /* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/browsersupport/NavigationHistory$Location.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/browsersupport/NavigationHistory$Location.class */
     private static class Location {
         private String href;
 

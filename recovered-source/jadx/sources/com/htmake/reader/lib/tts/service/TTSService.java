@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/lib/tts/service/TTSService.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/lib/tts/service/TTSService.class */
 public class TTSService {
     public static final Logger log = LoggerFactory.getLogger(TTSService.class);
     private OutputFormat outputFormat;
@@ -35,53 +35,64 @@ public class TTSService {
     private CountDownLatch latch;
     protected WebSocketListener webSocketListener;
 
+    /* synthetic */ TTSService(OutputFormat x0, boolean x1, AnonymousClass1 x2) {
+        this(x0, x1);
+    }
+
+    /* JADX INFO: renamed from: com.htmake.reader.lib.tts.service.TTSService$1, reason: invalid class name */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/lib/tts/service/TTSService$1.class */
+    class AnonymousClass1 extends WebSocketListener {
+        AnonymousClass1() {
+        }
+
+        public void onClosed(WebSocket webSocket, int code, String reason) {
+            super.onClosed(webSocket, code, reason);
+            TTSService.log.debug("onClosed:" + reason);
+            TTSService.this.ws = null;
+            TTSService.this.synthesising = false;
+        }
+
+        public void onClosing(WebSocket webSocket, int code, String reason) {
+            super.onClosing(webSocket, code, reason);
+            TTSService.log.debug("onClosing:" + reason);
+            TTSService.this.ws = null;
+            TTSService.this.synthesising = false;
+        }
+
+        public void onFailure(WebSocket webSocket, Throwable t, Response response) {
+            super.onFailure(webSocket, t, response);
+            TTSService.log.debug("onFailure" + t.getMessage(), t);
+            TTSService.this.ws = null;
+            TTSService.this.synthesising = false;
+        }
+
+        public void onMessage(WebSocket webSocket, String text) {
+            super.onMessage(webSocket, text);
+            if (text.contains(TtsConstants.TURN_START)) {
+                TTSService.this.audioBuffer.clear();
+            } else if (text.contains(TtsConstants.TURN_END)) {
+                TTSService.this.latch.countDown();
+                TTSService.this.synthesising = false;
+            }
+        }
+
+        public void onMessage(@NotNull WebSocket webSocket, @NotNull ByteString bytes) {
+            super.onMessage(webSocket, bytes);
+            int audioIndex = bytes.lastIndexOf(TtsConstants.AUDIO_START.getBytes(StandardCharsets.UTF_8)) + TtsConstants.AUDIO_START.length();
+            boolean audioContentType = bytes.lastIndexOf(TtsConstants.AUDIO_CONTENT_TYPE.getBytes(StandardCharsets.UTF_8)) + TtsConstants.AUDIO_CONTENT_TYPE.length() != -1;
+            if (audioIndex != -1 && audioContentType) {
+                try {
+                    TTSService.this.audioBuffer.write(bytes.substring(audioIndex));
+                } catch (Exception e) {
+                    TTSService.log.error("onMessage Error," + e.getMessage(), e);
+                }
+            }
+        }
+    }
+
     private TTSService(OutputFormat outputFormat, boolean usingAzureApi) {
         this.audioBuffer = new Buffer();
-        this.webSocketListener = new WebSocketListener() { // from class: com.htmake.reader.lib.tts.service.TTSService.1
-            public void onClosed(WebSocket webSocket, int code, String reason) {
-                super.onClosed(webSocket, code, reason);
-                TTSService.log.debug("onClosed:" + reason);
-                TTSService.this.ws = null;
-                TTSService.this.synthesising = false;
-            }
-
-            public void onClosing(WebSocket webSocket, int code, String reason) {
-                super.onClosing(webSocket, code, reason);
-                TTSService.log.debug("onClosing:" + reason);
-                TTSService.this.ws = null;
-                TTSService.this.synthesising = false;
-            }
-
-            public void onFailure(WebSocket webSocket, Throwable t, Response response) {
-                super.onFailure(webSocket, t, response);
-                TTSService.log.debug("onFailure" + t.getMessage(), t);
-                TTSService.this.ws = null;
-                TTSService.this.synthesising = false;
-            }
-
-            public void onMessage(WebSocket webSocket, String text) {
-                super.onMessage(webSocket, text);
-                if (text.contains(TtsConstants.TURN_START)) {
-                    TTSService.this.audioBuffer.clear();
-                } else if (text.contains(TtsConstants.TURN_END)) {
-                    TTSService.this.latch.countDown();
-                    TTSService.this.synthesising = false;
-                }
-            }
-
-            public void onMessage(@NotNull WebSocket webSocket, @NotNull ByteString bytes) {
-                super.onMessage(webSocket, bytes);
-                int audioIndex = bytes.lastIndexOf(TtsConstants.AUDIO_START.getBytes(StandardCharsets.UTF_8)) + TtsConstants.AUDIO_START.length();
-                boolean audioContentType = bytes.lastIndexOf(TtsConstants.AUDIO_CONTENT_TYPE.getBytes(StandardCharsets.UTF_8)) + TtsConstants.AUDIO_CONTENT_TYPE.length() != -1;
-                if (audioIndex != -1 && audioContentType) {
-                    try {
-                        TTSService.this.audioBuffer.write(bytes.substring(audioIndex));
-                    } catch (Exception e) {
-                        TTSService.log.error("onMessage Error," + e.getMessage(), e);
-                    }
-                }
-            }
-        };
+        this.webSocketListener = new AnonymousClass1();
         this.outputFormat = outputFormat;
         this.usingAzureApi = usingAzureApi;
     }
@@ -151,7 +162,7 @@ public class TTSService {
         this.outputFormat = speechConfig.getOutputFormat();
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/lib/tts/service/TTSService$TTSServiceBuilder.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/lib/tts/service/TTSService$TTSServiceBuilder.class */
     public static class TTSServiceBuilder {
         private OutputFormat outputFormat;
         private boolean usingAzureApi;
@@ -167,7 +178,7 @@ public class TTSService {
         }
 
         public TTSService build() {
-            return new TTSService(this.outputFormat, this.usingAzureApi);
+            return new TTSService(this.outputFormat, this.usingAzureApi, null);
         }
     }
 }

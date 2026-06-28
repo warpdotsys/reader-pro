@@ -6,7 +6,7 @@ import java.util.List;
 import me.ag2s.epublib.domain.TableOfContents;
 import me.ag2s.epublib.epub.PackageDocumentBase;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/util/StringUtil.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/util/StringUtil.class */
 public class StringUtil {
     public static String collapsePathDots(String path) {
         String[] stringParts = path.split(TableOfContents.DEFAULT_PATH_SEPARATOR);

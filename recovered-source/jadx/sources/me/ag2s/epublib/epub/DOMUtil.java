@@ -9,7 +9,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/epub/DOMUtil.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/epub/DOMUtil.class */
 class DOMUtil {
     DOMUtil() {
     }

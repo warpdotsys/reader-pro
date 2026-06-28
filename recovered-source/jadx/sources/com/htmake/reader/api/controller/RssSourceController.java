@@ -31,13 +31,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /* JADX INFO: compiled from: RssSourceController.kt */
-/* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/RssSourceController.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/RssSourceController.class */
 @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u00006\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0010\u000b\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\u000e\n\u0002\b\u0005\u0018\u00002\u00020\u0001B\r\u0012\u0006\u0010\u0002\u001a\u00020\u0003¢\u0006\u0002\u0010\u0004J\u0019\u0010\u0005\u001a\u00020\u00062\u0006\u0010\u0007\u001a\u00020\bH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\tJ\u0019\u0010\n\u001a\u00020\u000b2\u0006\u0010\u0007\u001a\u00020\bH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\tJ\u0019\u0010\f\u001a\u00020\u000b2\u0006\u0010\u0007\u001a\u00020\bH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\tJ\u0019\u0010\r\u001a\u00020\u000b2\u0006\u0010\u0007\u001a\u00020\bH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\tJ\u0018\u0010\u000e\u001a\u0004\u0018\u00010\u000f2\u0006\u0010\u0010\u001a\u00020\u00112\u0006\u0010\u0012\u001a\u00020\u0011J\u0019\u0010\u0013\u001a\u00020\u000b2\u0006\u0010\u0007\u001a\u00020\bH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\tJ\u0019\u0010\u0014\u001a\u00020\u000b2\u0006\u0010\u0007\u001a\u00020\bH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\tJ\u0019\u0010\u0015\u001a\u00020\u000b2\u0006\u0010\u0007\u001a\u00020\bH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\t\u0082\u0002\u0004\n\u0002\b\u0019¨\u0006\u0016"}, d2 = {"Lcom/htmake/reader/api/controller/RssSourceController;", "Lcom/htmake/reader/api/controller/BaseController;", "coroutineContext", "Lkotlin/coroutines/CoroutineContext;", "(Lkotlin/coroutines/CoroutineContext;)V", "canEditRssSource", PackageDocumentBase.PREFIX_OPF, "context", "Lio/vertx/ext/web/RoutingContext;", "(Lio/vertx/ext/web/RoutingContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "deleteRssSource", "Lcom/htmake/reader/api/ReturnData;", "getRssArticles", "getRssContent", "getRssSourceByURL", "Lio/legado/app/data/entities/RssSource;", RSSKeywords.RSS_ITEM_URL, PackageDocumentBase.PREFIX_OPF, "userNameSpace", "getRssSources", "saveRssSource", "saveRssSources", "reader-pro"})
 public final class RssSourceController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.RssSourceController$deleteRssSource$1, reason: invalid class name */
     /* JADX INFO: compiled from: RssSourceController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/RssSourceController$deleteRssSource$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/RssSourceController$deleteRssSource$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "RssSourceController.kt", l = {198, 201}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "deleteRssSource", c = "com.htmake.reader.api.controller.RssSourceController")
     static final class AnonymousClass1 extends ContinuationImpl {
@@ -61,7 +61,7 @@ public final class RssSourceController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.RssSourceController$getRssArticles$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: RssSourceController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/RssSourceController$getRssArticles$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/RssSourceController$getRssArticles$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "RssSourceController.kt", l = {249, 282}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "getRssArticles", c = "com.htmake.reader.api.controller.RssSourceController")
     static final class C01251 extends ContinuationImpl {
@@ -85,7 +85,7 @@ public final class RssSourceController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.RssSourceController$getRssContent$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: RssSourceController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/RssSourceController$getRssContent$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/RssSourceController$getRssContent$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "RssSourceController.kt", l = {289, 324}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "getRssContent", c = "com.htmake.reader.api.controller.RssSourceController")
     static final class C01261 extends ContinuationImpl {
@@ -109,7 +109,7 @@ public final class RssSourceController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.RssSourceController$getRssSources$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: RssSourceController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/RssSourceController$getRssSources$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/RssSourceController$getRssSources$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "RssSourceController.kt", l = {77}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "getRssSources", c = "com.htmake.reader.api.controller.RssSourceController")
     static final class C01271 extends ContinuationImpl {
@@ -133,7 +133,7 @@ public final class RssSourceController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.RssSourceController$saveRssSource$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: RssSourceController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/RssSourceController$saveRssSource$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/RssSourceController$saveRssSource$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "RssSourceController.kt", l = {101, 104}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "saveRssSource", c = "com.htmake.reader.api.controller.RssSourceController")
     static final class C01281 extends ContinuationImpl {
@@ -157,7 +157,7 @@ public final class RssSourceController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.RssSourceController$saveRssSources$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: RssSourceController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/RssSourceController$saveRssSources$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/RssSourceController$saveRssSources$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "RssSourceController.kt", l = {148, 151}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "saveRssSources", c = "com.htmake.reader.api.controller.RssSourceController")
     static final class C01291 extends ContinuationImpl {

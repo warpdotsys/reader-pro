@@ -2,7 +2,7 @@ package com.htmake.reader;
 
 import org.springframework.context.ApplicationEvent;
 
-/* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/SpringEvent.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/SpringEvent.class */
 public class SpringEvent extends ApplicationEvent {
     private String event;
     private String message;

@@ -3,7 +3,7 @@ package me.ag2s.epublib.util;
 import java.io.IOException;
 import java.io.OutputStream;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/util/NoCloseOutputStream.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/util/NoCloseOutputStream.class */
 public class NoCloseOutputStream extends OutputStream {
     private final OutputStream outputStream;
 

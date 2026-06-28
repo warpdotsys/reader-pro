@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /* JADX INFO: compiled from: RestVerticle.kt */
-/* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/verticle/RestVerticle$coroutineHandler$1$2.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/verticle/RestVerticle$coroutineHandler$1$2.class */
 @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\n\n\u0000\n\u0002\u0010\u0002\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H\u008a@"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "Lkotlinx/coroutines/CoroutineScope;"})
 @DebugMetadata(f = "RestVerticle.kt", l = {163}, i = {}, s = {}, n = {}, m = "invokeSuspend", c = "com.htmake.reader.verticle.RestVerticle$coroutineHandler$1$2")
 final class RestVerticle$coroutineHandler$1$2 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super Unit>, Object> {

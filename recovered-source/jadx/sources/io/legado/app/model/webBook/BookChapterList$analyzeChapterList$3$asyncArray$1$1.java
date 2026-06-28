@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /* JADX INFO: compiled from: BookChapterList.kt */
-/* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/webBook/BookChapterList$analyzeChapterList$3$asyncArray$1$1.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/webBook/BookChapterList$analyzeChapterList$3$asyncArray$1$1.class */
 @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\u000e\n\u0000\n\u0002\u0010 \n\u0002\u0018\u0002\n\u0002\u0018\u0002\u0010\u0000\u001a\b\u0012\u0004\u0012\u00020\u00020\u0001*\u00020\u0003H\u008a@"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "Lio/legado/app/data/entities/BookChapter;", "Lkotlinx/coroutines/CoroutineScope;"})
 @DebugMetadata(f = "BookChapterList.kt", l = {91, 92}, i = {0}, s = {"L$0"}, n = {"urlStr"}, m = "invokeSuspend", c = "io.legado.app.model.webBook.BookChapterList$analyzeChapterList$3$asyncArray$1$1")
 final class BookChapterList$analyzeChapterList$3$asyncArray$1$1 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super List<? extends BookChapter>>, Object> {

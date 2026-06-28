@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import me.ag2s.epublib.util.StringUtil;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/domain/Spine.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/domain/Spine.class */
 public class Spine implements Serializable {
     private static final long serialVersionUID = 3878483958947357246L;
     private Resource tocResource;

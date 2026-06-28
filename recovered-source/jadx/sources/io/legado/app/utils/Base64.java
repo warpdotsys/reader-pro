@@ -2,7 +2,7 @@ package io.legado.app.utils;
 
 import java.io.UnsupportedEncodingException;
 
-/* JADX INFO: loaded from: app-classes.jar:io/legado/app/utils/Base64.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/utils/Base64.class */
 public class Base64 {
     public static final int DEFAULT = 0;
     public static final int NO_PADDING = 1;
@@ -16,7 +16,7 @@ public class Base64 {
         $assertionsDisabled = !Base64.class.desiredAssertionStatus();
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/utils/Base64$Coder.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/utils/Base64$Coder.class */
     static abstract class Coder {
         public byte[] output;
         public int op;
@@ -50,7 +50,7 @@ public class Base64 {
         return temp;
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/utils/Base64$Decoder.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/utils/Base64$Decoder.class */
     static class Decoder extends Coder {
         private static final int SKIP = -1;
         private int state;
@@ -269,7 +269,7 @@ public class Base64 {
         throw new AssertionError();
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/utils/Base64$Encoder.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/utils/Base64$Encoder.class */
     static class Encoder extends Coder {
         public static final int LINE_GROUPS = 19;
         private static final byte[] ENCODE;

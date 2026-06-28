@@ -1,7 +1,6 @@
 package io.legado.app.help;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Predicate;
@@ -50,7 +49,7 @@ import org.jetbrains.annotations.Nullable;
 import org.kxml2.wap.Wbxml;
 
 /* JADX INFO: compiled from: SourceAnalyzer.kt */
-/* JADX INFO: loaded from: app-classes.jar:io/legado/app/help/SourceAnalyzer.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/help/SourceAnalyzer.class */
 @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u00004\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\u000e\n\u0002\b\u0003\n\u0002\u0010!\n\u0000\n\u0002\u0018\u0002\n\u0002\b\f\bÆ\u0002\u0018\u00002\u00020\u0001:\u0001\u001cB\u0007\b\u0002¢\u0006\u0002\u0010\u0002J$\u0010\u0007\u001a\b\u0012\u0004\u0012\u00020\t0\b2\u0006\u0010\n\u001a\u00020\u000bø\u0001\u0000ø\u0001\u0001ø\u0001\u0002¢\u0006\u0004\b\f\u0010\rJ*\u0010\u000e\u001a\u000e\u0012\n\u0012\b\u0012\u0004\u0012\u00020\t0\u000f0\b2\u0006\u0010\u0010\u001a\u00020\u0011ø\u0001\u0000ø\u0001\u0001ø\u0001\u0002¢\u0006\u0004\b\u0012\u0010\u0013J*\u0010\u000e\u001a\u000e\u0012\n\u0012\b\u0012\u0004\u0012\u00020\t0\u000f0\b2\u0006\u0010\n\u001a\u00020\u000bø\u0001\u0000ø\u0001\u0001ø\u0001\u0002¢\u0006\u0004\b\u0012\u0010\rJ\u0014\u0010\u0014\u001a\u0004\u0018\u00010\u000b2\b\u0010\u0015\u001a\u0004\u0018\u00010\u000bH\u0002J\u0014\u0010\u0016\u001a\u0004\u0018\u00010\u000b2\b\u0010\u0017\u001a\u0004\u0018\u00010\u000bH\u0002J\u0014\u0010\u0018\u001a\u0004\u0018\u00010\u000b2\b\u0010\u0019\u001a\u0004\u0018\u00010\u000bH\u0002J\u0014\u0010\u001a\u001a\u0004\u0018\u00010\u000b2\b\u0010\u001b\u001a\u0004\u0018\u00010\u000bH\u0002R\u0016\u0010\u0003\u001a\n \u0005*\u0004\u0018\u00010\u00040\u0004X\u0082\u0004¢\u0006\u0002\n\u0000R\u0016\u0010\u0006\u001a\n \u0005*\u0004\u0018\u00010\u00040\u0004X\u0082\u0004¢\u0006\u0002\n\u0000\u0082\u0002\u000f\n\u0002\b\u0019\n\u0002\b!\n\u0005\b¡\u001e0\u0001¨\u0006\u001d"}, d2 = {"Lio/legado/app/help/SourceAnalyzer;", PackageDocumentBase.PREFIX_OPF, "()V", "headerPattern", "Ljava/util/regex/Pattern;", "kotlin.jvm.PlatformType", "jsPattern", "jsonToBookSource", "Lkotlin/Result;", "Lio/legado/app/data/entities/BookSource;", "json", PackageDocumentBase.PREFIX_OPF, "jsonToBookSource-IoAF18A", "(Ljava/lang/String;)Ljava/lang/Object;", "jsonToBookSources", PackageDocumentBase.PREFIX_OPF, "inputStream", "Ljava/io/InputStream;", "jsonToBookSources-IoAF18A", "(Ljava/io/InputStream;)Ljava/lang/Object;", "toNewRule", "oldRule", "toNewUrl", "oldUrl", "toNewUrls", "oldUrls", "uaToHeader", "ua", "BookSourceAny", "reader-pro"})
 public final class SourceAnalyzer {
 
@@ -153,17 +152,6 @@ public final class SourceAnalyzer {
     /* JADX WARN: Can't fix incorrect switch cases order, some code will duplicate */
     /* JADX WARN: Failed to restore switch over string. Please report as a decompilation issue */
     /* JADX WARN: Removed duplicated region for block: B:79:0x0342  */
-    /* JADX WARN: Type inference failed for: r2v13, types: [io.legado.app.help.SourceAnalyzer$jsonToBookSource_IoAF18A$lambda-10$$inlined$fromJsonObject$4] */
-    /* JADX WARN: Type inference failed for: r2v180, types: [io.legado.app.help.SourceAnalyzer$jsonToBookSource-IoAF18A$$inlined$fromJsonObject$1] */
-    /* JADX WARN: Type inference failed for: r2v20, types: [io.legado.app.help.SourceAnalyzer$jsonToBookSource_IoAF18A$lambda-10$$inlined$fromJsonObject$6] */
-    /* JADX WARN: Type inference failed for: r2v27, types: [io.legado.app.help.SourceAnalyzer$jsonToBookSource_IoAF18A$lambda-10$$inlined$fromJsonObject$8] */
-    /* JADX WARN: Type inference failed for: r2v34, types: [io.legado.app.help.SourceAnalyzer$jsonToBookSource_IoAF18A$lambda-10$$inlined$fromJsonObject$10] */
-    /* JADX WARN: Type inference failed for: r2v39, types: [io.legado.app.help.SourceAnalyzer$jsonToBookSource_IoAF18A$lambda-10$$inlined$fromJsonObject$9] */
-    /* JADX WARN: Type inference failed for: r2v44, types: [io.legado.app.help.SourceAnalyzer$jsonToBookSource_IoAF18A$lambda-10$$inlined$fromJsonObject$7] */
-    /* JADX WARN: Type inference failed for: r2v49, types: [io.legado.app.help.SourceAnalyzer$jsonToBookSource_IoAF18A$lambda-10$$inlined$fromJsonObject$5] */
-    /* JADX WARN: Type inference failed for: r2v54, types: [io.legado.app.help.SourceAnalyzer$jsonToBookSource_IoAF18A$lambda-10$$inlined$fromJsonObject$3] */
-    /* JADX WARN: Type inference failed for: r2v59, types: [io.legado.app.help.SourceAnalyzer$jsonToBookSource_IoAF18A$lambda-10$$inlined$fromJsonObject$1] */
-    /* JADX WARN: Type inference failed for: r2v6, types: [io.legado.app.help.SourceAnalyzer$jsonToBookSource_IoAF18A$lambda-10$$inlined$fromJsonObject$2] */
     @NotNull
     /* JADX INFO: renamed from: jsonToBookSource-IoAF18A, reason: not valid java name */
     /*
@@ -200,8 +188,7 @@ public final class SourceAnalyzer {
         String json$iv = StringsKt.trim(json).toString();
         try {
             Result.Companion companion = Result.Companion;
-            Type type = new TypeToken<BookSourceAny>() { // from class: io.legado.app.help.SourceAnalyzer$jsonToBookSource-IoAF18A$$inlined$fromJsonObject$1
-            }.getType();
+            Type type = new SourceAnalyzer$jsonToBookSourceIoAF18A$$inlined$fromJsonObject$1().getType();
             Intrinsics.checkNotNullExpressionValue(type, "object : TypeToken<T>() {}.type");
             Object objFromJson = $this$fromJsonObject$iv.fromJson(json$iv, type);
             if (!(objFromJson instanceof BookSourceAny)) {
@@ -349,8 +336,7 @@ public final class SourceAnalyzer {
             String json$iv2 = String.valueOf(sourceAny.getRuleExplore());
             try {
                 Result.Companion companion5 = Result.Companion;
-                Type type2 = new TypeToken<ExploreRule>() { // from class: io.legado.app.help.SourceAnalyzer$jsonToBookSource_IoAF18A$lambda-10$$inlined$fromJsonObject$1
-                }.getType();
+                Type type2 = new SourceAnalyzer$jsonToBookSource_IoAF18A$lambda10$$inlined$fromJsonObject$1().getType();
                 Intrinsics.checkNotNullExpressionValue(type2, "object : TypeToken<T>() {}.type");
                 Object objFromJson2 = $this$fromJsonObject$iv2.fromJson(json$iv2, type2);
                 if (!(objFromJson2 instanceof ExploreRule)) {
@@ -369,8 +355,7 @@ public final class SourceAnalyzer {
             String json$iv3 = GsonExtensionsKt.getGSON().toJson(sourceAny.getRuleExplore());
             try {
                 Result.Companion companion7 = Result.Companion;
-                Type type3 = new TypeToken<ExploreRule>() { // from class: io.legado.app.help.SourceAnalyzer$jsonToBookSource_IoAF18A$lambda-10$$inlined$fromJsonObject$2
-                }.getType();
+                Type type3 = new SourceAnalyzer$jsonToBookSource_IoAF18A$lambda10$$inlined$fromJsonObject$2().getType();
                 Intrinsics.checkNotNullExpressionValue(type3, "object : TypeToken<T>() {}.type");
                 Object objFromJson3 = $this$fromJsonObject$iv3.fromJson(json$iv3, type3);
                 if (!(objFromJson3 instanceof ExploreRule)) {
@@ -392,8 +377,7 @@ public final class SourceAnalyzer {
             String json$iv4 = String.valueOf(sourceAny.getRuleSearch());
             try {
                 Result.Companion companion9 = Result.Companion;
-                Type type4 = new TypeToken<SearchRule>() { // from class: io.legado.app.help.SourceAnalyzer$jsonToBookSource_IoAF18A$lambda-10$$inlined$fromJsonObject$3
-                }.getType();
+                Type type4 = new SourceAnalyzer$jsonToBookSource_IoAF18A$lambda10$$inlined$fromJsonObject$3().getType();
                 Intrinsics.checkNotNullExpressionValue(type4, "object : TypeToken<T>() {}.type");
                 Object objFromJson4 = $this$fromJsonObject$iv4.fromJson(json$iv4, type4);
                 if (!(objFromJson4 instanceof SearchRule)) {
@@ -412,8 +396,7 @@ public final class SourceAnalyzer {
             String json$iv5 = GsonExtensionsKt.getGSON().toJson(sourceAny.getRuleSearch());
             try {
                 Result.Companion companion11 = Result.Companion;
-                Type type5 = new TypeToken<SearchRule>() { // from class: io.legado.app.help.SourceAnalyzer$jsonToBookSource_IoAF18A$lambda-10$$inlined$fromJsonObject$4
-                }.getType();
+                Type type5 = new SourceAnalyzer$jsonToBookSource_IoAF18A$lambda10$$inlined$fromJsonObject$4().getType();
                 Intrinsics.checkNotNullExpressionValue(type5, "object : TypeToken<T>() {}.type");
                 Object objFromJson5 = $this$fromJsonObject$iv5.fromJson(json$iv5, type5);
                 if (!(objFromJson5 instanceof SearchRule)) {
@@ -434,8 +417,7 @@ public final class SourceAnalyzer {
             String json$iv6 = String.valueOf(sourceAny.getRuleBookInfo());
             try {
                 Result.Companion companion13 = Result.Companion;
-                Type type6 = new TypeToken<BookInfoRule>() { // from class: io.legado.app.help.SourceAnalyzer$jsonToBookSource_IoAF18A$lambda-10$$inlined$fromJsonObject$5
-                }.getType();
+                Type type6 = new SourceAnalyzer$jsonToBookSource_IoAF18A$lambda10$$inlined$fromJsonObject$5().getType();
                 Intrinsics.checkNotNullExpressionValue(type6, "object : TypeToken<T>() {}.type");
                 Object objFromJson6 = $this$fromJsonObject$iv6.fromJson(json$iv6, type6);
                 if (!(objFromJson6 instanceof BookInfoRule)) {
@@ -454,8 +436,7 @@ public final class SourceAnalyzer {
             String json$iv7 = GsonExtensionsKt.getGSON().toJson(sourceAny.getRuleBookInfo());
             try {
                 Result.Companion companion15 = Result.Companion;
-                Type type7 = new TypeToken<BookInfoRule>() { // from class: io.legado.app.help.SourceAnalyzer$jsonToBookSource_IoAF18A$lambda-10$$inlined$fromJsonObject$6
-                }.getType();
+                Type type7 = new SourceAnalyzer$jsonToBookSource_IoAF18A$lambda10$$inlined$fromJsonObject$6().getType();
                 Intrinsics.checkNotNullExpressionValue(type7, "object : TypeToken<T>() {}.type");
                 Object objFromJson7 = $this$fromJsonObject$iv7.fromJson(json$iv7, type7);
                 if (!(objFromJson7 instanceof BookInfoRule)) {
@@ -476,8 +457,7 @@ public final class SourceAnalyzer {
             String json$iv8 = String.valueOf(sourceAny.getRuleToc());
             try {
                 Result.Companion companion17 = Result.Companion;
-                Type type8 = new TypeToken<TocRule>() { // from class: io.legado.app.help.SourceAnalyzer$jsonToBookSource_IoAF18A$lambda-10$$inlined$fromJsonObject$7
-                }.getType();
+                Type type8 = new SourceAnalyzer$jsonToBookSource_IoAF18A$lambda10$$inlined$fromJsonObject$7().getType();
                 Intrinsics.checkNotNullExpressionValue(type8, "object : TypeToken<T>() {}.type");
                 Object objFromJson8 = $this$fromJsonObject$iv8.fromJson(json$iv8, type8);
                 if (!(objFromJson8 instanceof TocRule)) {
@@ -496,8 +476,7 @@ public final class SourceAnalyzer {
             String json$iv9 = GsonExtensionsKt.getGSON().toJson(sourceAny.getRuleToc());
             try {
                 Result.Companion companion19 = Result.Companion;
-                Type type9 = new TypeToken<TocRule>() { // from class: io.legado.app.help.SourceAnalyzer$jsonToBookSource_IoAF18A$lambda-10$$inlined$fromJsonObject$8
-                }.getType();
+                Type type9 = new SourceAnalyzer$jsonToBookSource_IoAF18A$lambda10$$inlined$fromJsonObject$8().getType();
                 Intrinsics.checkNotNullExpressionValue(type9, "object : TypeToken<T>() {}.type");
                 Object objFromJson9 = $this$fromJsonObject$iv9.fromJson(json$iv9, type9);
                 if (!(objFromJson9 instanceof TocRule)) {
@@ -518,8 +497,7 @@ public final class SourceAnalyzer {
             String json$iv10 = String.valueOf(sourceAny.getRuleContent());
             try {
                 Result.Companion companion21 = Result.Companion;
-                Type type10 = new TypeToken<ContentRule>() { // from class: io.legado.app.help.SourceAnalyzer$jsonToBookSource_IoAF18A$lambda-10$$inlined$fromJsonObject$9
-                }.getType();
+                Type type10 = new SourceAnalyzer$jsonToBookSource_IoAF18A$lambda10$$inlined$fromJsonObject$9().getType();
                 Intrinsics.checkNotNullExpressionValue(type10, "object : TypeToken<T>() {}.type");
                 Object objFromJson10 = $this$fromJsonObject$iv10.fromJson(json$iv10, type10);
                 if (!(objFromJson10 instanceof ContentRule)) {
@@ -538,8 +516,7 @@ public final class SourceAnalyzer {
             String json$iv11 = GsonExtensionsKt.getGSON().toJson(sourceAny.getRuleContent());
             try {
                 Result.Companion companion23 = Result.Companion;
-                Type type11 = new TypeToken<ContentRule>() { // from class: io.legado.app.help.SourceAnalyzer$jsonToBookSource_IoAF18A$lambda-10$$inlined$fromJsonObject$10
-                }.getType();
+                Type type11 = new SourceAnalyzer$jsonToBookSource_IoAF18A$lambda10$$inlined$fromJsonObject$10().getType();
                 Intrinsics.checkNotNullExpressionValue(type11, "object : TypeToken<T>() {}.type");
                 Object objFromJson11 = $this$fromJsonObject$iv11.fromJson(json$iv11, type11);
                 if (!(objFromJson11 instanceof ContentRule)) {
@@ -560,7 +537,7 @@ public final class SourceAnalyzer {
     }
 
     /* JADX INFO: compiled from: SourceAnalyzer.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/help/SourceAnalyzer$BookSourceAny.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/help/SourceAnalyzer$BookSourceAny.class */
     @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u0000*\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0000\n\u0002\u0010\u000e\n\u0002\b\u0003\n\u0002\u0010\b\n\u0002\b\u0003\n\u0002\u0010\u000b\n\u0002\b\t\n\u0002\u0010\t\n\u0002\be\b\u0086\b\u0018\u00002\u00020\u0001B\u009d\u0002\u0012\b\b\u0002\u0010\u0002\u001a\u00020\u0003\u0012\n\b\u0002\u0010\u0004\u001a\u0004\u0018\u00010\u0003\u0012\b\b\u0002\u0010\u0005\u001a\u00020\u0003\u0012\b\b\u0002\u0010\u0006\u001a\u00020\u0007\u0012\n\b\u0002\u0010\b\u001a\u0004\u0018\u00010\u0003\u0012\b\b\u0002\u0010\t\u001a\u00020\u0007\u0012\b\b\u0002\u0010\n\u001a\u00020\u000b\u0012\b\b\u0002\u0010\f\u001a\u00020\u000b\u0012\b\b\u0002\u0010\r\u001a\u00020\u000b\u0012\n\b\u0002\u0010\u000e\u001a\u0004\u0018\u00010\u0003\u0012\n\b\u0002\u0010\u000f\u001a\u0004\u0018\u00010\u0003\u0012\n\b\u0002\u0010\u0010\u001a\u0004\u0018\u00010\u0001\u0012\n\b\u0002\u0010\u0011\u001a\u0004\u0018\u00010\u0001\u0012\n\b\u0002\u0010\u0012\u001a\u0004\u0018\u00010\u0003\u0012\n\b\u0002\u0010\u0013\u001a\u0004\u0018\u00010\u0003\u0012\b\b\u0002\u0010\u0014\u001a\u00020\u0015\u0012\b\b\u0002\u0010\u0016\u001a\u00020\u0015\u0012\b\b\u0002\u0010\u0017\u001a\u00020\u0007\u0012\n\b\u0002\u0010\u0018\u001a\u0004\u0018\u00010\u0003\u0012\n\b\u0002\u0010\u0019\u001a\u0004\u0018\u00010\u0001\u0012\n\b\u0002\u0010\u001a\u001a\u0004\u0018\u00010\u0003\u0012\n\b\u0002\u0010\u001b\u001a\u0004\u0018\u00010\u0001\u0012\n\b\u0002\u0010\u001c\u001a\u0004\u0018\u00010\u0001\u0012\n\b\u0002\u0010\u001d\u001a\u0004\u0018\u00010\u0001\u0012\n\b\u0002\u0010\u001e\u001a\u0004\u0018\u00010\u0001¢\u0006\u0002\u0010\u001fJ\t\u0010\\\u001a\u00020\u0003HÆ\u0003J\u000b\u0010]\u001a\u0004\u0018\u00010\u0003HÆ\u0003J\u000b\u0010^\u001a\u0004\u0018\u00010\u0003HÆ\u0003J\u000b\u0010_\u001a\u0004\u0018\u00010\u0001HÆ\u0003J\u000b\u0010`\u001a\u0004\u0018\u00010\u0001HÆ\u0003J\u000b\u0010a\u001a\u0004\u0018\u00010\u0003HÆ\u0003J\u000b\u0010b\u001a\u0004\u0018\u00010\u0003HÆ\u0003J\t\u0010c\u001a\u00020\u0015HÆ\u0003J\t\u0010d\u001a\u00020\u0015HÆ\u0003J\t\u0010e\u001a\u00020\u0007HÆ\u0003J\u000b\u0010f\u001a\u0004\u0018\u00010\u0003HÆ\u0003J\u000b\u0010g\u001a\u0004\u0018\u00010\u0003HÆ\u0003J\u000b\u0010h\u001a\u0004\u0018\u00010\u0001HÆ\u0003J\u000b\u0010i\u001a\u0004\u0018\u00010\u0003HÆ\u0003J\u000b\u0010j\u001a\u0004\u0018\u00010\u0001HÆ\u0003J\u000b\u0010k\u001a\u0004\u0018\u00010\u0001HÆ\u0003J\u000b\u0010l\u001a\u0004\u0018\u00010\u0001HÆ\u0003J\u000b\u0010m\u001a\u0004\u0018\u00010\u0001HÆ\u0003J\t\u0010n\u001a\u00020\u0003HÆ\u0003J\t\u0010o\u001a\u00020\u0007HÆ\u0003J\u000b\u0010p\u001a\u0004\u0018\u00010\u0003HÆ\u0003J\t\u0010q\u001a\u00020\u0007HÆ\u0003J\t\u0010r\u001a\u00020\u000bHÆ\u0003J\t\u0010s\u001a\u00020\u000bHÆ\u0003J\t\u0010t\u001a\u00020\u000bHÆ\u0003J¡\u0002\u0010u\u001a\u00020\u00002\b\b\u0002\u0010\u0002\u001a\u00020\u00032\n\b\u0002\u0010\u0004\u001a\u0004\u0018\u00010\u00032\b\b\u0002\u0010\u0005\u001a\u00020\u00032\b\b\u0002\u0010\u0006\u001a\u00020\u00072\n\b\u0002\u0010\b\u001a\u0004\u0018\u00010\u00032\b\b\u0002\u0010\t\u001a\u00020\u00072\b\b\u0002\u0010\n\u001a\u00020\u000b2\b\b\u0002\u0010\f\u001a\u00020\u000b2\b\b\u0002\u0010\r\u001a\u00020\u000b2\n\b\u0002\u0010\u000e\u001a\u0004\u0018\u00010\u00032\n\b\u0002\u0010\u000f\u001a\u0004\u0018\u00010\u00032\n\b\u0002\u0010\u0010\u001a\u0004\u0018\u00010\u00012\n\b\u0002\u0010\u0011\u001a\u0004\u0018\u00010\u00012\n\b\u0002\u0010\u0012\u001a\u0004\u0018\u00010\u00032\n\b\u0002\u0010\u0013\u001a\u0004\u0018\u00010\u00032\b\b\u0002\u0010\u0014\u001a\u00020\u00152\b\b\u0002\u0010\u0016\u001a\u00020\u00152\b\b\u0002\u0010\u0017\u001a\u00020\u00072\n\b\u0002\u0010\u0018\u001a\u0004\u0018\u00010\u00032\n\b\u0002\u0010\u0019\u001a\u0004\u0018\u00010\u00012\n\b\u0002\u0010\u001a\u001a\u0004\u0018\u00010\u00032\n\b\u0002\u0010\u001b\u001a\u0004\u0018\u00010\u00012\n\b\u0002\u0010\u001c\u001a\u0004\u0018\u00010\u00012\n\b\u0002\u0010\u001d\u001a\u0004\u0018\u00010\u00012\n\b\u0002\u0010\u001e\u001a\u0004\u0018\u00010\u0001HÆ\u0001J\u0013\u0010v\u001a\u00020\u000b2\b\u0010w\u001a\u0004\u0018\u00010\u0001HÖ\u0003J\t\u0010x\u001a\u00020\u0007HÖ\u0001J\t\u0010y\u001a\u00020\u0003HÖ\u0001R\u001c\u0010\u0013\u001a\u0004\u0018\u00010\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b \u0010!\"\u0004\b\"\u0010#R\u001c\u0010\u0004\u001a\u0004\u0018\u00010\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b$\u0010!\"\u0004\b%\u0010#R\u001a\u0010\u0002\u001a\u00020\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b&\u0010!\"\u0004\b'\u0010#R\u001a\u0010\u0006\u001a\u00020\u0007X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b(\u0010)\"\u0004\b*\u0010+R\u001a\u0010\u0005\u001a\u00020\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b,\u0010!\"\u0004\b-\u0010#R\u001c\u0010\b\u001a\u0004\u0018\u00010\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b.\u0010!\"\u0004\b/\u0010#R\u001c\u0010\u000e\u001a\u0004\u0018\u00010\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b0\u0010!\"\u0004\b1\u0010#R\u001a\u0010\t\u001a\u00020\u0007X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b2\u0010)\"\u0004\b3\u0010+R\u001a\u0010\n\u001a\u00020\u000bX\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b4\u00105\"\u0004\b6\u00107R\u001a\u0010\r\u001a\u00020\u000bX\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b8\u00105\"\u0004\b9\u00107R\u001a\u0010\f\u001a\u00020\u000bX\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b:\u00105\"\u0004\b;\u00107R\u001c\u0010\u0018\u001a\u0004\u0018\u00010\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b<\u0010!\"\u0004\b=\u0010#R\u001c\u0010\u000f\u001a\u0004\u0018\u00010\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b>\u0010!\"\u0004\b?\u0010#R\u001a\u0010\u0014\u001a\u00020\u0015X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b@\u0010A\"\u0004\bB\u0010CR\u001c\u0010\u0012\u001a\u0004\u0018\u00010\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bD\u0010!\"\u0004\bE\u0010#R\u001c\u0010\u0011\u001a\u0004\u0018\u00010\u0001X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bF\u0010G\"\u0004\bH\u0010IR\u001c\u0010\u0010\u001a\u0004\u0018\u00010\u0001X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bJ\u0010G\"\u0004\bK\u0010IR\u001a\u0010\u0016\u001a\u00020\u0015X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bL\u0010A\"\u0004\bM\u0010CR\u001c\u0010\u001c\u001a\u0004\u0018\u00010\u0001X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bN\u0010G\"\u0004\bO\u0010IR\u001c\u0010\u001e\u001a\u0004\u0018\u00010\u0001X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bP\u0010G\"\u0004\bQ\u0010IR\u001c\u0010\u0019\u001a\u0004\u0018\u00010\u0001X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bR\u0010G\"\u0004\bS\u0010IR\u001c\u0010\u001b\u001a\u0004\u0018\u00010\u0001X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bT\u0010G\"\u0004\bU\u0010IR\u001c\u0010\u001d\u001a\u0004\u0018\u00010\u0001X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bV\u0010G\"\u0004\bW\u0010IR\u001c\u0010\u001a\u001a\u0004\u0018\u00010\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bX\u0010!\"\u0004\bY\u0010#R\u001a\u0010\u0017\u001a\u00020\u0007X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\bZ\u0010)\"\u0004\b[\u0010+¨\u0006z"}, d2 = {"Lio/legado/app/help/SourceAnalyzer$BookSourceAny;", PackageDocumentBase.PREFIX_OPF, "bookSourceName", PackageDocumentBase.PREFIX_OPF, "bookSourceGroup", "bookSourceUrl", "bookSourceType", PackageDocumentBase.PREFIX_OPF, "bookUrlPattern", "customOrder", "enabled", PackageDocumentBase.PREFIX_OPF, "enabledExplore", "enabledCookieJar", "concurrentRate", "header", "loginUrl", "loginUi", "loginCheckJs", "bookSourceComment", "lastUpdateTime", PackageDocumentBase.PREFIX_OPF, "respondTime", "weight", "exploreUrl", "ruleExplore", "searchUrl", "ruleSearch", "ruleBookInfo", "ruleToc", "ruleContent", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;IZZZLjava/lang/String;Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/String;Ljava/lang/String;JJILjava/lang/String;Ljava/lang/Object;Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)V", "getBookSourceComment", "()Ljava/lang/String;", "setBookSourceComment", "(Ljava/lang/String;)V", "getBookSourceGroup", "setBookSourceGroup", "getBookSourceName", "setBookSourceName", "getBookSourceType", "()I", "setBookSourceType", "(I)V", "getBookSourceUrl", "setBookSourceUrl", "getBookUrlPattern", "setBookUrlPattern", "getConcurrentRate", "setConcurrentRate", "getCustomOrder", "setCustomOrder", "getEnabled", "()Z", "setEnabled", "(Z)V", "getEnabledCookieJar", "setEnabledCookieJar", "getEnabledExplore", "setEnabledExplore", "getExploreUrl", "setExploreUrl", "getHeader", "setHeader", "getLastUpdateTime", "()J", "setLastUpdateTime", "(J)V", "getLoginCheckJs", "setLoginCheckJs", "getLoginUi", "()Ljava/lang/Object;", "setLoginUi", "(Ljava/lang/Object;)V", "getLoginUrl", "setLoginUrl", "getRespondTime", "setRespondTime", "getRuleBookInfo", "setRuleBookInfo", "getRuleContent", "setRuleContent", "getRuleExplore", "setRuleExplore", "getRuleSearch", "setRuleSearch", "getRuleToc", "setRuleToc", "getSearchUrl", "setSearchUrl", "getWeight", "setWeight", "component1", "component10", "component11", "component12", "component13", "component14", "component15", "component16", "component17", "component18", "component19", "component2", "component20", "component21", "component22", "component23", "component24", "component25", "component3", "component4", "component5", "component6", "component7", "component8", "component9", "copy", "equals", "other", "hashCode", "toString", "reader-pro"})
     public static final /* data */ class BookSourceAny {
 

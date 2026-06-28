@@ -19,7 +19,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/util/ResourceUtil.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/util/ResourceUtil.class */
 public class ResourceUtil {
     public static Resource createChapterResource(String title, String txt, String model, String href) {
         String title2;

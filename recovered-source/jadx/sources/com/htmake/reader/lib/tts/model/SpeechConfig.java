@@ -5,7 +5,7 @@ import com.htmake.reader.lib.tts.util.Tools;
 import java.io.Serializable;
 import java.util.Optional;
 
-/* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/lib/tts/model/SpeechConfig.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/lib/tts/model/SpeechConfig.class */
 public class SpeechConfig implements Serializable {
     public static final String CONFIG_PATTERN = "X-Timestamp:%s\r\nContent-Type:application/json; charset=utf-8\r\nPath:speech.config\r\n\r\n{\"context\":{\"synthesis\":{\"audio\":{\"metadataoptions\":{\"sentenceBoundaryEnabled\":\"false\",\"wordBoundaryEnabled\":\"true\"},\"outputFormat\":\"%s\"}}}}";
     private OutputFormat outputFormat;

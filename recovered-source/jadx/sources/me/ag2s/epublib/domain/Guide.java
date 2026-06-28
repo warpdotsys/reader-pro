@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/domain/Guide.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/domain/Guide.class */
 public class Guide implements Serializable {
     private static final long serialVersionUID = -6256645339915751189L;
     public static final String DEFAULT_COVER_TITLE = "cover";

@@ -1,7 +1,6 @@
 package io.legado.app.model.analyzeRule;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.script.Bindings;
 import com.script.SimpleBindings;
 import io.legado.app.adapters.ReaderAdapterHelper;
@@ -33,7 +32,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.net.URLEncoder;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -58,7 +56,7 @@ import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
 import kotlin.jvm.internal.DefaultConstructorMarker;
 import kotlin.jvm.internal.Intrinsics;
-import kotlin.jvm.internal.StringCompanionObject;
+import kotlin.jvm.internal.Lambda;
 import kotlin.text.MatchResult;
 import kotlin.text.Regex;
 import kotlin.text.StringsKt;
@@ -80,7 +78,7 @@ import org.jsoup.Connection;
 import org.kxml2.wap.Wbxml;
 
 /* JADX INFO: compiled from: AnalyzeUrl.kt */
-/* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/analyzeRule/AnalyzeUrl.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/analyzeRule/AnalyzeUrl.class */
 @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u0000\u008e\u0001\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\u000e\n\u0002\b\u0002\n\u0002\u0010\b\n\u0002\b\u0004\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010$\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u000e\n\u0002\u0010\u000b\n\u0000\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0005\n\u0002\u0018\u0002\n\u0002\b\u0012\n\u0002\u0010\u0002\n\u0002\b\u0004\n\u0002\u0010\u0000\n\u0002\b\u0004\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0010\u0012\n\u0002\b\u0004\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0002\b\u0017\u0018\u0000 l2\u00020\u0001:\u0003lmnB\u008f\u0001\u0012\u0006\u0010\u0002\u001a\u00020\u0003\u0012\n\b\u0002\u0010\u0004\u001a\u0004\u0018\u00010\u0003\u0012\n\b\u0002\u0010\u0005\u001a\u0004\u0018\u00010\u0006\u0012\n\b\u0002\u0010\u0007\u001a\u0004\u0018\u00010\u0003\u0012\n\b\u0002\u0010\b\u001a\u0004\u0018\u00010\u0006\u0012\b\b\u0002\u0010\t\u001a\u00020\u0003\u0012\n\b\u0002\u0010\n\u001a\u0004\u0018\u00010\u000b\u0012\n\b\u0002\u0010\f\u001a\u0004\u0018\u00010\r\u0012\n\b\u0002\u0010\u000e\u001a\u0004\u0018\u00010\u000f\u0012\u0016\b\u0002\u0010\u0010\u001a\u0010\u0012\u0004\u0012\u00020\u0003\u0012\u0004\u0012\u00020\u0003\u0018\u00010\u0011\u0012\n\b\u0002\u0010\u0012\u001a\u0004\u0018\u00010\u0013¢\u0006\u0002\u0010\u0014J\u0010\u0010@\u001a\u00020A2\u0006\u0010B\u001a\u00020\u0003H\u0002J\b\u0010C\u001a\u00020AH\u0002J\b\u0010D\u001a\u00020AH\u0002J\u001c\u0010E\u001a\u0004\u0018\u00010F2\u0006\u0010G\u001a\u00020\u00032\n\b\u0002\u0010H\u001a\u0004\u0018\u00010FJ\u0012\u0010I\u001a\u00020A2\b\u0010J\u001a\u0004\u0018\u00010KH\u0002J\n\u0010L\u001a\u0004\u0018\u00010KH\u0002J\u000e\u0010M\u001a\u00020\u00032\u0006\u0010\u0004\u001a\u00020\u0003J\u0006\u0010N\u001a\u00020OJ\u0011\u0010P\u001a\u00020OH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010QJ\n\u0010R\u001a\u0004\u0018\u00010\u0013H\u0016J\u0006\u0010S\u001a\u00020TJ\u0011\u0010U\u001a\u00020TH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010QJ\n\u0010V\u001a\u0004\u0018\u00010\u000bH\u0016J*\u0010W\u001a\u00020X2\n\b\u0002\u0010G\u001a\u0004\u0018\u00010\u00032\n\b\u0002\u0010Y\u001a\u0004\u0018\u00010\u00032\b\b\u0002\u0010>\u001a\u00020\"H\u0007J3\u0010Z\u001a\u00020X2\n\b\u0002\u0010G\u001a\u0004\u0018\u00010\u00032\n\b\u0002\u0010Y\u001a\u0004\u0018\u00010\u00032\b\b\u0002\u0010>\u001a\u00020\"H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010[J\u0006\u0010\\\u001a\u00020\u0003J\b\u0010]\u001a\u00020\u0003H\u0016J\u0006\u0010^\u001a\u00020AJ\u0006\u0010_\u001a\u00020\"J\u0016\u0010`\u001a\u00020\u00032\u0006\u0010\u0004\u001a\u00020\u00032\u0006\u0010a\u001a\u00020\u0003J\b\u0010b\u001a\u00020AH\u0002J\u000e\u0010c\u001a\u00020A2\u0006\u0010d\u001a\u00020TJ\u0012\u0010e\u001a\u00020A2\b\u0010f\u001a\u0004\u0018\u00010\u0003H\u0002J)\u0010g\u001a\u00020X2\u0006\u0010h\u001a\u00020\u00032\u0006\u0010i\u001a\u00020F2\u0006\u0010j\u001a\u00020\u0003H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010kR\u001a\u0010\t\u001a\u00020\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\u0015\u0010\u0016\"\u0004\b\u0017\u0010\u0018R\"\u0010\u001a\u001a\u0004\u0018\u00010\u00032\b\u0010\u0019\u001a\u0004\u0018\u00010\u0003@BX\u0086\u000e¢\u0006\b\n\u0000\u001a\u0004\b\u001b\u0010\u0016R\u0010\u0010\u000e\u001a\u0004\u0018\u00010\u000fX\u0082\u0004¢\u0006\u0002\n\u0000R\u0010\u0010\u001c\u001a\u0004\u0018\u00010\u0003X\u0082\u000e¢\u0006\u0002\n\u0000R\u001c\u0010\u0012\u001a\u0004\u0018\u00010\u0013X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\u001d\u0010\u001e\"\u0004\b\u001f\u0010 R\u000e\u0010!\u001a\u00020\"X\u0082\u0004¢\u0006\u0002\n\u0000R*\u0010#\u001a\u001e\u0012\u0004\u0012\u00020\u0003\u0012\u0004\u0012\u00020\u00030$j\u000e\u0012\u0004\u0012\u00020\u0003\u0012\u0004\u0012\u00020\u0003`%X\u0082\u0004¢\u0006\u0002\n\u0000R-\u0010&\u001a\u001e\u0012\u0004\u0012\u00020\u0003\u0012\u0004\u0012\u00020\u00030'j\u000e\u0012\u0004\u0012\u00020\u0003\u0012\u0004\u0012\u00020\u0003`(¢\u0006\b\n\u0000\u001a\u0004\b)\u0010*R\u0013\u0010\u0004\u001a\u0004\u0018\u00010\u0003¢\u0006\b\n\u0000\u001a\u0004\b+\u0010\u0016R\u0011\u0010\u0002\u001a\u00020\u0003¢\u0006\b\n\u0000\u001a\u0004\b,\u0010\u0016R\u000e\u0010-\u001a\u00020.X\u0082\u000e¢\u0006\u0002\n\u0000R\u0015\u0010\u0005\u001a\u0004\u0018\u00010\u0006¢\u0006\n\n\u0002\u00101\u001a\u0004\b/\u00100R\u0010\u00102\u001a\u0004\u0018\u00010\u0003X\u0082\u000e¢\u0006\u0002\n\u0000R\u0010\u00103\u001a\u0004\u0018\u00010\u0003X\u0082\u000e¢\u0006\u0002\n\u0000R\u000e\u00104\u001a\u00020\u0006X\u0082\u000e¢\u0006\u0002\n\u0000R\u0010\u0010\f\u001a\u0004\u0018\u00010\rX\u0082\u0004¢\u0006\u0002\n\u0000R\u001e\u00105\u001a\u00020\u00032\u0006\u0010\u0019\u001a\u00020\u0003@BX\u0086\u000e¢\u0006\b\n\u0000\u001a\u0004\b6\u0010\u0016R\u0010\u0010\n\u001a\u0004\u0018\u00010\u000bX\u0082\u0004¢\u0006\u0002\n\u0000R\u0015\u0010\b\u001a\u0004\u0018\u00010\u0006¢\u0006\n\n\u0002\u00101\u001a\u0004\b7\u00100R\u0013\u0010\u0007\u001a\u0004\u0018\u00010\u0003¢\u0006\b\n\u0000\u001a\u0004\b8\u0010\u0016R\"\u00109\u001a\u0004\u0018\u00010\u00032\b\u0010\u0019\u001a\u0004\u0018\u00010\u0003@BX\u0086\u000e¢\u0006\b\n\u0000\u001a\u0004\b:\u0010\u0016R\u001e\u0010;\u001a\u00020\u00032\u0006\u0010\u0019\u001a\u00020\u0003@BX\u0086\u000e¢\u0006\b\n\u0000\u001a\u0004\b<\u0010\u0016R\u000e\u0010=\u001a\u00020\u0003X\u0082\u000e¢\u0006\u0002\n\u0000R\u000e\u0010>\u001a\u00020\"X\u0082\u000e¢\u0006\u0002\n\u0000R\u0010\u0010?\u001a\u0004\u0018\u00010\u0003X\u0082\u000e¢\u0006\u0002\n\u0000\u0082\u0002\u0004\n\u0002\b\u0019¨\u0006o"}, d2 = {"Lio/legado/app/model/analyzeRule/AnalyzeUrl;", "Lio/legado/app/help/JsExtensions;", "mUrl", PackageDocumentBase.PREFIX_OPF, "key", "page", PackageDocumentBase.PREFIX_OPF, "speakText", "speakSpeed", "baseUrl", PackageDocumentBase.DCTags.source, "Lio/legado/app/data/entities/BaseSource;", "ruleData", "Lio/legado/app/model/analyzeRule/RuleDataInterface;", NCXDocumentV2.NCXAttributeValues.chapter, "Lio/legado/app/data/entities/BookChapter;", "headerMapF", PackageDocumentBase.PREFIX_OPF, "debugLog", "Lio/legado/app/model/DebugLog;", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Lio/legado/app/data/entities/BaseSource;Lio/legado/app/model/analyzeRule/RuleDataInterface;Lio/legado/app/data/entities/BookChapter;Ljava/util/Map;Lio/legado/app/model/DebugLog;)V", "getBaseUrl", "()Ljava/lang/String;", "setBaseUrl", "(Ljava/lang/String;)V", "<set-?>", NCXDocumentV3.XHTMLTgs.body, "getBody", "charset", "getDebugLog", "()Lio/legado/app/model/DebugLog;", "setDebugLog", "(Lio/legado/app/model/DebugLog;)V", "enabledCookieJar", PackageDocumentBase.PREFIX_OPF, "fieldMap", "Ljava/util/LinkedHashMap;", "Lkotlin/collections/LinkedHashMap;", "headerMap", "Ljava/util/HashMap;", "Lkotlin/collections/HashMap;", "getHeaderMap", "()Ljava/util/HashMap;", "getKey", "getMUrl", "method", "Lio/legado/app/help/http/RequestMethod;", "getPage", "()Ljava/lang/Integer;", "Ljava/lang/Integer;", "proxy", "queryStr", "retry", "ruleUrl", "getRuleUrl", "getSpeakSpeed", "getSpeakText", "type", "getType", RSSKeywords.RSS_ITEM_URL, "getUrl", "urlNoQuery", "useWebView", "webJs", "analyzeFields", PackageDocumentBase.PREFIX_OPF, "fieldsTxt", "analyzeJs", "analyzeUrl", "evalJS", PackageDocumentBase.PREFIX_OPF, "jsStr", "result", "fetchEnd", "concurrentRecord", "Lio/legado/app/model/analyzeRule/AnalyzeUrl$ConcurrentRecord;", "fetchStart", "get", "getByteArray", PackageDocumentBase.PREFIX_OPF, "getByteArrayAwait", "(Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "getLogger", "getResponse", "Lokhttp3/Response;", "getResponseAwait", "getSource", "getStrResponse", "Lio/legado/app/help/http/StrResponse;", "sourceRegex", "getStrResponseAwait", "(Ljava/lang/String;Ljava/lang/String;ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;", "getUserAgent", "getUserNameSpace", "initUrl", "isPost", "put", "value", "replaceKeyPageJs", "saveCookieJar", "response", "setCookie", "tag", "upload", "fileName", "file", "contentType", "(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "Companion", "ConcurrentRecord", "UrlOption", "reader-pro"})
 public final class AnalyzeUrl implements JsExtensions {
 
@@ -165,7 +163,7 @@ public final class AnalyzeUrl implements JsExtensions {
     private static final HashMap<String, ConcurrentRecord> concurrentRecordMap;
 
     /* JADX INFO: compiled from: AnalyzeUrl.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/analyzeRule/AnalyzeUrl$WhenMappings.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/analyzeRule/AnalyzeUrl$WhenMappings.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     public /* synthetic */ class WhenMappings {
         public static final /* synthetic */ int[] $EnumSwitchMapping$0;
@@ -180,7 +178,7 @@ public final class AnalyzeUrl implements JsExtensions {
 
     /* JADX INFO: renamed from: io.legado.app.model.analyzeRule.AnalyzeUrl$getByteArrayAwait$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: AnalyzeUrl.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/analyzeRule/AnalyzeUrl$getByteArrayAwait$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/analyzeRule/AnalyzeUrl$getByteArrayAwait$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "AnalyzeUrl.kt", l = {491}, i = {}, s = {}, n = {}, m = "getByteArrayAwait", c = "io.legado.app.model.analyzeRule.AnalyzeUrl")
     static final class C01591 extends ContinuationImpl {
@@ -203,7 +201,7 @@ public final class AnalyzeUrl implements JsExtensions {
 
     /* JADX INFO: renamed from: io.legado.app.model.analyzeRule.AnalyzeUrl$getResponseAwait$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: AnalyzeUrl.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/analyzeRule/AnalyzeUrl$getResponseAwait$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/analyzeRule/AnalyzeUrl$getResponseAwait$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "AnalyzeUrl.kt", l = {446}, i = {0, 0}, s = {"L$0", "L$1"}, n = {"this", "concurrentRecord"}, m = "getResponseAwait", c = "io.legado.app.model.analyzeRule.AnalyzeUrl")
     static final class C01611 extends ContinuationImpl {
@@ -226,7 +224,7 @@ public final class AnalyzeUrl implements JsExtensions {
 
     /* JADX INFO: renamed from: io.legado.app.model.analyzeRule.AnalyzeUrl$getStrResponseAwait$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: AnalyzeUrl.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/analyzeRule/AnalyzeUrl$getStrResponseAwait$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/analyzeRule/AnalyzeUrl$getStrResponseAwait$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "AnalyzeUrl.kt", l = {360, 369, 381, 392}, i = {1, 1, 2, 2, 3, 3}, s = {"L$0", "L$1", "L$0", "L$1", "L$0", "L$1"}, n = {"this", "concurrentRecord", "this", "concurrentRecord", "this", "concurrentRecord"}, m = "getStrResponseAwait", c = "io.legado.app.model.analyzeRule.AnalyzeUrl")
     static final class C01631 extends ContinuationImpl {
@@ -761,7 +759,7 @@ public final class AnalyzeUrl implements JsExtensions {
     }
 
     /* JADX INFO: compiled from: AnalyzeUrl.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/analyzeRule/AnalyzeUrl$Companion.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/analyzeRule/AnalyzeUrl$Companion.class */
     @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u0000&\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\u0010\u000e\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0005\b\u0086\u0003\u0018\u00002\u00020\u0001B\u0007\b\u0002¢\u0006\u0002\u0010\u0002R*\u0010\u0003\u001a\u001e\u0012\u0004\u0012\u00020\u0005\u0012\u0004\u0012\u00020\u00060\u0004j\u000e\u0012\u0004\u0012\u00020\u0005\u0012\u0004\u0012\u00020\u0006`\u0007X\u0082\u0004¢\u0006\u0002\n\u0000R\u0016\u0010\b\u001a\n \n*\u0004\u0018\u00010\t0\tX\u0082\u0004¢\u0006\u0002\n\u0000R\u0011\u0010\u000b\u001a\u00020\t¢\u0006\b\n\u0000\u001a\u0004\b\f\u0010\r¨\u0006\u000e"}, d2 = {"Lio/legado/app/model/analyzeRule/AnalyzeUrl$Companion;", PackageDocumentBase.PREFIX_OPF, "()V", "concurrentRecordMap", "Ljava/util/HashMap;", PackageDocumentBase.PREFIX_OPF, "Lio/legado/app/model/analyzeRule/AnalyzeUrl$ConcurrentRecord;", "Lkotlin/collections/HashMap;", "pagePattern", "Ljava/util/regex/Pattern;", "kotlin.jvm.PlatformType", "paramPattern", "getParamPattern", "()Ljava/util/regex/Pattern;", "reader-pro"})
     public static final class Companion {
         public /* synthetic */ Companion(DefaultConstructorMarker $constructor_marker) {
@@ -923,31 +921,7 @@ public final class AnalyzeUrl implements JsExtensions {
         String strReplace$default;
         if (StringsKt.contains$default(this.ruleUrl, "{{", false, 2, (Object) null) && StringsKt.contains$default(this.ruleUrl, "}}", false, 2, (Object) null)) {
             RuleAnalyzer analyze = new RuleAnalyzer(this.ruleUrl, false, 2, null);
-            String url = analyze.innerRule("{{", "}}", new Function1<String, String>() { // from class: io.legado.app.model.analyzeRule.AnalyzeUrl$replaceKeyPageJs$url$1
-                {
-                    super(1);
-                }
-
-                @Nullable
-                public final String invoke(@NotNull String it) {
-                    Intrinsics.checkNotNullParameter(it, "it");
-                    Object objEvalJS$default = AnalyzeUrl.evalJS$default(this.this$0, it, null, 2, null);
-                    Object jsEval = objEvalJS$default == null ? PackageDocumentBase.PREFIX_OPF : objEvalJS$default;
-                    if (jsEval instanceof String) {
-                        return (String) jsEval;
-                    }
-                    if (jsEval instanceof Double) {
-                        if (((Number) jsEval).doubleValue() % 1.0d == 0.0d) {
-                            StringCompanionObject stringCompanionObject = StringCompanionObject.INSTANCE;
-                            Object[] objArr = {jsEval};
-                            String str = String.format("%.0f", Arrays.copyOf(objArr, objArr.length));
-                            Intrinsics.checkNotNullExpressionValue(str, "java.lang.String.format(format, *args)");
-                            return str;
-                        }
-                    }
-                    return jsEval.toString();
-                }
-            });
+            String url = analyze.innerRule("{{", "}}", new AnalyzeUrl$replaceKeyPageJs$url$1(this));
             if (url.length() > 0) {
                 this.ruleUrl = url;
             }
@@ -1022,7 +996,6 @@ public final class AnalyzeUrl implements JsExtensions {
         }
     }
 
-    /* JADX WARN: Type inference failed for: r2v19, types: [io.legado.app.model.analyzeRule.AnalyzeUrl$analyzeUrl$$inlined$fromJsonObject$1] */
     private final void analyzeUrl() throws UnsupportedEncodingException {
         String strSubstring;
         Object obj;
@@ -1057,8 +1030,7 @@ public final class AnalyzeUrl implements JsExtensions {
             Intrinsics.checkNotNullExpressionValue(json$iv, "(this as java.lang.String).substring(startIndex)");
             try {
                 Result.Companion companion = Result.Companion;
-                Type type = new TypeToken<UrlOption>() { // from class: io.legado.app.model.analyzeRule.AnalyzeUrl$analyzeUrl$$inlined$fromJsonObject$1
-                }.getType();
+                Type type = new AnalyzeUrl$analyzeUrl$$inlined$fromJsonObject$1().getType();
                 Intrinsics.checkNotNullExpressionValue(type, "object : TypeToken<T>() {}.type");
                 Object objFromJson = $this$fromJsonObject$iv.fromJson(json$iv, type);
                 if (!(objFromJson instanceof UrlOption)) {
@@ -1372,58 +1344,7 @@ public final class AnalyzeUrl implements JsExtensions {
                     c01631.L$0 = this;
                     c01631.L$1 = concurrentRecord;
                     c01631.label = 4;
-                    objNewCallStrResponse = OkHttpUtilsKt.newCallStrResponse(HttpHelperKt.getProxyClient(this.proxy, getDebugLog()), this.retry, new Function1<Request.Builder, Unit>() { // from class: io.legado.app.model.analyzeRule.AnalyzeUrl.getStrResponseAwait.2
-
-                        /* JADX INFO: renamed from: io.legado.app.model.analyzeRule.AnalyzeUrl$getStrResponseAwait$2$WhenMappings */
-                        /* JADX INFO: compiled from: AnalyzeUrl.kt */
-                        /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/analyzeRule/AnalyzeUrl$getStrResponseAwait$2$WhenMappings.class */
-                        @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
-                        public /* synthetic */ class WhenMappings {
-                            public static final /* synthetic */ int[] $EnumSwitchMapping$0;
-
-                            static {
-                                int[] iArr = new int[RequestMethod.values().length];
-                                iArr[RequestMethod.POST.ordinal()] = 1;
-                                $EnumSwitchMapping$0 = iArr;
-                            }
-                        }
-
-                        {
-                            super(1);
-                        }
-
-                        public /* bridge */ /* synthetic */ Object invoke(Object p1) {
-                            invoke((Request.Builder) p1);
-                            return Unit.INSTANCE;
-                        }
-
-                        public final void invoke(@NotNull Request.Builder $this$newCallStrResponse) {
-                            Intrinsics.checkNotNullParameter($this$newCallStrResponse, "$this$newCallStrResponse");
-                            OkHttpUtilsKt.addHeaders($this$newCallStrResponse, AnalyzeUrl.this.getHeaderMap());
-                            if (WhenMappings.$EnumSwitchMapping$0[AnalyzeUrl.this.method.ordinal()] == 1) {
-                                $this$newCallStrResponse.url(AnalyzeUrl.this.urlNoQuery);
-                                String contentType = AnalyzeUrl.this.getHeaderMap().get(NCXDocumentV3.XHTMLAttributeValues.Content_Type);
-                                String body = AnalyzeUrl.this.getBody();
-                                if (!(!AnalyzeUrl.this.fieldMap.isEmpty())) {
-                                    String str2 = body;
-                                    if (!(str2 == null || StringsKt.isBlank(str2))) {
-                                        String str3 = contentType;
-                                        if (!(str3 == null || StringsKt.isBlank(str3))) {
-                                            RequestBody requestBody = RequestBody.Companion.create(body, MediaType.Companion.get(contentType));
-                                            $this$newCallStrResponse.post(requestBody);
-                                            return;
-                                        } else {
-                                            OkHttpUtilsKt.postJson($this$newCallStrResponse, body);
-                                            return;
-                                        }
-                                    }
-                                }
-                                OkHttpUtilsKt.postForm($this$newCallStrResponse, AnalyzeUrl.this.fieldMap, true);
-                                return;
-                            }
-                            OkHttpUtilsKt.get($this$newCallStrResponse, AnalyzeUrl.this.urlNoQuery, AnalyzeUrl.this.fieldMap, true);
-                        }
-                    }, c01631);
+                    objNewCallStrResponse = OkHttpUtilsKt.newCallStrResponse(HttpHelperKt.getProxyClient(this.proxy, getDebugLog()), this.retry, new AnonymousClass2(), c01631);
                     if (objNewCallStrResponse == coroutine_suspended) {
                         return coroutine_suspended;
                     }
@@ -1524,6 +1445,63 @@ public final class AnalyzeUrl implements JsExtensions {
         return analyzeUrl.getStrResponseAwait(str, str2, z, continuation);
     }
 
+    /* JADX INFO: renamed from: io.legado.app.model.analyzeRule.AnalyzeUrl$getStrResponseAwait$2, reason: invalid class name */
+    /* JADX INFO: compiled from: AnalyzeUrl.kt */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/analyzeRule/AnalyzeUrl$getStrResponseAwait$2.class */
+    @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\n\n\u0000\n\u0002\u0010\u0002\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H\n"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "Lokhttp3/Request$Builder;"})
+    static final class AnonymousClass2 extends Lambda implements Function1<Request.Builder, Unit> {
+
+        /* JADX INFO: renamed from: io.legado.app.model.analyzeRule.AnalyzeUrl$getStrResponseAwait$2$WhenMappings */
+        /* JADX INFO: compiled from: AnalyzeUrl.kt */
+        /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/analyzeRule/AnalyzeUrl$getStrResponseAwait$2$WhenMappings.class */
+        @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
+        public /* synthetic */ class WhenMappings {
+            public static final /* synthetic */ int[] $EnumSwitchMapping$0;
+
+            static {
+                int[] iArr = new int[RequestMethod.values().length];
+                iArr[RequestMethod.POST.ordinal()] = 1;
+                $EnumSwitchMapping$0 = iArr;
+            }
+        }
+
+        AnonymousClass2() {
+            super(1);
+        }
+
+        public /* bridge */ /* synthetic */ Object invoke(Object p1) {
+            invoke((Request.Builder) p1);
+            return Unit.INSTANCE;
+        }
+
+        public final void invoke(@NotNull Request.Builder $this$newCallStrResponse) {
+            Intrinsics.checkNotNullParameter($this$newCallStrResponse, "$this$newCallStrResponse");
+            OkHttpUtilsKt.addHeaders($this$newCallStrResponse, AnalyzeUrl.this.getHeaderMap());
+            if (WhenMappings.$EnumSwitchMapping$0[AnalyzeUrl.this.method.ordinal()] == 1) {
+                $this$newCallStrResponse.url(AnalyzeUrl.this.urlNoQuery);
+                String contentType = AnalyzeUrl.this.getHeaderMap().get(NCXDocumentV3.XHTMLAttributeValues.Content_Type);
+                String body = AnalyzeUrl.this.getBody();
+                if (!(!AnalyzeUrl.this.fieldMap.isEmpty())) {
+                    String str = body;
+                    if (!(str == null || StringsKt.isBlank(str))) {
+                        String str2 = contentType;
+                        if (!(str2 == null || StringsKt.isBlank(str2))) {
+                            RequestBody requestBody = RequestBody.Companion.create(body, MediaType.Companion.get(contentType));
+                            $this$newCallStrResponse.post(requestBody);
+                            return;
+                        } else {
+                            OkHttpUtilsKt.postJson($this$newCallStrResponse, body);
+                            return;
+                        }
+                    }
+                }
+                OkHttpUtilsKt.postForm($this$newCallStrResponse, AnalyzeUrl.this.fieldMap, true);
+                return;
+            }
+            OkHttpUtilsKt.get($this$newCallStrResponse, AnalyzeUrl.this.urlNoQuery, AnalyzeUrl.this.fieldMap, true);
+        }
+    }
+
     public final void saveCookieJar(@NotNull Response response) {
         Intrinsics.checkNotNullParameter(response, "response");
         List cookieList = response.headers("Set-Cookie");
@@ -1553,7 +1531,7 @@ public final class AnalyzeUrl implements JsExtensions {
 
     /* JADX INFO: renamed from: io.legado.app.model.analyzeRule.AnalyzeUrl$getStrResponse$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: AnalyzeUrl.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/analyzeRule/AnalyzeUrl$getStrResponse$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/analyzeRule/AnalyzeUrl$getStrResponse$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\n\n\u0000\n\u0002\u0018\u0002\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H\u008a@"}, d2 = {"<anonymous>", "Lio/legado/app/help/http/StrResponse;", "Lkotlinx/coroutines/CoroutineScope;"})
     @DebugMetadata(f = "AnalyzeUrl.kt", l = {435}, i = {}, s = {}, n = {}, m = "invokeSuspend", c = "io.legado.app.model.analyzeRule.AnalyzeUrl$getStrResponse$1")
     static final class C01621 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super StrResponse>, Object> {
@@ -1635,57 +1613,7 @@ public final class AnalyzeUrl implements JsExtensions {
                 c01611.L$0 = this;
                 c01611.L$1 = concurrentRecord;
                 c01611.label = 1;
-                objNewCallResponse = OkHttpUtilsKt.newCallResponse(HttpHelperKt.getProxyClient$default(this.proxy, null, 2, null), this.retry, new Function1<Request.Builder, Unit>() { // from class: io.legado.app.model.analyzeRule.AnalyzeUrl$getResponseAwait$response$1
-
-                    /* JADX INFO: compiled from: AnalyzeUrl.kt */
-                    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/analyzeRule/AnalyzeUrl$getResponseAwait$response$1$WhenMappings.class */
-                    @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
-                    public /* synthetic */ class WhenMappings {
-                        public static final /* synthetic */ int[] $EnumSwitchMapping$0;
-
-                        static {
-                            int[] iArr = new int[RequestMethod.values().length];
-                            iArr[RequestMethod.POST.ordinal()] = 1;
-                            $EnumSwitchMapping$0 = iArr;
-                        }
-                    }
-
-                    {
-                        super(1);
-                    }
-
-                    public /* bridge */ /* synthetic */ Object invoke(Object p1) {
-                        invoke((Request.Builder) p1);
-                        return Unit.INSTANCE;
-                    }
-
-                    public final void invoke(@NotNull Request.Builder $this$newCallResponse) {
-                        Intrinsics.checkNotNullParameter($this$newCallResponse, "$this$newCallResponse");
-                        OkHttpUtilsKt.addHeaders($this$newCallResponse, this.this$0.getHeaderMap());
-                        if (WhenMappings.$EnumSwitchMapping$0[this.this$0.method.ordinal()] == 1) {
-                            $this$newCallResponse.url(this.this$0.urlNoQuery);
-                            String contentType = this.this$0.getHeaderMap().get(NCXDocumentV3.XHTMLAttributeValues.Content_Type);
-                            String body = this.this$0.getBody();
-                            if (!(!this.this$0.fieldMap.isEmpty())) {
-                                String str = body;
-                                if (!(str == null || StringsKt.isBlank(str))) {
-                                    String str2 = contentType;
-                                    if (!(str2 == null || StringsKt.isBlank(str2))) {
-                                        RequestBody requestBody = RequestBody.Companion.create(body, MediaType.Companion.get(contentType));
-                                        $this$newCallResponse.post(requestBody);
-                                        return;
-                                    } else {
-                                        OkHttpUtilsKt.postJson($this$newCallResponse, body);
-                                        return;
-                                    }
-                                }
-                            }
-                            OkHttpUtilsKt.postForm($this$newCallResponse, this.this$0.fieldMap, true);
-                            return;
-                        }
-                        OkHttpUtilsKt.get($this$newCallResponse, this.this$0.urlNoQuery, this.this$0.fieldMap, true);
-                    }
-                }, c01611);
+                objNewCallResponse = OkHttpUtilsKt.newCallResponse(HttpHelperKt.getProxyClient$default(this.proxy, null, 2, null), this.retry, new AnalyzeUrl$getResponseAwait$response$1(this), c01611);
                 if (objNewCallResponse == coroutine_suspended) {
                     return coroutine_suspended;
                 }
@@ -1706,7 +1634,7 @@ public final class AnalyzeUrl implements JsExtensions {
 
     /* JADX INFO: renamed from: io.legado.app.model.analyzeRule.AnalyzeUrl$getResponse$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: AnalyzeUrl.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/analyzeRule/AnalyzeUrl$getResponse$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/analyzeRule/AnalyzeUrl$getResponse$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\n\n\u0000\n\u0002\u0018\u0002\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H\u008a@"}, d2 = {"<anonymous>", "Lokhttp3/Response;", "Lkotlinx/coroutines/CoroutineScope;"})
     @DebugMetadata(f = "AnalyzeUrl.kt", l = {471}, i = {}, s = {}, n = {}, m = "invokeSuspend", c = "io.legado.app.model.analyzeRule.AnalyzeUrl$getResponse$1")
     static final class C01601 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super Response>, Object> {
@@ -1788,57 +1716,7 @@ public final class AnalyzeUrl implements JsExtensions {
                 c01591.L$0 = this;
                 c01591.L$1 = concurrentRecord;
                 c01591.label = 1;
-                objNewCallResponseBody = OkHttpUtilsKt.newCallResponseBody(HttpHelperKt.getProxyClient$default(this.proxy, null, 2, null), this.retry, new Function1<Request.Builder, Unit>() { // from class: io.legado.app.model.analyzeRule.AnalyzeUrl$getByteArrayAwait$byteArray$1
-
-                    /* JADX INFO: compiled from: AnalyzeUrl.kt */
-                    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/analyzeRule/AnalyzeUrl$getByteArrayAwait$byteArray$1$WhenMappings.class */
-                    @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
-                    public /* synthetic */ class WhenMappings {
-                        public static final /* synthetic */ int[] $EnumSwitchMapping$0;
-
-                        static {
-                            int[] iArr = new int[RequestMethod.values().length];
-                            iArr[RequestMethod.POST.ordinal()] = 1;
-                            $EnumSwitchMapping$0 = iArr;
-                        }
-                    }
-
-                    {
-                        super(1);
-                    }
-
-                    public /* bridge */ /* synthetic */ Object invoke(Object p1) {
-                        invoke((Request.Builder) p1);
-                        return Unit.INSTANCE;
-                    }
-
-                    public final void invoke(@NotNull Request.Builder $this$newCallResponseBody) {
-                        Intrinsics.checkNotNullParameter($this$newCallResponseBody, "$this$newCallResponseBody");
-                        OkHttpUtilsKt.addHeaders($this$newCallResponseBody, this.this$0.getHeaderMap());
-                        if (WhenMappings.$EnumSwitchMapping$0[this.this$0.method.ordinal()] == 1) {
-                            $this$newCallResponseBody.url(this.this$0.urlNoQuery);
-                            String contentType = this.this$0.getHeaderMap().get(NCXDocumentV3.XHTMLAttributeValues.Content_Type);
-                            String body = this.this$0.getBody();
-                            if (!(!this.this$0.fieldMap.isEmpty())) {
-                                String str = body;
-                                if (!(str == null || StringsKt.isBlank(str))) {
-                                    String str2 = contentType;
-                                    if (!(str2 == null || StringsKt.isBlank(str2))) {
-                                        RequestBody requestBody = RequestBody.Companion.create(body, MediaType.Companion.get(contentType));
-                                        $this$newCallResponseBody.post(requestBody);
-                                        return;
-                                    } else {
-                                        OkHttpUtilsKt.postJson($this$newCallResponseBody, body);
-                                        return;
-                                    }
-                                }
-                            }
-                            OkHttpUtilsKt.postForm($this$newCallResponseBody, this.this$0.fieldMap, true);
-                            return;
-                        }
-                        OkHttpUtilsKt.get($this$newCallResponseBody, this.this$0.urlNoQuery, this.this$0.fieldMap, true);
-                    }
-                }, c01591);
+                objNewCallResponseBody = OkHttpUtilsKt.newCallResponseBody(HttpHelperKt.getProxyClient$default(this.proxy, null, 2, null), this.retry, new AnalyzeUrl$getByteArrayAwait$byteArray$1(this), c01591);
                 if (objNewCallResponseBody == coroutine_suspended) {
                     return coroutine_suspended;
                 }
@@ -1859,7 +1737,7 @@ public final class AnalyzeUrl implements JsExtensions {
 
     /* JADX INFO: renamed from: io.legado.app.model.analyzeRule.AnalyzeUrl$getByteArray$1, reason: invalid class name */
     /* JADX INFO: compiled from: AnalyzeUrl.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/analyzeRule/AnalyzeUrl$getByteArray$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/analyzeRule/AnalyzeUrl$getByteArray$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\n\n\u0000\n\u0002\u0010\u0012\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H\u008a@"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "Lkotlinx/coroutines/CoroutineScope;"})
     @DebugMetadata(f = "AnalyzeUrl.kt", l = {517}, i = {}, s = {}, n = {}, m = "invokeSuspend", c = "io.legado.app.model.analyzeRule.AnalyzeUrl$getByteArray$1")
     static final class AnonymousClass1 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super byte[]>, Object> {
@@ -1905,56 +1783,67 @@ public final class AnalyzeUrl implements JsExtensions {
         return (byte[]) BuildersKt.runBlocking$default((CoroutineContext) null, new AnonymousClass1(null), 1, (Object) null);
     }
 
+    /* JADX INFO: renamed from: io.legado.app.model.analyzeRule.AnalyzeUrl$upload$2, reason: invalid class name and case insensitive filesystem */
+    /* JADX INFO: compiled from: AnalyzeUrl.kt */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/analyzeRule/AnalyzeUrl$upload$2.class */
+    @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\n\n\u0000\n\u0002\u0010\u0002\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H\n"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "Lokhttp3/Request$Builder;"})
+    static final class C01642 extends Lambda implements Function1<Request.Builder, Unit> {
+        final /* synthetic */ String $fileName;
+        final /* synthetic */ Object $file;
+        final /* synthetic */ String $contentType;
+
+        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+        C01642(String $fileName, Object $file, String $contentType) {
+            super(1);
+            this.$fileName = $fileName;
+            this.$file = $file;
+            this.$contentType = $contentType;
+        }
+
+        public /* bridge */ /* synthetic */ Object invoke(Object p1) {
+            invoke((Request.Builder) p1);
+            return Unit.INSTANCE;
+        }
+
+        public final void invoke(@NotNull Request.Builder $this$newCallStrResponse) {
+            Object obj;
+            Intrinsics.checkNotNullParameter($this$newCallStrResponse, "$this$newCallStrResponse");
+            $this$newCallStrResponse.url(AnalyzeUrl.this.urlNoQuery);
+            Gson $this$fromJsonObject$iv = GsonExtensionsKt.getGSON();
+            String json$iv = AnalyzeUrl.this.getBody();
+            try {
+                Result.Companion companion = Result.Companion;
+                Type type = new AnalyzeUrl$upload$2$invoke$$inlined$fromJsonObject$1().getType();
+                Intrinsics.checkNotNullExpressionValue(type, "object : TypeToken<T>() {}.type");
+                Object objFromJson = $this$fromJsonObject$iv.fromJson(json$iv, type);
+                if (!(objFromJson instanceof HashMap)) {
+                    objFromJson = null;
+                }
+                obj = Result.constructor-impl((HashMap) objFromJson);
+            } catch (Throwable th) {
+                Result.Companion companion2 = Result.Companion;
+                obj = Result.constructor-impl(ResultKt.createFailure(th));
+            }
+            Object obj2 = obj;
+            Object obj3 = Result.isFailure-impl(obj2) ? null : obj2;
+            Intrinsics.checkNotNull(obj3);
+            Map bodyMap = (HashMap) obj3;
+            Map $this$forEach$iv = bodyMap;
+            String str = this.$fileName;
+            Object obj4 = this.$file;
+            String str2 = this.$contentType;
+            for (Map.Entry element$iv : $this$forEach$iv.entrySet()) {
+                if (Intrinsics.areEqual(element$iv.getValue().toString(), "fileRequest")) {
+                    bodyMap.put(element$iv.getKey(), MapsKt.mapOf(new Pair[]{new Pair("fileName", str), new Pair("file", obj4), new Pair("contentType", str2)}));
+                }
+            }
+            OkHttpUtilsKt.postMultipart($this$newCallStrResponse, AnalyzeUrl.this.getType(), bodyMap);
+        }
+    }
+
     @Nullable
-    public final Object upload(@NotNull final String fileName, @NotNull final Object file, @NotNull final String contentType, @NotNull Continuation<? super StrResponse> $completion) {
-        return OkHttpUtilsKt.newCallStrResponse(HttpHelperKt.getProxyClient$default(this.proxy, null, 2, null), this.retry, new Function1<Request.Builder, Unit>() { // from class: io.legado.app.model.analyzeRule.AnalyzeUrl.upload.2
-            /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-            {
-                super(1);
-            }
-
-            public /* bridge */ /* synthetic */ Object invoke(Object p1) {
-                invoke((Request.Builder) p1);
-                return Unit.INSTANCE;
-            }
-
-            /* JADX WARN: Type inference failed for: r2v7, types: [io.legado.app.model.analyzeRule.AnalyzeUrl$upload$2$invoke$$inlined$fromJsonObject$1] */
-            public final void invoke(@NotNull Request.Builder $this$newCallStrResponse) {
-                Object obj;
-                Intrinsics.checkNotNullParameter($this$newCallStrResponse, "$this$newCallStrResponse");
-                $this$newCallStrResponse.url(AnalyzeUrl.this.urlNoQuery);
-                Gson $this$fromJsonObject$iv = GsonExtensionsKt.getGSON();
-                String json$iv = AnalyzeUrl.this.getBody();
-                try {
-                    Result.Companion companion = Result.Companion;
-                    Type type = new TypeToken<HashMap<String, Object>>() { // from class: io.legado.app.model.analyzeRule.AnalyzeUrl$upload$2$invoke$$inlined$fromJsonObject$1
-                    }.getType();
-                    Intrinsics.checkNotNullExpressionValue(type, "object : TypeToken<T>() {}.type");
-                    Object objFromJson = $this$fromJsonObject$iv.fromJson(json$iv, type);
-                    if (!(objFromJson instanceof HashMap)) {
-                        objFromJson = null;
-                    }
-                    obj = Result.constructor-impl((HashMap) objFromJson);
-                } catch (Throwable th) {
-                    Result.Companion companion2 = Result.Companion;
-                    obj = Result.constructor-impl(ResultKt.createFailure(th));
-                }
-                Object obj2 = obj;
-                Object obj3 = Result.isFailure-impl(obj2) ? null : obj2;
-                Intrinsics.checkNotNull(obj3);
-                Map bodyMap = (HashMap) obj3;
-                Map $this$forEach$iv = bodyMap;
-                String str = fileName;
-                Object obj4 = file;
-                String str2 = contentType;
-                for (Map.Entry element$iv : $this$forEach$iv.entrySet()) {
-                    if (Intrinsics.areEqual(element$iv.getValue().toString(), "fileRequest")) {
-                        bodyMap.put(element$iv.getKey(), MapsKt.mapOf(new Pair[]{new Pair("fileName", str), new Pair("file", obj4), new Pair("contentType", str2)}));
-                    }
-                }
-                OkHttpUtilsKt.postMultipart($this$newCallStrResponse, AnalyzeUrl.this.getType(), bodyMap);
-            }
-        }, $completion);
+    public final Object upload(@NotNull String fileName, @NotNull Object file, @NotNull String contentType, @NotNull Continuation<? super StrResponse> $completion) {
+        return OkHttpUtilsKt.newCallStrResponse(HttpHelperKt.getProxyClient$default(this.proxy, null, 2, null), this.retry, new C01642(fileName, file, contentType), $completion);
     }
 
     private final void setCookie(String tag) {
@@ -1993,7 +1882,7 @@ public final class AnalyzeUrl implements JsExtensions {
     }
 
     /* JADX INFO: compiled from: AnalyzeUrl.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/analyzeRule/AnalyzeUrl$UrlOption.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/analyzeRule/AnalyzeUrl$UrlOption.class */
     @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u00002\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0000\n\u0002\u0010\u000e\n\u0002\b\u0004\n\u0002\u0010\b\n\u0002\b\u0013\n\u0002\u0010\u000b\n\u0002\b\u0004\n\u0002\u0010$\n\u0002\b\u0007\n\u0002\u0010\u0002\n\u0002\b\f\b\u0086\b\u0018\u00002\u00020\u0001Bq\u0012\n\b\u0002\u0010\u0002\u001a\u0004\u0018\u00010\u0003\u0012\n\b\u0002\u0010\u0004\u001a\u0004\u0018\u00010\u0003\u0012\n\b\u0002\u0010\u0005\u001a\u0004\u0018\u00010\u0001\u0012\n\b\u0002\u0010\u0006\u001a\u0004\u0018\u00010\u0001\u0012\n\b\u0002\u0010\u0007\u001a\u0004\u0018\u00010\b\u0012\n\b\u0002\u0010\t\u001a\u0004\u0018\u00010\u0003\u0012\n\b\u0002\u0010\n\u001a\u0004\u0018\u00010\u0001\u0012\n\b\u0002\u0010\u000b\u001a\u0004\u0018\u00010\u0003\u0012\n\b\u0002\u0010\f\u001a\u0004\u0018\u00010\u0003¢\u0006\u0002\u0010\rJ\u000b\u0010\u000f\u001a\u0004\u0018\u00010\u0003HÂ\u0003J\u000b\u0010\u0010\u001a\u0004\u0018\u00010\u0003HÂ\u0003J\u000b\u0010\u0011\u001a\u0004\u0018\u00010\u0001HÂ\u0003J\u000b\u0010\u0012\u001a\u0004\u0018\u00010\u0001HÂ\u0003J\u0010\u0010\u0013\u001a\u0004\u0018\u00010\bHÂ\u0003¢\u0006\u0002\u0010\u0014J\u000b\u0010\u0015\u001a\u0004\u0018\u00010\u0003HÂ\u0003J\u000b\u0010\u0016\u001a\u0004\u0018\u00010\u0001HÂ\u0003J\u000b\u0010\u0017\u001a\u0004\u0018\u00010\u0003HÂ\u0003J\u000b\u0010\u0018\u001a\u0004\u0018\u00010\u0003HÂ\u0003Jz\u0010\u0019\u001a\u00020\u00002\n\b\u0002\u0010\u0002\u001a\u0004\u0018\u00010\u00032\n\b\u0002\u0010\u0004\u001a\u0004\u0018\u00010\u00032\n\b\u0002\u0010\u0005\u001a\u0004\u0018\u00010\u00012\n\b\u0002\u0010\u0006\u001a\u0004\u0018\u00010\u00012\n\b\u0002\u0010\u0007\u001a\u0004\u0018\u00010\b2\n\b\u0002\u0010\t\u001a\u0004\u0018\u00010\u00032\n\b\u0002\u0010\n\u001a\u0004\u0018\u00010\u00012\n\b\u0002\u0010\u000b\u001a\u0004\u0018\u00010\u00032\n\b\u0002\u0010\f\u001a\u0004\u0018\u00010\u0003HÆ\u0001¢\u0006\u0002\u0010\u001aJ\u0013\u0010\u001b\u001a\u00020\u001c2\b\u0010\u001d\u001a\u0004\u0018\u00010\u0001HÖ\u0003J\b\u0010\u001e\u001a\u0004\u0018\u00010\u0003J\b\u0010\u001f\u001a\u0004\u0018\u00010\u0003J\u0010\u0010 \u001a\f\u0012\u0002\b\u0003\u0012\u0002\b\u0003\u0018\u00010!J\b\u0010\"\u001a\u0004\u0018\u00010\u0003J\b\u0010#\u001a\u0004\u0018\u00010\u0003J\u0006\u0010$\u001a\u00020\bJ\b\u0010%\u001a\u0004\u0018\u00010\u0003J\b\u0010&\u001a\u0004\u0018\u00010\u0003J\t\u0010'\u001a\u00020\bHÖ\u0001J\u0010\u0010(\u001a\u00020)2\b\u0010*\u001a\u0004\u0018\u00010\u0003J\u0010\u0010+\u001a\u00020)2\b\u0010*\u001a\u0004\u0018\u00010\u0003J\u0010\u0010,\u001a\u00020)2\b\u0010*\u001a\u0004\u0018\u00010\u0003J\u0010\u0010-\u001a\u00020)2\b\u0010*\u001a\u0004\u0018\u00010\u0003J\u0010\u0010.\u001a\u00020)2\b\u0010*\u001a\u0004\u0018\u00010\u0003J\u0010\u0010/\u001a\u00020)2\b\u0010*\u001a\u0004\u0018\u00010\u0003J\u0010\u00100\u001a\u00020)2\b\u0010*\u001a\u0004\u0018\u00010\u0003J\u0010\u00101\u001a\u00020)2\b\u0010*\u001a\u0004\u0018\u00010\u0003J\t\u00102\u001a\u00020\u0003HÖ\u0001J\u0006\u00103\u001a\u00020\u001cJ\u000e\u00103\u001a\u00020)2\u0006\u00104\u001a\u00020\u001cR\u0010\u0010\u0006\u001a\u0004\u0018\u00010\u0001X\u0082\u000e¢\u0006\u0002\n\u0000R\u0010\u0010\u0004\u001a\u0004\u0018\u00010\u0003X\u0082\u000e¢\u0006\u0002\n\u0000R\u0010\u0010\u0005\u001a\u0004\u0018\u00010\u0001X\u0082\u000e¢\u0006\u0002\n\u0000R\u0010\u0010\f\u001a\u0004\u0018\u00010\u0003X\u0082\u000e¢\u0006\u0002\n\u0000R\u0010\u0010\u0002\u001a\u0004\u0018\u00010\u0003X\u0082\u000e¢\u0006\u0002\n\u0000R\u0012\u0010\u0007\u001a\u0004\u0018\u00010\bX\u0082\u000e¢\u0006\u0004\n\u0002\u0010\u000eR\u0010\u0010\t\u001a\u0004\u0018\u00010\u0003X\u0082\u000e¢\u0006\u0002\n\u0000R\u0010\u0010\u000b\u001a\u0004\u0018\u00010\u0003X\u0082\u000e¢\u0006\u0002\n\u0000R\u0010\u0010\n\u001a\u0004\u0018\u00010\u0001X\u0082\u000e¢\u0006\u0002\n\u0000¨\u00065"}, d2 = {"Lio/legado/app/model/analyzeRule/AnalyzeUrl$UrlOption;", PackageDocumentBase.PREFIX_OPF, "method", PackageDocumentBase.PREFIX_OPF, "charset", "headers", NCXDocumentV3.XHTMLTgs.body, "retry", PackageDocumentBase.PREFIX_OPF, "type", "webView", "webJs", "js", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/Object;Ljava/lang/String;Ljava/lang/String;)V", "Ljava/lang/Integer;", "component1", "component2", "component3", "component4", "component5", "()Ljava/lang/Integer;", "component6", "component7", "component8", "component9", "copy", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/Object;Ljava/lang/String;Ljava/lang/String;)Lio/legado/app/model/analyzeRule/AnalyzeUrl$UrlOption;", "equals", PackageDocumentBase.PREFIX_OPF, "other", "getBody", "getCharset", "getHeaderMap", PackageDocumentBase.PREFIX_OPF, "getJs", "getMethod", "getRetry", "getType", "getWebJs", "hashCode", "setBody", PackageDocumentBase.PREFIX_OPF, "value", "setCharset", "setHeaders", "setJs", "setMethod", "setRetry", "setType", "setWebJs", "toString", "useWebView", "boolean", "reader-pro"})
     public static final /* data */ class UrlOption {
 
@@ -2189,7 +2078,6 @@ public final class AnalyzeUrl implements JsExtensions {
             this.webView = z ? true : null;
         }
 
-        /* JADX WARN: Type inference failed for: r2v1, types: [io.legado.app.model.analyzeRule.AnalyzeUrl$UrlOption$setHeaders$$inlined$fromJsonObject$1] */
         public final void setHeaders(@Nullable String value) {
             Object obj;
             Map map;
@@ -2201,8 +2089,7 @@ public final class AnalyzeUrl implements JsExtensions {
                 Gson $this$fromJsonObject$iv = GsonExtensionsKt.getGSON();
                 try {
                     Result.Companion companion = Result.Companion;
-                    Type type = new TypeToken<Map<String, ? extends Object>>() { // from class: io.legado.app.model.analyzeRule.AnalyzeUrl$UrlOption$setHeaders$$inlined$fromJsonObject$1
-                    }.getType();
+                    Type type = new AnalyzeUrl$UrlOption$setHeaders$$inlined$fromJsonObject$1().getType();
                     Intrinsics.checkNotNullExpressionValue(type, "object : TypeToken<T>() {}.type");
                     Object objFromJson = $this$fromJsonObject$iv.fromJson(value, type);
                     if (!(objFromJson instanceof Map)) {
@@ -2220,7 +2107,6 @@ public final class AnalyzeUrl implements JsExtensions {
             urlOption.headers = map;
         }
 
-        /* JADX WARN: Type inference failed for: r2v1, types: [io.legado.app.model.analyzeRule.AnalyzeUrl$UrlOption$getHeaderMap$$inlined$fromJsonObject$1] */
         @Nullable
         public final Map<?, ?> getHeaderMap() {
             Object obj;
@@ -2235,8 +2121,7 @@ public final class AnalyzeUrl implements JsExtensions {
             String json$iv = (String) value;
             try {
                 Result.Companion companion = Result.Companion;
-                Type type = new TypeToken<Map<String, ? extends Object>>() { // from class: io.legado.app.model.analyzeRule.AnalyzeUrl$UrlOption$getHeaderMap$$inlined$fromJsonObject$1
-                }.getType();
+                Type type = new AnalyzeUrl$UrlOption$getHeaderMap$$inlined$fromJsonObject$1().getType();
                 Intrinsics.checkNotNullExpressionValue(type, "object : TypeToken<T>() {}.type");
                 Object objFromJson = $this$fromJsonObject$iv.fromJson(json$iv, type);
                 if (!(objFromJson instanceof Map)) {
@@ -2251,7 +2136,6 @@ public final class AnalyzeUrl implements JsExtensions {
             return (Map) (Result.isFailure-impl(obj2) ? null : obj2);
         }
 
-        /* JADX WARN: Type inference failed for: r2v3, types: [io.legado.app.model.analyzeRule.AnalyzeUrl$UrlOption$setBody$$inlined$fromJsonObject$1] */
         public final void setBody(@Nullable String value) {
             String str;
             Object obj;
@@ -2280,8 +2164,7 @@ public final class AnalyzeUrl implements JsExtensions {
                 Gson $this$fromJsonObject$iv = GsonExtensionsKt.getGSON();
                 try {
                     Result.Companion companion3 = Result.Companion;
-                    Type type = new TypeToken<Map<String, ? extends Object>>() { // from class: io.legado.app.model.analyzeRule.AnalyzeUrl$UrlOption$setBody$$inlined$fromJsonObject$1
-                    }.getType();
+                    Type type = new AnalyzeUrl$UrlOption$setBody$$inlined$fromJsonObject$1().getType();
                     Intrinsics.checkNotNullExpressionValue(type, "object : TypeToken<T>() {}.type");
                     Object objFromJson2 = $this$fromJsonObject$iv.fromJson(value, type);
                     if (!(objFromJson2 instanceof Map)) {
@@ -2329,7 +2212,7 @@ public final class AnalyzeUrl implements JsExtensions {
     }
 
     /* JADX INFO: compiled from: AnalyzeUrl.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/analyzeRule/AnalyzeUrl$ConcurrentRecord.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/analyzeRule/AnalyzeUrl$ConcurrentRecord.class */
     @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u0000$\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0000\n\u0002\u0010\u000b\n\u0000\n\u0002\u0010\t\n\u0000\n\u0002\u0010\b\n\u0002\b\u0013\n\u0002\u0010\u000e\n\u0000\b\u0086\b\u0018\u00002\u00020\u0001B\u001d\u0012\u0006\u0010\u0002\u001a\u00020\u0003\u0012\u0006\u0010\u0004\u001a\u00020\u0005\u0012\u0006\u0010\u0006\u001a\u00020\u0007¢\u0006\u0002\u0010\bJ\t\u0010\u0013\u001a\u00020\u0003HÆ\u0003J\t\u0010\u0014\u001a\u00020\u0005HÆ\u0003J\t\u0010\u0015\u001a\u00020\u0007HÆ\u0003J'\u0010\u0016\u001a\u00020\u00002\b\b\u0002\u0010\u0002\u001a\u00020\u00032\b\b\u0002\u0010\u0004\u001a\u00020\u00052\b\b\u0002\u0010\u0006\u001a\u00020\u0007HÆ\u0001J\u0013\u0010\u0017\u001a\u00020\u00032\b\u0010\u0018\u001a\u0004\u0018\u00010\u0001HÖ\u0003J\t\u0010\u0019\u001a\u00020\u0007HÖ\u0001J\t\u0010\u001a\u001a\u00020\u001bHÖ\u0001R\u0011\u0010\u0002\u001a\u00020\u0003¢\u0006\b\n\u0000\u001a\u0004\b\t\u0010\nR\u001a\u0010\u0006\u001a\u00020\u0007X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\u000b\u0010\f\"\u0004\b\r\u0010\u000eR\u001a\u0010\u0004\u001a\u00020\u0005X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\u000f\u0010\u0010\"\u0004\b\u0011\u0010\u0012¨\u0006\u001c"}, d2 = {"Lio/legado/app/model/analyzeRule/AnalyzeUrl$ConcurrentRecord;", PackageDocumentBase.PREFIX_OPF, "concurrent", PackageDocumentBase.PREFIX_OPF, RSSKeywords.RSS_ITEM_TIME, PackageDocumentBase.PREFIX_OPF, "frequency", PackageDocumentBase.PREFIX_OPF, "(ZJI)V", "getConcurrent", "()Z", "getFrequency", "()I", "setFrequency", "(I)V", "getTime", "()J", "setTime", "(J)V", "component1", "component2", "component3", "copy", "equals", "other", "hashCode", "toString", PackageDocumentBase.PREFIX_OPF, "reader-pro"})
     public static final /* data */ class ConcurrentRecord {
         private final boolean concurrent;

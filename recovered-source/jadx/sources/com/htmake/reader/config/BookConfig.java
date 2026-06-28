@@ -10,7 +10,7 @@ import me.ag2s.epublib.epub.PackageDocumentBase;
 import org.jetbrains.annotations.NotNull;
 
 /* JADX INFO: compiled from: BookConfig.kt */
-/* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/config/BookConfig.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/config/BookConfig.class */
 @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u0000\u001c\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0002\b\u0002\n\u0002\u0010\u000e\n\u0002\b\u0005\n\u0002\u0010\u0002\n\u0002\b\u0002\bÆ\u0002\u0018\u00002\u00020\u0001B\u0007\b\u0002¢\u0006\u0002\u0010\u0002J\u000e\u0010\t\u001a\u00020\n2\u0006\u0010\u000b\u001a\u00020\u0004R\u0014\u0010\u0003\u001a\u00020\u0004X\u0086D¢\u0006\b\n\u0000\u001a\u0004\b\u0005\u0010\u0006R\u0014\u0010\u0007\u001a\u00020\u0004X\u0086D¢\u0006\b\n\u0000\u001a\u0004\b\b\u0010\u0006¨\u0006\f"}, d2 = {"Lcom/htmake/reader/config/BookConfig;", PackageDocumentBase.PREFIX_OPF, "()V", "epubInjectJavascript", PackageDocumentBase.PREFIX_OPF, "getEpubInjectJavascript", "()Ljava/lang/String;", "javascriptVersion", "getJavascriptVersion", "injectJavascriptToEpubChapter", PackageDocumentBase.PREFIX_OPF, "filePath", "reader-pro"})
 public final class BookConfig {
 

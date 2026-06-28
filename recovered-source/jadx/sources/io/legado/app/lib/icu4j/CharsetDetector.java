@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-/* JADX INFO: loaded from: app-classes.jar:io/legado/app/lib/icu4j/CharsetDetector.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/lib/icu4j/CharsetDetector.class */
 public class CharsetDetector {
     private static final int kBufSize = 8000;
     int fInputLen;
@@ -181,7 +181,7 @@ public class CharsetDetector {
         }
     }
 
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/lib/icu4j/CharsetDetector$CSRecognizerInfo.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/lib/icu4j/CharsetDetector$CSRecognizerInfo.class */
     private static class CSRecognizerInfo {
         CharsetRecognizer recognizer;
         boolean isDefaultEnabled;

@@ -7,7 +7,7 @@ import java.net.URL;
 import org.kxml2.wap.Wbxml;
 
 /* JADX INFO: compiled from: EncodingDetectHelp.java */
-/* JADX INFO: loaded from: app-classes.jar:io/legado/app/help/BytesEncodingDetect.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/help/BytesEncodingDetect.class */
 class BytesEncodingDetect extends Encoding {
     public boolean debug = false;
     int[][] GBFreq = new int[94][94];

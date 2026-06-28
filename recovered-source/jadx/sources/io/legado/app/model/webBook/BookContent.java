@@ -44,7 +44,7 @@ import org.jetbrains.annotations.Nullable;
 import org.kxml2.wap.Wbxml;
 
 /* JADX INFO: compiled from: BookContent.kt */
-/* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/webBook/BookContent.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/webBook/BookContent.class */
 @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u0000D\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\u0010\u000e\n\u0002\u0010 \n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0004\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0010\u000b\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0003\bÆ\u0002\u0018\u00002\u00020\u0001B\u0007\b\u0002¢\u0006\u0002\u0010\u0002Jr\u0010\u0003\u001a\u0014\u0012\u0004\u0012\u00020\u0005\u0012\n\u0012\b\u0012\u0004\u0012\u00020\u00050\u00060\u00042\u0006\u0010\u0007\u001a\u00020\b2\u0006\u0010\t\u001a\u00020\u00052\u0006\u0010\n\u001a\u00020\u00052\u0006\u0010\u000b\u001a\u00020\u00052\u0006\u0010\f\u001a\u00020\r2\u0006\u0010\u000e\u001a\u00020\u000f2\u0006\u0010\u0010\u001a\u00020\u00112\b\u0010\u0012\u001a\u0004\u0018\u00010\u00052\b\b\u0002\u0010\u0013\u001a\u00020\u00142\n\b\u0002\u0010\u0015\u001a\u0004\u0018\u00010\u0016H\u0002J[\u0010\u0003\u001a\u00020\u00052\b\u0010\u000b\u001a\u0004\u0018\u00010\u00052\u0006\u0010\u0007\u001a\u00020\b2\u0006\u0010\u0017\u001a\u00020\u000f2\u0006\u0010\u0010\u001a\u00020\u00112\u0006\u0010\t\u001a\u00020\u00052\u0006\u0010\n\u001a\u00020\u00052\n\b\u0002\u0010\u0012\u001a\u0004\u0018\u00010\u00052\n\b\u0002\u0010\u0015\u001a\u0004\u0018\u00010\u0016H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0018\u0082\u0002\u0004\n\u0002\b\u0019¨\u0006\u0019"}, d2 = {"Lio/legado/app/model/webBook/BookContent;", PackageDocumentBase.PREFIX_OPF, "()V", "analyzeContent", "Lkotlin/Pair;", PackageDocumentBase.PREFIX_OPF, PackageDocumentBase.PREFIX_OPF, "book", "Lio/legado/app/data/entities/Book;", "baseUrl", "redirectUrl", NCXDocumentV3.XHTMLTgs.body, "contentRule", "Lio/legado/app/data/entities/rule/ContentRule;", NCXDocumentV2.NCXAttributeValues.chapter, "Lio/legado/app/data/entities/BookChapter;", "bookSource", "Lio/legado/app/data/entities/BookSource;", "nextChapterUrl", "printLog", PackageDocumentBase.PREFIX_OPF, "debugLog", "Lio/legado/app/model/DebugLog;", "bookChapter", "(Ljava/lang/String;Lio/legado/app/data/entities/Book;Lio/legado/app/data/entities/BookChapter;Lio/legado/app/data/entities/BookSource;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/legado/app/model/DebugLog;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "reader-pro"})
 public final class BookContent {
 
@@ -53,7 +53,7 @@ public final class BookContent {
 
     /* JADX INFO: renamed from: io.legado.app.model.webBook.BookContent$analyzeContent$1, reason: invalid class name */
     /* JADX INFO: compiled from: BookContent.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/webBook/BookContent$analyzeContent$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/webBook/BookContent$analyzeContent$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookContent.kt", l = {69, 84}, i = {}, s = {}, n = {}, m = "analyzeContent", c = "io.legado.app.model.webBook.BookContent")
     static final class AnonymousClass1 extends ContinuationImpl {
@@ -108,7 +108,7 @@ public final class BookContent {
     /*
         Code decompiled incorrectly, please refer to instructions dump.
     */
-    public final Object analyzeContent(@Nullable String body, @NotNull Book book, @NotNull BookChapter bookChapter, @NotNull BookSource bookSource, @NotNull String baseUrl, @NotNull String redirectUrl, @Nullable String nextChapterUrl, @Nullable DebugLog debugLog, @NotNull Continuation<? super String> $completion) throws Exception {
+    public final Object analyzeContent(@Nullable String body, @NotNull Book book, @NotNull BookChapter bookChapter, @NotNull BookSource bookSource, @NotNull String baseUrl, @NotNull String redirectUrl, @Nullable String nextChapterUrl, @Nullable DebugLog debugLog, @NotNull Continuation<? super String> $completion) {
         AnonymousClass1 anonymousClass1;
         AnalyzeRule analyzeRule;
         ContentRule contentRule;
@@ -402,7 +402,7 @@ public final class BookContent {
 
     /* JADX INFO: renamed from: io.legado.app.model.webBook.BookContent$analyzeContent$3, reason: invalid class name */
     /* JADX INFO: compiled from: BookContent.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/webBook/BookContent$analyzeContent$3.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/webBook/BookContent$analyzeContent$3.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\n\n\u0000\n\u0002\u0010\u0002\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H\u008a@"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "Lkotlinx/coroutines/CoroutineScope;"})
     @DebugMetadata(f = "BookContent.kt", l = {104}, i = {0}, s = {"L$0"}, n = {"$this$withContext"}, m = "invokeSuspend", c = "io.legado.app.model.webBook.BookContent$analyzeContent$3")
     static final class AnonymousClass3 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super Unit>, Object> {

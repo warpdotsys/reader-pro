@@ -9,7 +9,7 @@ import me.ag2s.epublib.epub.PackageDocumentBase;
 import org.kxml2.kdom.Node;
 import org.xmlpull.v1.XmlSerializer;
 
-/* JADX INFO: loaded from: app-classes.jar:org/kxml2/io/KXmlSerializer.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:org/kxml2/io/KXmlSerializer.class */
 public class KXmlSerializer implements XmlSerializer {
     private Writer writer;
     private boolean pending;

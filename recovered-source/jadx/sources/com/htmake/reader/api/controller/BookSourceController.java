@@ -8,6 +8,7 @@ import com.htmake.reader.utils.VertExtKt;
 import io.legado.app.constant.RSSKeywords;
 import io.legado.app.data.entities.BookSource;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Handler;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
@@ -42,9 +43,11 @@ import kotlin.coroutines.jvm.internal.ContinuationImpl;
 import kotlin.coroutines.jvm.internal.DebugMetadata;
 import kotlin.coroutines.jvm.internal.SuspendLambda;
 import kotlin.io.FilesKt;
+import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
 import kotlin.jvm.internal.DefaultConstructorMarker;
 import kotlin.jvm.internal.Intrinsics;
+import kotlin.jvm.internal.Lambda;
 import kotlin.jvm.internal.Ref;
 import kotlin.jvm.internal.TypeIntrinsics;
 import kotlinx.coroutines.BuildersKt;
@@ -58,7 +61,7 @@ import org.jetbrains.annotations.Nullable;
 import org.kxml2.wap.Wbxml;
 
 /* JADX INFO: compiled from: BookSourceController.kt */
-/* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookSourceController.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookSourceController.class */
 @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u0000^\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\u000b\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0005\n\u0002\u0010%\n\u0002\u0010\u000e\n\u0002\u0010\b\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0006\n\u0002\u0010\"\n\u0002\b\u0006\n\u0002\u0010\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0005\u0018\u00002\u00020\u0001B\r\u0012\u0006\u0010\u0002\u001a\u00020\u0003¢\u0006\u0002\u0010\u0004J\u0019\u0010\u0007\u001a\u00020\b2\u0006\u0010\t\u001a\u00020\nH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u000bJ\u0019\u0010\f\u001a\u00020\r2\u0006\u0010\t\u001a\u00020\nH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u000bJ\u0019\u0010\u000e\u001a\u00020\r2\u0006\u0010\t\u001a\u00020\nH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u000bJ\u0019\u0010\u000f\u001a\u00020\r2\u0006\u0010\t\u001a\u00020\nH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u000bJ\u0019\u0010\u0010\u001a\u00020\r2\u0006\u0010\t\u001a\u00020\nH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u000bJ\u0019\u0010\u0011\u001a\u00020\r2\u0006\u0010\t\u001a\u00020\nH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u000bJ&\u0010\u0012\u001a\u000e\u0012\u0004\u0012\u00020\u0014\u0012\u0004\u0012\u00020\u00150\u00132\u0006\u0010\u0016\u001a\u00020\u00142\n\b\u0002\u0010\u0017\u001a\u0004\u0018\u00010\u0018J\u0019\u0010\u0019\u001a\u00020\r2\u0006\u0010\t\u001a\u00020\nH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u000bJ\u001a\u0010\u001a\u001a\u000e\u0012\u0004\u0012\u00020\u0014\u0012\u0004\u0012\u00020\u00150\u00132\u0006\u0010\u0016\u001a\u00020\u0014J\u0019\u0010\u001b\u001a\u00020\r2\u0006\u0010\t\u001a\u00020\nH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u000bJ\u0010\u0010\u001c\u001a\u0004\u0018\u00010\u00182\u0006\u0010\u0016\u001a\u00020\u0014J4\u0010\u001d\u001a\u0004\u0018\u00010\u00182\u0006\u0010\u0016\u001a\u00020\u00142\u0010\b\u0002\u0010\u001e\u001a\n\u0012\u0004\u0012\u00020\u0014\u0018\u00010\u001f2\u0010\b\u0002\u0010 \u001a\n\u0012\u0004\u0012\u00020\u0014\u0018\u00010\u001fJ\u0019\u0010!\u001a\u00020\r2\u0006\u0010\t\u001a\u00020\nH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u000bJ\u0019\u0010\"\u001a\u00020\r2\u0006\u0010\t\u001a\u00020\nH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u000bJ\u0019\u0010#\u001a\u00020\r2\u0006\u0010\t\u001a\u00020\nH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u000bJ\u0016\u0010#\u001a\u00020\r2\u0006\u0010\t\u001a\u00020\n2\u0006\u0010$\u001a\u00020\u0018J\u0019\u0010%\u001a\u00020&2\u0006\u0010\t\u001a\u00020\nH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u000bJ \u0010'\u001a\u00020\r2\u0006\u0010\u0016\u001a\u00020\u00142\b\u0010(\u001a\u0004\u0018\u00010)2\u0006\u0010$\u001a\u00020\u0018J\u0019\u0010*\u001a\u00020\r2\u0006\u0010\t\u001a\u00020\nH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u000bJ#\u0010+\u001a\u00020&2\u0006\u0010\u0016\u001a\u00020\u00142\b\u0010,\u001a\u0004\u0018\u00010)H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010-R\u000e\u0010\u0005\u001a\u00020\u0006X\u0082\u000e¢\u0006\u0002\n\u0000\u0082\u0002\u0004\n\u0002\b\u0019¨\u0006."}, d2 = {"Lcom/htmake/reader/api/controller/BookSourceController;", "Lcom/htmake/reader/api/controller/BaseController;", "coroutineContext", "Lkotlin/coroutines/CoroutineContext;", "(Lkotlin/coroutines/CoroutineContext;)V", "webClient", "Lio/vertx/ext/web/client/WebClient;", "canEditBookSource", PackageDocumentBase.PREFIX_OPF, "context", "Lio/vertx/ext/web/RoutingContext;", "(Lio/vertx/ext/web/RoutingContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "deleteAllBookSources", "Lcom/htmake/reader/api/ReturnData;", "deleteBookSource", "deleteBookSources", "deleteBookSourcesFile", "deleteUserBookSource", "generateBookSourceMap", PackageDocumentBase.PREFIX_OPF, PackageDocumentBase.PREFIX_OPF, PackageDocumentBase.PREFIX_OPF, "userNameSpace", "bookSourceList", "Lio/vertx/core/json/JsonArray;", "getBookSource", "getBookSourceMap", "getBookSources", "getUserBookSourceJson", "getUserBookSourceJsonOpt", "fields", PackageDocumentBase.PREFIX_OPF, "checkNotEmpty", "readSourceFile", "saveBookSource", "saveBookSources", "bookSourceJsonArray", "saveFromRemoteSource", PackageDocumentBase.PREFIX_OPF, "saveUserBookSources", "userInfo", "Lcom/htmake/reader/entity/User;", "setAsDefaultBookSources", "updateRemoteSourceSub", "user", "(Ljava/lang/String;Lcom/htmake/reader/entity/User;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "reader-pro"})
 public final class BookSourceController extends BaseController {
 
@@ -67,7 +70,7 @@ public final class BookSourceController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookSourceController$deleteAllBookSources$1, reason: invalid class name */
     /* JADX INFO: compiled from: BookSourceController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookSourceController$deleteAllBookSources$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookSourceController$deleteAllBookSources$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookSourceController.kt", l = {312, 315}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "deleteAllBookSources", c = "com.htmake.reader.api.controller.BookSourceController")
     static final class AnonymousClass1 extends ContinuationImpl {
@@ -91,7 +94,7 @@ public final class BookSourceController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookSourceController$deleteBookSource$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookSourceController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookSourceController$deleteBookSource$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookSourceController$deleteBookSource$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookSourceController.kt", l = {240, 243}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "deleteBookSource", c = "com.htmake.reader.api.controller.BookSourceController")
     static final class C00931 extends ContinuationImpl {
@@ -115,7 +118,7 @@ public final class BookSourceController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookSourceController$deleteBookSources$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookSourceController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookSourceController$deleteBookSources$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookSourceController$deleteBookSources$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookSourceController.kt", l = {271, 274}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "deleteBookSources", c = "com.htmake.reader.api.controller.BookSourceController")
     static final class C00941 extends ContinuationImpl {
@@ -139,7 +142,7 @@ public final class BookSourceController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookSourceController$deleteBookSourcesFile$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookSourceController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookSourceController$deleteBookSourcesFile$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookSourceController$deleteBookSourcesFile$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookSourceController.kt", l = {440}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "deleteBookSourcesFile", c = "com.htmake.reader.api.controller.BookSourceController")
     static final class C00951 extends ContinuationImpl {
@@ -163,7 +166,7 @@ public final class BookSourceController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookSourceController$deleteUserBookSource$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookSourceController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookSourceController$deleteUserBookSource$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookSourceController$deleteUserBookSource$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookSourceController.kt", l = {420}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "deleteUserBookSource", c = "com.htmake.reader.api.controller.BookSourceController")
     static final class C00961 extends ContinuationImpl {
@@ -187,7 +190,7 @@ public final class BookSourceController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookSourceController$getBookSource$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookSourceController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookSourceController$getBookSource$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookSourceController$getBookSource$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookSourceController.kt", l = {183}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "getBookSource", c = "com.htmake.reader.api.controller.BookSourceController")
     static final class C00971 extends ContinuationImpl {
@@ -211,7 +214,7 @@ public final class BookSourceController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookSourceController$getBookSources$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookSourceController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookSourceController$getBookSources$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookSourceController$getBookSources$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookSourceController.kt", l = {219}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "getBookSources", c = "com.htmake.reader.api.controller.BookSourceController")
     static final class C00981 extends ContinuationImpl {
@@ -235,7 +238,7 @@ public final class BookSourceController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookSourceController$saveBookSource$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookSourceController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookSourceController$saveBookSource$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookSourceController$saveBookSource$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookSourceController.kt", l = {Wbxml.EXT_I_1, Wbxml.LITERAL_C}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "saveBookSource", c = "com.htmake.reader.api.controller.BookSourceController")
     static final class C00991 extends ContinuationImpl {
@@ -259,7 +262,7 @@ public final class BookSourceController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookSourceController$saveBookSources$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookSourceController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookSourceController$saveBookSources$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookSourceController$saveBookSources$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookSourceController.kt", l = {108, 111}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "saveBookSources", c = "com.htmake.reader.api.controller.BookSourceController")
     static final class C01001 extends ContinuationImpl {
@@ -283,7 +286,7 @@ public final class BookSourceController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookSourceController$saveFromRemoteSource$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookSourceController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookSourceController$saveFromRemoteSource$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookSourceController$saveFromRemoteSource$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookSourceController.kt", l = {363}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "saveFromRemoteSource", c = "com.htmake.reader.api.controller.BookSourceController")
     static final class C01011 extends ContinuationImpl {
@@ -307,7 +310,7 @@ public final class BookSourceController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookSourceController$setAsDefaultBookSources$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookSourceController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookSourceController$setAsDefaultBookSources$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookSourceController$setAsDefaultBookSources$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookSourceController.kt", l = {326}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "setAsDefaultBookSources", c = "com.htmake.reader.api.controller.BookSourceController")
     static final class C01021 extends ContinuationImpl {
@@ -331,7 +334,7 @@ public final class BookSourceController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookSourceController$updateRemoteSourceSub$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: BookSourceController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookSourceController$updateRemoteSourceSub$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookSourceController$updateRemoteSourceSub$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "BookSourceController.kt", l = {400}, i = {}, s = {}, n = {}, m = "updateRemoteSourceSub", c = "com.htmake.reader.api.controller.BookSourceController")
     static final class C01031 extends ContinuationImpl {
@@ -1265,7 +1268,7 @@ public final class BookSourceController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookSourceController$saveFromRemoteSource$2, reason: invalid class name */
     /* JADX INFO: compiled from: BookSourceController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/BookSourceController$saveFromRemoteSource$2.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookSourceController$saveFromRemoteSource$2.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\n\n\u0000\n\u0002\u0010\u0002\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H\u008a@"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "Lkotlinx/coroutines/CoroutineScope;"})
     @DebugMetadata(f = "BookSourceController.kt", l = {}, i = {}, s = {}, n = {}, m = "invokeSuspend", c = "com.htmake.reader.api.controller.BookSourceController$saveFromRemoteSource$2")
     static final class AnonymousClass2 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super Unit>, Object> {
@@ -1324,11 +1327,11 @@ public final class BookSourceController extends BaseController {
     }
 
     /* JADX WARN: Code restructure failed: missing block: B:15:0x00a3, code lost:
-
+    
         if (0 < r16) goto L16;
      */
     /* JADX WARN: Code restructure failed: missing block: B:16:0x00a6, code lost:
-
+    
         r0 = r15;
         r15 = r15 + 1;
         r0 = new kotlin.jvm.internal.Ref.ObjectRef();
@@ -1338,30 +1341,27 @@ public final class BookSourceController extends BaseController {
         r0 = (java.lang.CharSequence) r0.element;
      */
     /* JADX WARN: Code restructure failed: missing block: B:17:0x00f6, code lost:
-
+    
         if (r0 == null) goto L20;
      */
     /* JADX WARN: Code restructure failed: missing block: B:19:0x0100, code lost:
-
+    
         if (r0.length() != 0) goto L21;
      */
     /* JADX WARN: Code restructure failed: missing block: B:20:0x0103, code lost:
-
+    
         r0 = true;
      */
     /* JADX WARN: Code restructure failed: missing block: B:21:0x0107, code lost:
-
+    
         r0 = false;
      */
     /* JADX WARN: Code restructure failed: missing block: B:22:0x0108, code lost:
-
+    
         if (r0 == false) goto L24;
      */
     /* JADX WARN: Code restructure failed: missing block: B:24:0x010e, code lost:
-
-        r4 = r11;
-        r5 = r12;
-        r6 = r14;
+    
         r24.L$0 = r10;
         r24.L$1 = r11;
         r24.L$2 = r12;
@@ -1371,23 +1371,23 @@ public final class BookSourceController extends BaseController {
         r24.label = 1;
      */
     /* JADX WARN: Code restructure failed: missing block: B:25:0x0158, code lost:
-
-        if (io.vertx.kotlin.coroutines.VertxCoroutineKt.awaitResult(new com.htmake.reader.api.controller.BookSourceController.C01042(r10), r24) != r0) goto L30;
+    
+        if (io.vertx.kotlin.coroutines.VertxCoroutineKt.awaitResult(new com.htmake.reader.api.controller.BookSourceController.C01042(r10, r0, r11, r12, r14, r0, r0), r24) != r0) goto L30;
      */
     /* JADX WARN: Code restructure failed: missing block: B:27:0x015d, code lost:
-
+    
         return r0;
      */
     /* JADX WARN: Code restructure failed: missing block: B:31:0x019d, code lost:
-
+    
         if (r15 >= r16) goto L32;
      */
     /* JADX WARN: Code restructure failed: missing block: B:32:0x01a0, code lost:
-
+    
         generateBookSourceMap$default(r10, r11, null, 2, null);
      */
     /* JADX WARN: Code restructure failed: missing block: B:33:0x01ac, code lost:
-
+    
         return kotlin.Unit.INSTANCE;
      */
     /* JADX WARN: Removed duplicated region for block: B:7:0x0027  */
@@ -1434,6 +1434,144 @@ public final class BookSourceController extends BaseController {
                 break;
             default:
                 throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
+        }
+    }
+
+    /* JADX INFO: renamed from: com.htmake.reader.api.controller.BookSourceController$updateRemoteSourceSub$2, reason: invalid class name and case insensitive filesystem */
+    /* JADX INFO: compiled from: BookSourceController.kt */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/BookSourceController$updateRemoteSourceSub$2.class */
+    @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\u0014\n\u0000\n\u0002\u0010\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\u0010\u000b\u0010\u0000\u001a\u00020\u00012\u0012\u0010\u0002\u001a\u000e\u0012\n\u0012\b\u0012\u0004\u0012\u00020\u00050\u00040\u0003H\n"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "handler", "Lio/vertx/core/Handler;", "Lio/vertx/core/AsyncResult;", PackageDocumentBase.PREFIX_OPF})
+    static final class C01042 extends Lambda implements Function1<Handler<AsyncResult<Boolean>>, Unit> {
+        final /* synthetic */ Ref.ObjectRef<String> $url;
+        final /* synthetic */ String $userNameSpace;
+        final /* synthetic */ User $user;
+        final /* synthetic */ Ref.ObjectRef<JsonArray> $remoteBookSourceList;
+        final /* synthetic */ int $i;
+        final /* synthetic */ Ref.ObjectRef<JsonObject> $remoteBookSource;
+
+        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+        C01042(Ref.ObjectRef<String> $url, String $userNameSpace, User $user, Ref.ObjectRef<JsonArray> $remoteBookSourceList, int $i, Ref.ObjectRef<JsonObject> $remoteBookSource) {
+            super(1);
+            this.$url = $url;
+            this.$userNameSpace = $userNameSpace;
+            this.$user = $user;
+            this.$remoteBookSourceList = $remoteBookSourceList;
+            this.$i = $i;
+            this.$remoteBookSource = $remoteBookSource;
+        }
+
+        public /* bridge */ /* synthetic */ Object invoke(Object p1) {
+            invoke((Handler<AsyncResult<Boolean>>) p1);
+            return Unit.INSTANCE;
+        }
+
+        public final void invoke(@NotNull Handler<AsyncResult<Boolean>> handler) {
+            Intrinsics.checkNotNullParameter(handler, "handler");
+            HttpRequest httpRequestTimeout = BookSourceController.this.webClient.getAbs((String) this.$url.element).timeout(3000L);
+            Ref.ObjectRef<String> objectRef = this.$url;
+            BookSourceController bookSourceController = BookSourceController.this;
+            String str = this.$userNameSpace;
+            User user = this.$user;
+            Ref.ObjectRef<JsonArray> objectRef2 = this.$remoteBookSourceList;
+            int i = this.$i;
+            Ref.ObjectRef<JsonObject> objectRef3 = this.$remoteBookSource;
+            httpRequestTimeout.send((v8) -> {
+                m35invoke$lambda0(r1, r2, r3, r4, r5, r6, r7, r8, v8);
+            });
+        }
+
+        /*  JADX ERROR: JadxRuntimeException in pass: BlockSplitter
+            jadx.core.utils.exceptions.JadxRuntimeException: Unexpected missing predecessor for block: B:8:0x004a
+            	at jadx.core.dex.visitors.blocks.BlockSplitter.addTempConnectionsForExcHandlers(BlockSplitter.java:280)
+            	at jadx.core.dex.visitors.blocks.BlockSplitter.visit(BlockSplitter.java:79)
+            */
+        /* JADX INFO: renamed from: invoke$lambda-0, reason: not valid java name */
+        private static final void m35invoke$lambda0(kotlin.jvm.internal.Ref.ObjectRef r10, com.htmake.reader.api.controller.BookSourceController r11, java.lang.String r12, com.htmake.reader.entity.User r13, kotlin.jvm.internal.Ref.ObjectRef r14, int r15, kotlin.jvm.internal.Ref.ObjectRef r16, io.vertx.core.Handler r17, io.vertx.core.AsyncResult r18) {
+            /*
+                r0 = r10
+                java.lang.String r1 = "$url"
+                kotlin.jvm.internal.Intrinsics.checkNotNullParameter(r0, r1)
+                r0 = r11
+                java.lang.String r1 = "this$0"
+                kotlin.jvm.internal.Intrinsics.checkNotNullParameter(r0, r1)
+                r0 = r12
+                java.lang.String r1 = "$userNameSpace"
+                kotlin.jvm.internal.Intrinsics.checkNotNullParameter(r0, r1)
+                r0 = r14
+                java.lang.String r1 = "$remoteBookSourceList"
+                kotlin.jvm.internal.Intrinsics.checkNotNullParameter(r0, r1)
+                r0 = r16
+                java.lang.String r1 = "$remoteBookSource"
+                kotlin.jvm.internal.Intrinsics.checkNotNullParameter(r0, r1)
+                r0 = r17
+                java.lang.String r1 = "$handler"
+                kotlin.jvm.internal.Intrinsics.checkNotNullParameter(r0, r1)
+                r0 = r18
+                java.lang.Object r0 = r0.result()
+                io.vertx.ext.web.client.HttpResponse r0 = (io.vertx.ext.web.client.HttpResponse) r0
+                r20 = r0
+                r0 = r20
+                if (r0 != 0) goto L3c
+                r0 = 0
+                goto L43
+            L3c:
+                r0 = r20
+                io.vertx.core.json.JsonArray r0 = r0.bodyAsJsonArray()
+            L43:
+                r19 = r0
+                r0 = r19
+                if (r0 == 0) goto Lae
+            L4b:
+                mu.KLogger r0 = com.htmake.reader.api.controller.BookSourceControllerKt.access$getLogger$p()     // Catch: java.lang.Exception -> L99
+                java.lang.String r1 = "updateRemoteSourceSub link={}, result={}"
+                r2 = r10
+                java.lang.Object r2 = r2.element     // Catch: java.lang.Exception -> L99
+                r3 = r11
+                r4 = r12
+                r5 = r13
+                r6 = r19
+                com.htmake.reader.api.ReturnData r3 = r3.saveUserBookSources(r4, r5, r6)     // Catch: java.lang.Exception -> L99
+                java.lang.String r3 = r3.getErrorMsg()     // Catch: java.lang.Exception -> L99
+                r0.info(r1, r2, r3)     // Catch: java.lang.Exception -> L99
+                r0 = r11
+                r1 = r12
+                java.lang.String r2 = "remoteBookSourceSub"
+                r3 = r14
+                java.lang.Object r3 = r3.element     // Catch: java.lang.Exception -> L99
+                io.vertx.core.json.JsonArray r3 = (io.vertx.core.json.JsonArray) r3     // Catch: java.lang.Exception -> L99
+                r4 = r15
+                r5 = r16
+                java.lang.Object r5 = r5.element     // Catch: java.lang.Exception -> L99
+                io.vertx.core.json.JsonObject r5 = (io.vertx.core.json.JsonObject) r5     // Catch: java.lang.Exception -> L99
+                java.lang.String r6 = "lastSyncTime"
+                long r7 = java.lang.System.currentTimeMillis()     // Catch: java.lang.Exception -> L99
+                java.lang.Long r7 = java.lang.Long.valueOf(r7)     // Catch: java.lang.Exception -> L99
+                io.vertx.core.json.JsonObject r5 = r5.put(r6, r7)     // Catch: java.lang.Exception -> L99
+                io.vertx.core.json.JsonArray r3 = r3.set(r4, r5)     // Catch: java.lang.Exception -> L99
+                r20 = r3
+                r3 = r20
+                java.lang.String r4 = "remoteBookSourceList.set(i, remoteBookSource.put(\"lastSyncTime\", System.currentTimeMillis()))"
+                kotlin.jvm.internal.Intrinsics.checkNotNullExpressionValue(r3, r4)     // Catch: java.lang.Exception -> L99
+                r3 = r20
+                r0.saveUserStorage(r1, r2, r3)     // Catch: java.lang.Exception -> L99
+                goto Lae
+            L99:
+                r20 = move-exception
+                mu.KLogger r0 = com.htmake.reader.api.controller.BookSourceControllerKt.access$getLogger$p()
+                r1 = r20
+                java.lang.Throwable r1 = (java.lang.Throwable) r1
+                com.htmake.reader.api.controller.BookSourceController$updateRemoteSourceSub$2$1$1 r2 = com.htmake.reader.api.controller.BookSourceController$updateRemoteSourceSub$2$1$1.INSTANCE
+                kotlin.jvm.functions.Function0 r2 = (kotlin.jvm.functions.Function0) r2
+                r0.error(r1, r2)
+            Lae:
+                r0 = r17
+                r1 = 1
+                java.lang.Boolean r1 = java.lang.Boolean.valueOf(r1)
+                io.vertx.core.Future r1 = io.vertx.core.Future.succeededFuture(r1)
+                r0.handle(r1)
+                return
+            */
+            throw new UnsupportedOperationException("Method not decompiled: com.htmake.reader.api.controller.BookSourceController.C01042.m35invoke$lambda0(kotlin.jvm.internal.Ref$ObjectRef, com.htmake.reader.api.controller.BookSourceController, java.lang.String, com.htmake.reader.entity.User, kotlin.jvm.internal.Ref$ObjectRef, int, kotlin.jvm.internal.Ref$ObjectRef, io.vertx.core.Handler, io.vertx.core.AsyncResult):void");
         }
     }
 

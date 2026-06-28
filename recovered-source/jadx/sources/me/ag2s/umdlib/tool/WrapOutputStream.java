@@ -3,7 +3,7 @@ package me.ag2s.umdlib.tool;
 import java.io.IOException;
 import java.io.OutputStream;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/umdlib/tool/WrapOutputStream.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/umdlib/tool/WrapOutputStream.class */
 public class WrapOutputStream extends OutputStream {
     private OutputStream os;
     private int written;

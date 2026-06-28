@@ -35,7 +35,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 /* JADX INFO: compiled from: EpubFile.kt */
-/* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/localBook/EpubFile.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/localBook/EpubFile.class */
 @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u0000X\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0005\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\u000e\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0010\u000b\n\u0002\b\u0006\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0010\u0002\n\u0002\b\u0003\u0018\u0000 '2\u00020\u0001:\u0001'B\r\u0012\u0006\u0010\u0002\u001a\u00020\u0003¢\u0006\u0002\u0010\u0004J$\u0010\u000e\u001a\u00020\u000f2\u0006\u0010\u0010\u001a\u00020\u00112\b\u0010\u0012\u001a\u0004\u0018\u00010\u00132\b\u0010\u0014\u001a\u0004\u0018\u00010\u0013H\u0002J\f\u0010\u0015\u001a\b\u0012\u0004\u0012\u00020\u00170\u0016J\u0016\u0010\u0018\u001a\b\u0012\u0004\u0012\u00020\u00170\u00162\b\b\u0002\u0010\u0019\u001a\u00020\u001aJ\f\u0010\u001b\u001a\b\u0012\u0004\u0012\u00020\u00170\u0016J\u0016\u0010\u001c\u001a\b\u0012\u0004\u0012\u00020\u00170\u00162\b\b\u0002\u0010\u001d\u001a\u00020\u001aJ\u0012\u0010\u001e\u001a\u0004\u0018\u00010\u00132\u0006\u0010\u001f\u001a\u00020\u0017H\u0002J\u0012\u0010 \u001a\u0004\u0018\u00010!2\u0006\u0010\"\u001a\u00020\u0013H\u0002J\n\u0010#\u001a\u0004\u0018\u00010\tH\u0002J\b\u0010$\u001a\u00020%H\u0002J\u0006\u0010&\u001a\u00020%R\u001a\u0010\u0002\u001a\u00020\u0003X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\u0005\u0010\u0006\"\u0004\b\u0007\u0010\u0004R\u0018\u0010\b\u001a\u0004\u0018\u00010\t8BX\u0082\u000e¢\u0006\b\n\u0000\u001a\u0004\b\n\u0010\u000bR\u000e\u0010\f\u001a\u00020\rX\u0082\u000e¢\u0006\u0002\n\u0000¨\u0006("}, d2 = {"Lio/legado/app/model/localBook/EpubFile;", PackageDocumentBase.PREFIX_OPF, "book", "Lio/legado/app/data/entities/Book;", "(Lio/legado/app/data/entities/Book;)V", "getBook", "()Lio/legado/app/data/entities/Book;", "setBook", "epubBook", "Lme/ag2s/epublib/domain/EpubBook;", "getEpubBook", "()Lme/ag2s/epublib/domain/EpubBook;", "mCharset", "Ljava/nio/charset/Charset;", "getBody", "Lorg/jsoup/nodes/Element;", "res", "Lme/ag2s/epublib/domain/Resource;", "startFragmentId", PackageDocumentBase.PREFIX_OPF, "endFragmentId", "getChapterList", "Ljava/util/ArrayList;", "Lio/legado/app/data/entities/BookChapter;", "getChapterListBySpinAndToc", "useTocTitle", PackageDocumentBase.PREFIX_OPF, "getChapterListBySpine", "getChapterListByTocAndSpin", "useSpinTitle", "getContent", NCXDocumentV2.NCXAttributeValues.chapter, "getImage", "Ljava/io/InputStream;", "href", "readEpub", "upBookInfo", PackageDocumentBase.PREFIX_OPF, "updateCover", "Companion", "reader-pro"})
 public final class EpubFile {
 
@@ -80,7 +80,7 @@ public final class EpubFile {
     }
 
     /* JADX INFO: compiled from: EpubFile.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/model/localBook/EpubFile$Companion.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/model/localBook/EpubFile$Companion.class */
     @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u0000>\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\u000e\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0010\u0002\n\u0000\n\u0002\u0010\u000b\n\u0000\b\u0086\u0003\u0018\u00002\u00020\u0001B\u0007\b\u0002¢\u0006\u0002\u0010\u0002J\u0014\u0010\u0005\u001a\b\u0012\u0004\u0012\u00020\u00070\u00062\u0006\u0010\b\u001a\u00020\tJ\u0018\u0010\n\u001a\u0004\u0018\u00010\u000b2\u0006\u0010\b\u001a\u00020\t2\u0006\u0010\f\u001a\u00020\u0007J\u0010\u0010\r\u001a\u00020\u00042\u0006\u0010\b\u001a\u00020\tH\u0002J\u0018\u0010\u000e\u001a\u0004\u0018\u00010\u000f2\u0006\u0010\b\u001a\u00020\t2\u0006\u0010\u0010\u001a\u00020\u000bJ\u0018\u0010\u0011\u001a\u00020\u00122\u0006\u0010\b\u001a\u00020\t2\b\b\u0002\u0010\u0013\u001a\u00020\u0014R\u0010\u0010\u0003\u001a\u0004\u0018\u00010\u0004X\u0082\u000e¢\u0006\u0002\n\u0000¨\u0006\u0015"}, d2 = {"Lio/legado/app/model/localBook/EpubFile$Companion;", PackageDocumentBase.PREFIX_OPF, "()V", "eFile", "Lio/legado/app/model/localBook/EpubFile;", "getChapterList", "Ljava/util/ArrayList;", "Lio/legado/app/data/entities/BookChapter;", "book", "Lio/legado/app/data/entities/Book;", "getContent", PackageDocumentBase.PREFIX_OPF, NCXDocumentV2.NCXAttributeValues.chapter, "getEFile", "getImage", "Ljava/io/InputStream;", "href", "upBookInfo", PackageDocumentBase.PREFIX_OPF, "onlyCover", PackageDocumentBase.PREFIX_OPF, "reader-pro"})
     public static final class Companion {
         public /* synthetic */ Companion(DefaultConstructorMarker $constructor_marker) {
@@ -337,8 +337,8 @@ public final class EpubFile {
 
     /*  JADX ERROR: JadxRuntimeException in pass: BlockSplitter
         jadx.core.utils.exceptions.JadxRuntimeException: Unexpected missing predecessor for block: B:24:0x00a9
-            at jadx.core.dex.visitors.blocks.BlockSplitter.addTempConnectionsForExcHandlers(BlockSplitter.java:280)
-            at jadx.core.dex.visitors.blocks.BlockSplitter.visit(BlockSplitter.java:79)
+        	at jadx.core.dex.visitors.blocks.BlockSplitter.addTempConnectionsForExcHandlers(BlockSplitter.java:280)
+        	at jadx.core.dex.visitors.blocks.BlockSplitter.visit(BlockSplitter.java:79)
         */
     @org.jetbrains.annotations.NotNull
     public final java.util.ArrayList<io.legado.app.data.entities.BookChapter> getChapterListBySpine() throws java.io.IOException {
@@ -351,8 +351,8 @@ public final class EpubFile {
 
     /*  JADX ERROR: JadxRuntimeException in pass: BlockSplitter
         jadx.core.utils.exceptions.JadxRuntimeException: Unexpected missing predecessor for block: B:24:0x00a2
-            at jadx.core.dex.visitors.blocks.BlockSplitter.addTempConnectionsForExcHandlers(BlockSplitter.java:280)
-            at jadx.core.dex.visitors.blocks.BlockSplitter.visit(BlockSplitter.java:79)
+        	at jadx.core.dex.visitors.blocks.BlockSplitter.addTempConnectionsForExcHandlers(BlockSplitter.java:280)
+        	at jadx.core.dex.visitors.blocks.BlockSplitter.visit(BlockSplitter.java:79)
         */
     @org.jetbrains.annotations.NotNull
     public final java.util.ArrayList<io.legado.app.data.entities.BookChapter> getChapterList() throws java.io.IOException {

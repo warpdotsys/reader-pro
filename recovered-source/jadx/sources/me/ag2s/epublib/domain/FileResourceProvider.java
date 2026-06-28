@@ -5,7 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/domain/FileResourceProvider.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/domain/FileResourceProvider.class */
 public class FileResourceProvider implements LazyResourceProvider {
     String dir;
 

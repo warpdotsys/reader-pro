@@ -1,6 +1,5 @@
 package com.htmake.reader.api.controller;
 
-import com.google.gson.reflect.TypeToken;
 import com.htmake.reader.api.ReturnData;
 import com.htmake.reader.entity.License;
 import com.htmake.reader.entity.User;
@@ -53,14 +52,14 @@ import org.jetbrains.annotations.Nullable;
 import org.kxml2.wap.Wbxml;
 
 /* JADX INFO: compiled from: UserController.kt */
-/* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/UserController.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/UserController.class */
 @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u0000X\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0010\b\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0010\u0002\n\u0002\b\u0007\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\u0010\u000b\n\u0002\u0010\u0000\n\u0002\u0018\u0002\n\u0002\b\f\u0018\u00002\u00020\u0001B\r\u0012\u0006\u0010\u0002\u001a\u00020\u0003¢\u0006\u0002\u0010\u0004J\u0019\u0010\t\u001a\u00020\n2\u0006\u0010\u000b\u001a\u00020\fH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\rJ\u0019\u0010\u000e\u001a\u00020\n2\u0006\u0010\u000b\u001a\u00020\fH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\rJ\u0019\u0010\u000e\u001a\u00020\u000f2\u0006\u0010\u0010\u001a\u00020\u0006H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u0011J\u0019\u0010\u0012\u001a\u00020\n2\u0006\u0010\u000b\u001a\u00020\fH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\rJ\u0019\u0010\u0013\u001a\u00020\n2\u0006\u0010\u000b\u001a\u00020\fH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\rJ\u0019\u0010\u0014\u001a\u00020\u000f2\u0006\u0010\u000b\u001a\u00020\fH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\rJO\u0010\u0015\u001a\u00020\u000f2<\u0010\u0016\u001a8\b\u0001\u0012\u0004\u0012\u00020\u0018\u0012\u0013\u0012\u00110\u0019¢\u0006\f\b\u001a\u0012\b\b\u001b\u0012\u0004\b\b(\u001c\u0012\n\u0012\b\u0012\u0004\u0012\u00020\u001e0\u001d\u0012\u0006\u0012\u0004\u0018\u00010\u001f0\u0017¢\u0006\u0002\b H\u0086@ø\u0001\u0000¢\u0006\u0002\u0010!J\u0019\u0010\"\u001a\u00020\n2\u0006\u0010\u000b\u001a\u00020\fH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\rJ\u0019\u0010#\u001a\u00020\n2\u0006\u0010\u000b\u001a\u00020\fH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\rJ\u0010\u0010$\u001a\u00020\u00062\u0006\u0010\u000b\u001a\u00020\fH\u0002J\u0019\u0010%\u001a\u00020\n2\u0006\u0010\u000b\u001a\u00020\fH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\rJ\u0019\u0010&\u001a\u00020\n2\u0006\u0010\u000b\u001a\u00020\fH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\rJ\u0019\u0010'\u001a\u00020\n2\u0006\u0010\u000b\u001a\u00020\fH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\rJ\u0019\u0010(\u001a\u00020\n2\u0006\u0010\u000b\u001a\u00020\fH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\rJ\u0019\u0010)\u001a\u00020\n2\u0006\u0010\u000b\u001a\u00020\fH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\rJ\u0019\u0010*\u001a\u00020\n2\u0006\u0010\u000b\u001a\u00020\fH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\rJ\u0019\u0010+\u001a\u00020\n2\u0006\u0010\u000b\u001a\u00020\fH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\rR\u0014\u0010\u0005\u001a\u00020\u0006X\u0086D¢\u0006\b\n\u0000\u001a\u0004\b\u0007\u0010\b\u0082\u0002\u0004\n\u0002\b\u0019¨\u0006,"}, d2 = {"Lcom/htmake/reader/api/controller/UserController;", "Lcom/htmake/reader/api/controller/BaseController;", "coroutineContext", "Lkotlin/coroutines/CoroutineContext;", "(Lkotlin/coroutines/CoroutineContext;)V", "userMaxCount", PackageDocumentBase.PREFIX_OPF, "getUserMaxCount", "()I", "addUser", "Lcom/htmake/reader/api/ReturnData;", "context", "Lio/vertx/ext/web/RoutingContext;", "(Lio/vertx/ext/web/RoutingContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "clearInactiveUsers", PackageDocumentBase.PREFIX_OPF, "day", "(ILkotlin/coroutines/Continuation;)Ljava/lang/Object;", "deleteFile", "deleteUsers", "downloadBackupFile", "forEachUser", "handler", "Lkotlin/Function3;", "Lkotlinx/coroutines/CoroutineScope;", "Lcom/htmake/reader/entity/User;", "Lkotlin/ParameterName;", "name", "user", "Lkotlin/coroutines/Continuation;", PackageDocumentBase.PREFIX_OPF, PackageDocumentBase.PREFIX_OPF, "Lkotlin/ExtensionFunctionType;", "(Lkotlin/jvm/functions/Function3;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "getUserConfig", "getUserInfo", "getUserLimit", "getUserList", "login", "logout", "resetPassword", "saveUserConfig", "updateUser", "uploadFile", "reader-pro"})
 public final class UserController extends BaseController {
     private final int userMaxCount;
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.UserController$addUser$1, reason: invalid class name */
     /* JADX INFO: compiled from: UserController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/UserController$addUser$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/UserController$addUser$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "UserController.kt", l = {251}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "addUser", c = "com.htmake.reader.api.controller.UserController")
     static final class AnonymousClass1 extends ContinuationImpl {
@@ -84,7 +83,7 @@ public final class UserController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.UserController$clearInactiveUsers$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: UserController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/UserController$clearInactiveUsers$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/UserController$clearInactiveUsers$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "UserController.kt", l = {412, 423, 424}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "clearInactiveUsers", c = "com.htmake.reader.api.controller.UserController")
     static final class C01301 extends ContinuationImpl {
@@ -108,7 +107,7 @@ public final class UserController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.UserController$deleteFile$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: UserController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/UserController$deleteFile$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/UserController$deleteFile$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "UserController.kt", l = {612}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "deleteFile", c = "com.htmake.reader.api.controller.UserController")
     static final class C01311 extends ContinuationImpl {
@@ -132,7 +131,7 @@ public final class UserController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.UserController$deleteUsers$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: UserController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/UserController$deleteUsers$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/UserController$deleteUsers$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "UserController.kt", l = {372}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "deleteUsers", c = "com.htmake.reader.api.controller.UserController")
     static final class C01321 extends ContinuationImpl {
@@ -156,7 +155,7 @@ public final class UserController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.UserController$downloadBackupFile$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: UserController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/UserController$downloadBackupFile$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/UserController$downloadBackupFile$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "UserController.kt", l = {638, 645, 648}, i = {0, 0, 0, 1, 1}, s = {"L$0", "L$1", "L$2", "L$2", "L$3"}, n = {"this", "context", "returnData", "bookController", "userNameSpace"}, m = "downloadBackupFile", c = "com.htmake.reader.api.controller.UserController")
     static final class C01331 extends ContinuationImpl {
@@ -181,7 +180,7 @@ public final class UserController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.UserController$forEachUser$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: UserController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/UserController$forEachUser$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/UserController$forEachUser$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "UserController.kt", l = {674}, i = {}, s = {}, n = {}, m = "forEachUser", c = "com.htmake.reader.api.controller.UserController")
     static final class C01341 extends ContinuationImpl {
@@ -208,7 +207,7 @@ public final class UserController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.UserController$getUserConfig$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: UserController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/UserController$getUserConfig$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/UserController$getUserConfig$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "UserController.kt", l = {562}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "getUserConfig", c = "com.htmake.reader.api.controller.UserController")
     static final class C01351 extends ContinuationImpl {
@@ -232,7 +231,7 @@ public final class UserController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.UserController$getUserInfo$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: UserController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/UserController$getUserInfo$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/UserController$getUserInfo$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "UserController.kt", l = {507}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "getUserInfo", c = "com.htmake.reader.api.controller.UserController")
     static final class C01361 extends ContinuationImpl {
@@ -256,7 +255,7 @@ public final class UserController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.UserController$getUserList$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: UserController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/UserController$getUserList$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/UserController$getUserList$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "UserController.kt", l = {228}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "getUserList", c = "com.htmake.reader.api.controller.UserController")
     static final class C01371 extends ContinuationImpl {
@@ -280,7 +279,7 @@ public final class UserController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.UserController$login$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: UserController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/UserController$login$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/UserController$login$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "UserController.kt", l = {154, 170}, i = {}, s = {}, n = {}, m = "login", c = "com.htmake.reader.api.controller.UserController")
     static final class C01381 extends ContinuationImpl {
@@ -302,7 +301,7 @@ public final class UserController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.UserController$logout$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: UserController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/UserController$logout$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/UserController$logout$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "UserController.kt", l = {177, Wbxml.OPAQUE}, i = {0, 0, 0, 1}, s = {"L$0", "L$1", "L$2", "L$4"}, n = {"this", "context", "returnData", "userMap"}, m = "logout", c = "com.htmake.reader.api.controller.UserController")
     static final class C01391 extends ContinuationImpl {
@@ -328,7 +327,7 @@ public final class UserController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.UserController$resetPassword$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: UserController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/UserController$resetPassword$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/UserController$resetPassword$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "UserController.kt", l = {326}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "resetPassword", c = "com.htmake.reader.api.controller.UserController")
     static final class C01401 extends ContinuationImpl {
@@ -352,7 +351,7 @@ public final class UserController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.UserController$saveUserConfig$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: UserController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/UserController$saveUserConfig$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/UserController$saveUserConfig$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "UserController.kt", l = {546}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "saveUserConfig", c = "com.htmake.reader.api.controller.UserController")
     static final class C01411 extends ContinuationImpl {
@@ -376,7 +375,7 @@ public final class UserController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.UserController$updateUser$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: UserController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/UserController$updateUser$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/UserController$updateUser$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "UserController.kt", l = {447}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "updateUser", c = "com.htmake.reader.api.controller.UserController")
     static final class C01421 extends ContinuationImpl {
@@ -400,7 +399,7 @@ public final class UserController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.UserController$uploadFile$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: UserController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/UserController$uploadFile$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/UserController$uploadFile$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "UserController.kt", l = {575}, i = {0, 0, 0}, s = {"L$0", "L$1", "L$2"}, n = {"this", "context", "returnData"}, m = "uploadFile", c = "com.htmake.reader.api.controller.UserController")
     static final class C01431 extends ContinuationImpl {
@@ -444,7 +443,6 @@ public final class UserController extends BaseController {
     }
 
     /* JADX WARN: Removed duplicated region for block: B:7:0x0027  */
-    /* JADX WARN: Type inference failed for: r2v12, types: [com.htmake.reader.api.controller.UserController$login$$inlined$toDataClass$1] */
     @Nullable
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -553,8 +551,7 @@ public final class UserController extends BaseController {
                     json = (String) obj;
                 }
                 String json$iv$iv = json;
-                User userInfo = (User) ExtKt.getGson().fromJson(json$iv$iv, new TypeToken<User>() { // from class: com.htmake.reader.api.controller.UserController$login$$inlined$toDataClass$1
-                }.getType());
+                User userInfo = (User) ExtKt.getGson().fromJson(json$iv$iv, new UserController$login$$inlined$toDataClass$1().getType());
                 if (userInfo == null) {
                     return returnData.setErrorMsg("用户信息错误");
                 }
@@ -1195,7 +1192,7 @@ public final class UserController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.UserController$clearInactiveUsers$3, reason: invalid class name */
     /* JADX INFO: compiled from: UserController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/UserController$clearInactiveUsers$3.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/UserController$clearInactiveUsers$3.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\u0010\n\u0000\n\u0002\u0010\u000b\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u00022\u0006\u0010\u0003\u001a\u00020\u0004H\u008a@"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "Lkotlinx/coroutines/CoroutineScope;", "user", "Lcom/htmake/reader/entity/User;"})
     @DebugMetadata(f = "UserController.kt", l = {}, i = {}, s = {}, n = {}, m = "invokeSuspend", c = "com.htmake.reader.api.controller.UserController$clearInactiveUsers$3")
     static final class AnonymousClass3 extends SuspendLambda implements Function3<CoroutineScope, User, Continuation<? super Boolean>, Object> {
@@ -1819,7 +1816,6 @@ public final class UserController extends BaseController {
     /* JADX WARN: Removed duplicated region for block: B:54:0x027b  */
     /* JADX WARN: Removed duplicated region for block: B:58:0x0297  */
     /* JADX WARN: Removed duplicated region for block: B:7:0x0027  */
-    /* JADX WARN: Type inference failed for: r2v9, types: [com.htmake.reader.api.controller.UserController$forEachUser$lambda-7$lambda-6$$inlined$toDataClass$1] */
     /* JADX WARN: Unsupported multi-entry loop pattern (BACK_EDGE: B:53:0x0278 -> B:20:0x0105). Please report as a decompilation issue!!! */
     /* JADX WARN: Unsupported multi-entry loop pattern (BACK_EDGE: B:54:0x027b -> B:20:0x0105). Please report as a decompilation issue!!! */
     @Nullable
@@ -1882,8 +1878,7 @@ public final class UserController extends BaseController {
                                         json = (String) obj;
                                     }
                                     String json$iv$iv = json;
-                                    user = (User) ExtKt.getGson().fromJson(json$iv$iv, new TypeToken<User>() { // from class: com.htmake.reader.api.controller.UserController$forEachUser$lambda-7$lambda-6$$inlined$toDataClass$1
-                                    }.getType());
+                                    user = (User) ExtKt.getGson().fromJson(json$iv$iv, new UserController$forEachUser$lambda7$lambda6$$inlined$toDataClass$1().getType());
                                 } else {
                                     user = null;
                                 }

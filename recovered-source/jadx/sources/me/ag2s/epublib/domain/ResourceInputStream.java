@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.ZipFile;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/domain/ResourceInputStream.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/domain/ResourceInputStream.class */
 public class ResourceInputStream extends FilterInputStream {
     private final ZipFile zipFile;
 

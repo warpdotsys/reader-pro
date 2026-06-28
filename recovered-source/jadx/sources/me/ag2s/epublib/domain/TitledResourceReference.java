@@ -3,7 +3,7 @@ package me.ag2s.epublib.domain;
 import java.io.Serializable;
 import me.ag2s.epublib.util.StringUtil;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/domain/TitledResourceReference.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/domain/TitledResourceReference.class */
 public class TitledResourceReference extends ResourceReference implements Serializable {
     private static final long serialVersionUID = 3918155020095190080L;
     private String fragmentId;

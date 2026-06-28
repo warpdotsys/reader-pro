@@ -42,13 +42,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /* JADX INFO: compiled from: FileController.kt */
-/* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/FileController.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/FileController.class */
 @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u0000.\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\u000b\n\u0002\b\u0006\n\u0002\u0010\u0002\n\u0002\b\t\u0018\u00002\u00020\u0001B\r\u0012\u0006\u0010\u0002\u001a\u00020\u0003¢\u0006\u0002\u0010\u0004J/\u0010\u0005\u001a\u0004\u0018\u00010\u00062\u0006\u0010\u0007\u001a\u00020\b2\b\b\u0002\u0010\t\u001a\u00020\n2\b\b\u0002\u0010\u000b\u001a\u00020\nH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\fJ\u0019\u0010\r\u001a\u00020\u00062\u0006\u0010\u0007\u001a\u00020\bH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u000eJ\u0019\u0010\u000f\u001a\u00020\u00062\u0006\u0010\u0007\u001a\u00020\bH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u000eJ\u0019\u0010\u0010\u001a\u00020\u00112\u0006\u0010\u0007\u001a\u00020\bH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u000eJ\u0019\u0010\u0012\u001a\u00020\u00062\u0006\u0010\u0007\u001a\u00020\bH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u000eJ\u0019\u0010\u0013\u001a\u00020\u00062\u0006\u0010\u0007\u001a\u00020\bH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u000eJ\u0019\u0010\u0014\u001a\u00020\u00062\u0006\u0010\u0007\u001a\u00020\bH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u000eJ\u0019\u0010\u0015\u001a\u00020\u00062\u0006\u0010\u0007\u001a\u00020\bH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u000eJ\u0019\u0010\u0016\u001a\u00020\u00062\u0006\u0010\u0007\u001a\u00020\bH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u000eJ\u0019\u0010\u0017\u001a\u00020\u00062\u0006\u0010\u0007\u001a\u00020\bH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u000eJ\u0019\u0010\u0018\u001a\u00020\u00062\u0006\u0010\u0007\u001a\u00020\bH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u000eJ\u0019\u0010\u0019\u001a\u00020\u00062\u0006\u0010\u0007\u001a\u00020\bH\u0086@ø\u0001\u0000¢\u0006\u0002\u0010\u000e\u0082\u0002\u0004\n\u0002\b\u0019¨\u0006\u001a"}, d2 = {"Lcom/htmake/reader/api/controller/FileController;", "Lcom/htmake/reader/api/controller/BaseController;", "coroutineContext", "Lkotlin/coroutines/CoroutineContext;", "(Lkotlin/coroutines/CoroutineContext;)V", "checkAccess", "Lcom/htmake/reader/api/ReturnData;", "context", "Lio/vertx/ext/web/RoutingContext;", "isSave", PackageDocumentBase.PREFIX_OPF, "isDelete", "(Lio/vertx/ext/web/RoutingContext;ZZLkotlin/coroutines/Continuation;)Ljava/lang/Object;", "delete", "(Lio/vertx/ext/web/RoutingContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "deleteMulti", "download", PackageDocumentBase.PREFIX_OPF, "get", "importPreview", "list", "mkdir", "parse", "restore", "save", "upload", "reader-pro"})
 public final class FileController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.FileController$checkAccess$1, reason: invalid class name */
     /* JADX INFO: compiled from: FileController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/FileController$checkAccess$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/FileController$checkAccess$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "FileController.kt", l = {26}, i = {0, 0, 0, 0, 0}, s = {"L$0", "L$1", "L$2", "Z$0", "Z$1"}, n = {"this", "context", "returnData", "isSave", "isDelete"}, m = "checkAccess", c = "com.htmake.reader.api.controller.FileController")
     static final class AnonymousClass1 extends ContinuationImpl {
@@ -74,7 +74,7 @@ public final class FileController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.FileController$delete$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: FileController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/FileController$delete$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/FileController$delete$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "FileController.kt", l = {311}, i = {0}, s = {"L$0"}, n = {"context"}, m = "delete", c = "com.htmake.reader.api.controller.FileController")
     static final class C01131 extends ContinuationImpl {
@@ -96,7 +96,7 @@ public final class FileController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.FileController$deleteMulti$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: FileController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/FileController$deleteMulti$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/FileController$deleteMulti$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "FileController.kt", l = {342}, i = {0}, s = {"L$0"}, n = {"context"}, m = "deleteMulti", c = "com.htmake.reader.api.controller.FileController")
     static final class C01141 extends ContinuationImpl {
@@ -118,7 +118,7 @@ public final class FileController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.FileController$download$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: FileController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/FileController$download$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/FileController$download$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "FileController.kt", l = {188}, i = {0}, s = {"L$0"}, n = {"context"}, m = "download", c = "com.htmake.reader.api.controller.FileController")
     static final class C01151 extends ContinuationImpl {
@@ -140,7 +140,7 @@ public final class FileController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.FileController$get$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: FileController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/FileController$get$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/FileController$get$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "FileController.kt", l = {229}, i = {0}, s = {"L$0"}, n = {"context"}, m = "get", c = "com.htmake.reader.api.controller.FileController")
     static final class C01161 extends ContinuationImpl {
@@ -162,7 +162,7 @@ public final class FileController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.FileController$importPreview$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: FileController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/FileController$importPreview$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/FileController$importPreview$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "FileController.kt", l = {366}, i = {0, 0}, s = {"L$0", "L$1"}, n = {"this", "context"}, m = "importPreview", c = "com.htmake.reader.api.controller.FileController")
     static final class C01171 extends ContinuationImpl {
@@ -185,7 +185,7 @@ public final class FileController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.FileController$list$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: FileController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/FileController$list$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/FileController$list$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "FileController.kt", l = {91}, i = {0}, s = {"L$0"}, n = {"context"}, m = "list", c = "com.htmake.reader.api.controller.FileController")
     static final class C01181 extends ContinuationImpl {
@@ -207,7 +207,7 @@ public final class FileController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.FileController$mkdir$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: FileController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/FileController$mkdir$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/FileController$mkdir$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "FileController.kt", l = {282}, i = {0}, s = {"L$0"}, n = {"context"}, m = "mkdir", c = "com.htmake.reader.api.controller.FileController")
     static final class C01191 extends ContinuationImpl {
@@ -229,7 +229,7 @@ public final class FileController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.FileController$parse$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: FileController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/FileController$parse$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/FileController$parse$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "FileController.kt", l = {457}, i = {0, 0}, s = {"L$0", "L$1"}, n = {"this", "context"}, m = "parse", c = "com.htmake.reader.api.controller.FileController")
     static final class C01201 extends ContinuationImpl {
@@ -252,7 +252,7 @@ public final class FileController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.FileController$restore$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: FileController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/FileController$restore$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/FileController$restore$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "FileController.kt", l = {420, 450}, i = {0, 0}, s = {"L$0", "L$1"}, n = {"this", "context"}, m = "restore", c = "com.htmake.reader.api.controller.FileController")
     static final class C01211 extends ContinuationImpl {
@@ -275,7 +275,7 @@ public final class FileController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.FileController$save$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: FileController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/FileController$save$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/FileController$save$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "FileController.kt", l = {259}, i = {0}, s = {"L$0"}, n = {"context"}, m = "save", c = "com.htmake.reader.api.controller.FileController")
     static final class C01221 extends ContinuationImpl {
@@ -297,7 +297,7 @@ public final class FileController extends BaseController {
 
     /* JADX INFO: renamed from: com.htmake.reader.api.controller.FileController$upload$1, reason: invalid class name and case insensitive filesystem */
     /* JADX INFO: compiled from: FileController.kt */
-    /* JADX INFO: loaded from: app-classes.jar:com/htmake/reader/api/controller/FileController$upload$1.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:com/htmake/reader/api/controller/FileController$upload$1.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     @DebugMetadata(f = "FileController.kt", l = {143}, i = {}, s = {}, n = {}, m = "upload", c = "com.htmake.reader.api.controller.FileController")
     static final class C01231 extends ContinuationImpl {

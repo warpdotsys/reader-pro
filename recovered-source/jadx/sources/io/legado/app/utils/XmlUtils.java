@@ -15,7 +15,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 /* JADX INFO: compiled from: XmlUtils.kt */
-/* JADX INFO: loaded from: app-classes.jar:io/legado/app/utils/XmlUtils.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/utils/XmlUtils.class */
 @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u0000\u001e\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0002\b\u0002\n\u0002\u0010%\n\u0002\u0010\u000e\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0003\bÆ\u0002\u0018\u00002\u00020\u0001B\u0007\b\u0002¢\u0006\u0002\u0010\u0002J\u001a\u0010\u0003\u001a\u000e\u0012\u0004\u0012\u00020\u0005\u0012\u0004\u0012\u00020\u00010\u00042\u0006\u0010\u0006\u001a\u00020\u0007J\u001a\u0010\b\u001a\u000e\u0012\u0004\u0012\u00020\u0005\u0012\u0004\u0012\u00020\u00010\u00042\u0006\u0010\t\u001a\u00020\u0001¨\u0006\n"}, d2 = {"Lio/legado/app/utils/XmlUtils;", PackageDocumentBase.PREFIX_OPF, "()V", "parseNode", PackageDocumentBase.PREFIX_OPF, PackageDocumentBase.PREFIX_OPF, "list", "Lorg/w3c/dom/NodeList;", "xml2map", PackageDocumentBase.DCTags.source, "reader-pro"})
 public final class XmlUtils {
 

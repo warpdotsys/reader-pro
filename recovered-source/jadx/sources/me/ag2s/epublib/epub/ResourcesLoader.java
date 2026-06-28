@@ -19,7 +19,7 @@ import me.ag2s.epublib.domain.Resources;
 import me.ag2s.epublib.util.CollectionUtil;
 import me.ag2s.epublib.util.ResourceUtil;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/epub/ResourcesLoader.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/epub/ResourcesLoader.class */
 public class ResourcesLoader {
     private static final String TAG = ResourcesLoader.class.getName();
 

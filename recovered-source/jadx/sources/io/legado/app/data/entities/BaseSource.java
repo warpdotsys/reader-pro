@@ -1,7 +1,6 @@
 package io.legado.app.data.entities;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.script.Bindings;
 import com.script.SimpleBindings;
 import io.legado.app.constant.AppConst;
@@ -25,6 +24,7 @@ import kotlin.ResultKt;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.internal.Intrinsics;
+import kotlin.jvm.internal.Lambda;
 import kotlin.text.Charsets;
 import kotlin.text.StringsKt;
 import me.ag2s.epublib.epub.NCXDocumentV2;
@@ -35,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jsoup.Connection;
 
 /* JADX INFO: compiled from: BaseSource.kt */
-/* JADX INFO: loaded from: app-classes.jar:io/legado/app/data/entities/BaseSource.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/data/entities/BaseSource.class */
 @Metadata(mv = {1, 5, 1}, k = 1, xi = 48, d1 = {"\u0000H\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\u000e\n\u0002\b\u0005\n\u0002\u0010\u000b\n\u0002\b\u000e\n\u0002\u0010\u0000\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\u0010\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0004\n\u0002\u0010$\n\u0002\b\u000f\bf\u0018\u00002\u00020\u0001J-\u0010\u0017\u001a\u0004\u0018\u00010\u00182\u0006\u0010\u0019\u001a\u00020\u00032\u0019\b\u0002\u0010\u001a\u001a\u0013\u0012\u0004\u0012\u00020\u001c\u0012\u0004\u0012\u00020\u001d0\u001b¢\u0006\u0002\b\u001eH\u0016J.\u0010\u001f\u001a\u001e\u0012\u0004\u0012\u00020\u0003\u0012\u0004\u0012\u00020\u00030 j\u000e\u0012\u0004\u0012\u00020\u0003\u0012\u0004\u0012\u00020\u0003`!2\b\b\u0002\u0010\"\u001a\u00020\tH\u0016J\b\u0010#\u001a\u00020\u0003H&J\n\u0010$\u001a\u0004\u0018\u00010\u0003H\u0016J\u0016\u0010%\u001a\u0010\u0012\u0004\u0012\u00020\u0003\u0012\u0004\u0012\u00020\u0003\u0018\u00010&H\u0016J\n\u0010'\u001a\u0004\u0018\u00010\u0003H\u0016J\u0016\u0010(\u001a\u0010\u0012\u0004\u0012\u00020\u0003\u0012\u0004\u0012\u00020\u0003\u0018\u00010&H\u0016J\n\u0010)\u001a\u0004\u0018\u00010\u0003H\u0016J\n\u0010*\u001a\u0004\u0018\u00010\u0000H\u0016J\b\u0010+\u001a\u00020\u0003H&J\n\u0010,\u001a\u0004\u0018\u00010\u0003H\u0016J\b\u0010-\u001a\u00020\u001dH\u0016J\u0010\u0010.\u001a\u00020\u001d2\u0006\u0010\u000e\u001a\u00020\u0003H\u0016J\u0010\u0010/\u001a\u00020\t2\u0006\u00100\u001a\u00020\u0003H\u0016J\b\u00101\u001a\u00020\u001dH\u0016J\b\u00102\u001a\u00020\u001dH\u0016J\u0012\u00103\u001a\u00020\u001d2\b\u00104\u001a\u0004\u0018\u00010\u0003H\u0016R\u001a\u0010\u0002\u001a\u0004\u0018\u00010\u0003X¦\u000e¢\u0006\f\u001a\u0004\b\u0004\u0010\u0005\"\u0004\b\u0006\u0010\u0007R\u001a\u0010\b\u001a\u0004\u0018\u00010\tX¦\u000e¢\u0006\f\u001a\u0004\b\n\u0010\u000b\"\u0004\b\f\u0010\rR\u001a\u0010\u000e\u001a\u0004\u0018\u00010\u0003X¦\u000e¢\u0006\f\u001a\u0004\b\u000f\u0010\u0005\"\u0004\b\u0010\u0010\u0007R\u001a\u0010\u0011\u001a\u0004\u0018\u00010\u0003X¦\u000e¢\u0006\f\u001a\u0004\b\u0012\u0010\u0005\"\u0004\b\u0013\u0010\u0007R\u001a\u0010\u0014\u001a\u0004\u0018\u00010\u0003X¦\u000e¢\u0006\f\u001a\u0004\b\u0015\u0010\u0005\"\u0004\b\u0016\u0010\u0007¨\u00065"}, d2 = {"Lio/legado/app/data/entities/BaseSource;", "Lio/legado/app/help/JsExtensions;", "concurrentRate", PackageDocumentBase.PREFIX_OPF, "getConcurrentRate", "()Ljava/lang/String;", "setConcurrentRate", "(Ljava/lang/String;)V", "enabledCookieJar", PackageDocumentBase.PREFIX_OPF, "getEnabledCookieJar", "()Ljava/lang/Boolean;", "setEnabledCookieJar", "(Ljava/lang/Boolean;)V", "header", "getHeader", "setHeader", "loginUi", "getLoginUi", "setLoginUi", "loginUrl", "getLoginUrl", "setLoginUrl", "evalJS", PackageDocumentBase.PREFIX_OPF, "jsStr", "bindingsConfig", "Lkotlin/Function1;", "Lcom/script/SimpleBindings;", PackageDocumentBase.PREFIX_OPF, "Lkotlin/ExtensionFunctionType;", "getHeaderMap", "Ljava/util/HashMap;", "Lkotlin/collections/HashMap;", "hasLoginHeader", "getKey", "getLoginHeader", "getLoginHeaderMap", PackageDocumentBase.PREFIX_OPF, "getLoginInfo", "getLoginInfoMap", "getLoginJs", "getSource", "getTag", "getVariable", "login", "putLoginHeader", "putLoginInfo", "info", "removeLoginHeader", "removeLoginInfo", "setVariable", "variable", "reader-pro"})
 public interface BaseSource extends JsExtensions {
     @Nullable
@@ -110,7 +110,7 @@ public interface BaseSource extends JsExtensions {
     Object evalJS(@NotNull String jsStr, @NotNull Function1<? super SimpleBindings, Unit> bindingsConfig) throws Exception;
 
     /* JADX INFO: compiled from: BaseSource.kt */
-    /* JADX INFO: loaded from: app-classes.jar:io/legado/app/data/entities/BaseSource$DefaultImpls.class */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/data/entities/BaseSource$DefaultImpls.class */
     @Metadata(mv = {1, 5, 1}, k = 3, xi = 48)
     public static final class DefaultImpls {
         @Nullable
@@ -667,7 +667,6 @@ public interface BaseSource extends JsExtensions {
             }
         }
 
-        /* JADX WARN: Type inference failed for: r2v8, types: [io.legado.app.data.entities.BaseSource$DefaultImpls$getHeaderMap$lambda-4$lambda-2$$inlined$fromJsonObject$1] */
         @NotNull
         public static HashMap<String, String> getHeaderMap(@NotNull BaseSource baseSource, boolean hasLoginHeader) {
             Map<String, String> loginHeaderMap;
@@ -693,8 +692,7 @@ public interface BaseSource extends JsExtensions {
                 String json$iv = strValueOf;
                 try {
                     Result.Companion companion = Result.Companion;
-                    Type type = new TypeToken<Map<String, ? extends String>>() { // from class: io.legado.app.data.entities.BaseSource$DefaultImpls$getHeaderMap$lambda-4$lambda-2$$inlined$fromJsonObject$1
-                    }.getType();
+                    Type type = new BaseSource$DefaultImpls$getHeaderMap$lambda4$lambda2$$inlined$fromJsonObject$1().getType();
                     Intrinsics.checkNotNullExpressionValue(type, "object : TypeToken<T>() {}.type");
                     Object objFromJson = $this$fromJsonObject$iv.fromJson(json$iv, type);
                     if (!(objFromJson instanceof Map)) {
@@ -734,7 +732,6 @@ public interface BaseSource extends JsExtensions {
             return cacheInstance.get(Intrinsics.stringPlus("loginHeader_", baseSource.getKey()));
         }
 
-        /* JADX WARN: Type inference failed for: r2v1, types: [io.legado.app.data.entities.BaseSource$DefaultImpls$getLoginHeaderMap$$inlined$fromJsonObject$1] */
         @Nullable
         public static Map<String, String> getLoginHeaderMap(@NotNull BaseSource baseSource) {
             Object obj;
@@ -746,8 +743,7 @@ public interface BaseSource extends JsExtensions {
             Gson $this$fromJsonObject$iv = GsonExtensionsKt.getGSON();
             try {
                 Result.Companion companion = Result.Companion;
-                Type type = new TypeToken<Map<String, ? extends String>>() { // from class: io.legado.app.data.entities.BaseSource$DefaultImpls$getLoginHeaderMap$$inlined$fromJsonObject$1
-                }.getType();
+                Type type = new BaseSource$DefaultImpls$getLoginHeaderMap$$inlined$fromJsonObject$1().getType();
                 Intrinsics.checkNotNullExpressionValue(type, "object : TypeToken<T>() {}.type");
                 Object objFromJson = $this$fromJsonObject$iv.fromJson(cache, type);
                 if (!(objFromJson instanceof Map)) {
@@ -803,7 +799,6 @@ public interface BaseSource extends JsExtensions {
             }
         }
 
-        /* JADX WARN: Type inference failed for: r2v1, types: [io.legado.app.data.entities.BaseSource$DefaultImpls$getLoginInfoMap$$inlined$fromJsonObject$1] */
         @Nullable
         public static Map<String, String> getLoginInfoMap(@NotNull BaseSource baseSource) {
             Object obj;
@@ -812,8 +807,7 @@ public interface BaseSource extends JsExtensions {
             String json$iv = baseSource.getLoginInfo();
             try {
                 Result.Companion companion = Result.Companion;
-                Type type = new TypeToken<Map<String, ? extends String>>() { // from class: io.legado.app.data.entities.BaseSource$DefaultImpls$getLoginInfoMap$$inlined$fromJsonObject$1
-                }.getType();
+                Type type = new BaseSource$DefaultImpls$getLoginInfoMap$$inlined$fromJsonObject$1().getType();
                 Intrinsics.checkNotNullExpressionValue(type, "object : TypeToken<T>() {}.type");
                 Object objFromJson = $this$fromJsonObject$iv.fromJson(json$iv, type);
                 if (!(objFromJson instanceof Map)) {
@@ -880,16 +874,7 @@ public interface BaseSource extends JsExtensions {
                 throw new UnsupportedOperationException("Super calls with default arguments not supported in this target, function: evalJS");
             }
             if ((i & 2) != 0) {
-                function1 = new Function1<SimpleBindings, Unit>() { // from class: io.legado.app.data.entities.BaseSource.evalJS.1
-                    public final void invoke(@NotNull SimpleBindings $this$null) {
-                        Intrinsics.checkNotNullParameter($this$null, "$this$null");
-                    }
-
-                    public /* bridge */ /* synthetic */ Object invoke(Object p1) {
-                        invoke((SimpleBindings) p1);
-                        return Unit.INSTANCE;
-                    }
-                };
+                function1 = AnonymousClass1.INSTANCE;
             }
             return baseSource.evalJS(str, function1);
         }
@@ -907,6 +892,27 @@ public interface BaseSource extends JsExtensions {
             ((Map) simpleBindings).put("cookie", new CookieStore(baseSource.getUserNameSpace()));
             ((Map) simpleBindings).put("cache", new CacheManager(baseSource.getUserNameSpace()));
             return AppConst.INSTANCE.getSCRIPT_ENGINE().eval(jsStr, simpleBindings);
+        }
+    }
+
+    /* JADX INFO: renamed from: io.legado.app.data.entities.BaseSource$evalJS$1, reason: invalid class name */
+    /* JADX INFO: compiled from: BaseSource.kt */
+    /* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:io/legado/app/data/entities/BaseSource$evalJS$1.class */
+    @Metadata(mv = {1, 5, 1}, k = 3, xi = 48, d1 = {"\u0000\n\n\u0000\n\u0002\u0010\u0002\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H\n"}, d2 = {"<anonymous>", PackageDocumentBase.PREFIX_OPF, "Lcom/script/SimpleBindings;"})
+    static final class AnonymousClass1 extends Lambda implements Function1<SimpleBindings, Unit> {
+        public static final AnonymousClass1 INSTANCE = new AnonymousClass1();
+
+        AnonymousClass1() {
+            super(1);
+        }
+
+        public final void invoke(@NotNull SimpleBindings $this$null) {
+            Intrinsics.checkNotNullParameter($this$null, "$this$null");
+        }
+
+        public /* bridge */ /* synthetic */ Object invoke(Object p1) {
+            invoke((SimpleBindings) p1);
+            return Unit.INSTANCE;
         }
     }
 }

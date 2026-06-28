@@ -3,7 +3,7 @@ package me.ag2s.epublib.util;
 import java.io.IOException;
 import java.io.Writer;
 
-/* JADX INFO: loaded from: app-classes.jar:me/ag2s/epublib/util/NoCloseWriter.class */
+/* JADX INFO: loaded from: reader-pro-classes-3.2.14.jar:me/ag2s/epublib/util/NoCloseWriter.class */
 public class NoCloseWriter extends Writer {
     private final Writer writer;
 
