@@ -1,6 +1,7 @@
 /reader3/activateLicense
 /reader3/addBookGroupMulti
 /reader3/addUser
+/reader3/backupAllToMongodb
 /reader3/backupToMongodb
 /reader3/backupToWebdav
 /reader3/book/saveBookConfig
@@ -22,6 +23,7 @@
 /reader3/deleteBookSources
 /reader3/deleteBookSourcesFile
 /reader3/deleteFile
+/reader3/deleteMongoBackup
 /reader3/deleteReplaceRule
 /reader3/deleteReplaceRules
 /reader3/deleteRssSource
@@ -77,6 +79,7 @@
 /reader3/importLicense
 /reader3/isHostValid
 /reader3/isLicenseValid
+/reader3/listMongoBackups
 /reader3/listWebdavBackups
 /reader3/login
 /reader3/loginBookSource

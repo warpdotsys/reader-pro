@@ -13,6 +13,8 @@ reader:
     mongoUri: ""
     mongoDbName: "reader"
     cacheChapterContent: true
+    remoteActivateUrl: "https://r.htmake.com/reader3/activateLicense"
+    remoteActivateEnabled: false
   server:
     port: 8080
 

@@ -242,6 +242,10 @@ open class YueduApi : RestVerticle() {
         post(router, "/reader3/listWebdavBackups") { webdav.listWebdavBackups(it) }
         post(router, "/reader3/backupToMongodb") { book.backupToMongodb(it) }
         post(router, "/reader3/restoreFromMongodb") { book.restoreFromMongodb(it) }
+        get(router, "/reader3/listMongoBackups") { book.listMongoBackups(it) }
+        post(router, "/reader3/listMongoBackups") { book.listMongoBackups(it) }
+        post(router, "/reader3/deleteMongoBackup") { book.deleteMongoBackup(it) }
+        post(router, "/reader3/backupAllToMongodb") { book.backupAllToMongodb(it) }
     }
 
     private fun get(router: Router, path: String, block: suspend (RoutingContext) -> Any?) {
@@ -271,7 +275,9 @@ open class YueduApi : RestVerticle() {
                 "secure" to appConfig.secure,
                 "userLimit" to appConfig.userLimit,
                 "workDir" to ExtKt.getWorkDir(),
-                "routes" to "133"
+                "mongoConfigured" to appConfig.mongoUri.isNotBlank(),
+                "remoteActivateEnabled" to appConfig.remoteActivateEnabled,
+                "routes" to "133+"
             )
         )
 }

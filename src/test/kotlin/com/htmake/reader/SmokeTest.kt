@@ -514,6 +514,46 @@ class SmokeTest {
     }
 
     @Test
+    fun mongo_backup_file_fallback_roundtrip() {
+        val ns = "test-mongo-${System.currentTimeMillis()}"
+        // seed local storage
+        com.htmake.reader.utils.ExtKt.saveStorage(
+            arrayOf("data", ns, "bookshelf"),
+            """[{"bookUrl":"https://x/1","name":"书A"}]"""
+        )
+        com.htmake.reader.utils.ExtKt.saveStorage(
+            arrayOf("data", ns, "bookSource"),
+            """[{"bookSourceUrl":"https://s"}]"""
+        )
+        val bak = com.htmake.reader.api.controller.MongoBackup.backupUser(ns, null, "reader")
+        assertEquals(true, bak["ok"])
+        assertEquals("file", bak["backend"])
+        // wipe shelf and restore
+        com.htmake.reader.utils.ExtKt.saveStorage(arrayOf("data", ns, "bookshelf"), "[]")
+        val rest = com.htmake.reader.api.controller.MongoBackup.restoreUser(ns, null, "reader")
+        assertEquals(true, rest["ok"])
+        val shelf = com.htmake.reader.utils.ExtKt.getStorage("data", ns, "bookshelf")
+        assertTrue(shelf!!.contains("书A"))
+        val list = com.htmake.reader.api.controller.MongoBackup.listBackups(null, "reader")
+        assertTrue(list.any { it["ns"] == ns })
+        val del = com.htmake.reader.api.controller.MongoBackup.deleteBackup(ns, null, "reader")
+        assertEquals(true, del["ok"])
+    }
+
+    @Test
+    fun email_code_store_verify() {
+        val email = "user@example.com"
+        val code = com.htmake.reader.help.EmailCodeStore.generateCode(6)
+        assertEquals(6, code.length)
+        com.htmake.reader.help.EmailCodeStore.put(email, code, ttlMs = 60_000)
+        assertEquals(code, com.htmake.reader.help.EmailCodeStore.peek(email))
+        assertFalse(com.htmake.reader.help.EmailCodeStore.verify(email, "000000"))
+        assertTrue(com.htmake.reader.help.EmailCodeStore.verify(email, code))
+        // one-time
+        assertFalse(com.htmake.reader.help.EmailCodeStore.verify(email, code))
+    }
+
+    @Test
     fun license_rsa_segment_and_expire() {
         val (pub, pri) = com.htmake.reader.utils.EncoderUtils.genRsaPair()
         assertTrue(pub.length > 100 && pri.length > 100)

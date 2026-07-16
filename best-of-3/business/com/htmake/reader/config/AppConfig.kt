@@ -1,13 +1,12 @@
-/** Business rewrite from reader-pro-3.2.14.jar — readability / audit. */
-
 package com.htmake.reader.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.stereotype.Component
 
-@Component
+@Component("appConfig")
 @ConfigurationProperties(prefix = "reader.app")
 class AppConfig {
+    // bound from application.yml
     var workDir: String = "."
     var showUI: Boolean = false
     var debug: Boolean = false
@@ -15,26 +14,20 @@ class AppConfig {
     var secure: Boolean = false
     var inviteCode: String = ""
     var secureKey: String = ""
-    var proxy: Boolean = false
-    var proxyType: String = "HTTP"
-    var proxyHost: String = ""
-    var proxyPort: String = ""
-    var cacheChapterContent: Boolean = true
-    var userLimit: Int = 15
-    var userBookLimit: Int = 200
     var debugLog: Boolean = false
-    var autoClearInactiveUser: Int = 0
+    var userLimit: Int = 50
+    var userBookLimit: Int = 200
     var mongoUri: String = ""
     var mongoDbName: String = "reader"
-    var shelfUpdateInteval: Int = 30
+    var cacheChapterContent: Boolean = true
     var remoteWebviewApi: String = ""
-    var defaultUserEnableWebdav: Boolean = true
-    var defaultUserEnableLocalStore: Boolean = true
-    var defaultUserEnableBookSource: Boolean = true
-    var defaultUserEnableRssSource: Boolean = true
-    var defaultUserBookSourceLimit: Int = 100
-    var defaultUserBookLimit: Int = 200
-    var autoBackupUserData: Boolean = false
     var minUserPasswordLength: Int = 8
-    var remoteBookSourceUpdateInterval: Int = 720
+    var shelfUpdateInteval: Int = 30
+    var autoClearInactiveUser: Int = 0
+    var autoBackupUserData: Boolean = false
+    /** Remote license activate URL (empty = skip remote). */
+    var remoteActivateUrl: String = "https://r.htmake.com/reader3/activateLicense"
+    /** When true, activateLicense also POSTs to remoteActivateUrl. */
+    var remoteActivateEnabled: Boolean = false
 }
+

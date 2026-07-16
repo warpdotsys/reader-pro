@@ -132,6 +132,14 @@ class LicenseController(cc: CoroutineContext) : BaseController(cc) {
     suspend fun activateLicense(ctx: RoutingContext): ReturnData {
         val rd = ReturnData()
         val body = ctx.bodyAsJson ?: JsonObject()
+        // optional email code check
+        val email = body.getString("email")
+        val code = body.getString("code")
+        if (!email.isNullOrBlank() && !code.isNullOrBlank()) {
+            if (!com.htmake.reader.help.EmailCodeStore.verify(email, code)) {
+                return rd.setErrorMsg("验证码错误或已过期")
+            }
+        }
         val lic = loadLicense()
         if (lic != null) {
             try {
@@ -144,6 +152,7 @@ class LicenseController(cc: CoroutineContext) : BaseController(cc) {
             if (lic.host.isNullOrBlank()) {
                 lic.host = body.getString("host") ?: ctx.request().host()
             }
+            if (!email.isNullOrBlank()) lic.email = email
             saveLicense(lic)
         }
         val active = ActiveLicense(
@@ -153,13 +162,19 @@ class LicenseController(cc: CoroutineContext) : BaseController(cc) {
             result = "ok"
         )
         activeFile().apply { parentFile?.mkdirs() }.writeText(Json.encode(active))
-        // optional: encrypt result for clients that expect segment payload
+        var remote: Map<String, Any?>? = null
+        if (appConfig.remoteActivateEnabled && appConfig.remoteActivateUrl.isNotBlank()) {
+            remote = com.htmake.reader.help.RemoteLicenseClient.activateRemote(
+                body.encode(),
+                appConfig.remoteActivateUrl
+            )
+        }
         val pri = ensurePrivateKey()
         if (pri.isNotEmpty()) {
             val enc = EncoderUtils.encryptSegmentByPrivateKey(Json.encode(active), EncoderUtils.privateKeyFromBase64(pri))
-            return rd.setData(mapOf("result" to enc, "activated" to true))
+            return rd.setData(mapOf("result" to enc, "activated" to true, "remote" to remote))
         }
-        return rd.setData(mapOf("activated" to true, "active" to active))
+        return rd.setData(mapOf("activated" to true, "active" to active, "remote" to remote))
     }
 
     suspend fun isLicenseValid(ctx: RoutingContext): ReturnData {
@@ -187,8 +202,20 @@ class LicenseController(cc: CoroutineContext) : BaseController(cc) {
 
     suspend fun sendCodeToEmail(ctx: RoutingContext): ReturnData {
         val email = ctx.bodyAsJson?.getString("email") ?: return ReturnData().setErrorMsg("请输入邮箱")
-        // SMTP not configured in rebuild — accept and acknowledge
-        return ReturnData().setData(mapOf("email" to email, "sent" to true, "note" to "SMTP未配置，仅占位成功"))
+        if (!email.contains("@")) return ReturnData().setErrorMsg("邮箱格式错误")
+        val code = com.htmake.reader.help.EmailCodeStore.generateCode(6)
+        com.htmake.reader.help.EmailCodeStore.put(email, code)
+        // SMTP not wired — in debug/non-secure return code for local testing
+        val data = linkedMapOf<String, Any?>(
+            "email" to email,
+            "sent" to true,
+            "ttlMinutes" to 10,
+            "note" to "SMTP未配置；secure=false 时返回 code 便于联调"
+        )
+        if (!appConfig.secure || appConfig.debug) {
+            data["code"] = code
+        }
+        return ReturnData().setData(data)
     }
 
     suspend fun supplyLicense(ctx: RoutingContext): ReturnData = ReturnData().setData(true)

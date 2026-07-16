@@ -611,17 +611,59 @@ private fun findHttpTts(ns: String, name: String): io.legado.app.data.entities.H
     return null
 }
 
-// ---------- mongo ----------
+// ---------- mongo / file backup ----------
+private fun BookController.mongoUriOf(ctx: RoutingContext): String? {
+    val override = ctx.bodyAsJson?.getString("mongoUri")
+        ?: ctx.queryParam("mongoUri").firstOrNull()
+    return override?.takeIf { it.isNotBlank() } ?: appConfig.mongoUri.takeIf { it.isNotBlank() }
+}
+
+private fun BookController.mongoDbOf(ctx: RoutingContext): String {
+    return ctx.bodyAsJson?.getString("mongoDbName")
+        ?: ctx.queryParam("mongoDbName").firstOrNull()
+        ?: appConfig.mongoDbName
+}
+
 suspend fun BookController.backupToMongodb(ctx: RoutingContext): ReturnData {
     val rd = ReturnData()
     if (!checkAuth(ctx)) return rd.setData("NEED_LOGIN").setErrorMsg("请登录后使用")
-    if (appConfig.mongoUri.isBlank()) return rd.setErrorMsg("未配置 mongoUri")
-    return rd.setData(MongoBackup.backupUser(getUserNameSpace(ctx), appConfig.mongoUri, appConfig.mongoDbName))
+    val ns = getUserNameSpace(ctx)
+    return rd.setData(MongoBackup.backupUser(ns, mongoUriOf(ctx), mongoDbOf(ctx)))
 }
 
 suspend fun BookController.restoreFromMongodb(ctx: RoutingContext): ReturnData {
     val rd = ReturnData()
     if (!checkAuth(ctx)) return rd.setData("NEED_LOGIN").setErrorMsg("请登录后使用")
-    if (appConfig.mongoUri.isBlank()) return rd.setErrorMsg("未配置 mongoUri")
-    return rd.setData(MongoBackup.restoreUser(getUserNameSpace(ctx), appConfig.mongoUri, appConfig.mongoDbName))
+    val ns = getUserNameSpace(ctx)
+    return rd.setData(MongoBackup.restoreUser(ns, mongoUriOf(ctx), mongoDbOf(ctx)))
+}
+
+suspend fun BookController.listMongoBackups(ctx: RoutingContext): ReturnData {
+    val rd = ReturnData()
+    if (!checkAuth(ctx)) return rd.setData("NEED_LOGIN").setErrorMsg("请登录后使用")
+    if (!checkManagerAuth(ctx) && appConfig.secure) {
+        // non-manager: only own backup meta
+        val ns = getUserNameSpace(ctx)
+        val all = MongoBackup.listBackups(mongoUriOf(ctx), mongoDbOf(ctx))
+        return rd.setData(all.filter { it["ns"] == ns })
+    }
+    return rd.setData(MongoBackup.listBackups(mongoUriOf(ctx), mongoDbOf(ctx)))
+}
+
+suspend fun BookController.deleteMongoBackup(ctx: RoutingContext): ReturnData {
+    val rd = ReturnData()
+    if (!checkAuth(ctx)) return rd.setData("NEED_LOGIN").setErrorMsg("请登录后使用")
+    val ns = ctx.bodyAsJson?.getString("ns")
+        ?: ctx.queryParam("ns").firstOrNull()
+        ?: getUserNameSpace(ctx)
+    if (appConfig.secure && ns != getUserNameSpace(ctx) && !checkManagerAuth(ctx)) {
+        return rd.setErrorMsg("无权删除其他用户备份")
+    }
+    return rd.setData(MongoBackup.deleteBackup(ns, mongoUriOf(ctx), mongoDbOf(ctx)))
+}
+
+suspend fun BookController.backupAllToMongodb(ctx: RoutingContext): ReturnData {
+    val rd = ReturnData()
+    if (!checkManagerAuth(ctx)) return rd.setErrorMsg("需要管理密码")
+    return rd.setData(MongoBackup.backupAllUsers(mongoUriOf(ctx), mongoDbOf(ctx)))
 }

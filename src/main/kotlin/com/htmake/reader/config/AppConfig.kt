@@ -25,4 +25,9 @@ class AppConfig {
     var shelfUpdateInteval: Int = 30
     var autoClearInactiveUser: Int = 0
     var autoBackupUserData: Boolean = false
+    /** Remote license activate URL (empty = skip remote). */
+    var remoteActivateUrl: String = "https://r.htmake.com/reader3/activateLicense"
+    /** When true, activateLicense also POSTs to remoteActivateUrl. */
+    var remoteActivateEnabled: Boolean = false
 }
+

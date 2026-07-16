@@ -140,8 +140,50 @@ class UserController(cc: CoroutineContext) : BaseController(cc) {
     suspend fun updateUser(ctx: RoutingContext): ReturnData {
         val rd = ReturnData()
         if (!checkManagerAuth(ctx)) return rd.setErrorMsg("需要管理密码")
+        val body = ctx.bodyAsJson ?: return rd.setErrorMsg("参数错误")
+        val username = body.getString("username") ?: return rd.setErrorMsg("用户名不能为空")
+        val users = loadUserMap()
+        val u = users[username] ?: return rd.setErrorMsg("用户不存在")
+        listOf("enableWebdav", "enableBookSource", "enableRssSource").forEach { k ->
+            if (body.containsKey(k)) u[k] = body.getBoolean(k)
+        }
+        body.getString("email")?.let { u["email"] = it }
+        users[username] = u
+        saveUserMap(users)
         return rd.setData(true)
     }
 
-    suspend fun clearInactiveUsers(ctx: RoutingContext): ReturnData = ReturnData().setData(0)
+    /**
+     * Remove users whose last_login_at is older than `day` days (default from body/query or 90).
+     * Does not delete user data dirs unless `purgeData=true`.
+     */
+    suspend fun clearInactiveUsers(ctx: RoutingContext): ReturnData {
+        val rd = ReturnData()
+        if (!checkManagerAuth(ctx)) return rd.setErrorMsg("需要管理密码")
+        val day = ctx.bodyAsJson?.getInteger("day")
+            ?: ctx.queryParam("day").firstOrNull()?.toIntOrNull()
+            ?: appConfig.autoClearInactiveUser.takeIf { it > 0 }
+            ?: 90
+        val purge = ctx.bodyAsJson?.getBoolean("purgeData") == true
+        val cutoff = System.currentTimeMillis() - day.toLong() * 24 * 3600 * 1000
+        val users = loadUserMap()
+        val removed = mutableListOf<String>()
+        users.entries.removeAll { (name, info) ->
+            val last = (info["last_login_at"] as? Number)?.toLong()
+                ?: (info["created_at"] as? Number)?.toLong()
+                ?: 0L
+            // only drop when last_login/created is known and older than cutoff
+            val drop = last > 0 && last < cutoff
+            if (drop) {
+                removed += name
+                if (purge) {
+                    val dir = java.io.File(ExtKt.getWorkDir("storage", "data", name))
+                    ExtKt.deleteRecursively(dir)
+                }
+            }
+            drop
+        }
+        if (removed.isNotEmpty()) saveUserMap(users)
+        return rd.setData(mapOf("removed" to removed.size, "users" to removed, "day" to day))
+    }
 }

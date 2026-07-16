@@ -243,3 +243,11 @@ _business_utils_entities.py
 - **EncoderUtils**：RSA 分段加解密（公私钥）、genRsaPair
 - **LicenseController**：generateKeys/import/activate/isLicenseValid/isHostValid/decrypt、过期与 host 校验
 - **WebDAV Basic**：用户+加盐密码校验；accessToken；按用户 webdav home
+
+## Phase 22（Mongo 文件回落 + 邮箱验证码 + 远程激活）
+
+- **MongoBackup**：Mongo 优先，失败/未配置时文件回落；list/delete/backupAll
+- **API**：listMongoBackups / deleteMongoBackup / backupAllToMongodb
+- **EmailCodeStore**：6 位验证码 TTL；sendCodeToEmail / activate 校验
+- **RemoteLicenseClient**：可选 POST 到 r.htmake.com
+- **clearInactiveUsers**：按 last_login 清理
