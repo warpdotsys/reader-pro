@@ -1,5 +1,11 @@
 # Local JDK / decompiler binaries (large, machine-local)
 tools/
+src-business-ref/
+
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
 
 # OS / IDE
 .DS_Store
@@ -8,10 +14,12 @@ Thumbs.db
 .vscode/
 *.iml
 
-# Logs that can be regenerated
+# Logs / temp
 *.log
+compile.log
+storage/
 
-# Secrets — never commit tokens
+# Secrets
 .env
 *.pem
 *.key
