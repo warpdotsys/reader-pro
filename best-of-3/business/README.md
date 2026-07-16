@@ -206,3 +206,12 @@ _business_utils_entities.py
 - **UmdUtils**：stringToUnicodeBytes / compress / genRandomBytes
 - **SmokeTest**：UMD write→read 黄金往返 + UmdFile 集成；eader3-routes.txt 路由契约
 - **bookSourceDebug**：显示 loginUrl/loginUi；表单加载/登录/退出 API
+
+## Phase 17（WebDAV 深化 + 替换规则 + 文本目录 + 契约）
+
+- **WebDAV**：HEAD/LOCK/UNLOCK、PROPFIND displayname/getlastmodified、路径穿越防护
+- **restoreFromWebdav / listWebdavBackups** API
+- **ContentProcessor**：regex:/pat/ 书名过滤、applyRules 直调
+- **HtmlFormatter.formatKeepImg** 保留 img
+- **DefaultData** 加载 classpath txtTocRule.json
+- **SmokeTest**：替换规则、TXT 分章、Cookie/ACache、TTS SSML、WebDAV 路径

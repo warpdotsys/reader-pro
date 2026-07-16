@@ -312,4 +312,145 @@ class SmokeTest {
             tmp.delete()
         }
     }
+
+    @Test
+    fun contentProcessor_regex_and_book_filter() {
+        val book = io.legado.app.data.entities.Book(name = "三体")
+        val rules = listOf(
+            io.legado.app.help.ContentProcessor.ReplaceRule(
+                pattern = "广告",
+                replacement = "",
+                isRegex = false,
+                scope = "content"
+            ),
+            io.legado.app.help.ContentProcessor.ReplaceRule(
+                pattern = "\\s{2,}",
+                replacement = " ",
+                isRegex = true,
+                scope = "all",
+                bookName = "regex:三."
+            ),
+            io.legado.app.help.ContentProcessor.ReplaceRule(
+                pattern = "X",
+                replacement = "Y",
+                isRegex = false,
+                bookName = "无关书"
+            )
+        )
+        val out = io.legado.app.help.ContentProcessor.applyRules(
+            rules, book, "广告  正文  广告 X", "content"
+        )
+        assertFalse(out.contains("广告"))
+        assertTrue(out.contains("正文"))
+        assertTrue(out.contains("X")) // filtered by bookName
+        assertTrue(
+            io.legado.app.help.ContentProcessor.matchesBook(
+                io.legado.app.help.ContentProcessor.ReplaceRule(bookName = "/三体|球状/"),
+                book
+            )
+        )
+    }
+
+    @Test
+    fun htmlFormatter_keep_img() {
+        val html = """<p>hi</p><br/><img src="a.jpg" alt="x"/><div>end</div>"""
+        val plain = io.legado.app.utils.HtmlFormatter.format(html)
+        assertTrue(plain.contains("hi"))
+        assertFalse(plain.contains("<"))
+        val keep = io.legado.app.utils.HtmlFormatter.formatKeepImg(html)
+        assertTrue(keep.contains("<img"))
+        assertTrue(keep.contains("a.jpg"))
+        assertFalse(keep.contains("<div"))
+    }
+
+    @Test
+    fun textFile_chapter_split() {
+        val tmp = File.createTempFile("novel", ".txt")
+        try {
+            tmp.writeText(
+                """
+                前言废话
+                第一章 开始
+                内容一
+                第二章 继续
+                内容二
+                """.trimIndent(),
+                Charsets.UTF_8
+            )
+            val book = io.legado.app.data.entities.Book(
+                bookUrl = tmp.absolutePath,
+                origin = "loc_book",
+                name = "测试",
+                tocUrl = """^(第[0-9零一二三四五六七八九十百千]+章.*)$"""
+            )
+            val chapters = io.legado.app.model.localBook.TextFile(book).getChapterList()
+            assertTrue(chapters.size >= 2, "chapters=${chapters.map { it.title }}")
+            val c0 = io.legado.app.model.localBook.TextFile(book).getContent(chapters.first { it.title.contains("一") })
+            assertTrue(c0!!.contains("内容一") || c0.contains("第一章"))
+        } finally {
+            tmp.delete()
+        }
+    }
+
+    @Test
+    fun webdav_paths_safe_and_dest() {
+        val home = File.createTempFile("wdh", "home").apply { delete(); mkdirs() }
+        try {
+            val f = com.htmake.reader.api.controller.WebdavPaths.resolveUnderHome(home, "/a/b.txt")
+            assertTrue(f.absolutePath.startsWith(home.canonicalPath))
+            try {
+                com.htmake.reader.api.controller.WebdavPaths.resolveUnderHome(home, "/../etc/passwd")
+                assertTrue(false, "should reject traversal")
+            } catch (e: Exception) {
+                assertTrue(e.message?.contains("非法") == true)
+            }
+            val rel = com.htmake.reader.api.controller.WebdavPaths.destinationToRelativePath(
+                "http://host/reader3/webdav/backup/x.zip"
+            )
+            assertTrue(rel!!.contains("backup") || rel.contains("x.zip"))
+            val p = com.htmake.reader.api.controller.WebdavPaths.pathFromRequest("/reader3/webdav/foo//bar")
+            assertEquals("/foo/bar", p)
+        } finally {
+            home.deleteRecursively()
+        }
+    }
+
+    @Test
+    fun cookie_store_merge_and_acache_expire() {
+        val ns = "test-cookie-${System.currentTimeMillis()}"
+        val store = io.legado.app.help.http.CookieStore(ns)
+        store.setCookie("https://a.example.com/path", "a=1")
+        store.replaceCookie("https://a.example.com/x", "b=2; a=3")
+        val c = store.getCookie("https://www.example.com/")
+        assertTrue(c.contains("a=3") || c.contains("a=1"))
+        assertTrue(c.contains("b=2"))
+        store.applySetCookie("https://example.com", listOf("session=xyz; Path=/", "x=1"))
+        assertTrue(store.getCookie("https://example.com").contains("session=xyz"))
+
+        val dir = File(com.htmake.reader.utils.ExtKt.getWorkDir("storage", "cache", "t-acache"))
+        dir.deleteRecursively()
+        val cache = io.legado.app.utils.ACache.get(dir)
+        cache.put("k", "v", saveTimeSec = 1)
+        assertEquals("v", cache.getAsString("k"))
+        Thread.sleep(1100)
+        assertEquals(null, cache.getAsString("k"))
+        dir.deleteRecursively()
+    }
+
+    @Test
+    fun defaultData_loads_txt_toc_rules() {
+        val rules = io.legado.app.help.DefaultData.txtTocRules
+        assertTrue(rules.size >= 3, "expected bundled rules, got ${rules.size}")
+        assertTrue(rules.any { it.rule.isNotBlank() })
+    }
+
+    @Test
+    fun edgeTts_ssml_escapes() {
+        val ssml = com.htmake.reader.lib.tts.EdgeTts.buildSsml("a<b>&c", "zh-CN-XiaoxiaoNeural", "+10%", "0%")
+        assertTrue(ssml.contains("&lt;"))
+        assertTrue(ssml.contains("&amp;"))
+        assertTrue(ssml.contains("zh-CN-XiaoxiaoNeural"))
+        assertFalse(ssml.contains("<b>"))
+    }
 }
+

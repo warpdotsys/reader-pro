@@ -66,9 +66,10 @@ class TextFile(private val book: Book) {
     }
 
     private fun selectTocRule(head: String): String {
-        var best = DefaultData.txtTocRules.first().rule
+        val candidates = DefaultData.enabledTxtTocRules().ifEmpty { DefaultData.txtTocRules }
+        var best = candidates.first().rule
         var bestCount = 0
-        for (r in DefaultData.txtTocRules) {
+        for (r in candidates) {
             val c = try {
                 Pattern.compile(r.rule, Pattern.MULTILINE).matcher(head).let { m ->
                     var n = 0; while (m.find()) n++; n
@@ -76,6 +77,8 @@ class TextFile(private val book: Book) {
             } catch (_: Exception) { 0 }
             if (c > bestCount) { bestCount = c; best = r.rule }
         }
+        // prefer at least 2 hits; otherwise still return best
         return best
     }
 }
+

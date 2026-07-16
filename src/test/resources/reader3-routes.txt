@@ -75,6 +75,7 @@
 /reader3/importLicense
 /reader3/isHostValid
 /reader3/isLicenseValid
+/reader3/listWebdavBackups
 /reader3/login
 /reader3/loginBookSource
 /reader3/logout
@@ -84,6 +85,7 @@
 /reader3/removeBookGroupMulti
 /reader3/resetPassword
 /reader3/restoreFromMongodb
+/reader3/restoreFromWebdav
 /reader3/saveBook
 /reader3/saveBookContent
 /reader3/saveBookGroup

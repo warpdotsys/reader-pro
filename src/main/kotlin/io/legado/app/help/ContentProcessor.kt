@@ -8,6 +8,11 @@ import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 
+/**
+ * Apply user replace rules to chapter title/content.
+ * Supports scope = content | title | all, optional bookName filter
+ * (`plain`, `regex:pattern`, or `/pattern/`).
+ */
 object ContentProcessor {
     data class ReplaceRule(
         val name: String = "",
@@ -24,6 +29,10 @@ object ContentProcessor {
 
     fun loadRules(userNameSpace: String): List<ReplaceRule> {
         val raw = ExtKt.getStorage("data", userNameSpace, "replaceRule") ?: return emptyList()
+        return parseRulesJson(raw)
+    }
+
+    fun parseRulesJson(raw: String): List<ReplaceRule> {
         return try {
             JsonParser.parseString(raw).asJsonArray.mapNotNull { el ->
                 val o = el.asJsonObject
@@ -43,32 +52,54 @@ object ContentProcessor {
         }
     }
 
-    fun applyContent(ns: String, book: Book?, content: String): String {
-        var text = content
-        loadRules(ns).filter {
-            it.isEnabled && (it.scope == "content" || it.scope == "all" || it.scope.isBlank()) && matches(it, book)
-        }.forEach { text = applyOne(text, it) }
-        return text
+    fun applyContent(ns: String, book: Book?, content: String): String =
+        applyRules(loadRules(ns), book, content, "content")
+
+    fun applyTitle(ns: String, book: Book?, title: String): String =
+        applyRules(loadRules(ns), book, title, "title")
+
+    /** Direct apply (tests / offline). */
+    fun applyRules(
+        rules: List<ReplaceRule>,
+        book: Book?,
+        text: String,
+        scope: String
+    ): String {
+        var out = text
+        rules.filter {
+            it.isEnabled &&
+                (it.scope.equals(scope, true) || it.scope.equals("all", true) ||
+                    (scope == "content" && it.scope.isBlank())) &&
+                matchesBook(it, book)
+        }.forEach { out = applyOne(out, it) }
+        return out
     }
 
-    fun applyTitle(ns: String, book: Book?, title: String): String {
-        var text = title
-        loadRules(ns).filter {
-            it.isEnabled && (it.scope == "title" || it.scope == "all") && matches(it, book)
-        }.forEach { text = applyOne(text, it) }
-        return text
-    }
-
-    private fun matches(rule: ReplaceRule, book: Book?): Boolean {
+    fun matchesBook(rule: ReplaceRule, book: Book?): Boolean {
         if (rule.bookName.isBlank()) return true
         val name = book?.name ?: return true
-        return name.contains(rule.bookName)
+        val filter = rule.bookName.trim()
+        return when {
+            filter.startsWith("regex:", ignoreCase = true) -> {
+                val pat = filter.substringAfter(':')
+                runCatching { Regex(pat).containsMatchIn(name) }.getOrDefault(false)
+            }
+            filter.length >= 2 && filter.startsWith('/') && filter.endsWith('/') -> {
+                val pat = filter.substring(1, filter.length - 1)
+                runCatching { Regex(pat).containsMatchIn(name) }.getOrDefault(false)
+            }
+            else -> name.contains(filter)
+        }
     }
 
     private fun applyOne(text: String, r: ReplaceRule): String {
         val task = Callable {
-            if (r.isRegex) text.replace(Regex(r.pattern), r.replacement)
-            else text.replace(r.pattern, r.replacement)
+            if (r.isRegex) {
+                // use REPLACE_FIRST only if pattern ends with $single — keep full replace
+                text.replace(Regex(r.pattern), r.replacement)
+            } else {
+                text.replace(r.pattern, r.replacement)
+            }
         }
         val f = pool.submit(task)
         return try {

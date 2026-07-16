@@ -233,6 +233,9 @@ open class YueduApi : RestVerticle() {
 
         // ---- backup ----
         post(router, "/reader3/backupToWebdav") { webdav.backupToWebdav(it) }
+        post(router, "/reader3/restoreFromWebdav") { webdav.restoreFromWebdav(it) }
+        get(router, "/reader3/listWebdavBackups") { webdav.listWebdavBackups(it) }
+        post(router, "/reader3/listWebdavBackups") { webdav.listWebdavBackups(it) }
         post(router, "/reader3/backupToMongodb") { book.backupToMongodb(it) }
         post(router, "/reader3/restoreFromMongodb") { book.restoreFromMongodb(it) }
     }

@@ -33,8 +33,22 @@ class WebdavController(cc: CoroutineContext) : BaseController(cc) {
         }
         when (ctx.request().method()) {
             HttpMethod.OPTIONS -> ctx.response()
-                .putHeader("Allow", "OPTIONS,GET,PUT,DELETE,MKCOL,MOVE,COPY,PROPFIND")
-                .putHeader("DAV", "1,2").end()
+                .putHeader("Allow", "OPTIONS,GET,HEAD,PUT,DELETE,MKCOL,MOVE,COPY,PROPFIND,LOCK,UNLOCK")
+                .putHeader("DAV", "1,2")
+                .putHeader("MS-Author-Via", "DAV")
+                .end()
+            HttpMethod.HEAD -> {
+                val ns = getUserNameSpace(ctx)
+                val f = WebdavPaths.resolveUnderHome(home(ns), WebdavPaths.pathFromRequest(ctx.request().path() ?: "/"))
+                if (f.isFile) {
+                    ctx.response()
+                        .putHeader("Content-Length", f.length().toString())
+                        .putHeader("Last-Modified", java.text.SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", java.util.Locale.US).apply {
+                            timeZone = java.util.TimeZone.getTimeZone("GMT")
+                        }.format(java.util.Date(f.lastModified())))
+                        .setStatusCode(200).end()
+                } else ctx.response().setStatusCode(404).end()
+            }
             HttpMethod.GET -> {
                 val ns = getUserNameSpace(ctx)
                 val f = WebdavPaths.resolveUnderHome(home(ns), WebdavPaths.pathFromRequest(ctx.request().path() ?: "/"))
@@ -62,6 +76,8 @@ class WebdavController(cc: CoroutineContext) : BaseController(cc) {
                     f.mkdirs(); ctx.response().setStatusCode(201).end()
                 }
                 "MOVE", "COPY" -> moveCopy(ctx, (ctx.request().rawMethod() ?: "").uppercase() == "MOVE")
+                "LOCK" -> lock(ctx)
+                "UNLOCK" -> ctx.response().setStatusCode(204).end()
                 else -> ctx.response().setStatusCode(405).end()
             }
         }
@@ -75,11 +91,20 @@ class WebdavController(cc: CoroutineContext) : BaseController(cc) {
     private fun propfind(ctx: RoutingContext) {
         val ns = getUserNameSpace(ctx)
         val f = WebdavPaths.resolveUnderHome(home(ns), WebdavPaths.pathFromRequest(ctx.request().path() ?: "/"))
-        val sb = StringBuilder("""<?xml version="1.0"?><D:multistatus xmlns:D="DAV:">""")
+        val df = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", java.util.Locale.US).apply {
+            timeZone = java.util.TimeZone.getTimeZone("UTC")
+        }
+        val sb = StringBuilder("""<?xml version="1.0" encoding="utf-8"?><D:multistatus xmlns:D="DAV:">""")
         fun entry(file: File, href: String) {
-            sb.append("<D:response><D:href>").append(href).append("</D:href><D:propstat><D:prop>")
+            val safeHref = href.replace("&", "&amp;")
+            sb.append("<D:response><D:href>").append(safeHref).append("</D:href><D:propstat><D:prop>")
+            sb.append("<D:displayname>").append(file.name.replace("&", "&amp;")).append("</D:displayname>")
+            sb.append("<D:getlastmodified>").append(df.format(java.util.Date(file.lastModified()))).append("</D:getlastmodified>")
             if (file.isDirectory) sb.append("<D:resourcetype><D:collection/></D:resourcetype>")
-            else sb.append("<D:resourcetype/><D:getcontentlength>").append(file.length()).append("</D:getcontentlength>")
+            else {
+                sb.append("<D:resourcetype/>")
+                sb.append("<D:getcontentlength>").append(file.length()).append("</D:getcontentlength>")
+            }
             sb.append("</D:prop><D:status>HTTP/1.1 200 OK</D:status></D:propstat></D:response>")
         }
         entry(f, ctx.request().path() ?: "/")
@@ -88,6 +113,26 @@ class WebdavController(cc: CoroutineContext) : BaseController(cc) {
         }
         sb.append("</D:multistatus>")
         ctx.response().setStatusCode(207).putHeader("Content-Type", "application/xml; charset=utf-8").end(sb.toString())
+    }
+
+    /** Minimal LOCK for clients that expect DAV:2 (no real exclusive locking). */
+    private fun lock(ctx: RoutingContext) {
+        val token = "opaquelocktoken:" + java.util.UUID.randomUUID()
+        val body = """
+            <?xml version="1.0" encoding="utf-8"?>
+            <D:prop xmlns:D="DAV:"><D:lockdiscovery><D:activelock>
+              <D:locktype><D:write/></D:locktype>
+              <D:lockscope><D:exclusive/></D:lockscope>
+              <D:depth>Infinity</D:depth>
+              <D:timeout>Second-3600</D:timeout>
+              <D:locktoken><D:href>$token</D:href></D:locktoken>
+            </D:activelock></D:lockdiscovery></D:prop>
+        """.trimIndent()
+        ctx.response()
+            .setStatusCode(200)
+            .putHeader("Lock-Token", "<$token>")
+            .putHeader("Content-Type", "application/xml; charset=utf-8")
+            .end(body)
     }
 
     private fun moveCopy(ctx: RoutingContext, move: Boolean) {
@@ -125,6 +170,57 @@ class WebdavController(cc: CoroutineContext) : BaseController(cc) {
                 zos.closeEntry()
             }
         }
-        return rd.setData(mapOf("path" to zip.absolutePath, "size" to zip.length()))
+        return rd.setData(mapOf("path" to zip.absolutePath, "size" to zip.length(), "name" to zip.name))
+    }
+
+    /**
+     * Restore latest (or named) backup zip from user WebDAV home into data/{ns}/.
+     * Body/query: fileName optional.
+     */
+    suspend fun restoreFromWebdav(ctx: RoutingContext): ReturnData {
+        val rd = ReturnData()
+        if (!checkAuth(ctx)) return rd.setData("NEED_LOGIN").setErrorMsg("请登录后使用")
+        val ns = getUserNameSpace(ctx)
+        val homeDir = home(ns)
+        val name = ctx.bodyAsJson?.getString("fileName")
+            ?: ctx.queryParam("fileName").firstOrNull()
+        val zip = if (!name.isNullOrBlank()) {
+            File(homeDir, name)
+        } else {
+            homeDir.listFiles { f -> f.isFile && f.name.startsWith("backup-") && f.name.endsWith(".zip") }
+                ?.maxByOrNull { it.lastModified() }
+        } ?: return rd.setErrorMsg("没有备份文件")
+        if (!zip.isFile) return rd.setErrorMsg("备份不存在: ${zip.name}")
+        val dataDir = File(ExtKt.getWorkDir("storage", "data", ns)).apply { mkdirs() }
+        var count = 0
+        java.util.zip.ZipInputStream(zip.inputStream()).use { zis ->
+            var entry = zis.nextEntry
+            while (entry != null) {
+                if (!entry.isDirectory) {
+                    val safe = File(entry.name).name // flatten path
+                    if (safe.endsWith(".json")) {
+                        val out = File(dataDir, safe)
+                        out.outputStream().use { zis.copyTo(it) }
+                        count++
+                    }
+                }
+                zis.closeEntry()
+                entry = zis.nextEntry
+            }
+        }
+        return rd.setData(mapOf("restored" to count, "from" to zip.name))
+    }
+
+    /** List backup-*.zip under webdav home. */
+    suspend fun listWebdavBackups(ctx: RoutingContext): ReturnData {
+        val rd = ReturnData()
+        if (!checkAuth(ctx)) return rd.setData("NEED_LOGIN").setErrorMsg("请登录后使用")
+        val ns = getUserNameSpace(ctx)
+        val list = home(ns).listFiles { f -> f.isFile && f.name.endsWith(".zip") }
+            ?.sortedByDescending { it.lastModified() }
+            ?.map { mapOf("name" to it.name, "size" to it.length(), "mtime" to it.lastModified()) }
+            ?: emptyList()
+        return rd.setData(list)
     }
 }
+

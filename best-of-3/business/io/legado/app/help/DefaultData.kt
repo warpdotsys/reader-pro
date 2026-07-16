@@ -1,53 +1,39 @@
-/** Business rewrite from reader-pro-3.2.14.jar — phase4. */
-
 package io.legado.app.help
 
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.google.gson.JsonParser
 import io.legado.app.data.entities.TxtTocRule
-import java.io.File
 
 object DefaultData {
-    const val txtTocRuleFileName = "txtTocRule.json"
+    private val builtinFallback: List<TxtTocRule> = listOf(
+        TxtTocRule("中文章节", """^(第[0-9零一二三四五六七八九十百千]+[章节回部集卷].*)$"""),
+        TxtTocRule("Chapter", """^(Chapter\s+\d+.*)$""", enable = true),
+        TxtTocRule("数字点", """^(\d+\.\s*.{2,40})$""")
+    )
 
+    /** Prefer classpath `defaultData/txtTocRule.json` (from original jar). */
     val txtTocRules: List<TxtTocRule> by lazy { loadTxtTocRules() }
 
-    private fun loadTxtTocRules(): List<TxtTocRule> {
-        val candidates = listOf(
-            File("defaultData/txtTocRule.json"),
-            File("resources/defaultData/txtTocRule.json"),
-            File(System.getProperty("user.dir"), "defaultData/txtTocRule.json"),
-        )
-        for (f in candidates) {
-            if (f.isFile) {
-                return parse(f.readText())
+    fun loadTxtTocRules(): List<TxtTocRule> {
+        val stream = javaClass.classLoader.getResourceAsStream("defaultData/txtTocRule.json")
+            ?: return builtinFallback
+        return try {
+            val raw = stream.bufferedReader(Charsets.UTF_8).use { it.readText() }
+            val arr = JsonParser.parseString(raw).asJsonArray
+            val list = arr.mapNotNull { el ->
+                val o = el.asJsonObject
+                val rule = o.get("rule")?.asString ?: return@mapNotNull null
+                TxtTocRule(
+                    name = o.get("name")?.asString ?: "",
+                    rule = rule,
+                    example = o.get("example")?.asString,
+                    enable = o.get("enable")?.asBoolean ?: true
+                )
             }
+            if (list.isEmpty()) builtinFallback else list
+        } catch (_: Exception) {
+            builtinFallback
         }
-        // classpath
-        val stream = DefaultData::class.java.classLoader
-            ?.getResourceAsStream("defaultData/txtTocRule.json")
-            ?: DefaultData::class.java.getResourceAsStream("/defaultData/txtTocRule.json")
-        if (stream != null) {
-            return parse(stream.bufferedReader().readText())
-        }
-        return defaultBuiltin()
     }
 
-    private fun parse(json: String): List<TxtTocRule> {
-        val type = object : TypeToken<List<TxtTocRule>>() {}.type
-        return Gson().fromJson(json, type) ?: defaultBuiltin()
-    }
-
-    private fun defaultBuiltin(): List<TxtTocRule> = listOf(
-        TxtTocRule(
-            id = -1, enable = true, name = "目录",
-            rule = "^\\s*第[0-9零一二三四五六七八九十百千万]+[章节回卷].{0,30}$",
-            serialNumber = 0
-        ),
-        TxtTocRule(
-            id = -6, enable = true, name = "数字 分隔符 标题",
-            rule = "^[ 　\\t]{0,4}\\d{1,5}[：:,.， 、_—\\-].{1,30}$",
-            serialNumber = 1
-        ),
-    )
+    fun enabledTxtTocRules(): List<TxtTocRule> = txtTocRules.filter { it.enable }
 }
