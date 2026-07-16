@@ -1,229 +1,202 @@
-/** Business rewrite from reader-pro-3.2.14.jar — phase5. */
-
 package io.legado.app.model.localBook
 
 import io.legado.app.data.entities.Book
 import io.legado.app.data.entities.BookChapter
-import io.legado.app.utils.HtmlFormatter
-import me.ag2s.epublib.domain.EpubBook
-import me.ag2s.epublib.domain.Resource
-import me.ag2s.epublib.domain.SpineReference
-import me.ag2s.epublib.epub.EpubReader
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Element
-import java.nio.charset.Charset
+import java.io.File
 import java.util.zip.ZipFile
 
 /**
- * EPUB reader (epublib).
- * - getChapterList: NCX/TOC unique resources
- * - getChapterListBySpine: spine order
- * - getChapterListBySpinAndToc: spine order + TOC titles
- * - getChapterListByTocAndSpin: TOC order + spine titles
+ * EPUB chapter list:
+ * 1. OPF spine order (primary)
+ * 2. NCX / nav.xhtml titles merged when available
+ * 3. Fallback: enumerate html/xhtml entries
  */
-class EpubFile(var book: Book) {
-    private var cached: EpubBook? = null
-    private val charset: Charset = Charset.forName("UTF-8")
+object EpubFile {
 
-    private fun epub(): EpubBook? {
-        if (cached != null) return cached
+    fun getChapterList(book: Book): ArrayList<BookChapter> {
+        val file = book.localFile()
+        if (!file.isFile) return arrayListOf()
         return try {
-            EpubReader().readEpubLazy(ZipFile(book.localFile()), "utf-8").also { cached = it }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
-    }
-
-    /** Default: prefer TOC; if empty use spine. */
-    fun getChapterList(): ArrayList<BookChapter> {
-        val toc = getChapterListFromToc()
-        if (toc.isNotEmpty()) {
-            applyMeta(toc)
-            return toc
-        }
-        return getChapterListBySpine()
-    }
-
-    fun getChapterListFromToc(): ArrayList<BookChapter> {
-        val list = ArrayList<BookChapter>()
-        val e = epub() ?: return list
-        val resources = e.tableOfContents?.allUniqueResources ?: return list
-        resources.forEachIndexed { index, res -> list += toChapter(index, res) }
-        return list
-    }
-
-    fun getChapterListBySpine(): ArrayList<BookChapter> {
-        val list = ArrayList<BookChapter>()
-        val e = epub() ?: return list
-        val refs = e.spine?.spineReferences ?: return list
-        refs.forEachIndexed { index, ref ->
-            val res = ref.resource ?: return@forEachIndexed
-            val ch = toChapter(index, res)
-            if (index == 0 && ch.title.isEmpty()) ch.title = "封面"
-            list += ch
-        }
-        applyMeta(list)
-        return list
-    }
-
-    /**
-     * Spine order is canonical reading order; fill titles from TOC map by href.
-     * @param useTocTitle always prefer TOC title when present
-     */
-    fun getChapterListBySpinAndToc(useTocTitle: Boolean = false): ArrayList<BookChapter> {
-        val toc = getChapterListFromToc()
-        val spin = getChapterListBySpine()
-        if (spin.isEmpty()) return toc
-        if (toc.isEmpty()) return spin
-        val titleMap = toc.associateBy { normalizeHref(it.url) }
-        for (ch in spin) {
-            val tocCh = titleMap[normalizeHref(ch.url)]
-            if (tocCh != null && tocCh.title.isNotEmpty() && (useTocTitle || ch.title.isEmpty())) {
-                ch.title = tocCh.title
+            ZipFile(file).use { zf ->
+                val opfPath = findOpfPath(zf)
+                val spine = if (opfPath != null) parseSpine(zf, opfPath) else emptyList()
+                val tocTitles = if (opfPath != null) parseTocTitles(zf, opfPath) else emptyMap()
+                val list = ArrayList<BookChapter>()
+                if (spine.isNotEmpty()) {
+                    spine.forEachIndexed { i, href ->
+                        val title = tocTitles[normalizeHref(href)]
+                            ?: tocTitles.entries.firstOrNull { normalizeHref(href).endsWith(it.key) }?.value
+                            ?: href.substringAfterLast('/').substringBeforeLast('.')
+                        list += BookChapter(
+                            url = href,
+                            title = title,
+                            bookUrl = book.bookUrl,
+                            index = i,
+                            resourceUrl = resolveInZip(opfPath!!, href)
+                        )
+                    }
+                } else {
+                    zf.entries().asSequence()
+                        .map { it.name }
+                        .filter { it.endsWith(".xhtml", true) || it.endsWith(".html", true) || it.endsWith(".htm", true) }
+                        .filter { !it.contains("nav", true) && !it.contains("toc", true) }
+                        .sorted()
+                        .forEachIndexed { i, name ->
+                            list += BookChapter(
+                                url = name,
+                                title = name.substringAfterLast('/').substringBeforeLast('.'),
+                                bookUrl = book.bookUrl,
+                                index = i,
+                                resourceUrl = name
+                            )
+                        }
+                }
+                book.totalChapterNum = list.size
+                book.latestChapterTitle = list.lastOrNull()?.title
+                // cover from metadata
+                if (book.coverUrl.isNullOrBlank() && opfPath != null) {
+                    book.coverUrl = parseCover(zf, opfPath)
+                }
+                if (book.name.isBlank() && opfPath != null) {
+                    parseMeta(zf, opfPath)?.let { (n, a) ->
+                        if (n.isNotBlank()) book.name = n
+                        if (a.isNotBlank() && book.author.isBlank()) book.author = a
+                    }
+                }
+                list
             }
+        } catch (_: Exception) {
+            arrayListOf()
         }
-        applyMeta(spin)
-        return spin
     }
 
-    /** TOC order preferred; fill empty titles from spine map. */
-    fun getChapterListByTocAndSpin(useSpinTitle: Boolean = false): ArrayList<BookChapter> {
-        val toc = getChapterListFromToc()
-        val spin = getChapterListBySpine()
-        if (toc.isEmpty()) return spin
-        if (spin.isEmpty()) return toc
-        val titleMap = spin.associateBy { normalizeHref(it.url) }
-        for (ch in toc) {
-            val spinCh = titleMap[normalizeHref(ch.url)]
-            if (spinCh != null && spinCh.title.isNotEmpty() && (useSpinTitle || ch.title.isEmpty())) {
-                ch.title = spinCh.title
-            }
-        }
-        applyMeta(toc)
-        return toc
-    }
-
-    fun getContent(chapter: BookChapter): String? {
-        if (chapter.url.contains("titlepage.xhtml")) {
-            return """<img src="cover.jpeg" />"""
-        }
-        val e = epub() ?: return null
-        val href = chapter.url.substringBefore('#')
-        val startId = chapter.url.substringAfter('#', "").ifEmpty { null }
-        val endId = chapter.variable // optional end fragment stored in variable in full impl
-        val elements = org.jsoup.select.Elements()
-        var collecting = false
-        val nextUrl = null as String? // multi-resource chapter span simplified
-
-        for (res in e.contents) {
-            val rh = res.href ?: continue
-            if (normalizeHref(rh) == normalizeHref(href)) {
-                elements.add(getBody(res, startId, endId))
-                collecting = true
-                if (nextUrl == null || normalizeHref(rh) == normalizeHref(nextUrl)) break
-            } else if (collecting) {
-                if (nextUrl != null && normalizeHref(rh) == normalizeHref(nextUrl)) break
-                elements.add(getBody(res, null, null))
-            }
-        }
-        if (elements.isEmpty()) {
-            val res = e.resources?.getByHref(href) ?: return null
-            elements.add(getBody(res, startId, endId))
-        }
-        var html = elements.outerHtml()
-        html = Regex("""<ruby>\s?([\u4e00-\u9fa5])\s?.*?</ruby>""").replace(html, "$1")
-        return HtmlFormatter.formatKeepImg(html)
-    }
-
-    /** Cover image bytes for streaming. */
-    fun getCoverBytes(): ByteArray? {
-        val e = epub() ?: return null
+    fun getContent(book: Book, chapter: BookChapter): String? {
+        val file = book.localFile()
+        if (!file.isFile) return null
+        val name = chapter.resourceUrl ?: chapter.url
         return try {
-            e.coverImage?.data
+            ZipFile(file).use { zf ->
+                val e = zf.getEntry(name)
+                    ?: zf.entries().asSequence().firstOrNull { it.name.endsWith(name.substringAfterLast('/')) }
+                    ?: return null
+                val html = zf.getInputStream(e).bufferedReader().readText()
+                // strip scripts/styles for cleaner body
+                val doc = Jsoup.parse(html)
+                doc.select("script, style").remove()
+                doc.body()?.html() ?: html
+            }
         } catch (_: Exception) {
             null
         }
     }
 
-    fun getImageByHref(href: String): ByteArray? {
-        val e = epub() ?: return null
-        val ab = href.replace("../", "")
-        return try {
-            e.resources?.getByHref(ab)?.data
-        } catch (_: Exception) {
-            null
+    private fun findOpfPath(zf: ZipFile): String? {
+        val container = zf.getEntry("META-INF/container.xml") ?: return null
+        val xml = zf.getInputStream(container).bufferedReader().readText()
+        val doc = Jsoup.parse(xml, "", org.jsoup.parser.Parser.xmlParser())
+        return doc.selectFirst("rootfile")?.attr("full-path")?.takeIf { it.isNotBlank() }
+    }
+
+    private fun parseSpine(zf: ZipFile, opfPath: String): List<String> {
+        val opf = readZip(zf, opfPath) ?: return emptyList()
+        val doc = Jsoup.parse(opf, "", org.jsoup.parser.Parser.xmlParser())
+        val idToHref = doc.select("manifest item").associate {
+            it.attr("id") to it.attr("href")
+        }
+        return doc.select("spine itemref").mapNotNull { ref ->
+            idToHref[ref.attr("idref")]
         }
     }
 
-    private fun toChapter(index: Int, res: Resource): BookChapter {
-        var title = res.title
-        if (title.isNullOrEmpty()) {
-            try {
-                val titles = Jsoup.parse(String(res.data, charset)).getElementsByTag("title")
-                if (titles.isNotEmpty()) title = titles[0].text()
-            } catch (_: Exception) {
+    private fun parseTocTitles(zf: ZipFile, opfPath: String): Map<String, String> {
+        val map = linkedMapOf<String, String>()
+        val opf = readZip(zf, opfPath) ?: return map
+        val doc = Jsoup.parse(opf, "", org.jsoup.parser.Parser.xmlParser())
+        // NCX
+        val ncxHref = doc.select("manifest item").firstOrNull {
+            it.attr("media-type").contains("ncx", true) || it.attr("href").endsWith(".ncx", true)
+        }?.attr("href")
+        if (!ncxHref.isNullOrBlank()) {
+            val ncxPath = resolveInZip(opfPath, ncxHref)
+            readZip(zf, ncxPath)?.let { ncxXml ->
+                val ncx = Jsoup.parse(ncxXml, "", org.jsoup.parser.Parser.xmlParser())
+                ncx.select("navPoint").forEach { np ->
+                    val title = np.selectFirst("navLabel text")?.text()?.trim().orEmpty()
+                    val src = np.selectFirst("content")?.attr("src")?.substringBefore('#')?.trim().orEmpty()
+                    if (title.isNotEmpty() && src.isNotEmpty()) {
+                        map[normalizeHref(src)] = title
+                        map[normalizeHref(resolveInZip(ncxPath, src))] = title
+                    }
+                }
             }
         }
-        return BookChapter(
-            url = res.href ?: "",
-            title = title ?: "",
-            index = index,
-            bookUrl = book.bookUrl
-        )
-    }
-
-    private fun getBody(res: Resource, startFragmentId: String?, endFragmentId: String?): Element {
-        val body = Jsoup.parse(String(res.data, charset)).body()
-        if (!startFragmentId.isNullOrBlank()) {
-            body.getElementById(startFragmentId)?.previousElementSiblings()?.remove()
-        }
-        if (!endFragmentId.isNullOrBlank() && endFragmentId != startFragmentId) {
-            body.getElementById(endFragmentId)?.let {
-                it.nextElementSiblings().remove()
-                it.remove()
+        // EPUB3 nav
+        val navHref = doc.select("manifest item").firstOrNull {
+            it.attr("properties").contains("nav") || it.attr("href").contains("nav", true)
+        }?.attr("href")
+        if (!navHref.isNullOrBlank()) {
+            val navPath = resolveInZip(opfPath, navHref)
+            readZip(zf, navPath)?.let { navHtml ->
+                val nav = Jsoup.parse(navHtml)
+                nav.select("nav[epub:type=toc] a, nav a").forEach { a ->
+                    val title = a.text().trim()
+                    val href = a.attr("href").substringBefore('#').trim()
+                    if (title.isNotEmpty() && href.isNotEmpty()) {
+                        map[normalizeHref(href)] = title
+                        map[normalizeHref(resolveInZip(navPath, href))] = title
+                    }
+                }
             }
         }
-        body.select("script,style").remove()
-        return body
+        return map
     }
 
-    private fun applyMeta(chapters: List<BookChapter>) {
-        if (chapters.isNotEmpty()) {
-            book.latestChapterTitle = chapters.last().title
-            book.totalChapterNum = chapters.size
+    private fun parseCover(zf: ZipFile, opfPath: String): String? {
+        val opf = readZip(zf, opfPath) ?: return null
+        val doc = Jsoup.parse(opf, "", org.jsoup.parser.Parser.xmlParser())
+        val coverId = doc.selectFirst("meta[name=cover]")?.attr("content")
+        val href = if (!coverId.isNullOrBlank()) {
+            doc.select("manifest item").firstOrNull { it.attr("id") == coverId }?.attr("href")
+        } else {
+            doc.select("manifest item").firstOrNull {
+                it.attr("properties").contains("cover-image") ||
+                    it.attr("media-type").startsWith("image/")
+            }?.attr("href")
         }
-        epub()?.metadata?.let { md ->
-            if (book.name.isEmpty()) book.name = md.firstTitle ?: book.name
-            if (book.author.isEmpty()) {
-                book.author = md.authors?.firstOrNull()?.toString() ?: ""
+        return href?.let { resolveInZip(opfPath, it) }
+    }
+
+    private fun parseMeta(zf: ZipFile, opfPath: String): Pair<String, String>? {
+        val opf = readZip(zf, opfPath) ?: return null
+        val doc = Jsoup.parse(opf, "", org.jsoup.parser.Parser.xmlParser())
+        val title = doc.selectFirst("metadata title, dc|title, title")?.text().orEmpty()
+        val author = doc.selectFirst("metadata creator, dc|creator, creator")?.text().orEmpty()
+        return title to author
+    }
+
+    private fun readZip(zf: ZipFile, path: String): String? {
+        val e = zf.getEntry(path) ?: zf.getEntry(path.replace('\\', '/')) ?: return null
+        return zf.getInputStream(e).bufferedReader().readText()
+    }
+
+    private fun resolveInZip(basePath: String, href: String): String {
+        if (href.startsWith("/")) return href.trimStart('/')
+        val baseDir = File(basePath).parent?.replace('\\', '/') ?: ""
+        if (baseDir.isEmpty()) return href
+        // simple normalize
+        val joined = "$baseDir/$href"
+        val parts = mutableListOf<String>()
+        for (p in joined.split('/')) {
+            when (p) {
+                "", "." -> {}
+                ".." -> if (parts.isNotEmpty()) parts.removeAt(parts.lastIndex)
+                else -> parts += p
             }
         }
+        return parts.joinToString("/")
     }
 
-    private fun normalizeHref(href: String): String =
-        href.substringBefore('#').replace("\\", "/").trimStart('/')
-
-    companion object {
-        @Volatile private var eFile: EpubFile? = null
-
-        @Synchronized
-        private fun getEFile(book: Book): EpubFile {
-            val cur = eFile
-            if (cur != null && cur.book.bookUrl == book.bookUrl) {
-                cur.book = book
-                return cur
-            }
-            return EpubFile(book).also { eFile = it }
-        }
-
-        fun getChapterList(book: Book): ArrayList<BookChapter> =
-            getEFile(book).getChapterListBySpinAndToc(useTocTitle = true)
-
-        fun getContent(book: Book, chapter: BookChapter): String? =
-            getEFile(book).getContent(chapter)
-
-        fun getCoverBytes(book: Book): ByteArray? = getEFile(book).getCoverBytes()
-        fun getImage(book: Book, href: String): ByteArray? = getEFile(book).getImageByHref(href)
-    }
+    private fun normalizeHref(h: String): String =
+        h.substringAfterLast('/').substringBefore('#').lowercase()
 }

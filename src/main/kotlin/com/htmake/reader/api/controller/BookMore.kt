@@ -22,8 +22,6 @@ import me.ag2s.epublib.domain.Author
 import me.ag2s.epublib.domain.EpubBook
 import me.ag2s.epublib.domain.Resource
 import me.ag2s.epublib.epub.EpubWriter
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import java.io.FileOutputStream
 import java.util.Base64
@@ -508,8 +506,10 @@ suspend fun BookController.textToSpeech(ctx: RoutingContext): ReturnData? {
     val base64 = p(ctx, "base64") == "1"
     val ns = getUserNameSpace(ctx)
     try {
+        val rate = p(ctx, "rate") ?: "0"
+        val pitch = p(ctx, "pitch") ?: "0"
         val audio: ByteArray = when (type) {
-            "textToSpeechCn" -> synthesizeTtsCn(text, voice)
+            "textToSpeechCn" -> com.htmake.reader.lib.tts.EdgeTts.synthesizeTextToSpeechCn(text, voice, rate, pitch)
             "api" -> {
                 val http = findHttpTts(ns, voice) ?: run {
                     ctx.response().setStatusCode(404).end(); return null
@@ -520,14 +520,7 @@ suspend fun BookController.textToSpeech(ctx: RoutingContext): ReturnData? {
                     okhttp3.Request.Builder().url(url).get().build()
                 ).execute().use { it.body?.bytes() ?: ByteArray(0) }
             }
-            else -> {
-                // edge: return minimal silent-ish mp3 header placeholder if service unavailable
-                try {
-                    synthesizeTtsCn(text, voice)
-                } catch (_: Exception) {
-                    ByteArray(0)
-                }
-            }
+            else -> com.htmake.reader.lib.tts.EdgeTts.synthesize(text, voice, rate, pitch)
         }
         if (base64) {
             ctx.response().putHeader("content-type", "application/json; charset=utf-8")
@@ -557,28 +550,6 @@ private fun findHttpTts(ns: String, name: String): io.legado.app.data.entities.H
     }
     return null
 }
-
-private fun synthesizeTtsCn(text: String, voice: String): ByteArray {
-    val form = mapOf(
-        "language" to "中文（普通话，简体）",
-        "voice" to voice.ifBlank { "zh-CN-XiaoxiaoNeural" },
-        "text" to text, "role" to "0", "style" to "0", "rate" to "0", "pitch" to "0",
-        "kbitrate" to "audio-16khz-32kbitrate-mono-mp3", "silence" to "",
-        "styledegree" to "1", "user_id" to "", "yzm" to ""
-    )
-    val body = form.entries.joinToString("&") {
-        java.net.URLEncoder.encode(it.key, "UTF-8") + "=" + java.net.URLEncoder.encode(it.value, "UTF-8")
-    }
-    val media = "application/x-www-form-urlencoded".toMediaTypeOrNull()
-    val req = okhttp3.Request.Builder()
-        .url("https://www.text-to-speech.cn/getSpeek.php")
-        .post(body.toRequestBody(media))
-        .header("Origin", "https://www.text-to-speech.cn")
-        .header("Referer", "https://www.text-to-speech.cn/")
-        .build()
-    return okhttp3.OkHttpClient().newCall(req).execute().use { it.body?.bytes() ?: ByteArray(0) }
-}
-
 
 // ---------- mongo ----------
 suspend fun BookController.backupToMongodb(ctx: RoutingContext): ReturnData {

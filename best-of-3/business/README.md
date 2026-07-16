@@ -174,3 +174,10 @@ _business_utils_entities.py
 - **BookMore**：cache SSE/导出/TTS/正文检索/分组/封面/本地预览
 - **MongoBackup** / ControllerMore：书源批量、文件上传、用户资产
 - **前端**：src/main/resources/web + simple-web 从 jar 资源回填
+
+## Phase 13 深度
+
+- Xsoup XPath + &&/||/%%
+- EpubFile OPF spine/NCX/nav
+- EdgeTts + SmokeTest
+

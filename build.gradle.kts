@@ -54,6 +54,9 @@ dependencies {
     // PDF
     implementation("org.apache.pdfbox:pdfbox:2.0.31")
 
+    // XPath (Jsoup + XPath, legado-compatible)
+    implementation("us.codecraft:xsoup:0.3.2")
+
     // Mongo optional
     implementation("org.mongodb:mongodb-driver-sync:4.11.1")
 
@@ -61,11 +64,9 @@ dependencies {
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
     implementation("org.slf4j:slf4j-api:1.7.36")
 
-    // XPath (seimicrawler-style JXDocument alternative via jsoup + jaxen-like: use Saxon-lite stub)
-    // Provide local stub for us.codecraft.xsoup / cn.wanghaomiao if referenced
-
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {

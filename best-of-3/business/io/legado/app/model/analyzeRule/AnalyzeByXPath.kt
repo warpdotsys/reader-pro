@@ -1,128 +1,159 @@
-/** Business rewrite from reader-pro-3.2.14.jar — phase3. */
-
 package io.legado.app.model.analyzeRule
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
-import org.seimicrawler.xpath.JXDocument
-import org.seimicrawler.xpath.JXNode
+import us.codecraft.xsoup.Xsoup
 
 /**
- * XPath evaluator using seimicrawler (same as jar).
- * Supports && (union all) || (first non-empty) %% (zip by index) via RuleAnalyzer.
+ * XPath engine powered by **Xsoup** (Jsoup + XPath), closer to legado/seimicrawler usage.
+ * Supports `&&` / `||` / `%%` via [RuleAnalyzer].
  */
-class AnalyzeByXPath(doc: Any?) {
-    private val jxNode: Any = parse(doc)
-
-    private fun parse(doc: Any?): Any {
-        return when (doc) {
-            is JXNode -> if (doc.isElement) doc else strToJXDocument(doc.toString())
-            is Document -> JXDocument.create(doc)
-            is Element -> JXDocument.create(Elements(doc))
-            is Elements -> JXDocument.create(doc)
-            is String -> strToJXDocument(doc)
-            null -> strToJXDocument("")
-            else -> strToJXDocument(doc.toString())
+class AnalyzeByXPath(content: Any?) {
+    private val doc: Document = when (content) {
+        is Document -> content
+        is Element -> {
+            val owner = content.ownerDocument()
+            if (owner != null) owner else Jsoup.parse(content.outerHtml())
         }
+        is String -> Jsoup.parse(content)
+        else -> Jsoup.parse(content?.toString() ?: "")
     }
 
-    /** Wrap incomplete HTML fragments so XPath engine can parse tables. */
-    private fun strToJXDocument(html: String): JXDocument {
-        var html1 = html
-        if (html1.endsWith("</td>")) html1 = "<tr>$html1</tr>"
-        if (html1.endsWith("</tr>") || html1.endsWith("</tbody>")) html1 = "<table>$html1</table>"
-        return JXDocument.create(html1)
+    fun getString(content: Any?, rule: String): String =
+        getStringList(content, rule).firstOrNull() ?: ""
+
+    fun getStringList(content: Any?, rule: String): List<String> {
+        if (rule.isBlank()) return emptyList()
+        val analyzer = RuleAnalyzer(rule)
+        val rules = analyzer.splitRule("&&", "||", "%%")
+        if (rules.size == 1) return getStringListSingle(content, rules[0])
+        val parts = ArrayList<List<String>>()
+        for (rl in rules) {
+            val part = getStringListSingle(content, rl)
+            if (part.isNotEmpty()) {
+                parts += part
+                if (analyzer.elementsType == "||") break
+            }
+        }
+        if (parts.isEmpty()) return emptyList()
+        return if (analyzer.elementsType == "%%") zipByIndex(parts) else parts.flatten()
     }
 
-    private fun getResult(xPath: String): List<JXNode> {
+    fun getElements(content: Any?, rule: String): List<Any> {
+        if (rule.isBlank()) return emptyList()
+        val analyzer = RuleAnalyzer(rule)
+        val rules = analyzer.splitRule("&&", "||", "%%")
+        if (rules.size == 1) return getElementsSingle(content, rules[0])
+        val parts = ArrayList<List<Any>>()
+        for (rl in rules) {
+            val part = getElementsSingle(content, rl)
+            if (part.isNotEmpty()) {
+                parts += part
+                if (analyzer.elementsType == "||") break
+            }
+        }
+        if (parts.isEmpty()) return emptyList()
+        return if (analyzer.elementsType == "%%") zipByIndex(parts) else parts.flatten()
+    }
+
+    fun getStringList(xPath: String): List<String> = getStringList(null, xPath)
+
+    private fun getStringListSingle(content: Any?, rule: String): List<String> {
+        val root = elementOf(content)
+        val r = normalize(rule)
+        // attribute / text node shortcuts
         return try {
-            when (val n = jxNode) {
-                is JXNode -> n.sel(xPath) ?: emptyList()
-                is JXDocument -> n.selN(xPath) ?: emptyList()
-                else -> emptyList()
+            val elements = evalElements(root, stripResult(r))
+            when {
+                r.endsWith("/text()") || r.endsWith("//text()") ->
+                    elements.map { it.text() }.filter { it.isNotBlank() }
+                r.contains("/@") -> {
+                    val attr = r.substringAfterLast("/@")
+                    elements.map { it.attr(attr) }.filter { it.isNotBlank() }
+                }
+                else -> {
+                    // Xsoup list() returns strings when xpath ends with text()
+                    val xs = Xsoup.compile(r).evaluate(root)
+                    val list = xs.list()
+                    if (list.isNotEmpty()) list.filter { it.isNotBlank() }
+                    else elements.map { it.text() }.filter { it.isNotBlank() }
+                }
             }
         } catch (_: Exception) {
-            emptyList()
-        }
-    }
-
-    fun getElements(xPath: String): List<Any> {
-        if (xPath.isEmpty()) return emptyList()
-        val analyzer = RuleAnalyzer(xPath)
-        val rules = analyzer.splitRule("&&", "||", "%%")
-        if (rules.size == 1) return getResult(rules[0])
-
-        val results = ArrayList<List<JXNode>>()
-        for (rl in rules) {
-            val part = getElements(rl).filterIsInstance<JXNode>()
-            if (part.isNotEmpty()) {
-                results.add(part)
-                if (analyzer.elementsType == "||") break
+            // CSS fallback
+            try {
+                root.select(xpathToCss(r)).map { it.text() }.filter { it.isNotBlank() }
+            } catch (_: Exception) {
+                emptyList()
             }
         }
-        if (results.isEmpty()) return emptyList()
-        return when (analyzer.elementsType) {
-            "%%" -> zipByIndex(results)
-            else -> results.flatten()
-        }
     }
 
-    fun getStringList(xPath: String): List<String> {
-        if (xPath.isEmpty()) return emptyList()
-        val analyzer = RuleAnalyzer(xPath)
-        val rules = analyzer.splitRule("&&", "||", "%%")
-        if (rules.size == 1) {
-            return getResult(xPath).map { it.asString() ?: "" }
-        }
-        val results = ArrayList<List<String>>()
-        for (rl in rules) {
-            val part = getStringList(rl)
-            if (part.isNotEmpty()) {
-                results.add(part)
-                if (analyzer.elementsType == "||") break
+    private fun getElementsSingle(content: Any?, rule: String): List<Any> {
+        val root = elementOf(content)
+        val r = normalize(stripResult(rule))
+        return try {
+            evalElements(root, r)
+        } catch (_: Exception) {
+            try {
+                root.select(xpathToCss(r)).toList()
+            } catch (_: Exception) {
+                emptyList()
             }
         }
-        if (results.isEmpty()) return emptyList()
-        return when (analyzer.elementsType) {
-            "%%" -> zipByIndex(results)
-            else -> results.flatten()
-        }
     }
 
-    fun getString(rule: String): String {
-        val analyzer = RuleAnalyzer(rule)
-        val rules = analyzer.splitRule("&&", "||")
-        if (rules.size == 1) {
-            val nodes = getResult(rule)
-            return nodes.joinToString("\n") { it.asString() ?: "" }
-        }
-        val parts = ArrayList<String>()
-        for (rl in rules) {
-            val s = getString(rl)
-            if (s.isNotEmpty()) {
-                parts += s
-                if (analyzer.elementsType == "||") break
-            }
-        }
-        return parts.joinToString("\n")
+    private fun evalElements(root: Element, xpath: String): List<Element> {
+        val xs = Xsoup.compile(xpath).evaluate(root)
+        val elements: Elements = xs.getElements()
+        return elements.toList()
     }
 
-    // Adapt to AnalyzeRule call sites that pass (content, rule)
-    fun getString(content: Any?, rule: String): String = AnalyzeByXPath(content ?: jxNode).getString(rule)
-    fun getStringList(content: Any?, rule: String): List<String> = AnalyzeByXPath(content ?: jxNode).getStringList(rule)
-    fun getElements(content: Any?, rule: String): List<Any> = AnalyzeByXPath(content ?: jxNode).getElements(rule)
+    private fun elementOf(content: Any?): Element = when (content) {
+        null -> doc
+        is Document -> content
+        is Element -> content
+        is String -> Jsoup.parse(content)
+        else -> doc
+    }
 
-    private fun <T> zipByIndex(results: List<List<T>>): List<T> {
-        if (results.isEmpty()) return emptyList()
+    private fun normalize(rule: String): String {
+        var r = rule.trim()
+        if (r.startsWith("@XPath:", true)) r = r.substringAfter(':')
+        return r
+    }
+
+    private fun stripResult(rule: String): String {
+        var r = rule
+        // /text() and /@attr kept for string path; for elements strip trailing text()
+        if (r.endsWith("/text()")) r = r.removeSuffix("/text()")
+        if (r.contains("/@") && !r.endsWith(")")) {
+            // keep parent path for element selection when reading attr later
+            r = r.substringBeforeLast("/@")
+        }
+        return r
+    }
+
+    private fun <T> zipByIndex(parts: List<List<T>>): List<T> {
+        val max = parts.maxOf { it.size }
         val out = ArrayList<T>()
-        val max = results.maxOf { it.size }
         for (i in 0 until max) {
-            for (list in results) {
-                if (i < list.size) out += list[i]
-            }
+            for (p in parts) if (i < p.size) out += p[i]
         }
         return out
+    }
+
+    /** Last-resort CSS mapping */
+    private fun xpathToCss(xp: String): String {
+        var r = xp.trim()
+        if (r.startsWith("//")) r = r.removePrefix("//")
+        r = r.replace("//", " ")
+        r = r.replace(Regex("""\[@(\w+)='([^']*)']"""), "[$1=$2]")
+        r = r.replace(Regex("""\[@(\w+)="([^"]*)"]"""), "[$1=$2]")
+        r = r.replace(Regex("""/text\(\)"""), "")
+        r = r.replace("/", " > ")
+        return r.ifBlank { "*" }
     }
 }

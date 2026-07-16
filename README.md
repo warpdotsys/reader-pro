@@ -68,7 +68,14 @@ best-of-3/               # 逆向归档（参考，不参与编译）
 | 前端 | 原 jar `web/` + `simple-web` 已回填 resources |
 | 可编译 | `./gradlew bootJar` + GitHub Actions |
 
-仍可加深：Edge TTS 原生库、完整 seimicrawler XPath、umdlib、Mongo 生产配置。
+### 最近加深（phase 深度）
+
+- **XPath**：接入 **Xsoup**（Jsoup+XPath），支持 `&&/||/%%`
+- **EPUB**：OPF spine + NCX/nav 标题合并 + 封面/元数据
+- **TTS**：`EdgeTts`（反射原 TTSService → fallback text-to-speech.cn）
+- **测试**：`SmokeTest`（规则/书源/EPUB/路由冒烟）+ CI 跑 `test bootJar`
+
+仍可加深：umdlib、登录 JS 全链路、生产级 Mongo、接口行为对照压测。
 
 ## 说明
 
