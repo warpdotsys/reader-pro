@@ -2,9 +2,24 @@ package me.ag2s.umdlib.tool
 
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
+import java.io.File
+import java.util.Random
+import java.util.zip.DeflaterOutputStream
 import java.util.zip.InflaterInputStream
 
 object UmdUtils {
+    private val random = Random()
+
+    fun stringToUnicodeBytes(s: String): ByteArray {
+        val ret = ByteArray(s.length * 2)
+        for (i in s.indices) {
+            val c = s[i].code
+            ret[i * 2] = (c and 0xFF).toByte()
+            ret[i * 2 + 1] = (c shr 8 and 0xFF).toByte()
+        }
+        return ret
+    }
+
     fun unicodeBytesToString(bytes: ByteArray): String {
         val sb = StringBuilder(bytes.size / 2)
         var i = 0
@@ -33,4 +48,25 @@ object UmdUtils {
             }
         }
     }
+
+    fun compress(data: ByteArray, off: Int = 0, len: Int = data.size): ByteArray {
+        val bos = ByteArrayOutputStream(len.coerceAtMost(32768) + 256)
+        DeflaterOutputStream(bos).use { zos ->
+            zos.write(data, off, len)
+        }
+        return bos.toByteArray()
+    }
+
+    fun genRandomBytes(len: Int): ByteArray {
+        require(len > 0)
+        return ByteArray(len) { random.nextInt(256).toByte() }
+    }
+
+    fun readFile(f: File): ByteArray = f.readBytes()
+
+    fun saveFile(f: File, content: ByteArray) {
+        f.parentFile?.mkdirs()
+        f.writeBytes(content)
+    }
 }
+

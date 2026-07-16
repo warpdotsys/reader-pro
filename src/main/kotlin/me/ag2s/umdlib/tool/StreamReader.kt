@@ -10,22 +10,27 @@ class StreamReader(private val input: InputStream) {
         offset += n
     }
 
+    /**
+     * Matches original umdlib: on EOF returns 0 (unsigned fill), does not throw.
+     * UmdReader relies on this to exit the 0x23 section loop at end-of-file.
+     */
     fun readByte(): Byte {
-        val b = input.read()
-        if (b < 0) error("EOF")
-        inc(1)
-        return b.toByte()
+        val b = ByteArray(1)
+        val n = input.read(b)
+        if (n > 0) inc(1)
+        // n < 0 → EOF, leave b[0]=0
+        return b[0]
     }
 
     fun readUint8(): Short = (readByte().toInt() and 0xFF).toShort()
 
     fun readBytes(len: Int): ByteArray {
-        require(len > 0)
+        require(len > 0) { "Length must > 0: $len" }
         val b = ByteArray(len)
         var off = 0
         while (off < len) {
             val n = input.read(b, off, len - off)
-            if (n < 0) error("EOF")
+            if (n < 0) break // original leaves zeros for unread tail
             off += n
         }
         inc(len)

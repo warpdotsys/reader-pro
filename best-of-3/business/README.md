@@ -198,3 +198,11 @@ _business_utils_entities.py
 - **Docker workflow**ï¼špush åˆ° `ghcr.io/${{ github.repository }}`ï¼ˆbranch / semver / latestï¼‰
 - **SmokeTest**ï¼šloginUi è§£æã€form loginã€UMD header æ ¡éªŒã€EPUB spine/TOC
 
+
+## Phase 16£¨UMD Ğ´¶Ë + ÆõÔ¼²âÊÔ + loginUi µ÷ÊÔÒ³£©
+
+- **umdlib Ğ´Â·¾¶**£ºWrapOutputStream¡¢UmdBook.buildUmd¡¢ÕÂ½Ú zlib chunk¡¢·âÃæ/½áÊø¶Î
+- **StreamReader** ¶ÔÆë jar£ºEOF ·µ»Ø 0£¬½áÊø section Ñ­»·
+- **UmdUtils**£ºstringToUnicodeBytes / compress / genRandomBytes
+- **SmokeTest**£ºUMD write¡úread »Æ½ğÍù·µ + UmdFile ¼¯³É£»eader3-routes.txt Â·ÓÉÆõÔ¼
+- **bookSourceDebug**£ºÏÔÊ¾ loginUrl/loginUi£»±íµ¥¼ÓÔØ/µÇÂ¼/ÍË³ö API

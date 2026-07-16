@@ -730,3 +730,94 @@ $(".tab3>.titlebar").addEventListener("click", e => {
     default:
   }
 });
+
+// ---- loginUi form (getLoginUi / loginBookSource / logoutBookSource) ----
+function apiBase() {
+  // bookSourceDebug is usually under /web/bookSourceDebug/
+  return "/reader3";
+}
+
+function setLoginResult(obj) {
+  const el = document.getElementById("loginResult");
+  if (el) el.textContent = typeof obj === "string" ? obj : JSON.stringify(obj, null, 2);
+}
+
+function renderLoginFields(fields) {
+  const box = document.getElementById("loginFields");
+  if (!box) return;
+  box.innerHTML = "";
+  (fields || []).forEach(f => {
+    const row = document.createElement("div");
+    row.style.margin = "4px 0";
+    const lab = document.createElement("label");
+    lab.textContent = (f.hint || f.name || "") + "：";
+    lab.style.display = "inline-block";
+    lab.style.minWidth = "72px";
+    const inp = document.createElement("input");
+    inp.name = f.name;
+    inp.type = f.type === "password" ? "password" : "text";
+    inp.value = f.value || "";
+    inp.placeholder = f.hint || f.name || "";
+    inp.style.width = "60%";
+    row.appendChild(lab);
+    row.appendChild(inp);
+    box.appendChild(row);
+  });
+}
+
+document.getElementById("btnLoadLoginUi")?.addEventListener("click", () => {
+  const url = document.getElementById("bookSourceUrl")?.value?.trim();
+  if (!url) {
+    alert("请先填写源域名 bookSourceUrl");
+    return;
+  }
+  fetch(`${apiBase()}/getLoginUi?bookSourceUrl=${encodeURIComponent(url)}`)
+    .then(r => r.json())
+    .then(json => {
+      if (!json.isSuccess) {
+        setLoginResult(json.errorMsg || json);
+        return;
+      }
+      const data = json.data || {};
+      renderLoginFields(data.fields || []);
+      setLoginResult({ bookSourceName: data.bookSourceName, loginUrl: data.loginUrl, hasLoginHeader: data.hasLoginHeader });
+    })
+    .catch(err => setLoginResult(String(err)));
+});
+
+document.getElementById("btnDoLogin")?.addEventListener("click", () => {
+  const url = document.getElementById("bookSourceUrl")?.value?.trim();
+  if (!url) {
+    alert("请先填写源域名 bookSourceUrl");
+    return;
+  }
+  const loginInfo = {};
+  document.querySelectorAll("#loginFields input").forEach(inp => {
+    loginInfo[inp.name] = inp.value;
+  });
+  // fallback: if no dynamic fields, try username/password from empty form
+  fetch(`${apiBase()}/loginBookSource`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ bookSourceUrl: url, loginInfo })
+  })
+    .then(r => r.json())
+    .then(json => setLoginResult(json))
+    .catch(err => setLoginResult(String(err)));
+});
+
+document.getElementById("btnLogout")?.addEventListener("click", () => {
+  const url = document.getElementById("bookSourceUrl")?.value?.trim();
+  if (!url) {
+    alert("请先填写源域名 bookSourceUrl");
+    return;
+  }
+  fetch(`${apiBase()}/logoutBookSource`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ bookSourceUrl: url })
+  })
+    .then(r => r.json())
+    .then(json => setLoginResult(json))
+    .catch(err => setLoginResult(String(err)));
+});

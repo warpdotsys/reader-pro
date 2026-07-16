@@ -186,6 +186,75 @@ class SmokeTest {
     }
 
     @Test
+    fun umd_write_read_golden_roundtrip() {
+        val book = me.ag2s.umdlib.domain.UmdBook()
+        book.header.title = "测试书"
+        book.header.author = "作者甲"
+        book.header.bookType = "玄幻"
+        book.chapters.addChapter("第一章", "正文内容甲\n第二行")
+        book.chapters.addChapter("第二章", "正文内容乙")
+        book.cover.coverData = byteArrayOf(0xFF.toByte(), 0xD8.toByte(), 0xFF.toByte(), 0xD9.toByte()) // mini jpeg-ish
+
+        val tmp = java.io.File.createTempFile("golden", ".umd")
+        try {
+            java.io.FileOutputStream(tmp).use { book.buildUmd(it) }
+            assertTrue(tmp.length() > 32)
+
+            val loaded = java.io.FileInputStream(tmp).use { me.ag2s.umdlib.umd.UmdReader().read(it) }
+            assertEquals("测试书", loaded.header.title)
+            assertEquals("作者甲", loaded.header.author)
+            assertEquals(2, loaded.chapters.getTitles().size)
+            assertEquals("第一章", loaded.chapters.getTitle(0))
+            assertEquals("第二章", loaded.chapters.getTitle(1))
+            assertTrue(loaded.chapters.getContentString(0).contains("正文内容甲"))
+            assertTrue(loaded.chapters.getContentString(1).contains("正文内容乙"))
+            assertTrue(loaded.cover.coverData != null && loaded.cover.coverData!!.isNotEmpty())
+
+            // UmdFile integration
+            val entity = io.legado.app.data.entities.Book(
+                bookUrl = tmp.absolutePath,
+                origin = "loc_book",
+                name = "",
+                author = ""
+            )
+            val chapters = io.legado.app.model.localBook.UmdFile.getChapterList(entity)
+            assertEquals(2, chapters.size)
+            assertEquals("测试书", entity.name)
+            val body = io.legado.app.model.localBook.UmdFile.getContent(entity, chapters[0])
+            assertTrue(body!!.contains("正文内容甲"))
+        } finally {
+            tmp.delete()
+        }
+    }
+
+    @Test
+    fun route_contract_fixture_matches_yuedu_api() {
+        val api = File("src/main/kotlin/com/htmake/reader/api/YueduApi.kt").readText()
+        val fixture = File("src/test/resources/reader3-routes.txt").readLines()
+            .map { it.trim() }.filter { it.startsWith("/reader3/") }.toSet()
+        assertTrue(fixture.size >= 100, "fixture too small: ${fixture.size}")
+        fixture.forEach { path ->
+            assertTrue(api.contains("\"$path\""), "YueduApi missing fixture route $path")
+        }
+        // critical loginUi routes
+        listOf("/reader3/getLoginUi", "/reader3/loginBookSource", "/reader3/logoutBookSource").forEach {
+            assertTrue(it in fixture, "fixture missing $it")
+        }
+    }
+
+    @Test
+    fun umd_utils_string_unicode_roundtrip() {
+        val s = "Hello中文\u2029line"
+        val bytes = me.ag2s.umdlib.tool.UmdUtils.stringToUnicodeBytes(s)
+        assertEquals(s, me.ag2s.umdlib.tool.UmdUtils.unicodeBytesToString(bytes))
+        val raw = "abcdef".toByteArray()
+        val c = me.ag2s.umdlib.tool.UmdUtils.compress(raw)
+        assertTrue(c.isNotEmpty())
+        assertTrue(me.ag2s.umdlib.tool.UmdUtils.decompress(c).contentEquals(raw))
+    }
+
+
+    @Test
     fun epub_spine_toc_minimal() {
         val tmp = File.createTempFile("test", ".epub")
         try {
