@@ -236,6 +236,20 @@ class AnalyzeRule(
             scope.put("title", scope, chapter?.title)
             scope.put("src", scope, content)
             scope.put("nextChapterUrl", scope, nextChapterUrl)
+            // loginInfo + form fields as top-level bindings (legado login scripts)
+            scope.put("loginInfo", scope, source?.getLoginInfo())
+            val formMap: Map<*, *>? = when (result) {
+                is Map<*, *> -> result
+                else -> source?.getLoginInfoMap()?.takeIf { it.isNotEmpty() }
+            }
+            formMap?.forEach { (k, v) ->
+                if (k != null) {
+                    val key = k.toString()
+                    if (key.isNotBlank() && !scope.has(key, scope)) {
+                        scope.put(key, scope, v?.toString() ?: "")
+                    }
+                }
+            }
             return cx.evaluateString(scope, jsStr, "js", 1, null)
         } catch (e: Exception) {
             debugLog?.log(source?.toString(), "js error: ${e.message}")

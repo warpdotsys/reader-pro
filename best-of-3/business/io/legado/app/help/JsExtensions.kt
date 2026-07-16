@@ -107,6 +107,15 @@ interface JsExtensions {
     fun randomUUID(): String = UUID.randomUUID().toString()
     fun androidId(): String = ""
 
+    /** Book-source login scripts: java.putLoginHeader('{"Cookie":"..."}') */
+    fun putLoginHeader(header: String) {
+        getSource()?.putLoginHeader(header)
+    }
+
+    fun getLoginHeader(): String? = getSource()?.getLoginHeader()
+    fun getLoginInfo(): String? = getSource()?.getLoginInfo()
+    fun putLoginInfo(info: String): Boolean = getSource()?.putLoginInfo(info) ?: false
+
     // ---- AES (hutool/javax.crypto in jar) ----
     fun aesDecodeToString(str: String, key: String, transformation: String, iv: String): String? =
         runCatching {

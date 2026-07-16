@@ -188,3 +188,13 @@ _business_utils_entities.py
 - SourceLogin + loginBookSource API
 - Docker 构建
 
+## Phase 15（loginUi + GHCR）
+
+- **SourceLogin**：`loginUi` 解析（JSON 数组 / CSV / rows）、`loginInfo` AES 落盘、`loginWithForm`
+- **API**：`GET|POST /reader3/getLoginUi`、`POST /reader3/loginBookSource`、`POST /reader3/logoutBookSource`
+- **AnalyzeRule.evalJS**：绑定 `loginInfo` + 表单字段顶层名（`username`/`password`…）
+- **JsExtensions**：`putLoginHeader` / `getLoginInfo` / `putLoginInfo`
+- **BaseSource**：`getLoginInfo` / `putLoginInfo` / `removeLoginInfo` / `login()`
+- **Docker workflow**：push 到 `ghcr.io/${{ github.repository }}`（branch / semver / latest）
+- **SmokeTest**：loginUi 解析、form login、UMD header 校验、EPUB spine/TOC
+

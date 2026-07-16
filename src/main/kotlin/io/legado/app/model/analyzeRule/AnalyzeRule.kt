@@ -164,6 +164,23 @@ class AnalyzeRule(
             scope.put("title", scope, chapter?.title)
             scope.put("src", scope, content)
             scope.put("nextChapterUrl", scope, nextChapterUrl)
+            // loginInfo: AES-backed form JSON (legado scripts read this binding)
+            val loginInfoRaw = source?.getLoginInfo()
+            scope.put("loginInfo", scope, loginInfoRaw)
+            // When result is a Map (e.g. login form), expose keys as top-level names
+            // so scripts can use `username`, `password` directly.
+            val formMap: Map<*, *>? = when (result) {
+                is Map<*, *> -> result
+                else -> source?.getLoginInfoMap()?.takeIf { it.isNotEmpty() }
+            }
+            formMap?.forEach { (k, v) ->
+                if (k != null) {
+                    val key = k.toString()
+                    if (key.isNotBlank() && !scope.has(key, scope)) {
+                        scope.put(key, scope, v?.toString() ?: "")
+                    }
+                }
+            }
             return cx.evaluateString(scope, jsStr, "js", 1, null)
         } catch (e: Exception) {
             debugLog?.log(source?.toString(), "js error: ${e.message}")

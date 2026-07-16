@@ -183,3 +183,10 @@ Extracted from YueduApi.initRouter, total unique endpoints: 133
 - `ROUTE  /simple-web`
 - `ROUTE  /simple-web/*`
 - `ROUTE  /simple-web/*`
+## Book source login (loginUi)
+
+| Method | Path | Notes |
+|--------|------|--------|
+| GET/POST | /reader3/getLoginUi | bookSourceUrl ¡ú fields + saved values |
+| POST | /reader3/loginBookSource | body: bookSourceUrl + loginInfo{} or flat fields |
+| POST | /reader3/logoutBookSource | clear loginHeader + loginInfo |

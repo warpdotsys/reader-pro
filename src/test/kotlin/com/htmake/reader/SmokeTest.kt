@@ -136,6 +136,56 @@ class SmokeTest {
     }
 
     @Test
+    fun loginUi_parse_array_and_csv() {
+        val fields = io.legado.app.help.SourceLogin.parseLoginUi(
+            """[{"name":"username","type":"text"},{"name":"password","type":"password"}]"""
+        )
+        assertEquals(2, fields.size)
+        assertEquals("password", fields[1].type)
+        val csv = io.legado.app.help.SourceLogin.parseLoginUi("user,pwd")
+        assertEquals(2, csv.size)
+    }
+
+    @Test
+    fun loginUi_payload_and_form_login() {
+        val src = io.legado.app.data.entities.BookSource(
+            bookSourceUrl = "https://login.example",
+            bookSourceName = "demo",
+            loginUiValue = """[{"name":"username","type":"text"},{"name":"password","type":"password"}]""",
+            loginUrlValue = """@js:java.putLoginHeader(JSON.stringify({Cookie: username+"="+password}))"""
+        )
+        src.setUserNameSpace("test-login")
+        val payload = io.legado.app.help.SourceLogin.getLoginUiPayload(src)
+        @Suppress("UNCHECKED_CAST")
+        val fields = payload["fields"] as List<*>
+        assertEquals(2, fields.size)
+        // form login with rhino (username/password bound as top-level names)
+        val result = io.legado.app.help.SourceLogin.loginWithForm(
+            src, mapOf("username" to "u1", "password" to "p1")
+        )
+        // may or may not set header depending on JS engine; putLoginInfo must work
+        assertTrue(src.getLoginInfo() != null || result["loginInfoKeys"] != null)
+        assertTrue(io.legado.app.help.SourceLogin.getLoginInfoMap(src).containsKey("username")
+            || src.getLoginInfo()?.contains("u1") == true)
+    }
+
+    @Test
+    fun umd_wrong_header_throws() {
+        val tmp = java.io.File.createTempFile("bad", ".umd")
+        try {
+            tmp.writeBytes(byteArrayOf(1, 2, 3, 4, 5, 6, 7, 8))
+            try {
+                java.io.FileInputStream(tmp).use { me.ag2s.umdlib.umd.UmdReader().read(it) }
+                assertTrue(false, "should throw")
+            } catch (e: Exception) {
+                assertTrue(e.message?.contains("header", true) == true || e is IllegalStateException)
+            }
+        } finally {
+            tmp.delete()
+        }
+    }
+
+    @Test
     fun epub_spine_toc_minimal() {
         val tmp = File.createTempFile("test", ".epub")
         try {

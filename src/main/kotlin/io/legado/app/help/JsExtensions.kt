@@ -41,4 +41,15 @@ interface JsExtensions {
     }
 
     fun evalJS(jsStr: String, result: Any?): Any? = null
+
+    /** Called from book-source login scripts: java.putLoginHeader('{"Cookie":"..."}') */
+    fun putLoginHeader(header: String) {
+        getSource()?.putLoginHeader(header)
+    }
+
+    fun getLoginHeader(): String? = getSource()?.getLoginHeader()
+
+    fun getLoginInfo(): String? = getSource()?.getLoginInfo()
+
+    fun putLoginInfo(info: String): Boolean = getSource()?.putLoginInfo(info) ?: false
 }

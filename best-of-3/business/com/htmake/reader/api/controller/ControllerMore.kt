@@ -66,6 +66,80 @@ suspend fun BookSourceController.deleteBookSourcesFile(ctx: RoutingContext): Ret
     return rd.setData(true)
 }
 
+/**
+ * GET/POST ?bookSourceUrl= — return loginUi fields (+ saved values).
+ */
+suspend fun BookSourceController.getLoginUi(ctx: RoutingContext): ReturnData {
+    val rd = ReturnData()
+    if (!checkAuth(ctx)) return rd.setData("NEED_LOGIN").setErrorMsg("请登录后使用")
+    val url = ctx.queryParam("bookSourceUrl").firstOrNull()
+        ?: ctx.bodyAsJson?.getString("bookSourceUrl")
+        ?: return rd.setErrorMsg("bookSourceUrl 不能为空")
+    val ns = getUserNameSpace(ctx)
+    val src = loadBookSource(ns, url) ?: return rd.setErrorMsg("书源不存在")
+    return rd.setData(io.legado.app.help.SourceLogin.getLoginUiPayload(src))
+}
+
+/**
+ * POST body: bookSourceUrl + loginInfo{...}  or flat username/password fields.
+ * Saves form then runs loginUrl JS.
+ */
+suspend fun BookSourceController.loginBookSource(ctx: RoutingContext): ReturnData {
+    val rd = ReturnData()
+    if (!checkAuth(ctx)) return rd.setData("NEED_LOGIN").setErrorMsg("请登录后使用")
+    val body = ctx.bodyAsJson ?: return rd.setErrorMsg("参数错误")
+    val url = body.getString("bookSourceUrl")
+        ?: ctx.queryParam("bookSourceUrl").firstOrNull()
+        ?: return rd.setErrorMsg("bookSourceUrl 不能为空")
+    val ns = getUserNameSpace(ctx)
+    val src = loadBookSource(ns, url) ?: return rd.setErrorMsg("书源不存在")
+    val form = linkedMapOf<String, String>()
+    body.getJsonObject("loginInfo")?.forEach { (k, v) -> form[k] = v?.toString() ?: "" }
+    // also accept top-level field values except meta keys
+    body.forEach { (k, v) ->
+        if (k !in setOf("bookSourceUrl", "loginInfo") && v != null) form[k] = v.toString()
+    }
+    return try {
+        val result = if (form.isNotEmpty()) {
+            io.legado.app.help.SourceLogin.loginWithForm(src, form)
+        } else {
+            val ok = io.legado.app.help.SourceLogin.login(src)
+            if (!ok) io.legado.app.help.SourceLogin.ensureLoginIfNeeded(src)
+            mapOf("ok" to (src.getLoginHeader() != null), "loginHeader" to src.getLoginHeader())
+        }
+        rd.setData(result)
+    } catch (e: Exception) {
+        rd.setErrorMsg(e.message ?: "登录失败")
+    }
+}
+
+suspend fun BookSourceController.logoutBookSource(ctx: RoutingContext): ReturnData {
+    val rd = ReturnData()
+    if (!checkAuth(ctx)) return rd.setData("NEED_LOGIN").setErrorMsg("请登录后使用")
+    val url = ctx.bodyAsJson?.getString("bookSourceUrl")
+        ?: ctx.queryParam("bookSourceUrl").firstOrNull()
+        ?: return rd.setErrorMsg("bookSourceUrl 不能为空")
+    val ns = getUserNameSpace(ctx)
+    val src = loadBookSource(ns, url)
+    if (src != null) io.legado.app.help.SourceLogin.clearLogin(src)
+    else {
+        io.legado.app.help.CacheManager(ns).delete("loginHeader_$url")
+        io.legado.app.help.CacheManager(ns).delete("userInfo_$url")
+        io.legado.app.help.CacheManager(ns).delete("userInfo_plain_$url")
+    }
+    return rd.setData(true)
+}
+
+private fun BookSourceController.loadBookSource(ns: String, url: String): io.legado.app.data.entities.BookSource? {
+    val raw = getUserBookSourceJson(ns)?.let { arr ->
+        (0 until arr.size()).mapNotNull { i -> arr.getJsonObject(i) }
+            .firstOrNull { it.getString("bookSourceUrl") == url }?.encode()
+    } ?: return null
+    return io.legado.app.data.entities.BookSource.fromJson(raw).getOrNull()?.also {
+        it.setUserNameSpace(ns)
+    }
+}
+
 // ---- Bookmark extras ----
 suspend fun BookmarkController.saveBookmarks(ctx: RoutingContext) = save(ctx)
 suspend fun BookmarkController.deleteBookmarks(ctx: RoutingContext): ReturnData {

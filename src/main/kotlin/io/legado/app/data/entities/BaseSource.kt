@@ -55,4 +55,9 @@ interface BaseSource {
     }
 
     fun login(): Boolean = io.legado.app.help.SourceLogin.login(this)
+
+    fun getLoginInfo(): String? = io.legado.app.help.SourceLogin.getLoginInfo(this)
+    fun getLoginInfoMap(): Map<String, String> = io.legado.app.help.SourceLogin.getLoginInfoMap(this)
+    fun putLoginInfo(info: String): Boolean = io.legado.app.help.SourceLogin.putLoginInfo(this, info)
+    fun removeLoginInfo() = io.legado.app.help.SourceLogin.removeLoginInfo(this)
 }

@@ -89,6 +89,10 @@ open class YueduApi : RestVerticle() {
         post(router, "/reader3/deleteBookSources") { bookSource.deleteBookSources(it) }
         post(router, "/reader3/readSourceFile") { bookSource.readSourceFile(it) }
         post(router, "/reader3/saveFromRemoteSource") { bookSource.saveFromRemoteSource(it) }
+        get(router, "/reader3/getLoginUi") { bookSource.getLoginUi(it) }
+        post(router, "/reader3/getLoginUi") { bookSource.getLoginUi(it) }
+        post(router, "/reader3/loginBookSource") { bookSource.loginBookSource(it) }
+        post(router, "/reader3/logoutBookSource") { bookSource.logoutBookSource(it) }
         post(router, "/reader3/setAsDefaultBookSources") { bookSource.setAsDefaultBookSources(it) }
         post(router, "/reader3/deleteUserBookSource") { bookSource.deleteUserBookSource(it) }
         post(router, "/reader3/deleteBookSourcesFile") { bookSource.deleteBookSourcesFile(it) }
