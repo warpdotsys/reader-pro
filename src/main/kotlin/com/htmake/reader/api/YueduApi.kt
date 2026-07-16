@@ -129,6 +129,8 @@ open class YueduApi : RestVerticle() {
         post(router, "/reader3/saveBookContent") { book.saveBookContent(it) }
         post(router, "/reader3/saveBookProgress") { book.saveBookProgress(it) }
         get(router, "/reader3/cover") { book.cover(it); null }
+        get(router, "/reader3/getLocalBookImage") { book.getLocalBookImage(it); null }
+        post(router, "/reader3/getLocalBookImage") { book.getLocalBookImage(it); null }
         post(router, "/reader3/importBookPreview") { book.importBookPreview(it) }
         post(router, "/reader3/refreshLocalBook") { book.refreshLocalBook(it) }
         get(router, "/reader3/getTxtTocRules") { book.getTxtTocRules(it) }
@@ -221,6 +223,8 @@ open class YueduApi : RestVerticle() {
         post(router, "/reader3/getRssArticles") { rss.getRssArticles(it) }
         get(router, "/reader3/getRssContent") { rss.getRssContent(it) }
         post(router, "/reader3/getRssContent") { rss.getRssContent(it) }
+        get(router, "/reader3/getRssSorts") { rss.getRssSorts(it) }
+        post(router, "/reader3/getRssSorts") { rss.getRssSorts(it) }
 
         // ---- tts ----
         get(router, "/reader3/book/tts") { book.textToSpeech(it) }

@@ -514,6 +514,62 @@ class SmokeTest {
     }
 
     @Test
+    fun rss_parse_rss2_and_atom_offline() {
+        val src = io.legado.app.data.entities.RssSource(
+            sourceUrl = "https://feed.example/rss",
+            sourceName = "demo"
+        )
+        val rss2 = """
+            <?xml version="1.0"?>
+            <rss version="2.0"><channel>
+              <title>Demo</title>
+              <item>
+                <title>文章一</title>
+                <link>https://feed.example/a1</link>
+                <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
+                <description><![CDATA[<p>摘要<img src="/img/1.png"/></p>]]></description>
+                <enclosure url="https://feed.example/c.jpg" type="image/jpeg"/>
+              </item>
+              <item>
+                <title>文章二</title>
+                <link>https://feed.example/a2</link>
+                <description>纯文本</description>
+              </item>
+            </channel></rss>
+        """.trimIndent()
+        val (arts, _) = io.legado.app.model.rss.Rss.parseArticlesFromBody("", "https://feed.example/rss", rss2, src)
+        assertEquals(2, arts.size)
+        assertEquals("文章一", arts[0].title)
+        assertTrue(arts[0].link.contains("a1"))
+        assertTrue(arts[0].image?.contains("c.jpg") == true || arts[0].image?.contains("1.png") == true)
+
+        val atom = """
+            <?xml version="1.0"?>
+            <feed xmlns="http://www.w3.org/2005/Atom">
+              <entry>
+                <title>Atom条</title>
+                <link href="https://feed.example/atom1" rel="alternate"/>
+                <updated>2024-02-01T00:00:00Z</updated>
+                <summary>atom摘要</summary>
+              </entry>
+            </feed>
+        """.trimIndent()
+        val (atomArts, _) = io.legado.app.model.rss.Rss.parseArticlesFromBody("", "https://feed.example/atom", atom, src)
+        assertEquals(1, atomArts.size)
+        assertEquals("Atom条", atomArts[0].title)
+        assertTrue(atomArts[0].link.contains("atom1"))
+
+        val sorts = io.legado.app.model.rss.Rss.parseSortUrls(
+            io.legado.app.data.entities.RssSource(
+                sourceUrl = "https://x.com",
+                sortUrl = "科技::https://x.com/tech\n生活::https://x.com/life"
+            )
+        )
+        assertEquals(2, sorts.size)
+        assertEquals("科技", sorts[0].first)
+    }
+
+    @Test
     fun pdf_text_and_page_image() {
         // minimal PDF with one page of text via PDFBox
         val tmp = File.createTempFile("doc", ".pdf")

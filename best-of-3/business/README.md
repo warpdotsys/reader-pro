@@ -223,3 +223,10 @@ _business_utils_entities.py
 - **LocalMedia**：统一 PDF/CBZ 页图
 - **AnalyzeUrl**：,{method,body,headers,charset} 选项、表单 POST、baseUrl、Cookie、loginCheckJs、retry
 - **SmokeTest**：AnalyzeUrl 解析、CBZ 往返、PDF 文本+渲染
+
+## Phase 19（RSS 实装 + 本地页图）
+
+- **RssSourceController**：CRUD 按 sourceUrl 合并/删除；getRssArticles/getRssContent 接线 Rss 引擎
+- **Rss**：RSS2/Atom、enclosure/media、sortUrl 分类、parseArticlesFromBody 离线
+- **getLocalBookImage**：PDF/CBZ 页图流；cover 支持 bookUrl→LocalMedia
+- **getRssSorts** API

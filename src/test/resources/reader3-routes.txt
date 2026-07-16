@@ -54,10 +54,12 @@
 /reader3/getChapterListByRule
 /reader3/getInvalidBookSources
 /reader3/getLicense
+/reader3/getLocalBookImage
 /reader3/getLoginUi
 /reader3/getReplaceRules
 /reader3/getRssArticles
 /reader3/getRssContent
+/reader3/getRssSorts
 /reader3/getRssSources
 /reader3/getShelfBook
 /reader3/getShelfBookWithCacheInfo

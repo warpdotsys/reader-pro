@@ -1,5 +1,3 @@
-/** Business rewrite from reader-pro-3.2.14.jar — phase8. */
-
 package com.htmake.reader.api.controller
 
 import com.htmake.reader.api.ReturnData
@@ -7,145 +5,181 @@ import com.htmake.reader.utils.ExtKt
 import io.legado.app.data.entities.RssArticle
 import io.legado.app.data.entities.RssSource
 import io.legado.app.model.rss.Rss
-import io.vertx.core.http.HttpMethod
 import io.vertx.core.json.JsonArray
 import io.vertx.core.json.JsonObject
 import io.vertx.ext.web.RoutingContext
 import kotlin.coroutines.CoroutineContext
 
-class RssSourceController(coroutineContext: CoroutineContext) : BaseController(coroutineContext) {
+class RssSourceController(cc: CoroutineContext) : BaseController(cc) {
     private fun load(ns: String) = ExtKt.asJsonArray(getUserStorage(ns, "rssSource")) ?: JsonArray()
     private fun save(ns: String, a: JsonArray) = saveUserStorage(ns, "rssSource", a)
 
-    fun getRssSourceByURL(url: String, userNameSpace: String): RssSource? {
-        val arr = load(userNameSpace)
+    suspend fun list(ctx: RoutingContext): ReturnData {
+        val rd = ReturnData()
+        if (!checkAuth(ctx)) return rd.setData("NEED_LOGIN").setErrorMsg("请登录后使用")
+        return rd.setData(load(getUserNameSpace(ctx)))
+    }
+
+    suspend fun save(ctx: RoutingContext): ReturnData {
+        val rd = ReturnData()
+        if (!checkAuth(ctx)) return rd.setData("NEED_LOGIN").setErrorMsg("请登录后使用")
+        val ns = getUserNameSpace(ctx)
+        val arr = ctx.bodyAsJsonArray
+        if (arr != null) {
+            // merge by sourceUrl
+            val cur = load(ns)
+            val map = linkedMapOf<String, JsonObject>()
+            for (i in 0 until cur.size()) {
+                val o = cur.getJsonObject(i) ?: continue
+                map[o.getString("sourceUrl") ?: ""] = o
+            }
+            for (i in 0 until arr.size()) {
+                val o = arr.getJsonObject(i) ?: continue
+                map[o.getString("sourceUrl") ?: ""] = o
+            }
+            val out = JsonArray()
+            map.values.forEach { out.add(it) }
+            save(ns, out)
+            return rd.setData(out.size())
+        }
+        val one = ctx.bodyAsJson ?: return rd.setErrorMsg("参数错误")
+        val url = one.getString("sourceUrl") ?: return rd.setErrorMsg("sourceUrl 不能为空")
+        val cur = load(ns)
+        var replaced = false
+        val out = JsonArray()
+        for (i in 0 until cur.size()) {
+            val o = cur.getJsonObject(i) ?: continue
+            if (o.getString("sourceUrl") == url) {
+                out.add(one); replaced = true
+            } else out.add(o)
+        }
+        if (!replaced) out.add(one)
+        save(ns, out)
+        return rd.setData(one)
+    }
+
+    suspend fun delete(ctx: RoutingContext): ReturnData {
+        val rd = ReturnData()
+        if (!checkAuth(ctx)) return rd.setData("NEED_LOGIN").setErrorMsg("请登录后使用")
+        val ns = getUserNameSpace(ctx)
+        val body = ctx.bodyAsJson
+        val urls = mutableSetOf<String>()
+        body?.getString("sourceUrl")?.let { urls += it }
+        body?.getJsonArray("sourceUrls")?.forEach { if (it is String) urls += it }
+        ctx.queryParam("sourceUrl").firstOrNull()?.let { urls += it }
+        if (urls.isEmpty() && ctx.bodyAsJsonArray != null) {
+            val arr = ctx.bodyAsJsonArray!!
+            for (i in 0 until arr.size()) {
+                arr.getJsonObject(i)?.getString("sourceUrl")?.let { urls += it }
+                    ?: (arr.getValue(i) as? String)?.let { urls += it }
+            }
+        }
+        if (urls.isEmpty()) return rd.setErrorMsg("sourceUrl 不能为空")
+        val cur = load(ns)
+        val out = JsonArray()
+        for (i in 0 until cur.size()) {
+            val o = cur.getJsonObject(i) ?: continue
+            if (o.getString("sourceUrl") !in urls) out.add(o)
+        }
+        save(ns, out)
+        return rd.setData(true)
+    }
+
+    suspend fun getRssSources(ctx: RoutingContext) = list(ctx)
+    suspend fun saveRssSource(ctx: RoutingContext) = save(ctx)
+    suspend fun saveRssSources(ctx: RoutingContext) = save(ctx)
+    suspend fun deleteRssSource(ctx: RoutingContext) = delete(ctx)
+
+    suspend fun getRssArticles(ctx: RoutingContext): ReturnData {
+        val rd = ReturnData()
+        if (!checkAuth(ctx)) return rd.setData("NEED_LOGIN").setErrorMsg("请登录后使用")
+        val ns = getUserNameSpace(ctx)
+        val sourceUrl = p(ctx, "sourceUrl") ?: p(ctx, "url") ?: return rd.setErrorMsg("sourceUrl 不能为空")
+        val sortName = p(ctx, "sortName") ?: p(ctx, "sort") ?: ""
+        val sortUrl = p(ctx, "sortUrl") ?: ""
+        val page = p(ctx, "page")?.toIntOrNull() ?: 1
+        val src = loadSource(ns, sourceUrl) ?: return rd.setErrorMsg("RSS 源不存在")
+        src.setUserNameSpace(ns)
+        return try {
+            val url = sortUrl.ifBlank {
+                Rss.parseSortUrls(src).firstOrNull { it.first == sortName }?.second
+                    ?: src.sourceUrl
+            }
+            val (articles, next) = Rss.getArticles(sortName, url, src, page)
+            rd.setData(
+                mapOf(
+                    "articles" to articles,
+                    "nextPage" to next,
+                    "sorts" to Rss.parseSortUrls(src).map { mapOf("name" to it.first, "url" to it.second) }
+                )
+            )
+        } catch (e: Exception) {
+            rd.setErrorMsg(e.message ?: "拉取失败")
+        }
+    }
+
+    suspend fun getRssContent(ctx: RoutingContext): ReturnData {
+        val rd = ReturnData()
+        if (!checkAuth(ctx)) return rd.setData("NEED_LOGIN").setErrorMsg("请登录后使用")
+        val ns = getUserNameSpace(ctx)
+        val sourceUrl = p(ctx, "sourceUrl") ?: p(ctx, "origin") ?: return rd.setErrorMsg("sourceUrl 不能为空")
+        val link = p(ctx, "link") ?: p(ctx, "url") ?: return rd.setErrorMsg("link 不能为空")
+        val title = p(ctx, "title") ?: ""
+        val src = loadSource(ns, sourceUrl) ?: return rd.setErrorMsg("RSS 源不存在")
+        src.setUserNameSpace(ns)
+        val article = RssArticle(
+            origin = sourceUrl,
+            title = title,
+            link = link,
+            description = p(ctx, "description")
+        )
+        return try {
+            val content = Rss.getContent(article, src.ruleContent, src)
+            rd.setData(mapOf("content" to content, "link" to link, "title" to title))
+        } catch (e: Exception) {
+            rd.setErrorMsg(e.message ?: "正文失败")
+        }
+    }
+
+    /** List sort categories without fetching. */
+    suspend fun getRssSorts(ctx: RoutingContext): ReturnData {
+        val rd = ReturnData()
+        if (!checkAuth(ctx)) return rd.setData("NEED_LOGIN").setErrorMsg("请登录后使用")
+        val ns = getUserNameSpace(ctx)
+        val sourceUrl = p(ctx, "sourceUrl") ?: return rd.setErrorMsg("sourceUrl 不能为空")
+        val src = loadSource(ns, sourceUrl) ?: return rd.setErrorMsg("RSS 源不存在")
+        return rd.setData(Rss.parseSortUrls(src).map { mapOf("name" to it.first, "url" to it.second) })
+    }
+
+    private fun p(ctx: RoutingContext, key: String): String? =
+        ctx.queryParam(key).firstOrNull()?.takeIf { it.isNotBlank() }
+            ?: ctx.bodyAsJson?.getString(key)?.takeIf { it.isNotBlank() }
+
+    private fun loadSource(ns: String, url: String): RssSource? {
+        val arr = load(ns)
         for (i in 0 until arr.size()) {
             val o = arr.getJsonObject(i) ?: continue
-            val u = o.getString("sourceUrl") ?: o.getString("rssUrl")
-            if (u == url) {
-                return try {
-                    o.mapTo(RssSource::class.java).also { it.setUserNameSpace(userNameSpace) }
-                } catch (_: Exception) {
-                    RssSource(
-                        sourceUrl = u ?: "",
-                        sourceName = o.getString("sourceName") ?: "",
-                        ruleArticles = o.getString("ruleArticles"),
-                        ruleTitle = o.getString("ruleTitle"),
-                        ruleLink = o.getString("ruleLink"),
-                        rulePubDate = o.getString("rulePubDate"),
-                        ruleDescription = o.getString("ruleDescription"),
-                        ruleImage = o.getString("ruleImage"),
-                        ruleContent = o.getString("ruleContent"),
-                        ruleNextPage = o.getString("ruleNextPage"),
-                        header = o.getString("header"),
-                        sortUrl = o.getString("sortUrl")
-                    ).also { it.setUserNameSpace(userNameSpace) }
-                }
-            }
+            if (o.getString("sourceUrl") == url) return o.toRssSource()
         }
         return null
     }
 
-    suspend fun getRssSources(context: RoutingContext): ReturnData {
-        val rd = ReturnData()
-        if (!checkAuth(context)) return rd.setData("NEED_LOGIN").setErrorMsg("请登录后使用")
-        return rd.setData(load(getUserNameSpace(context)))
-    }
-
-    suspend fun saveRssSource(context: RoutingContext): ReturnData {
-        val rd = ReturnData()
-        if (!checkAuth(context)) return rd.setData("NEED_LOGIN").setErrorMsg("请登录后使用")
-        val ns = getUserNameSpace(context)
-        val bodyArr = context.bodyAsJsonArray
-        if (bodyArr != null) {
-            save(ns, bodyArr)
-            return rd.setData(bodyArr.size())
-        }
-        val src = context.bodyAsJson ?: return rd.setErrorMsg("参数错误")
-        val arr = load(ns)
-        val key = src.getString("sourceUrl") ?: src.getString("rssUrl") ?: return rd.setErrorMsg("链接不能为空")
-        val list = arr.list
-        var found = false
-        for (i in list.indices) {
-            val o = arr.getJsonObject(i)
-            val k = o.getString("sourceUrl") ?: o.getString("rssUrl")
-            if (k == key) {
-                list[i] = src
-                found = true
-                break
-            }
-        }
-        if (!found) list.add(src)
-        save(ns, JsonArray(list))
-        return rd.setData(src)
-    }
-
-    suspend fun deleteRssSource(context: RoutingContext): ReturnData {
-        val rd = ReturnData()
-        if (!checkAuth(context)) return rd.setData("NEED_LOGIN").setErrorMsg("请登录后使用")
-        val ns = getUserNameSpace(context)
-        val key = context.bodyAsJson?.getString("sourceUrl")
-            ?: context.queryParam("sourceUrl").firstOrNull()
-            ?: return rd.setErrorMsg("参数错误")
-        val arr = load(ns)
-        val list = arr.list.filterIndexed { i, _ ->
-            val o = arr.getJsonObject(i)
-            (o.getString("sourceUrl") ?: o.getString("rssUrl")) != key
-        }
-        save(ns, JsonArray(list))
-        return rd.setData(true)
-    }
-
-    suspend fun getRssArticles(context: RoutingContext): ReturnData {
-        val rd = ReturnData()
-        if (!checkAuth(context)) return rd.setData("NEED_LOGIN").setErrorMsg("请登录后使用")
-        val sourceUrl = p(context, "sourceUrl") ?: p(context, "url") ?: return rd.setErrorMsg("RSS源链接不能为空")
-        val sortName = p(context, "sortName") ?: ""
-        var sortUrl = p(context, "sortUrl") ?: ""
-        val page = pInt(context, "page") ?: 1
-        if (sortUrl.isEmpty()) sortUrl = sourceUrl
-        val ns = getUserNameSpace(context)
-        val source = getRssSourceByURL(sourceUrl, ns) ?: return rd.setErrorMsg("RSS源不存在")
-        val (articles, next) = Rss.getArticles(sortName, sortUrl, source, page, null)
-        return rd.setData(mapOf("articles" to articles, "nextPage" to next))
-    }
-
-    suspend fun getRssContent(context: RoutingContext): ReturnData {
-        val rd = ReturnData()
-        if (!checkAuth(context)) return rd.setData("NEED_LOGIN").setErrorMsg("请登录后使用")
-        val sourceUrl = p(context, "sourceUrl") ?: ""
-        val link = p(context, "link") ?: p(context, "url") ?: return rd.setErrorMsg("link 不能为空")
-        val title = p(context, "title") ?: ""
-        val ns = getUserNameSpace(context)
-        val source = if (sourceUrl.isNotEmpty()) getRssSourceByURL(sourceUrl, ns) else null
-        val article = RssArticle(origin = sourceUrl, title = title, link = link)
-        val content = if (source != null && !source.ruleContent.isNullOrBlank()) {
-            Rss.getContent(article, source.ruleContent!!, source, null)
-        } else if (source != null) {
-            Rss.getContent(article, "", source, null)
-        } else {
-            // bare fetch
-            try {
-                val au = io.legado.app.model.analyzeRule.AnalyzeUrl(mUrl = link)
-                au.getStrResponseAwait().body ?: ""
-            } catch (_: Exception) {
-                ""
-            }
-        }
-        return rd.setData(mapOf("link" to link, "content" to content))
-    }
-
-    private fun p(context: RoutingContext, name: String): String? {
-        if (context.request().method() == HttpMethod.POST) {
-            context.bodyAsJson?.getString(name)?.let { return it }
-        }
-        return context.queryParam(name).firstOrNull()
-    }
-
-    private fun pInt(context: RoutingContext, name: String): Int? {
-        if (context.request().method() == HttpMethod.POST) {
-            context.bodyAsJson?.getInteger(name)?.let { return it }
-        }
-        return context.queryParam(name).firstOrNull()?.toIntOrNull()
-    }
+    private fun JsonObject.toRssSource(): RssSource =
+        RssSource(
+            sourceUrl = getString("sourceUrl") ?: "",
+            sourceName = getString("sourceName") ?: "",
+            sourceIcon = getString("sourceIcon") ?: "",
+            sourceGroup = getString("sourceGroup"),
+            enabled = getBoolean("enabled", true),
+            headerJson = getString("header") ?: getString("headerJson"),
+            sortUrl = getString("sortUrl"),
+            ruleArticles = getString("ruleArticles"),
+            ruleNextPage = getString("ruleNextPage"),
+            ruleTitle = getString("ruleTitle"),
+            rulePubDate = getString("rulePubDate"),
+            ruleDescription = getString("ruleDescription"),
+            ruleImage = getString("ruleImage"),
+            ruleLink = getString("ruleLink"),
+            ruleContent = getString("ruleContent")
+        )
 }
