@@ -452,5 +452,98 @@ class SmokeTest {
         assertTrue(ssml.contains("zh-CN-XiaoxiaoNeural"))
         assertFalse(ssml.contains("<b>"))
     }
+
+    @Test
+    fun analyzeUrl_parses_option_and_expands_key() {
+        val au = io.legado.app.model.analyzeRule.AnalyzeUrl(
+            mUrl = """https://example.com/search?q={{key}},{"method":"POST","body":{"q":"{{key}}","p":"{{page}}"},"headers":{"X-Test":"1"},"charset":"UTF-8"}""",
+            key = "三体",
+            page = 2,
+            baseUrl = "https://example.com/"
+        )
+        assertTrue(au.finalUrl.contains("example.com"))
+        assertTrue(au.finalUrl.contains("%") || au.finalUrl.contains("三体") || au.finalUrl.contains("search"))
+        assertEquals("POST", au.method.uppercase())
+        assertTrue(au.getFieldMap().containsKey("q"))
+        assertEquals("2", au.getFieldMap()["p"])
+        assertTrue(au.getHeaderMap().containsKey("X-Test") || au.getHeaderMap().keys.any { it.equals("X-Test", true) })
+        // relative + base
+        val rel = io.legado.app.model.analyzeRule.AnalyzeUrl(
+            mUrl = "/book/1.html",
+            baseUrl = "https://host.com/a/"
+        )
+        assertTrue(rel.finalUrl.startsWith("https://host.com"))
+    }
+
+    @Test
+    fun cbz_natural_sort_and_comicinfo() {
+        val tmp = File.createTempFile("comic", ".cbz")
+        try {
+            ZipOutputStream(tmp.outputStream()).use { zos ->
+                fun put(name: String, bytes: ByteArray) {
+                    zos.putNextEntry(ZipEntry(name))
+                    zos.write(bytes)
+                    zos.closeEntry()
+                }
+                // tiny 1x1 png
+                val png = java.util.Base64.getDecoder().decode(
+                    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=="
+                )
+                put("pages/page10.png", png)
+                put("pages/page2.png", png)
+                put(
+                    "ComicInfo.xml",
+                    """<?xml version="1.0"?><ComicInfo><Title>漫画甲</Title><Writer>作者乙</Writer><Genre>冒险</Genre></ComicInfo>""".toByteArray()
+                )
+            }
+            val book = io.legado.app.data.entities.Book(bookUrl = tmp.absolutePath, origin = "loc_book")
+            val chapters = io.legado.app.model.localBook.CbzFile.getChapterList(book)
+            assertEquals(2, chapters.size)
+            // natural order: page2 before page10
+            assertTrue(chapters[0].url.contains("page2"), chapters[0].url)
+            assertTrue(chapters[1].url.contains("page10"), chapters[1].url)
+            assertEquals("漫画甲", book.name)
+            assertEquals("作者乙", book.author)
+            val img = io.legado.app.model.localBook.CbzFile.getImage(book, chapters[0].url)
+            assertTrue(img != null && img.isNotEmpty())
+            val media = io.legado.app.model.localBook.LocalMedia.getChapterImage(book, chapters[0])
+            assertTrue(media != null && media.isNotEmpty())
+        } finally {
+            tmp.delete()
+        }
+    }
+
+    @Test
+    fun pdf_text_and_page_image() {
+        // minimal PDF with one page of text via PDFBox
+        val tmp = File.createTempFile("doc", ".pdf")
+        try {
+            org.apache.pdfbox.pdmodel.PDDocument().use { doc ->
+                val page = org.apache.pdfbox.pdmodel.PDPage()
+                doc.addPage(page)
+                org.apache.pdfbox.pdmodel.PDPageContentStream(doc, page).use { cs ->
+                    cs.beginText()
+                    cs.setFont(org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA, 12f)
+                    cs.newLineAtOffset(50f, 700f)
+                    cs.showText("Hello PDF Page")
+                    cs.endText()
+                }
+                doc.documentInformation.title = "PDF书"
+                doc.documentInformation.author = "PDF作者"
+                doc.save(tmp)
+            }
+            val book = io.legado.app.data.entities.Book(bookUrl = tmp.absolutePath, origin = "loc_book")
+            val chapters = io.legado.app.model.localBook.PdfFile.getChapterList(book)
+            assertEquals(1, chapters.size)
+            assertEquals("PDF书", book.name)
+            val content = io.legado.app.model.localBook.PdfFile.getContent(book, chapters[0])
+            assertTrue(content!!.contains("Hello PDF") || content.contains("PDF"))
+            val jpg = io.legado.app.model.localBook.PdfFile.getPageImage(book, 0, 200f)
+            assertTrue(jpg != null && jpg.size > 100)
+        } finally {
+            tmp.delete()
+        }
+    }
 }
+
 

@@ -81,6 +81,8 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
 
 tasks.withType<Test> {
     useJUnitPlatform()
+    // PDFBox page render + ImageIO on CI
+    jvmArgs("-Djava.awt.headless=true")
 }
 
 tasks.named<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {

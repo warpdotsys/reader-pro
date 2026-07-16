@@ -215,3 +215,11 @@ _business_utils_entities.py
 - **HtmlFormatter.formatKeepImg** 保留 img
 - **DefaultData** 加载 classpath txtTocRule.json
 - **SmokeTest**：替换规则、TXT 分章、Cookie/ACache、TTS SSML、WebDAV 路径
+
+## Phase 18（PDF/CBZ/LocalMedia + AnalyzeUrl 选项）
+
+- **PdfFile**：PDFTextStripper 按页取文、元数据、DPI/宽度渲染 JPEG 封面
+- **CbzFile**：自然排序、ComicInfo.xml、getImage、封面
+- **LocalMedia**：统一 PDF/CBZ 页图
+- **AnalyzeUrl**：,{method,body,headers,charset} 选项、表单 POST、baseUrl、Cookie、loginCheckJs、retry
+- **SmokeTest**：AnalyzeUrl 解析、CBZ 往返、PDF 文本+渲染
