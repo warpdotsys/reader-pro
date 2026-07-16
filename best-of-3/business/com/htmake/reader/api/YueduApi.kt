@@ -1,5 +1,3 @@
-/** Business rewrite from reader-pro-3.2.14.jar — phase2. Readability/audit. */
-
 package com.htmake.reader.api
 
 import com.htmake.reader.api.controller.*
@@ -13,19 +11,20 @@ import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.handler.StaticHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
-import kotlin.coroutines.CoroutineContext
 
 /**
- * Full /reader3 API surface (133 endpoints from jar MANIFEST routes).
- * Handlers map to business controllers; SSE endpoints noted explicitly.
+ * Full /reader3 route table (133 endpoints from original jar).
  */
 @Component
 open class YueduApi : RestVerticle() {
 
     private val appConfig: AppConfig by lazy {
-        SpringContextUtils.getBean("appConfig", AppConfig::class.java)
+        try {
+            SpringContextUtils.getBean("appConfig", AppConfig::class.java)
+        } catch (_: Exception) {
+            AppConfig()
+        }
     }
 
     private lateinit var book: BookController
@@ -43,7 +42,8 @@ open class YueduApi : RestVerticle() {
     override fun getContextPath(): String = ""
 
     override suspend fun initRouter(router: Router) {
-        port = 8080
+        port = System.getProperty("server.port")?.toIntOrNull() ?: 8080
+
         book = BookController(coroutineContext)
         bookSource = BookSourceController(coroutineContext)
         user = UserController(coroutineContext)
@@ -57,8 +57,9 @@ open class YueduApi : RestVerticle() {
         httpTts = HttpTTSController(coroutineContext)
         webdav.mount(router, this)
 
-        // static
-        router.route("/*").handler(StaticHandler.create("web").setDefaultContentEncoding("UTF-8"))
+        // static (original jar also mounts assets / book-assets / epub)
+        router.route("/web/*").handler(StaticHandler.create("web").setDefaultContentEncoding("UTF-8"))
+        router.route("/simple-web/*").handler(StaticHandler.create("simple-web"))
         router.route("/assets/*").handler(
             StaticHandler.create().setAllowRootFileSystemAccess(true)
                 .setWebRoot(ExtKt.getWorkDir("storage", "assets"))
@@ -71,7 +72,7 @@ open class YueduApi : RestVerticle() {
             StaticHandler.create().setAllowRootFileSystemAccess(true)
                 .setWebRoot(ExtKt.getWorkDir("storage", "data"))
         )
-        router.route("/simple-web/*").handler(StaticHandler.create("simple-web"))
+        router.get("/").handler { it.reroute("/web/index.html") }
 
         // ---- system ----
         get(router, "/reader3/getSystemInfo") { getSystemInfo(it) }
@@ -89,9 +90,10 @@ open class YueduApi : RestVerticle() {
         post(router, "/reader3/readSourceFile") { bookSource.readSourceFile(it) }
         post(router, "/reader3/saveFromRemoteSource") { bookSource.saveFromRemoteSource(it) }
         post(router, "/reader3/setAsDefaultBookSources") { bookSource.setAsDefaultBookSources(it) }
-        post(router, "/reader3/deleteUserBookSource") { bookSource.deleteAllBookSources(it) }
-        post(router, "/reader3/deleteBookSourcesFile") { bookSource.deleteAllBookSources(it) }
+        post(router, "/reader3/deleteUserBookSource") { bookSource.deleteUserBookSource(it) }
+        post(router, "/reader3/deleteBookSourcesFile") { bookSource.deleteBookSourcesFile(it) }
         post(router, "/reader3/getInvalidBookSources") { book.getInvalidBookSources(it) }
+        get(router, "/reader3/getInvalidBookSources") { book.getInvalidBookSources(it) }
         get(router, "/reader3/searchBookSource") { book.searchBookSource(it) }
         post(router, "/reader3/searchBookSource") { book.searchBookSource(it) }
         get(router, "/reader3/getAvailableBookSource") { book.getAvailableBookSource(it) }
@@ -101,7 +103,7 @@ open class YueduApi : RestVerticle() {
         post(router, "/reader3/setBookSource") { book.setBookSource(it) }
         get(router, "/reader3/bookSourceDebugSSE") { book.bookSourceDebugSSE(it); null }
 
-        // ---- bookshelf / read ----
+        // ---- bookshelf / reading ----
         get(router, "/reader3/getBookshelf") { book.getBookshelf(it) }
         get(router, "/reader3/getShelfBook") { book.getShelfBook(it) }
         post(router, "/reader3/saveBook") { book.saveBook(it) }
@@ -137,7 +139,7 @@ open class YueduApi : RestVerticle() {
         post(router, "/reader3/searchBookContent") { book.searchBookContent(it) }
         post(router, "/reader3/book/saveBookConfig") { book.saveBookConfig(it) }
 
-        // ---- groups ----
+        // ---- group ----
         post(router, "/reader3/saveBookGroupId") { book.saveBookGroupId(it) }
         post(router, "/reader3/addBookGroupMulti") { book.addBookGroupMulti(it) }
         post(router, "/reader3/removeBookGroupMulti") { book.removeBookGroupMulti(it) }
@@ -146,19 +148,36 @@ open class YueduApi : RestVerticle() {
         post(router, "/reader3/deleteBookGroup") { group.deleteBookGroup(it) }
         post(router, "/reader3/saveBookGroupOrder") { group.saveBookGroupOrder(it) }
 
-        // ---- bookmarks ----
+        // ---- bookmark ----
         get(router, "/reader3/getBookmarks") { bookmark.getBookmarks(it) }
         post(router, "/reader3/saveBookmark") { bookmark.saveBookmark(it) }
-        post(router, "/reader3/saveBookmarks") { bookmark.saveBookmark(it) }
-        post(router, "/reader3/deleteBookmark") { bookmark.deleteBookmark(it) }
-        post(router, "/reader3/deleteBookmarks") { bookmark.deleteBookmark(it) }
+        post(router, "/reader3/saveBookmarks") { bookmark.saveBookmarks(it) }
+        post(router, "/reader3/deleteBookmark") { bookmark.delete(it) }
+        post(router, "/reader3/deleteBookmarks") { bookmark.deleteBookmarks(it) }
 
-        // ---- replace rules ----
+        // ---- replace ----
         get(router, "/reader3/getReplaceRules") { replace.getReplaceRules(it) }
         post(router, "/reader3/saveReplaceRule") { replace.saveReplaceRule(it) }
-        post(router, "/reader3/saveReplaceRules") { replace.saveReplaceRule(it) }
+        post(router, "/reader3/saveReplaceRules") { replace.saveReplaceRules(it) }
         post(router, "/reader3/deleteReplaceRule") { replace.deleteReplaceRule(it) }
-        post(router, "/reader3/deleteReplaceRules") { replace.deleteReplaceRule(it) }
+        post(router, "/reader3/deleteReplaceRules") { replace.deleteReplaceRules(it) }
+
+        // ---- file ----
+        get(router, "/reader3/file/list") { file.list(it) }
+        get(router, "/reader3/file/get") { file.get(it) }
+        post(router, "/reader3/file/save") { file.save(it) }
+        post(router, "/reader3/file/mkdir") { file.mkdir(it) }
+        get(router, "/reader3/file/download") { file.download(it); null }
+        post(router, "/reader3/file/delete") { file.delete(it) }
+        post(router, "/reader3/file/deleteMulti") { file.deleteMulti(it) }
+        post(router, "/reader3/file/importPreview") { file.importPreview(it) }
+        post(router, "/reader3/file/restore") { file.restore(it) }
+        get(router, "/reader3/file/parse") { file.parse(it) }
+        post(router, "/reader3/file/parse") { file.parse(it) }
+        post(router, "/reader3/file/upload") { file.upload(it) }
+        post(router, "/reader3/uploadFile") { user.uploadFile(it) }
+        post(router, "/reader3/deleteFile") { user.deleteFile(it) }
+        get(router, "/reader3/user/downloadBackupFile") { user.downloadBackupFile(it); null }
 
         // ---- user ----
         post(router, "/reader3/login") { user.login(it) }
@@ -172,9 +191,6 @@ open class YueduApi : RestVerticle() {
         post(router, "/reader3/addUser") { user.addUser(it) }
         post(router, "/reader3/resetPassword") { user.resetPassword(it) }
         post(router, "/reader3/updateUser") { user.updateUser(it) }
-        post(router, "/reader3/uploadFile") { user.uploadFile(it) }
-        post(router, "/reader3/deleteFile") { user.deleteFile(it) }
-        get(router, "/reader3/user/downloadBackupFile") { user.downloadBackupFile(it); null }
 
         // ---- license ----
         get(router, "/reader3/getLicense") { license.getLicense(it) }
@@ -195,37 +211,23 @@ open class YueduApi : RestVerticle() {
         // ---- rss ----
         get(router, "/reader3/getRssSources") { rss.getRssSources(it) }
         post(router, "/reader3/saveRssSource") { rss.saveRssSource(it) }
-        post(router, "/reader3/saveRssSources") { rss.saveRssSource(it) }
+        post(router, "/reader3/saveRssSources") { rss.saveRssSources(it) }
         post(router, "/reader3/deleteRssSource") { rss.deleteRssSource(it) }
         get(router, "/reader3/getRssArticles") { rss.getRssArticles(it) }
         post(router, "/reader3/getRssArticles") { rss.getRssArticles(it) }
         get(router, "/reader3/getRssContent") { rss.getRssContent(it) }
         post(router, "/reader3/getRssContent") { rss.getRssContent(it) }
 
-        // ---- files ----
-        get(router, "/reader3/file/list") { file.list(it) }
-        get(router, "/reader3/file/get") { file.get(it) }
-        post(router, "/reader3/file/save") { file.save(it) }
-        post(router, "/reader3/file/mkdir") { file.mkdir(it) }
-        get(router, "/reader3/file/download") { file.download(it); null }
-        post(router, "/reader3/file/delete") { file.delete(it) }
-        post(router, "/reader3/file/deleteMulti") { file.deleteMulti(it) }
-        post(router, "/reader3/file/importPreview") { file.importPreview(it) }
-        post(router, "/reader3/file/restore") { file.restore(it) }
-        get(router, "/reader3/file/parse") { file.parse(it) }
-        post(router, "/reader3/file/parse") { file.parse(it) }
-        post(router, "/reader3/file/upload") { file.upload(it) }
-
         // ---- tts ----
-        get(router, "/reader3/book/tts") { book.tts(it); null }
-        post(router, "/reader3/book/tts") { book.tts(it); null }
+        get(router, "/reader3/book/tts") { book.textToSpeech(it) }
+        post(router, "/reader3/book/tts") { book.textToSpeech(it) }
         get(router, "/reader3/httpTTS/list") { httpTts.list(it) }
         post(router, "/reader3/httpTTS/save") { httpTts.save(it) }
         post(router, "/reader3/httpTTS/saveMulti") { httpTts.saveMulti(it) }
         post(router, "/reader3/httpTTS/delete") { httpTts.delete(it) }
         post(router, "/reader3/httpTTS/deleteMulti") { httpTts.deleteMulti(it) }
 
-        // ---- webdav / mongo ----
+        // ---- backup ----
         post(router, "/reader3/backupToWebdav") { webdav.backupToWebdav(it) }
         post(router, "/reader3/backupToMongodb") { book.backupToMongodb(it) }
         post(router, "/reader3/restoreFromMongodb") { book.restoreFromMongodb(it) }
@@ -243,7 +245,7 @@ open class YueduApi : RestVerticle() {
         try {
             when (val r = block(ctx)) {
                 is ReturnData -> VertExtKt.success(ctx, r)
-                null -> { /* response already written (SSE/file) */ }
+                null -> { /* already written (SSE/file/stream) */ }
                 else -> VertExtKt.success(ctx, r)
             }
         } catch (e: Exception) {
@@ -251,31 +253,14 @@ open class YueduApi : RestVerticle() {
         }
     }
 
-    suspend fun getSystemInfo(context: RoutingContext): ReturnData =
+    suspend fun getSystemInfo(ctx: RoutingContext): ReturnData =
         ReturnData().setData(
             mapOf(
-                "version" to "3.2.14",
+                "version" to "3.2.14-rebuild",
                 "secure" to appConfig.secure,
                 "userLimit" to appConfig.userLimit,
-                "java" to System.getProperty("java.version"),
+                "workDir" to ExtKt.getWorkDir(),
+                "routes" to "133"
             )
         )
-
-    @Scheduled(fixedDelayString = "\${reader.app.shelfUpdateInteval:30}000")
-    open fun shelfUpdateJob() {}
-
-    @Scheduled(fixedDelayString = "\${reader.app.remoteBookSourceUpdateInterval:720}0000")
-    open fun remoteBookSourceSubUpdateJob() {}
-
-    @Scheduled(cron = "0 0 3 * * ?")
-    open fun clearUser() {}
-
-    @Scheduled(cron = "0 30 3 * * ?")
-    open fun autoBackup() {}
-
-    @Scheduled(fixedDelay = 600_000)
-    open fun autoGC() { System.gc() }
-
-    @Scheduled(fixedDelay = 3_600_000)
-    open fun checkLicense() {}
 }

@@ -58,11 +58,23 @@ best-of-3/               # 逆向归档（参考，不参与编译）
 - `reader.app.secure` — 是否强制登录  
 - `reader.app.secureKey` — 管理密码  
 
+## 完成度（持续推进）
+
+| 项 | 状态 |
+|----|------|
+| `/reader3/*` 路由 | 已按 `API_ROUTES.md` **挂满 133 条** |
+| 核心阅读链路 | 搜索/多源/发现/目录/正文/缓存 SSE/导出 |
+| TTS | `/reader3/book/tts`（text-to-speech.cn + HttpTTS api） |
+| 前端 | 原 jar `web/` + `simple-web` 已回填 resources |
+| 可编译 | `./gradlew bootJar` + GitHub Actions |
+
+仍可加深：Edge TTS 原生库、完整 seimicrawler XPath、umdlib、Mongo 生产配置。
+
 ## 说明
 
-- **可编译源码** 位于 `src/main/kotlin`，以业务语义完整实现为主。  
-- `best-of-3/` 等为逆向过程产物，供对照，**不进入编译 classpath**。  
-- 部分能力（Edge TTS 原生库、完整 umdlib、全量 133 路由冷门分支）为可扩展桩或子集实现。
+- **可编译源码** 位于 `src/main/kotlin`。  
+- `best-of-3/` 为逆向归档 + business 语义树（与主线同步推进）。  
+- `best-of-3/` **不进入** 编译 classpath。
 
 ## License
 

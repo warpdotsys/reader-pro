@@ -167,3 +167,10 @@ _business_utils_entities.py
 - **ReplaceRuleController**：按 name 增改删；normalize scope/timeout
 - **ContentProcessor**：scope=`all`；bookName 支持 `regex:` 与 `/pat/`
 - **API_INDEX.md**：业务一页纸对照
+
+## Phase 12 增量（与 src/main 对齐）
+
+- **YueduApi**：按 API_ROUTES.md 挂满 **133** 路由
+- **BookMore**：cache SSE/导出/TTS/正文检索/分组/封面/本地预览
+- **MongoBackup** / ControllerMore：书源批量、文件上传、用户资产
+- **前端**：src/main/resources/web + simple-web 从 jar 资源回填
