@@ -23,3 +23,9 @@ storage/
 .env
 *.pem
 *.key
+# runtime / test workdirs
+/data/
+/storage/
+*.log
+build/
+.gradle/
