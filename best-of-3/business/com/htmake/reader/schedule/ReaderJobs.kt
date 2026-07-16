@@ -56,8 +56,11 @@ class ReaderJobs(private val appConfig: AppConfig) {
         }
     }
 
-    /** Shelf update tick log (interval minutes from config). */
-    @Scheduled(fixedDelay = 60_000, initialDelay = 60_000)
+    /**
+     * Shelf update: every minute check whether interval elapsed, then refresh
+     * latest-chapter metadata for canUpdate shelf books.
+     */
+    @Scheduled(fixedDelay = 60_000, initialDelay = 90_000)
     fun shelfUpdateTick() {
         val interval = appConfig.shelfUpdateInteval
         if (interval <= 0) return
@@ -65,16 +68,29 @@ class ReaderJobs(private val appConfig: AppConfig) {
         val last = lastShelfTick.get()
         if (last > 0 && now - last < interval * 60_000L) return
         lastShelfTick.set(now)
-        // Full multi-user shelf refresh is heavy; record heartbeat for ops.
         runCatching {
+            val result = ShelfRefresh.refreshAll(
+                debugLog = appConfig.debugLog,
+                perBookTimeoutMs = 12_000,
+                maxBooksPerUser = 40
+            )
             val f = File(ExtKt.getWorkDir("storage", "data", "_jobs", "shelf-tick.json"))
             f.parentFile?.mkdirs()
             f.writeText(
                 JsonObject()
                     .put("at", now)
                     .put("intervalMin", interval)
+                    .put("users", result.users)
+                    .put("books", result.books)
+                    .put("updated", result.updated)
+                    .put("failed", result.failed)
+                    .put("skipped", result.skipped)
                     .encode()
             )
+            log?.info { "shelfUpdate $result" }
+            println("[ReaderJobs] shelfUpdate users=${result.users} updated=${result.updated} failed=${result.failed}")
+        }.onFailure {
+            println("[ReaderJobs] shelfUpdate error: ${it.message}")
         }
     }
 

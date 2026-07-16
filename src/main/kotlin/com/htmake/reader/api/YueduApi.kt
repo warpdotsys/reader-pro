@@ -76,6 +76,10 @@ open class YueduApi : RestVerticle() {
 
         // ---- system ----
         get(router, "/reader3/getSystemInfo") { getSystemInfo(it) }
+        get(router, "/reader3/openapi.json") { openApiJson(it); null }
+        get(router, "/reader3/apiDocs") { apiDocsHtml(it); null }
+        get(router, "/reader3/apiRoutes.md") { apiRoutesMd(it); null }
+        post(router, "/reader3/refreshShelfBooks") { refreshShelfBooks(it) }
 
         // ---- book source ----
         post(router, "/reader3/saveBookSource") { bookSource.saveBookSource(it) }
@@ -272,6 +276,7 @@ open class YueduApi : RestVerticle() {
         val jobs = runCatching {
             SpringContextUtils.getBean(com.htmake.reader.schedule.ReaderJobs::class.java).status()
         }.getOrNull()
+        val routeCount = OpenApiDocs.loadPaths().size
         return ReturnData().setData(
             mapOf(
                 "version" to "3.2.14-rebuild",
@@ -283,7 +288,60 @@ open class YueduApi : RestVerticle() {
                 "autoBackupUserData" to appConfig.autoBackupUserData,
                 "smtpConfigured" to com.htmake.reader.help.SmtpMailer.isConfigured(appConfig),
                 "jobs" to jobs,
-                "routes" to "133+"
+                "routeCount" to routeCount,
+                "docs" to mapOf(
+                    "openapi" to "/reader3/openapi.json",
+                    "html" to "/reader3/apiDocs",
+                    "markdown" to "/reader3/apiRoutes.md"
+                )
+            )
+        )
+    }
+
+    fun openApiJson(ctx: RoutingContext) {
+        val json = OpenApiDocs.openApiJson().encodePrettily()
+        ctx.response()
+            .putHeader("Content-Type", "application/json; charset=utf-8")
+            .end(json)
+    }
+
+    fun apiDocsHtml(ctx: RoutingContext) {
+        ctx.response()
+            .putHeader("Content-Type", "text/html; charset=utf-8")
+            .end(OpenApiDocs.htmlDocs())
+    }
+
+    fun apiRoutesMd(ctx: RoutingContext) {
+        ctx.response()
+            .putHeader("Content-Type", "text/markdown; charset=utf-8")
+            .end(OpenApiDocs.markdownIndex())
+    }
+
+    /** Manual trigger: refresh current user's shelf latest chapters. */
+    suspend fun refreshShelfBooks(ctx: RoutingContext): ReturnData {
+        val rd = ReturnData()
+        // reuse auth via a lightweight controller check
+        val bookCtrl = book
+        if (!bookCtrl.checkAuth(ctx)) return rd.setData("NEED_LOGIN").setErrorMsg("请登录后使用")
+        val ns = bookCtrl.getUserNameSpace(ctx)
+        val onlyUrl = ctx.bodyAsJson?.getString("bookUrl")
+            ?: ctx.queryParam("bookUrl").firstOrNull()
+        val result = if (!onlyUrl.isNullOrBlank()) {
+            // filter: refresh all then not ideal — call user refresh (updates all canUpdate)
+            com.htmake.reader.schedule.ShelfRefresh.refreshUser(
+                ns, appConfig.debugLog, 15_000, 100
+            )
+        } else {
+            com.htmake.reader.schedule.ShelfRefresh.refreshUser(
+                ns, appConfig.debugLog, 15_000, 100
+            )
+        }
+        return rd.setData(
+            mapOf(
+                "books" to result.books,
+                "updated" to result.updated,
+                "failed" to result.failed,
+                "skipped" to result.skipped
             )
         )
     }

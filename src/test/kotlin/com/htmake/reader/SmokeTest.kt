@@ -514,6 +514,28 @@ class SmokeTest {
     }
 
     @Test
+    fun openapi_docs_and_shelf_refresh_local_skip() {
+        val paths = com.htmake.reader.api.OpenApiDocs.loadPaths()
+        assertTrue(paths.size >= 100, "paths=${paths.size}")
+        val oas = com.htmake.reader.api.OpenApiDocs.openApiJson()
+        assertEquals("3.0.3", oas.getString("openapi"))
+        assertTrue(oas.getJsonObject("paths").size() >= 100)
+        val md = com.htmake.reader.api.OpenApiDocs.markdownIndex(paths)
+        assertTrue(md.contains("/reader3/"))
+        val html = com.htmake.reader.api.OpenApiDocs.htmlDocs()
+        assertTrue(html.contains("<table"))
+        // shelf refresh: local books skipped
+        val ns = "shelf-test-${System.currentTimeMillis()}"
+        com.htmake.reader.utils.ExtKt.saveStorage(
+            arrayOf("data", ns, "bookshelf"),
+            """[{"bookUrl":"C:/tmp/a.txt","origin":"loc_book","name":"本地","canUpdate":true}]"""
+        )
+        val r = com.htmake.reader.schedule.ShelfRefresh.refreshUser(ns, maxBooksPerUser = 10)
+        assertEquals(1, r.books)
+        assertTrue(r.skipped >= 1)
+    }
+
+    @Test
     fun smtp_mail_body_and_config_flag() {
         val body = com.htmake.reader.help.SmtpMailer.buildCodeMailBody("123456", 10)
         assertTrue(body.contains("123456"))

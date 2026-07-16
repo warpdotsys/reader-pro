@@ -1,192 +1,135 @@
-# reader-pro 3.2.14 API Routes
+ï»¿# reader-pro API Routes
 
-Extracted from YueduApi.initRouter, total unique endpoints: 133
+Generated from YueduApi, **126** unique paths.
+
+| Path |
+|------|
+| `/reader3/activateLicense` |
+| `/reader3/addBookGroupMulti` |
+| `/reader3/addUser` |
+| `/reader3/apiDocs` |
+| `/reader3/apiRoutes.md` |
+| `/reader3/backupAllToMongodb` |
+| `/reader3/backupToMongodb` |
+| `/reader3/backupToWebdav` |
+| `/reader3/book/saveBookConfig` |
+| `/reader3/book/tts` |
+| `/reader3/bookSourceDebugSSE` |
+| `/reader3/cacheBookOnServer` |
+| `/reader3/cacheBookSSE` |
+| `/reader3/clearInactiveUsers` |
+| `/reader3/cover` |
+| `/reader3/decryptLicense` |
+| `/reader3/deleteAllBookSources` |
+| `/reader3/deleteBook` |
+| `/reader3/deleteBookCache` |
+| `/reader3/deleteBookGroup` |
+| `/reader3/deleteBookmark` |
+| `/reader3/deleteBookmarks` |
+| `/reader3/deleteBooks` |
+| `/reader3/deleteBookSource` |
+| `/reader3/deleteBookSources` |
+| `/reader3/deleteBookSourcesFile` |
+| `/reader3/deleteFile` |
+| `/reader3/deleteMongoBackup` |
+| `/reader3/deleteReplaceRule` |
+| `/reader3/deleteReplaceRules` |
+| `/reader3/deleteRssSource` |
+| `/reader3/deleteUserBookSource` |
+| `/reader3/deleteUsers` |
+| `/reader3/exploreBook` |
+| `/reader3/exportBook` |
+| `/reader3/file/delete` |
+| `/reader3/file/deleteMulti` |
+| `/reader3/file/download` |
+| `/reader3/file/get` |
+| `/reader3/file/importPreview` |
+| `/reader3/file/list` |
+| `/reader3/file/mkdir` |
+| `/reader3/file/parse` |
+| `/reader3/file/restore` |
+| `/reader3/file/save` |
+| `/reader3/file/upload` |
+| `/reader3/generateKeys` |
+| `/reader3/generateLicense` |
+| `/reader3/getAvailableBookSource` |
+| `/reader3/getBookContent` |
+| `/reader3/getBookGroups` |
+| `/reader3/getBookInfo` |
+| `/reader3/getBookmarks` |
+| `/reader3/getBookshelf` |
+| `/reader3/getBookSource` |
+| `/reader3/getBookSources` |
+| `/reader3/getChapterList` |
+| `/reader3/getChapterListByRule` |
+| `/reader3/getInvalidBookSources` |
+| `/reader3/getLicense` |
+| `/reader3/getLocalBookImage` |
+| `/reader3/getLoginUi` |
+| `/reader3/getReplaceRules` |
+| `/reader3/getRssArticles` |
+| `/reader3/getRssContent` |
+| `/reader3/getRssSorts` |
+| `/reader3/getRssSources` |
+| `/reader3/getShelfBook` |
+| `/reader3/getShelfBookWithCacheInfo` |
+| `/reader3/getSystemInfo` |
+| `/reader3/getTxtTocRules` |
+| `/reader3/getUserConfig` |
+| `/reader3/getUserInfo` |
+| `/reader3/getUserList` |
+| `/reader3/httpTTS/delete` |
+| `/reader3/httpTTS/deleteMulti` |
+| `/reader3/httpTTS/list` |
+| `/reader3/httpTTS/save` |
+| `/reader3/httpTTS/saveMulti` |
+| `/reader3/importBookPreview` |
+| `/reader3/importLicense` |
+| `/reader3/isHostValid` |
+| `/reader3/isLicenseValid` |
+| `/reader3/listMongoBackups` |
+| `/reader3/listWebdavBackups` |
+| `/reader3/login` |
+| `/reader3/loginBookSource` |
+| `/reader3/logout` |
+| `/reader3/logoutBookSource` |
+| `/reader3/openapi.json` |
+| `/reader3/readSourceFile` |
+| `/reader3/refreshLocalBook` |
+| `/reader3/refreshShelfBooks` |
+| `/reader3/removeBookGroupMulti` |
+| `/reader3/resetPassword` |
+| `/reader3/restoreFromMongodb` |
+| `/reader3/restoreFromWebdav` |
+| `/reader3/saveBook` |
+| `/reader3/saveBookContent` |
+| `/reader3/saveBookGroup` |
+| `/reader3/saveBookGroupId` |
+| `/reader3/saveBookGroupOrder` |
+| `/reader3/saveBookmark` |
+| `/reader3/saveBookmarks` |
+| `/reader3/saveBookProgress` |
+| `/reader3/saveBookSource` |
+| `/reader3/saveBookSources` |
+| `/reader3/saveFromRemoteSource` |
+| `/reader3/saveReplaceRule` |
+| `/reader3/saveReplaceRules` |
+| `/reader3/saveRssSource` |
+| `/reader3/saveRssSources` |
+| `/reader3/saveUserConfig` |
+| `/reader3/searchBook` |
+| `/reader3/searchBookContent` |
+| `/reader3/searchBookMulti` |
+| `/reader3/searchBookMultiSSE` |
+| `/reader3/searchBookSource` |
+| `/reader3/searchBookSourceSSE` |
+| `/reader3/sendCodeToEmail` |
+| `/reader3/setAsDefaultBookSources` |
+| `/reader3/setBookSource` |
+| `/reader3/supplyLicense` |
+| `/reader3/updateUser` |
+| `/reader3/uploadFile` |
+| `/reader3/user/downloadBackupFile` |
 
 
-## Book
-
-- `GET    /reader3/getSystemInfo`
-- `GET    /reader3/getBookshelf`
-- `GET    /reader3/getShelfBook`
-- `POST   /reader3/saveBook`
-- `POST   /reader3/deleteBook`
-- `POST   /reader3/deleteBooks`
-- `POST   /reader3/exploreBook`
-- `GET    /reader3/exploreBook`
-- `GET    /reader3/searchBook`
-- `POST   /reader3/searchBook`
-- `GET    /reader3/searchBookMulti`
-- `POST   /reader3/searchBookMulti`
-- `GET    /reader3/searchBookMultiSSE`
-- `GET    /reader3/getBookInfo`
-- `POST   /reader3/getBookInfo`
-- `GET    /reader3/getChapterList`
-- `POST   /reader3/getChapterList`
-- `GET    /reader3/getBookContent`
-- `POST   /reader3/getBookContent`
-- `POST   /reader3/saveBookContent`
-- `POST   /reader3/saveBookProgress`
-- `GET    /reader3/cover`
-- `POST   /reader3/importBookPreview`
-- `POST   /reader3/refreshLocalBook`
-- `GET    /reader3/getTxtTocRules`
-- `POST   /reader3/getChapterListByRule`
-- `GET    /reader3/cacheBookSSE`
-- `POST   /reader3/cacheBookOnServer`
-- `GET    /reader3/getShelfBookWithCacheInfo`
-- `POST   /reader3/deleteBookCache`
-- `POST   /reader3/exportBook`
-- `GET    /reader3/exportBook`
-- `GET    /reader3/searchBookContent`
-- `POST   /reader3/searchBookContent`
-- `POST   /reader3/book/saveBookConfig`
-- `GET    /reader3/file/list`
-- `GET    /reader3/file/get`
-- `POST   /reader3/file/save`
-- `POST   /reader3/file/mkdir`
-- `GET    /reader3/file/download`
-- `POST   /reader3/file/delete`
-- `POST   /reader3/file/deleteMulti`
-- `POST   /reader3/file/importPreview`
-- `POST   /reader3/file/restore`
-- `GET    /reader3/file/parse`
-- `POST   /reader3/file/parse`
-
-## BookGroup
-
-- `POST   /reader3/saveBookGroupId`
-- `POST   /reader3/addBookGroupMulti`
-- `POST   /reader3/removeBookGroupMulti`
-- `GET    /reader3/getBookGroups`
-- `POST   /reader3/saveBookGroup`
-- `POST   /reader3/deleteBookGroup`
-- `POST   /reader3/saveBookGroupOrder`
-
-## BookSource
-
-- `POST   /reader3/saveBookSource`
-- `POST   /reader3/saveBookSources`
-- `GET    /reader3/getBookSource`
-- `POST   /reader3/getBookSource`
-- `GET    /reader3/getBookSources`
-- `POST   /reader3/getBookSources`
-- `POST   /reader3/deleteAllBookSources`
-- `POST   /reader3/deleteBookSource`
-- `POST   /reader3/deleteBookSources`
-- `POST   /reader3/readSourceFile`
-- `POST   /reader3/saveFromRemoteSource`
-- `POST   /reader3/setAsDefaultBookSources`
-- `POST   /reader3/deleteUserBookSource`
-- `POST   /reader3/deleteBookSourcesFile`
-- `POST   /reader3/getInvalidBookSources`
-- `GET    /reader3/searchBookSource`
-- `POST   /reader3/searchBookSource`
-- `GET    /reader3/getAvailableBookSource`
-- `POST   /reader3/getAvailableBookSource`
-- `GET    /reader3/searchBookSourceSSE`
-- `GET    /reader3/setBookSource`
-- `POST   /reader3/setBookSource`
-- `GET    /reader3/bookSourceDebugSSE`
-
-## Bookmark
-
-- `GET    /reader3/getBookmarks`
-- `POST   /reader3/saveBookmark`
-- `POST   /reader3/saveBookmarks`
-- `POST   /reader3/deleteBookmark`
-- `POST   /reader3/deleteBookmarks`
-
-## File
-
-- `POST   /reader3/uploadFile`
-- `POST   /reader3/deleteFile`
-- `GET    /reader3/user/downloadBackupFile`
-- `POST   /reader3/file/upload`
-
-## License
-
-- `GET    /reader3/getLicense`
-- `POST   /reader3/importLicense`
-- `GET    /reader3/generateKeys`
-- `POST   /reader3/generateKeys`
-- `GET    /reader3/generateLicense`
-- `POST   /reader3/generateLicense`
-- `GET    /reader3/isHostValid`
-- `POST   /reader3/isHostValid`
-- `POST   /reader3/activateLicense`
-- `GET    /reader3/isLicenseValid`
-- `POST   /reader3/isLicenseValid`
-- `POST   /reader3/decryptLicense`
-- `POST   /reader3/sendCodeToEmail`
-- `POST   /reader3/supplyLicense`
-
-## MongoBackup
-
-- `POST   /reader3/backupToMongodb`
-- `POST   /reader3/restoreFromMongodb`
-
-## RSS
-
-- `GET    /reader3/getRssSources`
-- `POST   /reader3/saveRssSource`
-- `POST   /reader3/saveRssSources`
-- `POST   /reader3/deleteRssSource`
-- `GET    /reader3/getRssArticles`
-- `POST   /reader3/getRssArticles`
-- `GET    /reader3/getRssContent`
-- `POST   /reader3/getRssContent`
-
-## ReplaceRule
-
-- `GET    /reader3/getReplaceRules`
-- `POST   /reader3/saveReplaceRule`
-- `POST   /reader3/saveReplaceRules`
-- `POST   /reader3/deleteReplaceRule`
-- `POST   /reader3/deleteReplaceRules`
-
-## TTS
-
-- `GET    /reader3/book/tts`
-- `POST   /reader3/book/tts`
-- `GET    /reader3/httpTTS/list`
-- `POST   /reader3/httpTTS/save`
-- `POST   /reader3/httpTTS/saveMulti`
-- `POST   /reader3/httpTTS/delete`
-- `POST   /reader3/httpTTS/deleteMulti`
-
-## User
-
-- `POST   /reader3/login`
-- `POST   /reader3/logout`
-- `GET    /reader3/getUserInfo`
-- `POST   /reader3/saveUserConfig`
-- `GET    /reader3/getUserConfig`
-- `GET    /reader3/getUserList`
-- `POST   /reader3/deleteUsers`
-- `POST   /reader3/clearInactiveUsers`
-- `POST   /reader3/addUser`
-- `POST   /reader3/resetPassword`
-- `POST   /reader3/updateUser`
-
-## WebDAV
-
-- `POST   /reader3/backupToWebdav`
-
-## Static routes
-
-- `ROUTE  /*`
-- `ROUTE  /assets/*`
-- `ROUTE  /book-assets/*`
-- `ROUTE  /book-assets/*`
-- `ROUTE  /epub/*`
-- `ROUTE  /epub/*`
-- `ROUTE  /simple-web`
-- `ROUTE  /simple-web/*`
-- `ROUTE  /simple-web/*`
-## Book source login (loginUi)
-
-| Method | Path | Notes |
-|--------|------|--------|
-| GET/POST | /reader3/getLoginUi | bookSourceUrl ¡ú fields + saved values |
-| POST | /reader3/loginBookSource | body: bookSourceUrl + loginInfo{} or flat fields |
-| POST | /reader3/logoutBookSource | clear loginHeader + loginInfo |
+Live docs: `/reader3/apiDocs` Â· OpenAPI: `/reader3/openapi.json`

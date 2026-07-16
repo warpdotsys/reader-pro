@@ -258,3 +258,10 @@ _business_utils_entities.py
 - **SmtpMailer**：可配置 SMTP 发验证码；未配置时降级返回 code
 - **AppConfig/yml**：smtp*、autoBackup*、autoClear*
 - **getSystemInfo**：jobs 状态、smtpConfigured
+
+## Phase 24（书架定时刷新 + OpenAPI）
+
+- **ShelfRefresh**：按用户书架刷新 latestChapter/totalChapterNum
+- **ReaderJobs.shelfUpdateTick**：按 shelfUpdateInteval 执行
+- **OpenAPI**：/reader3/openapi.json · /reader3/apiDocs · /reader3/apiRoutes.md
+- **refreshShelfBooks** 手动触发当前用户
