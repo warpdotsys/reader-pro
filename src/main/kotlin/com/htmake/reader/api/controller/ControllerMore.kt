@@ -66,6 +66,44 @@ suspend fun BookSourceController.deleteBookSourcesFile(ctx: RoutingContext): Ret
     return rd.setData(true)
 }
 
+/** POST body: bookSourceUrl — run loginUrl JS and store loginHeader */
+suspend fun BookSourceController.loginBookSource(ctx: RoutingContext): ReturnData {
+    val rd = ReturnData()
+    if (!checkAuth(ctx)) return rd.setData("NEED_LOGIN").setErrorMsg("请登录后使用")
+    val url = ctx.bodyAsJson?.getString("bookSourceUrl")
+        ?: ctx.queryParam("bookSourceUrl").firstOrNull()
+        ?: return rd.setErrorMsg("bookSourceUrl 不能为空")
+    val ns = getUserNameSpace(ctx)
+    val raw = getUserBookSourceJson(ns)?.let { arr ->
+        (0 until arr.size()).mapNotNull { i -> arr.getJsonObject(i) }
+            .firstOrNull { it.getString("bookSourceUrl") == url }?.encode()
+    } ?: return rd.setErrorMsg("书源不存在")
+    val src = io.legado.app.data.entities.BookSource.fromJson(raw).getOrNull()
+        ?: return rd.setErrorMsg("书源解析失败")
+    src.setUserNameSpace(ns)
+    val ok = io.legado.app.help.SourceLogin.login(src)
+    return if (ok || src.getLoginHeader() != null) {
+        rd.setData(mapOf("ok" to true, "loginHeader" to src.getLoginHeader()))
+    } else {
+        // still try ensure for URL-type login
+        try {
+            io.legado.app.help.SourceLogin.ensureLoginIfNeeded(src)
+            rd.setData(mapOf("ok" to (src.getLoginHeader() != null), "loginHeader" to src.getLoginHeader()))
+        } catch (e: Exception) {
+            rd.setErrorMsg(e.message ?: "登录失败")
+        }
+    }
+}
+
+suspend fun BookSourceController.logoutBookSource(ctx: RoutingContext): ReturnData {
+    val rd = ReturnData()
+    if (!checkAuth(ctx)) return rd.setData("NEED_LOGIN").setErrorMsg("请登录后使用")
+    val url = ctx.bodyAsJson?.getString("bookSourceUrl") ?: return rd.setErrorMsg("bookSourceUrl 不能为空")
+    val ns = getUserNameSpace(ctx)
+    io.legado.app.help.CacheManager(ns).delete("loginHeader_$url")
+    return rd.setData(true)
+}
+
 // ---- Bookmark extras ----
 suspend fun BookmarkController.saveBookmarks(ctx: RoutingContext) = save(ctx)
 suspend fun BookmarkController.deleteBookmarks(ctx: RoutingContext): ReturnData {

@@ -181,3 +181,10 @@ _business_utils_entities.py
 - EpubFile OPF spine/NCX/nav
 - EdgeTts + SmokeTest
 
+
+## Phase 14
+
+- umdlib 只读解析
+- SourceLogin + loginBookSource API
+- Docker 构建
+

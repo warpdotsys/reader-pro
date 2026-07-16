@@ -110,6 +110,32 @@ class SmokeTest {
     }
 
     @Test
+    fun umd_utils_unicode_roundtrip_style() {
+        // little-endian UTF-16 style used by UMD
+        val s = "章节"
+        val bytes = ByteArray(s.length * 2)
+        for (i in s.indices) {
+            val c = s[i].code
+            bytes[i * 2] = (c and 0xFF).toByte()
+            bytes[i * 2 + 1] = (c shr 8).toByte()
+        }
+        val back = me.ag2s.umdlib.tool.UmdUtils.unicodeBytesToString(bytes)
+        assertEquals(s, back)
+    }
+
+    @Test
+    fun sourceLogin_extracts_js_from_loginUrl() {
+        val src = io.legado.app.data.entities.BookSource(
+            bookSourceUrl = "https://x.com",
+            loginUrlValue = "@js:java.putLoginHeader('{\"Cookie\":\"a=1\"}')"
+        )
+        val js = io.legado.app.help.SourceLogin.run {
+            src.getLoginJs()
+        }
+        assertTrue(js!!.contains("putLoginHeader") || js.contains("Cookie"))
+    }
+
+    @Test
     fun epub_spine_toc_minimal() {
         val tmp = File.createTempFile("test", ".epub")
         try {

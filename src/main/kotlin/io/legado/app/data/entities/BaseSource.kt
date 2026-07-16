@@ -48,4 +48,11 @@ interface BaseSource {
                 .entrySet().associate { it.key to it.value.asString }
         }.getOrNull()
     }
+
+    /** Convenience used by book-source login scripts / API */
+    fun removeLoginHeader() {
+        CacheManager(getUserNameSpace()).delete("loginHeader_${getKey()}")
+    }
+
+    fun login(): Boolean = io.legado.app.help.SourceLogin.login(this)
 }

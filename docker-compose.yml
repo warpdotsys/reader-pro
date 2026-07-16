@@ -1,0 +1,14 @@
+services:
+  reader-pro:
+    build: .
+    image: reader-pro:3.2.14-rebuild
+    ports:
+      - "8080:8080"
+    volumes:
+      - reader-data:/app/storage
+    environment:
+      - JAVA_OPTS=-Xms256m -Xmx512m
+    restart: unless-stopped
+
+volumes:
+  reader-data:

@@ -75,7 +75,18 @@ best-of-3/               # 逆向归档（参考，不参与编译）
 - **TTS**：`EdgeTts`（反射原 TTSService → fallback text-to-speech.cn）
 - **测试**：`SmokeTest`（规则/书源/EPUB/路由冒烟）+ CI 跑 `test bootJar`
 
-仍可加深：umdlib、登录 JS 全链路、生产级 Mongo、接口行为对照压测。
+### 再推进
+
+- **UMD**：内置 `me.ag2s.umdlib` 只读解析（章节/正文/封面）
+- **书源登录**：`SourceLogin` + `POST /reader3/loginBookSource` / `logoutBookSource`；网书请求前 `ensureLoginIfNeeded`
+- **Docker**：`Dockerfile` + `docker-compose.yml` + Actions `docker.yml` 构建校验
+
+```bash
+docker compose up --build
+# http://localhost:8080/
+```
+
+仍可加深：loginUi 前端交互表单、生产级 Mongo 运维、更多 golden 对照用例。
 
 ## 说明
 

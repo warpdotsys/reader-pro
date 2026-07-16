@@ -21,14 +21,20 @@ class WebBook(
 
     fun getBookSource(): BookSource = source
 
-    suspend fun searchBook(key: String, page: Int = 1): List<SearchBook> =
-        BookList.searchBook(source, key, page, debugLogger)
+    suspend fun searchBook(key: String, page: Int = 1): List<SearchBook> {
+        io.legado.app.help.SourceLogin.ensureLoginIfNeeded(source, debugLogger)
+        return BookList.searchBook(source, key, page, debugLogger)
+    }
 
-    suspend fun exploreBook(url: String, page: Int = 1): List<SearchBook> =
-        BookList.exploreBook(source, url, page, debugLogger)
+    suspend fun exploreBook(url: String, page: Int = 1): List<SearchBook> {
+        io.legado.app.help.SourceLogin.ensureLoginIfNeeded(source, debugLogger)
+        return BookList.exploreBook(source, url, page, debugLogger)
+    }
 
-    suspend fun getBookInfo(bookUrl: String): Book =
-        BookInfo.getBookInfo(source, bookUrl, debugLogger)
+    suspend fun getBookInfo(bookUrl: String): Book {
+        io.legado.app.help.SourceLogin.ensureLoginIfNeeded(source, debugLogger)
+        return BookInfo.getBookInfo(source, bookUrl, debugLogger)
+    }
 
     suspend fun getChapterList(book: Book): List<BookChapter> =
         BookChapterList.analyzeChapterList(
