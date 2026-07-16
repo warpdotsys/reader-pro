@@ -268,8 +268,11 @@ open class YueduApi : RestVerticle() {
         }
     }
 
-    suspend fun getSystemInfo(ctx: RoutingContext): ReturnData =
-        ReturnData().setData(
+    suspend fun getSystemInfo(ctx: RoutingContext): ReturnData {
+        val jobs = runCatching {
+            SpringContextUtils.getBean(com.htmake.reader.schedule.ReaderJobs::class.java).status()
+        }.getOrNull()
+        return ReturnData().setData(
             mapOf(
                 "version" to "3.2.14-rebuild",
                 "secure" to appConfig.secure,
@@ -277,7 +280,11 @@ open class YueduApi : RestVerticle() {
                 "workDir" to ExtKt.getWorkDir(),
                 "mongoConfigured" to appConfig.mongoUri.isNotBlank(),
                 "remoteActivateEnabled" to appConfig.remoteActivateEnabled,
+                "autoBackupUserData" to appConfig.autoBackupUserData,
+                "smtpConfigured" to com.htmake.reader.help.SmtpMailer.isConfigured(appConfig),
+                "jobs" to jobs,
                 "routes" to "133+"
             )
         )
+    }
 }

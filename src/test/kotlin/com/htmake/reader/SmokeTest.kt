@@ -514,6 +514,43 @@ class SmokeTest {
     }
 
     @Test
+    fun smtp_mail_body_and_config_flag() {
+        val body = com.htmake.reader.help.SmtpMailer.buildCodeMailBody("123456", 10)
+        assertTrue(body.contains("123456"))
+        assertTrue(body.contains("10"))
+        val cfg = com.htmake.reader.config.AppConfig()
+        assertFalse(com.htmake.reader.help.SmtpMailer.isConfigured(cfg))
+        cfg.smtpHost = "smtp.example.com"
+        cfg.smtpFrom = "noreply@example.com"
+        assertTrue(com.htmake.reader.help.SmtpMailer.isConfigured(cfg))
+        val send = com.htmake.reader.help.SmtpMailer.sendText(cfg, "a@b.c", "t", "b")
+        // no real server — expect failure not crash
+        assertEquals(false, send["ok"])
+    }
+
+    @Test
+    fun reader_jobs_clear_inactive_pure() {
+        val name = "olduser-${System.currentTimeMillis()}"
+        val oldTs = System.currentTimeMillis() - 100L * 24 * 3600 * 1000
+        val users = io.vertx.core.json.JsonObject()
+            .put(name, io.vertx.core.json.JsonObject()
+                .put("password", "x")
+                .put("last_login_at", oldTs))
+            .put("fresh", io.vertx.core.json.JsonObject()
+                .put("password", "y")
+                .put("last_login_at", System.currentTimeMillis()))
+        com.htmake.reader.utils.ExtKt.saveStorage(arrayOf("data", "users"), users.encode())
+        val n = com.htmake.reader.schedule.ReaderJobs.runClearInactive(30, purgeData = false)
+        assertTrue(n >= 1)
+        val after = com.htmake.reader.utils.ExtKt.getStorage("data", "users")!!
+        assertFalse(after.contains(name))
+        assertTrue(after.contains("fresh"))
+        // backup all with file backend
+        val bak = com.htmake.reader.schedule.ReaderJobs.runAutoBackup(com.htmake.reader.config.AppConfig())
+        assertEquals(true, bak["ok"])
+    }
+
+    @Test
     fun mongo_backup_file_fallback_roundtrip() {
         val ns = "test-mongo-${System.currentTimeMillis()}"
         // seed local storage

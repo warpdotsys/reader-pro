@@ -15,6 +15,18 @@ reader:
     cacheChapterContent: true
     remoteActivateUrl: "https://r.htmake.com/reader3/activateLicense"
     remoteActivateEnabled: false
+    autoBackupUserData: false
+    autoClearInactiveUser: 0
+    shelfUpdateInteval: 30
+    autoBackupIntervalMs: 3600000
+    autoClearIntervalMs: 86400000
+    smtpHost: ""
+    smtpPort: 465
+    smtpUser: ""
+    smtpPassword: ""
+    smtpFrom: ""
+    smtpSsl: true
+    smtpStartTls: false
   server:
     port: 8080
 

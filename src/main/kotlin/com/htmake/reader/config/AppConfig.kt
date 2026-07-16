@@ -29,5 +29,19 @@ class AppConfig {
     var remoteActivateUrl: String = "https://r.htmake.com/reader3/activateLicense"
     /** When true, activateLicense also POSTs to remoteActivateUrl. */
     var remoteActivateEnabled: Boolean = false
+
+    // ---- SMTP (optional) ----
+    var smtpHost: String = ""
+    var smtpPort: Int = 465
+    var smtpUser: String = ""
+    var smtpPassword: String = ""
+    var smtpFrom: String = ""
+    var smtpSsl: Boolean = true
+    var smtpStartTls: Boolean = false
+
+    /** Auto backup interval for Spring scheduler (ms). Default 1h. */
+    var autoBackupIntervalMs: Long = 3_600_000
+    /** Inactive clear interval (ms). Default 24h. */
+    var autoClearIntervalMs: Long = 86_400_000
 }
 

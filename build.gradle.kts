@@ -60,6 +60,9 @@ dependencies {
     // Mongo optional
     implementation("org.mongodb:mongodb-driver-sync:4.11.1")
 
+    // SMTP optional (JavaMail)
+    implementation("com.sun.mail:javax.mail:1.6.2")
+
     // Logging
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
     implementation("org.slf4j:slf4j-api:1.7.36")

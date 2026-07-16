@@ -205,14 +205,25 @@ class LicenseController(cc: CoroutineContext) : BaseController(cc) {
         if (!email.contains("@")) return ReturnData().setErrorMsg("邮箱格式错误")
         val code = com.htmake.reader.help.EmailCodeStore.generateCode(6)
         com.htmake.reader.help.EmailCodeStore.put(email, code)
-        // SMTP not wired — in debug/non-secure return code for local testing
+        val body = com.htmake.reader.help.SmtpMailer.buildCodeMailBody(code, 10)
+        val smtp = if (com.htmake.reader.help.SmtpMailer.isConfigured(appConfig)) {
+            com.htmake.reader.help.SmtpMailer.sendText(
+                appConfig, email, "【Reader】邮箱验证码", body
+            )
+        } else {
+            mapOf("ok" to false, "error" to "smtp not configured")
+        }
+        val mailed = smtp["ok"] == true
         val data = linkedMapOf<String, Any?>(
             "email" to email,
-            "sent" to true,
+            "sent" to mailed,
             "ttlMinutes" to 10,
-            "note" to "SMTP未配置；secure=false 时返回 code 便于联调"
+            "smtp" to smtp
         )
-        if (!appConfig.secure || appConfig.debug) {
+        if (!mailed) {
+            data["note"] = "SMTP未配置或发送失败；secure=false/debug 时返回 code 便于联调"
+        }
+        if ((!appConfig.secure || appConfig.debug) && !mailed) {
             data["code"] = code
         }
         return ReturnData().setData(data)

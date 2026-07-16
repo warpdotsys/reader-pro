@@ -251,3 +251,10 @@ _business_utils_entities.py
 - **EmailCodeStore**：6 位验证码 TTL；sendCodeToEmail / activate 校验
 - **RemoteLicenseClient**：可选 POST 到 r.htmake.com
 - **clearInactiveUsers**：按 last_login 清理
+
+## Phase 23（定时任务 + SMTP）
+
+- **ReaderJobs**：@Scheduled autoBackup / clearInactive / shelf tick
+- **SmtpMailer**：可配置 SMTP 发验证码；未配置时降级返回 code
+- **AppConfig/yml**：smtp*、autoBackup*、autoClear*
+- **getSystemInfo**：jobs 状态、smtpConfigured
