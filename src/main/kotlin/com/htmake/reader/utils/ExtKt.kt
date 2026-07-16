@@ -70,4 +70,28 @@ object ExtKt {
     }
 
     fun getRelativePath(vararg parts: String): String = parts.joinToString(File.separator)
+
+    /** Original jar: random A-Za-z0-9 of given length. */
+    fun getRandomString(length: Int): String {
+        val allowed = "ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz0123456789"
+        return (1..length).map { allowed.random() }.joinToString("")
+    }
+
+    /**
+     * Original jar password scheme:
+     * `md5( md5(password + salt) + salt )`
+     */
+    fun genEncryptedPassword(password: String, salt: String): String {
+        val inner = io.legado.app.utils.MD5Utils.md5Encode(password + salt)
+        return io.legado.app.utils.MD5Utils.md5Encode(inner + salt)
+    }
+
+    fun verifyPassword(plain: String, stored: String, salt: String?): Boolean {
+        if (salt.isNullOrBlank()) {
+            // legacy plain / direct match
+            return stored == plain || stored == genEncryptedPassword(plain, "")
+        }
+        return stored == genEncryptedPassword(plain, salt) || stored == plain
+    }
 }
+

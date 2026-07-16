@@ -40,12 +40,23 @@ open class BaseController(
         if (!appConfig.secure) return true
         val username = context.session()?.get<String>("username")
         if (!username.isNullOrEmpty()) return true
+        // accessToken from query / header / Authorization Bearer
         val accessToken = context.queryParam("accessToken").firstOrNull().orEmpty()
+            .ifBlank { context.request().getHeader("accessToken").orEmpty() }
+            .ifBlank {
+                val auth = context.request().getHeader("Authorization").orEmpty()
+                when {
+                    auth.startsWith("Bearer ", true) -> auth.substring(7).trim()
+                    auth.startsWith("Token ", true) -> auth.substring(6).trim()
+                    else -> ""
+                }
+            }
         if (accessToken.isEmpty()) return false
         val parts = accessToken.split(":", limit = 2)
         if (parts.size < 2) return false
         val users = loadUserMap()
         val info = users[parts[0]] ?: return false
+        @Suppress("UNCHECKED_CAST")
         val tokenMap = info["token_map"] as? Map<*, *>
         if (tokenMap != null && tokenMap.containsKey(parts[1])) {
             context.session()?.put("username", parts[0])

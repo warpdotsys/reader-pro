@@ -514,6 +514,75 @@ class SmokeTest {
     }
 
     @Test
+    fun password_salt_md5_scheme() {
+        val salt = "Ab12Cd34"
+        val enc = com.htmake.reader.utils.ExtKt.genEncryptedPassword("secret", salt)
+        assertEquals(32, enc.length)
+        assertTrue(com.htmake.reader.utils.ExtKt.verifyPassword("secret", enc, salt))
+        assertFalse(com.htmake.reader.utils.ExtKt.verifyPassword("wrong", enc, salt))
+        // double-md5 formula: md5(md5(pw+salt)+salt)
+        val expected = io.legado.app.utils.MD5Utils.md5Encode(
+            io.legado.app.utils.MD5Utils.md5Encode("secret$salt") + salt
+        )
+        assertEquals(expected, enc)
+        val rnd = com.htmake.reader.utils.ExtKt.getRandomString(8)
+        assertEquals(8, rnd.length)
+    }
+
+    @Test
+    fun debugger_key_forms_emit_steps() {
+        // Without network: keys that fail early still emit classified steps
+        val msgs = mutableListOf<String>()
+        val dbg = io.legado.app.model.Debugger { msgs += it }
+        // empty source json will throw on lazy source — use minimal valid book source
+        val srcJson = """{"bookSourceUrl":"https://debug.example","bookSourceName":"d","searchUrl":"https://debug.example/s?q={{key}}","ruleSearch":{"bookList":"div","name":"a","bookUrl":"a@href"}}"""
+        try {
+            kotlinx.coroutines.runBlocking {
+                dbg.startDebug(
+                    io.legado.app.model.webBook.WebBook(srcJson, true, dbg, "test"),
+                    "关键词"
+                )
+            }
+        } catch (_: Exception) {
+            // network may fail; messages should still contain 搜索
+        }
+        assertTrue(msgs.any { it.contains("搜索") || it.contains("开始") || it.contains("结束") || it.contains("调试") }, msgs.toString())
+        msgs.clear()
+        try {
+            kotlinx.coroutines.runBlocking {
+                dbg.startDebug(
+                    io.legado.app.model.webBook.WebBook(srcJson, true, dbg, "test"),
+                    "++https://debug.example/toc"
+                )
+            }
+        } catch (_: Exception) {
+        }
+        assertTrue(msgs.any { it.contains("目录") }, msgs.toString())
+        msgs.clear()
+        try {
+            kotlinx.coroutines.runBlocking {
+                dbg.startDebug(
+                    io.legado.app.model.webBook.WebBook(srcJson, true, dbg, "test"),
+                    "--https://debug.example/ch1"
+                )
+            }
+        } catch (_: Exception) {
+        }
+        assertTrue(msgs.any { it.contains("正文") }, msgs.toString())
+        msgs.clear()
+        try {
+            kotlinx.coroutines.runBlocking {
+                dbg.startDebug(
+                    io.legado.app.model.webBook.WebBook(srcJson, true, dbg, "test"),
+                    "分类::https://debug.example/explore"
+                )
+            }
+        } catch (_: Exception) {
+        }
+        assertTrue(msgs.any { it.contains("发现") }, msgs.toString())
+    }
+
+    @Test
     fun rss_parse_rss2_and_atom_offline() {
         val src = io.legado.app.data.entities.RssSource(
             sourceUrl = "https://feed.example/rss",

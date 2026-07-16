@@ -16,14 +16,24 @@ class UserController(cc: CoroutineContext) : BaseController(cc) {
         val password = body.getString("password") ?: return rd.setErrorMsg("密码不能为空")
         if (!appConfig.secure) {
             ctx.session()?.put("username", username)
-            return rd.setData(mapOf("username" to username, "token" to "dev"))
+            return rd.setData(
+                mapOf(
+                    "username" to username,
+                    "token" to "dev",
+                    "accessToken" to "$username:dev"
+                )
+            )
         }
         val users = loadUserMap()
         val u = users[username] ?: return rd.setErrorMsg("用户不存在")
-        if (u["password"] != password) return rd.setErrorMsg("密码错误")
+        val stored = u["password"]?.toString() ?: ""
+        val salt = u["salt"]?.toString()
+        if (!ExtKt.verifyPassword(password, stored, salt)) return rd.setErrorMsg("密码错误")
         val token = UUID.randomUUID().toString().replace("-", "")
         @Suppress("UNCHECKED_CAST")
-        val tokenMap = (u["token_map"] as? MutableMap<String, Any?>) ?: mutableMapOf()
+        val tokenMap = (u["token_map"] as? MutableMap<String, Any?>)
+            ?: (u["token_map"] as? Map<*, *>)?.mapKeys { it.key.toString() }?.mapValues { it.value }?.toMutableMap()
+            ?: mutableMapOf()
         tokenMap[token] = System.currentTimeMillis()
         u["token_map"] = tokenMap
         u["token"] = token
@@ -80,13 +90,19 @@ class UserController(cc: CoroutineContext) : BaseController(cc) {
         val body = ctx.bodyAsJson ?: return rd.setErrorMsg("参数错误")
         val username = body.getString("username") ?: return rd.setErrorMsg("用户名不能为空")
         val password = body.getString("password") ?: return rd.setErrorMsg("密码不能为空")
+        val minLen = appConfig.minUserPasswordLength.takeIf { it > 0 } ?: 6
+        if (password.length < minLen) return rd.setErrorMsg("密码不能低于${minLen}位")
         val users = loadUserMap()
         if (users.containsKey(username)) return rd.setErrorMsg("用户已存在")
+        val salt = ExtKt.getRandomString(8)
+        val enc = ExtKt.genEncryptedPassword(password, salt)
         users[username] = mutableMapOf(
-            "password" to password,
+            "password" to enc,
+            "salt" to salt,
             "created_at" to System.currentTimeMillis(),
             "enableWebdav" to true,
-            "enableBookSource" to true
+            "enableBookSource" to true,
+            "enableRssSource" to true
         )
         saveUserMap(users)
         return rd.setData(true)
@@ -108,9 +124,15 @@ class UserController(cc: CoroutineContext) : BaseController(cc) {
         val body = ctx.bodyAsJson ?: return rd.setErrorMsg("参数错误")
         val username = body.getString("username") ?: return rd.setErrorMsg("用户名不能为空")
         val password = body.getString("password") ?: return rd.setErrorMsg("密码不能为空")
+        val minLen = appConfig.minUserPasswordLength.takeIf { it > 0 } ?: 6
+        if (password.length < minLen) return rd.setErrorMsg("密码不能低于${minLen}位")
         val users = loadUserMap()
         val u = users[username] ?: return rd.setErrorMsg("用户不存在")
-        u["password"] = password
+        val salt = ExtKt.getRandomString(8)
+        u["salt"] = salt
+        u["password"] = ExtKt.genEncryptedPassword(password, salt)
+        u["token_map"] = mutableMapOf<String, Any?>()
+        u["token"] = ""
         saveUserMap(users)
         return rd.setData(true)
     }

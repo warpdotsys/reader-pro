@@ -1,76 +1,97 @@
-/** Business rewrite from reader-pro-3.2.14.jar — readability / audit. */
-
 package com.htmake.reader.utils
 
+import com.htmake.reader.config.AppConfig
 import io.vertx.core.json.Json
 import io.vertx.core.json.JsonArray
 import io.vertx.core.json.JsonObject
 import java.io.File
-import java.security.MessageDigest
-import javax.crypto.SecretKeyFactory
-import javax.crypto.spec.PBEKeySpec
 
-/**
- * Storage / crypto / path helpers used across controllers.
- */
 object ExtKt {
-    @JvmStatic
-    var workDir: String = System.getProperty("reader.workDir", ".")
-
-    @JvmStatic
-    fun getWorkDir(vararg parts: String): String {
-        return parts.fold(File(workDir)) { acc, p -> File(acc, p) }.absolutePath
+    private fun appConfig(): AppConfig = try {
+        SpringContextUtils.getBean("appConfig", AppConfig::class.java)
+    } catch (_: Exception) {
+        AppConfig()
     }
 
-    @JvmStatic
-    fun getWorkDir(): String = File(workDir).absolutePath
+    fun getWorkDir(vararg parts: String): String {
+        val base = File(appConfig().workDir).absoluteFile
+        return if (parts.isEmpty()) base.absolutePath
+        else File(base, parts.joinToString(File.separator)).absolutePath
+    }
 
-    @JvmStatic
     fun getStorage(vararg path: String): String? {
-        val f = File(getWorkDir("storage", *path).let {
-            // allow "data/x" style via multiple args
-            File(getWorkDir(), listOf("storage", *path).joinToString(File.separator))
-        })
-        // simpler:
-        val file = path.fold(File(getWorkDir(), "storage")) { a, p -> File(a, p) }
-        val json = File(file.path + ".json")
-        val plain = file
-        return when {
-            json.isFile -> json.readText()
-            plain.isFile -> plain.readText()
-            else -> null
+        if (path.isEmpty()) return null
+        val file = File(getWorkDir(*path))
+        val withJson = if (file.extension.isEmpty()) File(file.parent, file.name + ".json") else file
+        val target = when {
+            file.isFile -> file
+            withJson.isFile -> withJson
+            else -> File(getWorkDir(*path.dropLast(1).toTypedArray() + (path.last() + ".json")))
+        }
+        return if (target.isFile) target.readText(Charsets.UTF_8) else null
+    }
+
+    fun saveStorage(path: Array<String>, value: String) {
+        if (path.isEmpty()) return
+        val name = path.last().let { if (it.endsWith(".json")) it else "$it.json" }
+        val dir = File(getWorkDir(*path.dropLast(1).toTypedArray()))
+        dir.mkdirs()
+        File(dir, name).writeText(value, Charsets.UTF_8)
+    }
+
+    fun asJsonArray(raw: String?): JsonArray? = try {
+        if (raw.isNullOrBlank()) null else JsonArray(raw)
+    } catch (_: Exception) {
+        null
+    }
+
+    fun asJsonObject(raw: String?): JsonObject? = try {
+        if (raw.isNullOrBlank()) null else JsonObject(raw)
+    } catch (_: Exception) {
+        null
+    }
+
+    fun jsonEncode(obj: Any?, pretty: Boolean = false): String = when (obj) {
+        null -> "null"
+        is String -> obj
+        is JsonObject -> if (pretty) obj.encodePrettily() else obj.encode()
+        is JsonArray -> if (pretty) obj.encodePrettily() else obj.encode()
+        else -> try {
+            if (pretty) Json.encodePrettily(obj) else Json.encode(obj)
+        } catch (_: Exception) {
+            obj.toString()
         }
     }
 
-    @JvmStatic
-    fun saveStorage(path: Array<String>, content: String, pretty: Boolean = false, unused: Any? = null) {
-        val base = path.fold(File(getWorkDir(), "storage")) { a, p -> File(a, p) }
-        val f = if (base.extension.isEmpty()) File(base.path + ".json") else base
-        f.parentFile?.mkdirs()
-        f.writeText(content)
-    }
-
-    @JvmStatic fun asJsonObject(raw: String?): JsonObject? =
-        raw?.let { try { JsonObject(it) } catch (_: Exception) { null } }
-
-    @JvmStatic fun asJsonArray(raw: String?): JsonArray? =
-        raw?.let { try { JsonArray(it) } catch (_: Exception) { null } }
-
-    @JvmStatic fun jsonEncode(obj: Any?, pretty: Boolean = false): String = Json.encode(obj)
-
-    @JvmStatic fun getRelativePath(vararg parts: String): String = parts.joinToString("/")
-
-    @JvmStatic
-    fun genEncryptedPassword(password: String, salt: String): String {
-        // approximate: jar uses salted hash (see hutool / custom in ExtKt CFR)
-        val md = MessageDigest.getInstance("SHA-256")
-        return md.digest((password + salt).toByteArray()).joinToString("") { "%02x".format(it) }
-    }
-
-    @JvmStatic
     fun deleteRecursively(f: File?) {
-        if (f == null || !f.exists()) return
+        if (f == null) return
         if (f.isDirectory) f.listFiles()?.forEach { deleteRecursively(it) }
         f.delete()
     }
+
+    fun getRelativePath(vararg parts: String): String = parts.joinToString(File.separator)
+
+    /** Original jar: random A-Za-z0-9 of given length. */
+    fun getRandomString(length: Int): String {
+        val allowed = "ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz0123456789"
+        return (1..length).map { allowed.random() }.joinToString("")
+    }
+
+    /**
+     * Original jar password scheme:
+     * `md5( md5(password + salt) + salt )`
+     */
+    fun genEncryptedPassword(password: String, salt: String): String {
+        val inner = io.legado.app.utils.MD5Utils.md5Encode(password + salt)
+        return io.legado.app.utils.MD5Utils.md5Encode(inner + salt)
+    }
+
+    fun verifyPassword(plain: String, stored: String, salt: String?): Boolean {
+        if (salt.isNullOrBlank()) {
+            // legacy plain / direct match
+            return stored == plain || stored == genEncryptedPassword(plain, "")
+        }
+        return stored == genEncryptedPassword(plain, salt) || stored == plain
+    }
 }
+

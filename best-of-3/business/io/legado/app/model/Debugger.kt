@@ -1,8 +1,7 @@
-/** Business rewrite from reader-pro-3.2.14.jar — phase7. */
-
 package io.legado.app.model
 
 import io.legado.app.data.entities.Book
+import io.legado.app.data.entities.BookChapter
 import io.legado.app.model.webBook.WebBook
 import io.legado.app.utils.HtmlFormatter
 import java.text.SimpleDateFormat
@@ -10,66 +9,60 @@ import java.util.Date
 import java.util.Locale
 
 /**
- * Debug entry key forms (from jar):
- * - absolute URL → infoDebug
- * - contains `::` → exploreDebug (after :: is explore URL)
- * - starts with `++` → tocDebug (toc url)
- * - starts with `--` → contentDebug (content url)
- * - else → searchDebug
+ * Book-source debug entry (legado key forms):
+ * - `http(s)://…` → info → toc → content
+ * - contains `::` → explore (url after ::)
+ * - starts with `++` → toc only
+ * - starts with `--` → content only
+ * - else → search → first hit detail chain
  */
-class Debugger(val logMsg: (String) -> Unit) : DebugLog {
+class Debugger(private val logMsg: (String) -> Unit) : DebugLog {
     private val debugTimeFormat = SimpleDateFormat("[mm:ss.SSS]", Locale.getDefault())
     private var startTime = System.currentTimeMillis()
 
-    override fun log(sourceUrl: String?, msg: String?) = log(sourceUrl, msg, false)
-
-    override fun log(message: String) {
+    override fun log(source: String?, msg: String?) {
+        if (msg == null) return
         val t = debugTimeFormat.format(Date(System.currentTimeMillis() - startTime))
-        logMsg("$t $message")
+        logMsg("$t $msg")
     }
 
-    override fun log(sourceUrl: String?, msg: String?, isHtml: Boolean) {
+    fun logHtml(source: String?, msg: String?) {
         if (msg == null) return
-        var printMsg = msg
-        if (isHtml) printMsg = HtmlFormatter.formatKeepImg(msg)
-        val t = debugTimeFormat.format(Date(System.currentTimeMillis() - startTime))
-        logMsg("$t $printMsg")
+        log(source, HtmlFormatter.formatKeepImg(msg).take(500))
     }
 
     suspend fun startDebug(webBook: WebBook, key: String) {
-        val bookSource = webBook.getBookSource()
-        val origin = bookSource.bookSourceUrl
+        val origin = webBook.getBookSource().bookSourceUrl
         startTime = System.currentTimeMillis()
-
+        log(origin, "◇开始调试 key=$key")
         when {
-            key.startsWith("http://") || key.startsWith("https://") -> {
-                log(origin, "⇒开始访问详情页:$key")
-                val book = Book(bookUrl = key, origin = origin)
-                infoDebug(webBook, book)
+            key.startsWith("http://", true) || key.startsWith("https://", true) -> {
+                log(origin, "⇒详情页:$key")
+                infoDebug(webBook, Book(bookUrl = key, origin = origin))
             }
             key.contains("::") -> {
                 val url = key.substringAfter("::")
-                log(origin, "⇒开始访问发现页:$url")
+                log(origin, "⇒发现页:$url")
                 exploreDebug(webBook, url)
             }
             key.startsWith("++") -> {
-                val tocUrl = key.substring(2)
-                log(origin, "⇒开始访问目录页:$tocUrl")
-                val book = Book(bookUrl = tocUrl, tocUrl = tocUrl, origin = origin)
-                tocDebug(webBook, book)
+                val tocUrl = key.removePrefix("++")
+                log(origin, "⇒目录页:$tocUrl")
+                tocDebug(webBook, Book(bookUrl = tocUrl, tocUrl = tocUrl, origin = origin))
             }
             key.startsWith("--") -> {
-                val contentUrl = key.substring(2)
-                log(origin, "⇒开始访问正文页:$contentUrl")
+                val contentUrl = key.removePrefix("--")
+                log(origin, "⇒正文页:$contentUrl")
                 val book = Book(bookUrl = contentUrl, origin = origin)
-                val chapter = io.legado.app.data.entities.BookChapter(url = contentUrl, title = "debug", bookUrl = contentUrl)
+                val chapter = BookChapter(url = contentUrl, title = "debug", bookUrl = contentUrl)
                 contentDebug(webBook, book, chapter)
             }
             else -> {
-                log(origin, "⇒开始搜索关键字:$key")
+                log(origin, "⇒搜索关键字:$key")
                 searchDebug(webBook, key)
             }
         }
+        log(origin, "◇结束")
     }
 
     private suspend fun searchDebug(webBook: WebBook, key: String) {
@@ -84,7 +77,16 @@ class Debugger(val logMsg: (String) -> Unit) : DebugLog {
             return
         }
         log(origin, "⇒取第一条进入详情")
-        infoDebug(webBook, Book(bookUrl = first.bookUrl, name = first.name, author = first.author, origin = origin, coverUrl = first.coverUrl))
+        infoDebug(
+            webBook,
+            Book(
+                bookUrl = first.bookUrl,
+                name = first.name,
+                author = first.author,
+                origin = origin,
+                coverUrl = first.coverUrl
+            )
+        )
     }
 
     private suspend fun exploreDebug(webBook: WebBook, url: String) {
@@ -95,7 +97,10 @@ class Debugger(val logMsg: (String) -> Unit) : DebugLog {
             log(origin, "  [$i] ${s.name} - ${s.author}")
         }
         val first = list.firstOrNull() ?: return
-        infoDebug(webBook, Book(bookUrl = first.bookUrl, name = first.name, author = first.author, origin = origin))
+        infoDebug(
+            webBook,
+            Book(bookUrl = first.bookUrl, name = first.name, author = first.author, origin = origin)
+        )
     }
 
     private suspend fun infoDebug(webBook: WebBook, book: Book) {
@@ -109,8 +114,8 @@ class Debugger(val logMsg: (String) -> Unit) : DebugLog {
         val origin = webBook.getBookSource().bookSourceUrl
         val chapters = webBook.getChapterList(book)
         log(origin, "≡目录 ${chapters.size} 章")
-        chapters.take(3).forEach { log(origin, "  - ${it.title}") }
-        if (chapters.size > 3) log(origin, "  …")
+        chapters.take(5).forEach { log(origin, "  - ${it.title}") }
+        if (chapters.size > 5) log(origin, "  …")
         val first = chapters.firstOrNull() ?: return
         contentDebug(webBook, book, first, chapters.getOrNull(1)?.url)
     }
@@ -118,7 +123,7 @@ class Debugger(val logMsg: (String) -> Unit) : DebugLog {
     private suspend fun contentDebug(
         webBook: WebBook,
         book: Book,
-        chapter: io.legado.app.data.entities.BookChapter,
+        chapter: BookChapter,
         nextUrl: String? = null
     ) {
         val origin = webBook.getBookSource().bookSourceUrl

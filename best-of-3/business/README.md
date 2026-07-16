@@ -230,3 +230,10 @@ _business_utils_entities.py
 - **Rss**：RSS2/Atom、enclosure/media、sortUrl 分类、parseArticlesFromBody 离线
 - **getLocalBookImage**：PDF/CBZ 页图流；cover 支持 bookUrl→LocalMedia
 - **getRssSorts** API
+
+## Phase 20（Debugger + 鉴权加盐）
+
+- **Debugger**：搜索/发现/详情/目录/正文链路；:: ++ -- 键位；时间戳日志
+- **密码**：md5(md5(pw+salt)+salt) + salt 存盘；addUser/resetPassword 对齐 jar
+- **checkAuth**：accessToken 查询/头/Bearer；session
+- **getInvalidBookSources**：读 invalid 缓存目录

@@ -122,8 +122,20 @@ suspend fun BookController.bookSourceDebugSSE(ctx: RoutingContext) {
 suspend fun BookController.getInvalidBookSources(ctx: RoutingContext): ReturnData {
     val rd = ReturnData()
     if (!checkAuth(ctx)) return rd.setData("NEED_LOGIN").setErrorMsg("请登录后使用")
-    // simplified empty list if none
-    return rd.setData(emptyList<Any>())
+    val ns = getUserNameSpace(ctx)
+    val cache = getInvalidBookSourceCache(ns)
+    // ACache stores by hashCode key; list dir of cache files if present
+    val dir = java.io.File(com.htmake.reader.utils.ExtKt.getWorkDir("storage", "cache", "invalidBookSourceCache", ns))
+    val list = if (!dir.isDirectory) emptyList()
+    else dir.listFiles()?.mapNotNull { f ->
+        runCatching {
+            val text = f.readText()
+            val body = if (text.startsWith("expireAt=")) text.substringAfter('\n') else text
+            JsonObject(body).map
+        }.getOrNull()
+    } ?: emptyList()
+    // also expose known invalid via memory helper if BookController tracks any
+    return rd.setData(list.ifEmpty { emptyList() })
 }
 
 fun BookController.getTxtTocRules(ctx: RoutingContext): ReturnData =
