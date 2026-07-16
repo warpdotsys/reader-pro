@@ -1,0 +1,418 @@
+   public suspend fun getSpeakStream(httpTts: HttpTTS, speakText: String, speechRate: Int): InputStream? {
+      // $VF: Couldn't be decompiled
+      // Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
+      // java.lang.RuntimeException: parsing failure!
+      //   at org.jetbrains.java.decompiler.modules.decompiler.decompose.DomHelper.parseGraph(DomHelper.java:211)
+      //   at org.jetbrains.java.decompiler.modules.decompiler.decompose.DomHelper.createStatement(DomHelper.java:27)
+      //   at org.jetbrains.java.decompiler.main.rels.MethodProcessor.codeToJava(MethodProcessor.java:157)
+      //
+      // Bytecode:
+      // 000: aload 4
+      // 002: instanceof com/htmake/reader/api/controller/BookController$getSpeakStream$1
+      // 005: ifeq 029
+      // 008: aload 4
+      // 00a: checkcast com/htmake/reader/api/controller/BookController$getSpeakStream$1
+      // 00d: astore 22
+      // 00f: aload 22
+      // 011: getfield com/htmake/reader/api/controller/BookController$getSpeakStream$1.label I
+      // 014: ldc -2147483648
+      // 016: iand
+      // 017: ifeq 029
+      // 01a: aload 22
+      // 01c: dup
+      // 01d: getfield com/htmake/reader/api/controller/BookController$getSpeakStream$1.label I
+      // 020: ldc -2147483648
+      // 022: isub
+      // 023: putfield com/htmake/reader/api/controller/BookController$getSpeakStream$1.label I
+      // 026: goto 035
+      // 029: new com/htmake/reader/api/controller/BookController$getSpeakStream$1
+      // 02c: dup
+      // 02d: aload 0
+      // 02e: aload 4
+      // 030: invokespecial com/htmake/reader/api/controller/BookController$getSpeakStream$1.<init> (Lcom/htmake/reader/api/controller/BookController;Lkotlin/coroutines/Continuation;)V
+      // 033: astore 22
+      // 035: aload 22
+      // 037: getfield com/htmake/reader/api/controller/BookController$getSpeakStream$1.result Ljava/lang/Object;
+      // 03a: astore 21
+      // 03c: invokestatic kotlin/coroutines/intrinsics/IntrinsicsKt.getCOROUTINE_SUSPENDED ()Ljava/lang/Object;
+      // 03f: astore 23
+      // 041: aload 22
+      // 043: getfield com/htmake/reader/api/controller/BookController$getSpeakStream$1.label I
+      // 046: tableswitch 849 0 1 22 170
+      // 05c: aload 21
+      // 05e: invokestatic kotlin/ResultKt.throwOnFailure (Ljava/lang/Object;)V
+      // 061: new kotlin/jvm/internal/Ref$IntRef
+      // 064: dup
+      // 065: invokespecial kotlin/jvm/internal/Ref$IntRef.<init> ()V
+      // 068: astore 5
+      // 06a: nop
+      // 06b: nop
+      // 06c: new io/legado/app/model/analyzeRule/AnalyzeUrl
+      // 06f: dup
+      // 070: aload 1
+      // 071: invokevirtual io/legado/app/data/entities/HttpTTS.getUrl ()Ljava/lang/String;
+      // 074: aconst_null
+      // 075: aconst_null
+      // 076: aload 2
+      // 077: iload 3
+      // 078: invokestatic kotlin/coroutines/jvm/internal/Boxing.boxInt (I)Ljava/lang/Integer;
+      // 07b: aconst_null
+      // 07c: aload 1
+      // 07d: checkcast io/legado/app/data/entities/BaseSource
+      // 080: aconst_null
+      // 081: aconst_null
+      // 082: aload 1
+      // 083: bipush 1
+      // 084: invokevirtual io/legado/app/data/entities/HttpTTS.getHeaderMap (Z)Ljava/util/HashMap;
+      // 087: checkcast java/util/Map
+      // 08a: getstatic io/legado/app/model/Debug.INSTANCE Lio/legado/app/model/Debug;
+      // 08d: checkcast io/legado/app/model/DebugLog
+      // 090: sipush 422
+      // 093: aconst_null
+      // 094: invokespecial io/legado/app/model/analyzeRule/AnalyzeUrl.<init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Lio/legado/app/data/entities/BaseSource;Lio/legado/app/model/analyzeRule/RuleDataInterface;Lio/legado/app/data/entities/BookChapter;Ljava/util/Map;Lio/legado/app/model/DebugLog;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+      // 097: astore 6
+      // 099: new kotlin/jvm/internal/Ref$ObjectRef
+      // 09c: dup
+      // 09d: invokespecial kotlin/jvm/internal/Ref$ObjectRef.<init> ()V
+      // 0a0: astore 7
+      // 0a2: aload 7
+      // 0a4: astore 19
+      // 0a6: aload 6
+      // 0a8: aload 22
+      // 0aa: aload 22
+      // 0ac: aload 0
+      // 0ad: putfield com/htmake/reader/api/controller/BookController$getSpeakStream$1.L$0 Ljava/lang/Object;
+      // 0b0: aload 22
+      // 0b2: aload 1
+      // 0b3: putfield com/htmake/reader/api/controller/BookController$getSpeakStream$1.L$1 Ljava/lang/Object;
+      // 0b6: aload 22
+      // 0b8: aload 2
+      // 0b9: putfield com/htmake/reader/api/controller/BookController$getSpeakStream$1.L$2 Ljava/lang/Object;
+      // 0bc: aload 22
+      // 0be: aload 5
+      // 0c0: putfield com/htmake/reader/api/controller/BookController$getSpeakStream$1.L$3 Ljava/lang/Object;
+      // 0c3: aload 22
+      // 0c5: aload 6
+      // 0c7: putfield com/htmake/reader/api/controller/BookController$getSpeakStream$1.L$4 Ljava/lang/Object;
+      // 0ca: aload 22
+      // 0cc: aload 7
+      // 0ce: putfield com/htmake/reader/api/controller/BookController$getSpeakStream$1.L$5 Ljava/lang/Object;
+      // 0d1: aload 22
+      // 0d3: aload 19
+      // 0d5: putfield com/htmake/reader/api/controller/BookController$getSpeakStream$1.L$6 Ljava/lang/Object;
+      // 0d8: aload 22
+      // 0da: iload 3
+      // 0db: putfield com/htmake/reader/api/controller/BookController$getSpeakStream$1.I$0 I
+      // 0de: aload 22
+      // 0e0: bipush 1
+      // 0e1: putfield com/htmake/reader/api/controller/BookController$getSpeakStream$1.label I
+      // 0e4: invokevirtual io/legado/app/model/analyzeRule/AnalyzeUrl.getResponseAwait (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+      // 0e7: dup
+      // 0e8: aload 23
+      // 0ea: if_acmpne 141
+      // 0ed: aload 23
+      // 0ef: areturn
+      // 0f0: aload 22
+      // 0f2: getfield com/htmake/reader/api/controller/BookController$getSpeakStream$1.I$0 I
+      // 0f5: istore 3
+      // 0f6: aload 22
+      // 0f8: getfield com/htmake/reader/api/controller/BookController$getSpeakStream$1.L$6 Ljava/lang/Object;
+      // 0fb: checkcast kotlin/jvm/internal/Ref$ObjectRef
+      // 0fe: astore 19
+      // 100: aload 22
+      // 102: getfield com/htmake/reader/api/controller/BookController$getSpeakStream$1.L$5 Ljava/lang/Object;
+      // 105: checkcast kotlin/jvm/internal/Ref$ObjectRef
+      // 108: astore 7
+      // 10a: aload 22
+      // 10c: getfield com/htmake/reader/api/controller/BookController$getSpeakStream$1.L$4 Ljava/lang/Object;
+      // 10f: checkcast io/legado/app/model/analyzeRule/AnalyzeUrl
+      // 112: astore 6
+      // 114: aload 22
+      // 116: getfield com/htmake/reader/api/controller/BookController$getSpeakStream$1.L$3 Ljava/lang/Object;
+      // 119: checkcast kotlin/jvm/internal/Ref$IntRef
+      // 11c: astore 5
+      // 11e: aload 22
+      // 120: getfield com/htmake/reader/api/controller/BookController$getSpeakStream$1.L$2 Ljava/lang/Object;
+      // 123: checkcast java/lang/String
+      // 126: astore 2
+      // 127: aload 22
+      // 129: getfield com/htmake/reader/api/controller/BookController$getSpeakStream$1.L$1 Ljava/lang/Object;
+      // 12c: checkcast io/legado/app/data/entities/HttpTTS
+      // 12f: astore 1
+      // 130: aload 22
+      // 132: getfield com/htmake/reader/api/controller/BookController$getSpeakStream$1.L$0 Ljava/lang/Object;
+      // 135: checkcast com/htmake/reader/api/controller/BookController
+      // 138: astore 0
+      // 139: nop
+      // 13a: aload 21
+      // 13c: invokestatic kotlin/ResultKt.throwOnFailure (Ljava/lang/Object;)V
+      // 13f: aload 21
+      // 141: astore 20
+      // 143: aload 19
+      // 145: aload 20
+      // 147: putfield kotlin/jvm/internal/Ref$ObjectRef.element Ljava/lang/Object;
+      // 14a: aload 0
+      // 14b: invokevirtual com/htmake/reader/api/controller/BookController.getCoroutineContext ()Lkotlin/coroutines/CoroutineContext;
+      // 14e: invokestatic kotlinx/coroutines/JobKt.ensureActive (Lkotlin/coroutines/CoroutineContext;)V
+      // 151: aload 1
+      // 152: invokevirtual io/legado/app/data/entities/HttpTTS.getLoginCheckJs ()Ljava/lang/String;
+      // 155: astore 8
+      // 157: aload 8
+      // 159: astore 9
+      // 15b: aload 9
+      // 15d: ifnonnull 164
+      // 160: bipush 0
+      // 161: goto 184
+      // 164: aload 9
+      // 166: checkcast java/lang/CharSequence
+      // 169: astore 10
+      // 16b: bipush 0
+      // 16c: istore 11
+      // 16e: aload 10
+      // 170: invokestatic kotlin/text/StringsKt.isBlank (Ljava/lang/CharSequence;)Z
+      // 173: ifne 17a
+      // 176: bipush 1
+      // 177: goto 17b
+      // 17a: bipush 0
+      // 17b: bipush 1
+      // 17c: if_icmpne 183
+      // 17f: bipush 1
+      // 180: goto 184
+      // 183: bipush 0
+      // 184: ifeq 1af
+      // 187: aload 7
+      // 189: aload 6
+      // 18b: aload 8
+      // 18d: aload 7
+      // 18f: getfield kotlin/jvm/internal/Ref$ObjectRef.element Ljava/lang/Object;
+      // 192: invokevirtual io/legado/app/model/analyzeRule/AnalyzeUrl.evalJS (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
+      // 195: astore 9
+      // 197: aload 9
+      // 199: ifnonnull 1a7
+      // 19c: new java/lang/NullPointerException
+      // 19f: dup
+      // 1a0: ldc_w "null cannot be cast to non-null type okhttp3.Response"
+      // 1a3: invokespecial java/lang/NullPointerException.<init> (Ljava/lang/String;)V
+      // 1a6: athrow
+      // 1a7: aload 9
+      // 1a9: checkcast okhttp3/Response
+      // 1ac: putfield kotlin/jvm/internal/Ref$ObjectRef.element Ljava/lang/Object;
+      // 1af: aload 7
+      // 1b1: getfield kotlin/jvm/internal/Ref$ObjectRef.element Ljava/lang/Object;
+      // 1b4: checkcast okhttp3/Response
+      // 1b7: invokevirtual okhttp3/Response.headers ()Lokhttp3/Headers;
+      // 1ba: ldc_w "Content-Type"
+      // 1bd: invokevirtual okhttp3/Headers.get (Ljava/lang/String;)Ljava/lang/String;
+      // 1c0: astore 9
+      // 1c2: aload 9
+      // 1c4: ifnonnull 1ca
+      // 1c7: goto 27e
+      // 1ca: aload 9
+      // 1cc: astore 10
+      // 1ce: bipush 0
+      // 1cf: istore 11
+      // 1d1: bipush 0
+      // 1d2: istore 12
+      // 1d4: aload 10
+      // 1d6: astore 13
+      // 1d8: bipush 0
+      // 1d9: istore 14
+      // 1db: aload 1
+      // 1dc: invokevirtual io/legado/app/data/entities/HttpTTS.getContentType ()Ljava/lang/String;
+      // 1df: astore 15
+      // 1e1: aload 13
+      // 1e3: ldc_w "application/json"
+      // 1e6: invokestatic kotlin/jvm/internal/Intrinsics.areEqual (Ljava/lang/Object;Ljava/lang/Object;)Z
+      // 1e9: ifeq 206
+      // 1ec: new io/legado/app/exception/NoStackTraceException
+      // 1ef: dup
+      // 1f0: aload 7
+      // 1f2: getfield kotlin/jvm/internal/Ref$ObjectRef.element Ljava/lang/Object;
+      // 1f5: checkcast okhttp3/Response
+      // 1f8: invokevirtual okhttp3/Response.body ()Lokhttp3/ResponseBody;
+      // 1fb: dup
+      // 1fc: invokestatic kotlin/jvm/internal/Intrinsics.checkNotNull (Ljava/lang/Object;)V
+      // 1ff: invokevirtual okhttp3/ResponseBody.string ()Ljava/lang/String;
+      // 202: invokespecial io/legado/app/exception/NoStackTraceException.<init> (Ljava/lang/String;)V
+      // 205: athrow
+      // 206: aload 15
+      // 208: astore 16
+      // 20a: aload 16
+      // 20c: ifnonnull 213
+      // 20f: bipush 0
+      // 210: goto 233
+      // 213: aload 16
+      // 215: checkcast java/lang/CharSequence
+      // 218: astore 17
+      // 21a: bipush 0
+      // 21b: istore 18
+      // 21d: aload 17
+      // 21f: invokestatic kotlin/text/StringsKt.isBlank (Ljava/lang/CharSequence;)Z
+      // 222: ifne 229
+      // 225: bipush 1
+      // 226: goto 22a
+      // 229: bipush 0
+      // 22a: bipush 1
+      // 22b: if_icmpne 232
+      // 22e: bipush 1
+      // 22f: goto 233
+      // 232: bipush 0
+      // 233: ifeq 27c
+      // 236: aload 13
+      // 238: checkcast java/lang/CharSequence
+      // 23b: astore 16
+      // 23d: aload 15
+      // 23f: astore 17
+      // 241: bipush 0
+      // 242: istore 18
+      // 244: new kotlin/text/Regex
+      // 247: dup
+      // 248: aload 17
+      // 24a: invokespecial kotlin/text/Regex.<init> (Ljava/lang/String;)V
+      // 24d: astore 17
+      // 24f: bipush 0
+      // 250: istore 18
+      // 252: aload 17
+      // 254: aload 16
+      // 256: invokevirtual kotlin/text/Regex.matches (Ljava/lang/CharSequence;)Z
+      // 259: ifne 27c
+      // 25c: new io/legado/app/exception/NoStackTraceException
+      // 25f: dup
+      // 260: ldc_w "TTS服务器返回错误："
+      // 263: aload 7
+      // 265: getfield kotlin/jvm/internal/Ref$ObjectRef.element Ljava/lang/Object;
+      // 268: checkcast okhttp3/Response
+      // 26b: invokevirtual okhttp3/Response.body ()Lokhttp3/ResponseBody;
+      // 26e: dup
+      // 26f: invokestatic kotlin/jvm/internal/Intrinsics.checkNotNull (Ljava/lang/Object;)V
+      // 272: invokevirtual okhttp3/ResponseBody.string ()Ljava/lang/String;
+      // 275: invokestatic kotlin/jvm/internal/Intrinsics.stringPlus (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/String;
+      // 278: invokespecial io/legado/app/exception/NoStackTraceException.<init> (Ljava/lang/String;)V
+      // 27b: athrow
+      // 27c: nop
+      // 27d: nop
+      // 27e: aload 0
+      // 27f: invokevirtual com/htmake/reader/api/controller/BookController.getCoroutineContext ()Lkotlin/coroutines/CoroutineContext;
+      // 282: invokestatic kotlinx/coroutines/JobKt.ensureActive (Lkotlin/coroutines/CoroutineContext;)V
+      // 285: aload 7
+      // 287: getfield kotlin/jvm/internal/Ref$ObjectRef.element Ljava/lang/Object;
+      // 28a: checkcast okhttp3/Response
+      // 28d: invokevirtual okhttp3/Response.body ()Lokhttp3/ResponseBody;
+      // 290: dup
+      // 291: invokestatic kotlin/jvm/internal/Intrinsics.checkNotNull (Ljava/lang/Object;)V
+      // 294: invokevirtual okhttp3/ResponseBody.byteStream ()Ljava/io/InputStream;
+      // 297: astore 9
+      // 299: bipush 0
+      // 29a: istore 10
+      // 29c: bipush 0
+      // 29d: istore 11
+      // 29f: aload 9
+      // 2a1: astore 12
+      // 2a3: bipush 0
+      // 2a4: istore 13
+      // 2a6: aload 5
+      // 2a8: bipush 0
+      // 2a9: putfield kotlin/jvm/internal/Ref$IntRef.element I
+      // 2ac: aload 12
+      // 2ae: areturn
+      // 2af: astore 6
+      // 2b1: aload 6
+      // 2b3: astore 7
+      // 2b5: aload 7
+      // 2b7: instanceof java/util/concurrent/CancellationException
+      // 2ba: ifeq 2c0
+      // 2bd: aload 6
+      // 2bf: athrow
+      // 2c0: aload 7
+      // 2c2: instanceof com/script/ScriptException
+      // 2c5: ifeq 2cc
+      // 2c8: bipush 1
+      // 2c9: goto 2d1
+      // 2cc: aload 7
+      // 2ce: instanceof org/mozilla/javascript/WrappedException
+      // 2d1: ifeq 2ef
+      // 2d4: invokestatic com/htmake/reader/api/controller/BookControllerKt.access$getLogger$p ()Lmu/KLogger;
+      // 2d7: ldc_w "js错误\n"
+      // 2da: aload 6
+      // 2dc: invokevirtual java/lang/Exception.getLocalizedMessage ()Ljava/lang/String;
+      // 2df: invokestatic kotlin/jvm/internal/Intrinsics.stringPlus (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/String;
+      // 2e2: aload 6
+      // 2e4: checkcast java/lang/Throwable
+      // 2e7: invokeinterface mu/KLogger.error (Ljava/lang/String;Ljava/lang/Throwable;)V 3
+      // 2ec: aload 6
+      // 2ee: athrow
+      // 2ef: aload 7
+      // 2f1: instanceof java/net/SocketTimeoutException
+      // 2f4: ifeq 2fb
+      // 2f7: bipush 1
+      // 2f8: goto 300
+      // 2fb: aload 7
+      // 2fd: instanceof java/net/ConnectException
+      // 300: ifeq 33b
+      // 303: aload 5
+      // 305: getfield kotlin/jvm/internal/Ref$IntRef.element I
+      // 308: istore 8
+      // 30a: aload 5
+      // 30c: iload 8
+      // 30e: bipush 1
+      // 30f: iadd
+      // 310: putfield kotlin/jvm/internal/Ref$IntRef.element I
+      // 313: aload 5
+      // 315: getfield kotlin/jvm/internal/Ref$IntRef.element I
+      // 318: bipush 5
+      // 319: if_icmple 06a
+      // 31c: ldc_w "tts超时或连接错误超过5次\n"
+      // 31f: aload 6
+      // 321: invokevirtual java/lang/Exception.getLocalizedMessage ()Ljava/lang/String;
+      // 324: invokestatic kotlin/jvm/internal/Intrinsics.stringPlus (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/String;
+      // 327: astore 8
+      // 329: invokestatic com/htmake/reader/api/controller/BookControllerKt.access$getLogger$p ()Lmu/KLogger;
+      // 32c: aload 8
+      // 32e: aload 6
+      // 330: checkcast java/lang/Throwable
+      // 333: invokeinterface mu/KLogger.error (Ljava/lang/String;Ljava/lang/Throwable;)V 3
+      // 338: aload 6
+      // 33a: athrow
+      // 33b: aload 5
+      // 33d: getfield kotlin/jvm/internal/Ref$IntRef.element I
+      // 340: istore 8
+      // 342: aload 5
+      // 344: iload 8
+      // 346: bipush 1
+      // 347: iadd
+      // 348: putfield kotlin/jvm/internal/Ref$IntRef.element I
+      // 34b: invokestatic com/htmake/reader/api/controller/BookControllerKt.access$getLogger$p ()Lmu/KLogger;
+      // 34e: ldc_w "tts下载错误\n"
+      // 351: aload 6
+      // 353: invokevirtual java/lang/Exception.getLocalizedMessage ()Ljava/lang/String;
+      // 356: invokestatic kotlin/jvm/internal/Intrinsics.stringPlus (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/String;
+      // 359: aload 6
+      // 35b: checkcast java/lang/Throwable
+      // 35e: invokeinterface mu/KLogger.error (Ljava/lang/String;Ljava/lang/Throwable;)V 3
+      // 363: aload 5
+      // 365: getfield kotlin/jvm/internal/Ref$IntRef.element I
+      // 368: bipush 5
+      // 369: if_icmple 383
+      // 36c: ldc_w "TTS服务器连续5次错误，已暂停阅读。"
+      // 36f: astore 8
+      // 371: invokestatic com/htmake/reader/api/controller/BookControllerKt.access$getLogger$p ()Lmu/KLogger;
+      // 374: aload 8
+      // 376: aload 6
+      // 378: checkcast java/lang/Throwable
+      // 37b: invokeinterface mu/KLogger.error (Ljava/lang/String;Ljava/lang/Throwable;)V 3
+      // 380: aload 6
+      // 382: athrow
+      // 383: invokestatic com/htmake/reader/api/controller/BookControllerKt.access$getLogger$p ()Lmu/KLogger;
+      // 386: ldc_w "TTS下载音频出错，使用无声音频代替。\n朗读文本："
+      // 389: aload 2
+      // 38a: invokestatic kotlin/jvm/internal/Intrinsics.stringPlus (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/String;
+      // 38d: invokeinterface mu/KLogger.error (Ljava/lang/String;)V 2
+      // 392: goto 395
+      // 395: aconst_null
+      // 396: areturn
+      // 397: new java/lang/IllegalStateException
+      // 39a: dup
+      // 39b: ldc_w "call to 'resume' before 'invoke' with coroutine"
+      // 39e: invokespecial java/lang/IllegalStateException.<init> (Ljava/lang/String;)V
+      // 3a1: athrow
+   }

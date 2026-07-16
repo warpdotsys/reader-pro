@@ -1,0 +1,99 @@
+    public final Object saveShelfBookProgress(@NotNull final Book book, @NotNull final BookChapter bookChapter, @NotNull final String userNameSpace, @NotNull final Continuation<? super Unit> $completion) {
+        final Object editShelfBook = this.editShelfBook(book, userNameSpace, (Function1<? super Book, Book>)new BookController$saveShelfBookProgress.BookController$saveShelfBookProgress$2(bookChapter), (Continuation<? super Book>)$completion);
+        if (editShelfBook == IntrinsicsKt.getCOROUTINE_SUSPENDED()) {
+            return editShelfBook;
+        }
+        return Unit.INSTANCE;
+    }
+    
+    @Nullable
+    public final Object saveShelfBookLatestChapter(@NotNull Book book, @NotNull List<BookChapter> bookChapterList, @NotNull String userNameSpace, @Nullable Mutex mutex, @NotNull final Continuation<? super Unit> $completion) {
+        final Continuation $continuation;
+        Label_0053: {
+            if ($completion instanceof BookController$saveShelfBookLatestChapter.BookController$saveShelfBookLatestChapter$1) {
+                final BookController$saveShelfBookLatestChapter.BookController$saveShelfBookLatestChapter$1 bookController$saveShelfBookLatestChapter$1 = (BookController$saveShelfBookLatestChapter.BookController$saveShelfBookLatestChapter$1)$completion;
+                if ((bookController$saveShelfBookLatestChapter$1.label & Integer.MIN_VALUE) != 0x0) {
+                    final BookController$saveShelfBookLatestChapter.BookController$saveShelfBookLatestChapter$1 bookController$saveShelfBookLatestChapter$2 = bookController$saveShelfBookLatestChapter$1;
+                    bookController$saveShelfBookLatestChapter$2.label -= Integer.MIN_VALUE;
+                    break Label_0053;
+                }
+            }
+            $continuation = (Continuation)new BookController$saveShelfBookLatestChapter.BookController$saveShelfBookLatestChapter$1(this, (Continuation)$completion);
+        }
+        final Object $result = ((BookController$saveShelfBookLatestChapter.BookController$saveShelfBookLatestChapter$1)$continuation).result;
+        final Object coroutine_SUSPENDED = IntrinsicsKt.getCOROUTINE_SUSPENDED();
+    Label_0170_Outer:
+        while (true) {
+            while (true) {
+                switch (((BookController$saveShelfBookLatestChapter.BookController$saveShelfBookLatestChapter$1)$continuation).label) {
+                    case 0: {
+                        ResultKt.throwOnFailure($result);
+                        try {
+                            final Mutex mutex2 = mutex;
+                            while (true) {
+                                if (mutex2 != null) {
+                                    final Mutex mutex3 = mutex2;
+                                    final Object o = null;
+                                    final Continuation continuation = $continuation;
+                                    final int n = 1;
+                                    final Object o2 = null;
+                                    ((BookController$saveShelfBookLatestChapter.BookController$saveShelfBookLatestChapter$1)$continuation).L$0 = this;
+                                    ((BookController$saveShelfBookLatestChapter.BookController$saveShelfBookLatestChapter$1)$continuation).L$1 = book;
+                                    ((BookController$saveShelfBookLatestChapter.BookController$saveShelfBookLatestChapter$1)$continuation).L$2 = bookChapterList;
+                                    ((BookController$saveShelfBookLatestChapter.BookController$saveShelfBookLatestChapter$1)$continuation).L$3 = userNameSpace;
+                                    ((BookController$saveShelfBookLatestChapter.BookController$saveShelfBookLatestChapter$1)$continuation).L$4 = mutex;
+                                    ((BookController$saveShelfBookLatestChapter.BookController$saveShelfBookLatestChapter$1)$continuation).label = 1;
+                                    if (Mutex$DefaultImpls.lock$default(mutex3, o, continuation, n, o2) == coroutine_SUSPENDED) {
+                                        return coroutine_SUSPENDED;
+                                    }
+                                }
+                                final BookController bookController = this;
+                                final Book book2 = book;
+                                final String userNameSpace2 = userNameSpace;
+                                final Function1 handler = (Function1)new BookController$saveShelfBookLatestChapter.BookController$saveShelfBookLatestChapter$2(bookChapterList, book);
+                                final Continuation $completion2 = $continuation;
+                                ((BookController$saveShelfBookLatestChapter.BookController$saveShelfBookLatestChapter$1)$continuation).L$0 = mutex;
+                                ((BookController$saveShelfBookLatestChapter.BookController$saveShelfBookLatestChapter$1)$continuation).L$1 = null;
+                                ((BookController$saveShelfBookLatestChapter.BookController$saveShelfBookLatestChapter$1)$continuation).L$2 = null;
+                                ((BookController$saveShelfBookLatestChapter.BookController$saveShelfBookLatestChapter$1)$continuation).L$3 = null;
+                                ((BookController$saveShelfBookLatestChapter.BookController$saveShelfBookLatestChapter$1)$continuation).L$4 = null;
+                                ((BookController$saveShelfBookLatestChapter.BookController$saveShelfBookLatestChapter$1)$continuation).label = 2;
+                                if (bookController.editShelfBook(book2, userNameSpace2, (Function1<? super Book, Book>)handler, (Continuation<? super Book>)$completion2) == coroutine_SUSPENDED) {
+                                    return coroutine_SUSPENDED;
+                                }
+                                return Unit.INSTANCE;
+                                mutex = (Mutex)((BookController$saveShelfBookLatestChapter.BookController$saveShelfBookLatestChapter$1)$continuation).L$0;
+                                ResultKt.throwOnFailure($result);
+                                return Unit.INSTANCE;
+                                mutex = (Mutex)((BookController$saveShelfBookLatestChapter.BookController$saveShelfBookLatestChapter$1)$continuation).L$4;
+                                userNameSpace = (String)((BookController$saveShelfBookLatestChapter.BookController$saveShelfBookLatestChapter$1)$continuation).L$3;
+                                bookChapterList = (List)((BookController$saveShelfBookLatestChapter.BookController$saveShelfBookLatestChapter$1)$continuation).L$2;
+                                book = (Book)((BookController$saveShelfBookLatestChapter.BookController$saveShelfBookLatestChapter$1)$continuation).L$1;
+                                this = (BookController)((BookController$saveShelfBookLatestChapter.BookController$saveShelfBookLatestChapter$1)$continuation).L$0;
+                                ResultKt.throwOnFailure($result);
+                                continue Label_0170_Outer;
+                            }
+                        }
+                        finally {
+                            final Mutex mutex4 = mutex;
+                            if (mutex4 != null) {
+                                Mutex$DefaultImpls.unlock$default(mutex4, (Object)null, 1, (Object)null);
+                            }
+                        }
+                        return Unit.INSTANCE;
+                    }
+                    case 1: {
+                        continue;
+                    }
+                    case 2: {
+                        continue Label_0170_Outer;
+                    }
+                    default: {
+                        throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
+                    }
+                }
+                break;
+            }
+            break;
+        }
+    }

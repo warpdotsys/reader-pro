@@ -1,0 +1,111 @@
+    public final Object saveImage(@Nullable BookSource var1_1, @NotNull Book var2_2, @NotNull String var3_3, @NotNull Continuation<? super Unit> var4_4) {
+        if (!(var4_4 instanceof saveImage.1)) ** GOTO lbl-1000
+        var13_5 = var4_4;
+        if ((var13_5.label & -2147483648) != 0) {
+            var13_5.label -= -2147483648;
+        } else lbl-1000:
+        // 2 sources
+
+        {
+            $continuation = new ContinuationImpl(this, var4_4){
+                Object L$0;
+                Object L$1;
+                Object L$2;
+                Object L$3;
+                /* synthetic */ Object result;
+                final /* synthetic */ BookHelp this$0;
+                int label;
+                {
+                    this.this$0 = this$0;
+                    super($completion);
+                }
+
+                @Nullable
+                public final Object invokeSuspend(@NotNull Object $result) {
+                    this.result = $result;
+                    this.label |= Integer.MIN_VALUE;
+                    return this.this$0.saveImage(null, null, null, (Continuation<? super Unit>)((Continuation)this));
+                }
+            };
+        }
+        $result = $continuation.result;
+        var14_7 = IntrinsicsKt.getCOROUTINE_SUSPENDED();
+        switch ($continuation.label) {
+            case 0: {
+                ResultKt.throwOnFailure((Object)$result);
+lbl12:
+                // 3 sources
+
+                while (BookHelp.downloadImages.contains(src)) {
+                    $continuation.L$0 = this;
+                    $continuation.L$1 = bookSource;
+                    $continuation.L$2 = book;
+                    $continuation.L$3 = src;
+                    $continuation.label = 1;
+                    v0 = DelayKt.delay((long)100L, (Continuation)$continuation);
+                    if (v0 != var14_7) continue;
+                    return var14_7;
+                }
+                break;
+            }
+            case 1: {
+                src = (String)$continuation.L$3;
+                book = (Book)$continuation.L$2;
+                bookSource = (BookSource)$continuation.L$1;
+                this = (BookHelp)$continuation.L$0;
+                ResultKt.throwOnFailure((Object)$result);
+                v0 = $result;
+                ** GOTO lbl12
+            }
+        }
+        if (this.getImage(book, src).exists()) {
+            return Unit.INSTANCE;
+        }
+        BookHelp.downloadImages.add(src);
+        analyzeUrl = new AnalyzeUrl(src, null, null, null, null, null, bookSource, null, null, null, null, 1982, null);
+        $continuation.L$0 = book;
+        $continuation.L$1 = src;
+        $continuation.L$2 = null;
+        $continuation.L$3 = null;
+        $continuation.label = 2;
+        v1 = analyzeUrl.getByteArrayAwait((Continuation<? super byte[]>)$continuation);
+        ** if (v1 != var14_7) goto lbl45
+lbl44:
+        // 1 sources
+
+        return var14_7;
+lbl45:
+        // 1 sources
+
+        ** GOTO lbl53
+        {
+            case 2: {
+                var3_3 = (String)$continuation.L$1;
+                var2_2 = (Book)$continuation.L$0;
+                try {
+                    ResultKt.throwOnFailure((Object)$result);
+                    v1 = $result;
+lbl53:
+                    // 2 sources
+
+                    var6_9 = v1;
+                    var7_12 = false;
+                    var8_13 = false;
+                    it = (byte[])var6_9;
+                    $i$a$-let-BookHelp$saveImage$2 = false;
+                    var11_16 = new String[]{"images", MD5Utils.INSTANCE.md5Encode16(var3_3) + '.' + BookHelp.INSTANCE.getImageSuffix(var3_3)};
+                    FilesKt.writeBytes((File)FileUtils.INSTANCE.createFileIfNotExist(BookHelp.INSTANCE.getBookCacheDir(var2_2), var11_16), (byte[])it);
+                    BookHelp.downloadImages.remove(var3_3);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                    return Unit.INSTANCE;
+                }
+                return Unit.INSTANCE;
+            }
+        }
+        finally {
+            BookHelp.downloadImages.remove(var3_3);
+        }
+        throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
+    }

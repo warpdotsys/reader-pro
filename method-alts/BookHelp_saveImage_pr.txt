@@ -1,0 +1,95 @@
+    public final Object saveImage(@Nullable BookSource bookSource, @NotNull Book book, @NotNull String src, @NotNull final Continuation<? super Unit> $completion) {
+        final Continuation $continuation;
+        Label_0055: {
+            if ($completion instanceof BookHelp$saveImage.BookHelp$saveImage$1) {
+                final BookHelp$saveImage.BookHelp$saveImage$1 bookHelp$saveImage$1 = (BookHelp$saveImage.BookHelp$saveImage$1)$completion;
+                if ((bookHelp$saveImage$1.label & Integer.MIN_VALUE) != 0x0) {
+                    final BookHelp$saveImage.BookHelp$saveImage$1 bookHelp$saveImage$2 = bookHelp$saveImage$1;
+                    bookHelp$saveImage$2.label -= Integer.MIN_VALUE;
+                    break Label_0055;
+                }
+            }
+            $continuation = (Continuation)new BookHelp$saveImage.BookHelp$saveImage$1(this, (Continuation)$completion);
+        }
+        final Object $result = ((BookHelp$saveImage.BookHelp$saveImage$1)$continuation).result;
+        final Object coroutine_SUSPENDED = IntrinsicsKt.getCOROUTINE_SUSPENDED();
+        while (true) {
+            while (true) {
+                switch (((BookHelp$saveImage.BookHelp$saveImage$1)$continuation).label) {
+                    case 0: {
+                        ResultKt.throwOnFailure($result);
+                        break;
+                    }
+                    case 1: {
+                        src = (String)((BookHelp$saveImage.BookHelp$saveImage$1)$continuation).L$3;
+                        book = (Book)((BookHelp$saveImage.BookHelp$saveImage$1)$continuation).L$2;
+                        bookSource = (BookSource)((BookHelp$saveImage.BookHelp$saveImage$1)$continuation).L$1;
+                        this = (BookHelp)((BookHelp$saveImage.BookHelp$saveImage$1)$continuation).L$0;
+                        ResultKt.throwOnFailure($result);
+                        break;
+                    }
+                    case 2: {
+                        Label_0307: {
+                            break Label_0307;
+                            BookHelp.downloadImages.add(src);
+                            final AnalyzeUrl analyzeUrl = new AnalyzeUrl(src, null, null, null, null, null, bookSource, null, null, null, null, 1982, null);
+                            try {
+                                final AnalyzeUrl analyzeUrl2 = analyzeUrl;
+                                final Continuation $completion2 = $continuation;
+                                ((BookHelp$saveImage.BookHelp$saveImage$1)$continuation).L$0 = book;
+                                ((BookHelp$saveImage.BookHelp$saveImage$1)$continuation).L$1 = src;
+                                ((BookHelp$saveImage.BookHelp$saveImage$1)$continuation).L$2 = null;
+                                ((BookHelp$saveImage.BookHelp$saveImage$1)$continuation).L$3 = null;
+                                ((BookHelp$saveImage.BookHelp$saveImage$1)$continuation).label = 2;
+                                Object byteArrayAwait;
+                                if ((byteArrayAwait = analyzeUrl2.getByteArrayAwait((Continuation<? super byte[]>)$completion2)) == coroutine_SUSPENDED) {
+                                    return coroutine_SUSPENDED;
+                                }
+                                while (true) {
+                                    final byte[] it = (byte[])byteArrayAwait;
+                                    final int n = 0;
+                                    FilesKt.writeBytes(FileUtils.INSTANCE.createFileIfNotExist(BookHelp.INSTANCE.getBookCacheDir(book), "images", MD5Utils.INSTANCE.md5Encode16(src) + '.' + BookHelp.INSTANCE.getImageSuffix(src)), it);
+                                    return Unit.INSTANCE;
+                                    src = (String)((BookHelp$saveImage.BookHelp$saveImage$1)$continuation).L$1;
+                                    book = (Book)((BookHelp$saveImage.BookHelp$saveImage$1)$continuation).L$0;
+                                    ResultKt.throwOnFailure($result);
+                                    byteArrayAwait = $result;
+                                    continue;
+                                }
+                            }
+                            catch (final Exception e) {
+                                e.printStackTrace();
+                            }
+                            finally {
+                                BookHelp.downloadImages.remove(src);
+                            }
+                        }
+                        return Unit.INSTANCE;
+                    }
+                    default: {
+                        throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
+                    }
+                }
+                if (BookHelp.downloadImages.contains(src)) {
+                    final long n2 = 100L;
+                    final Continuation continuation = $continuation;
+                    ((BookHelp$saveImage.BookHelp$saveImage$1)$continuation).L$0 = this;
+                    ((BookHelp$saveImage.BookHelp$saveImage$1)$continuation).L$1 = bookSource;
+                    ((BookHelp$saveImage.BookHelp$saveImage$1)$continuation).L$2 = book;
+                    ((BookHelp$saveImage.BookHelp$saveImage$1)$continuation).L$3 = src;
+                    ((BookHelp$saveImage.BookHelp$saveImage$1)$continuation).label = 1;
+                    if (DelayKt.delay(n2, continuation) == coroutine_SUSPENDED) {
+                        return coroutine_SUSPENDED;
+                    }
+                }
+                else {
+                    if (this.getImage(book, src).exists()) {
+                        return Unit.INSTANCE;
+                    }
+                    continue;
+                }
+                break;
+            }
+            continue;
+        }
+    }

@@ -1,0 +1,128 @@
+   public suspend fun cacheBookOnServer(context: RoutingContext): ReturnData {
+      var `$continuation`: Continuation;
+      label33: {
+         if (`$completion` is <unrepresentable>) {
+            `$continuation` = `$completion` as <unrepresentable>;
+            if (((`$completion` as <unrepresentable>).label and Integer.MIN_VALUE) != 0) {
+               `$continuation`.label -= Integer.MIN_VALUE;
+               break label33;
+            }
+         }
+
+         `$continuation` = new ContinuationImpl(this, `$completion`) {
+            Object L$0;
+            Object L$1;
+            Object L$2;
+            int label;
+
+            {
+               super(`$completion`);
+               this.this$0 = `this$0`;
+            }
+
+            @Nullable
+            @Override
+            public final Object invokeSuspend(@NotNull Object $result) {
+               this.result = `$result`;
+               this.label |= Integer.MIN_VALUE;
+               return this.this$0.cacheBookOnServer(null, this);
+            }
+         };
+      }
+
+      val `$result`: Any = `$continuation`.result;
+      val var10: Any = IntrinsicsKt.getCOROUTINE_SUSPENDED();
+      var returnData: ReturnData;
+      var var10000: Any;
+      switch ($continuation.label) {
+         case 0:
+            ResultKt.throwOnFailure(`$result`);
+            returnData = new ReturnData();
+            `$continuation`.L$0 = this;
+            `$continuation`.L$1 = context;
+            `$continuation`.L$2 = returnData;
+            `$continuation`.label = 1;
+            var10000 = this.checkAuth(context, `$continuation`);
+            if (var10000 === var10) {
+               return var10;
+            }
+            break;
+         case 1:
+            returnData = `$continuation`.L$2 as ReturnData;
+            context = `$continuation`.L$1 as RoutingContext;
+            this = `$continuation`.L$0 as BookController;
+            ResultKt.throwOnFailure(`$result`);
+            var10000 = `$result`;
+            break;
+         default:
+            throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
+      }
+
+      if (!var10000 as java.lang.Boolean) {
+         return ReturnData.setData$default(returnData, "NEED_LOGIN", null, 2, null).setErrorMsg("请登录后使用");
+      } else {
+         val exceptionHandler: JsonArray = context.getBodyAsJson().getJsonArray("bookUrlList");
+         val bookUrlList: JsonArray = if (exceptionHandler == null) new JsonArray() else exceptionHandler;
+         if (bookUrlList.size() <= 0) {
+            return returnData.setErrorMsg("请输入书籍链接");
+         } else {
+            val var11: CoroutineExceptionHandler = new BookController$cacheBookOnServer$$inlined$CoroutineExceptionHandler$1(CoroutineExceptionHandler.Key);
+            val var12: java.lang.String = this.getUserNameSpace(context);
+            BuildersKt.launch$default(
+               this,
+               new MDCContext(null, 1, null).plus(Dispatchers.getIO()).plus(var11),
+               null,
+               (new Function2<CoroutineScope, Continuation<? super Unit>, Object>(this, bookUrlList, var12, null) {
+                  int label;
+
+                  {
+                     super(2, `$completionx`);
+                     this.this$0 = `$receiver`;
+                     this.$bookUrlList = `$bookUrlList`;
+                     this.$userNameSpace = `$userNameSpace`;
+                  }
+
+                  @Nullable
+                  @Override
+                  public final Object invokeSuspend(@NotNull Object $result) {
+                     val var2: Any = IntrinsicsKt.getCOROUTINE_SUSPENDED();
+                     switch (this.label) {
+                        case 0:
+                           ResultKt.throwOnFailure(`$result`);
+                           val var10000: BookController = this.this$0;
+                           val var10001: JsonArray = this.$bookUrlList;
+                           val var10002: java.lang.String = this.$userNameSpace;
+                           val var10003: Continuation = this;
+                           this.label = 1;
+                           if (var10000.cacheBookOnServer(var10001, var10002, var10003) === var2) {
+                              return var2;
+                           }
+                           break;
+                        case 1:
+                           ResultKt.throwOnFailure(`$result`);
+                           break;
+                        default:
+                           throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
+                     }
+
+                     return Unit.INSTANCE;
+                  }
+
+                  @NotNull
+                  @Override
+                  public final Continuation<Unit> create(@Nullable Object value, @NotNull Continuation<?> $completion) {
+                     return new <anonymous constructor>(this.this$0, this.$bookUrlList, this.$userNameSpace, `$completion`);
+                  }
+
+                  @Nullable
+                  public final Object invoke(@NotNull CoroutineScope p1, @Nullable Continuation<? super Unit> p2) {
+                     return (this.create(p1, p2) as <unrepresentable>).invokeSuspend(Unit.INSTANCE);
+                  }
+               }) as Function2,
+               2,
+               null
+            );
+            return ReturnData.setData$default(returnData, "", null, 2, null);
+         }
+      }
+   }

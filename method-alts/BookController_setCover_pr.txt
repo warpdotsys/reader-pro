@@ -1,0 +1,3 @@
+                    if (bookController.setCover(book2, epubBook2, bookSourceString, (Continuation<? super Unit>)$completion2) == coroutine_SUSPENDED) {
+                        return coroutine_SUSPENDED;
+                    }

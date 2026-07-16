@@ -1,0 +1,281 @@
+    public static /* synthetic */ Object saveBookCover$default(BookController bookController, Book book, String string, String string2, Continuation continuation, int n, Object object) {
+        if ((n & 4) != 0) {
+            string2 = null;
+        }
+        return bookController.saveBookCover(book, string, string2, (Continuation<? super Unit>)continuation);
+    }
+
+    /*
+     * Unable to fully structure code
+     * Could not resolve type clashes
+     */
+    @Nullable
+    public final Object setBookSource(@NotNull RoutingContext var1_1, @NotNull Continuation<? super ReturnData> var2_2) {
+        if (!(var2_2 instanceof setBookSource.1)) ** GOTO lbl-1000
+        var19_3 = var2_2;
+        if ((var19_3.label & -2147483648) != 0) {
+            var19_3.label -= -2147483648;
+        } else lbl-1000:
+        // 2 sources
+
+        {
+            $continuation = new ContinuationImpl(this, var2_2){
+                Object L$0;
+                Object L$1;
+                Object L$2;
+                Object L$3;
+                Object L$4;
+                Object L$5;
+                Object L$6;
+                /* synthetic */ Object result;
+                final /* synthetic */ BookController this$0;
+                int label;
+                {
+                    this.this$0 = this$0;
+                    super($completion);
+                }
+
+                @Nullable
+                public final Object invokeSuspend(@NotNull Object $result) {
+                    this.result = $result;
+                    this.label |= Integer.MIN_VALUE;
+                    return this.this$0.setBookSource(null, (Continuation<? super ReturnData>)((Continuation)this));
+                }
+            };
+        }
+        $result = $continuation.result;
+        var20_5 = IntrinsicsKt.getCOROUTINE_SUSPENDED();
+        switch ($continuation.label) {
+            case 0: {
+                ResultKt.throwOnFailure((Object)$result);
+                returnData = new ReturnData();
+                $continuation.L$0 = this;
+                $continuation.L$1 = context;
+                $continuation.L$2 = returnData;
+                $continuation.label = 1;
+                v0 = this.checkAuth(context, (Continuation<? super Boolean>)$continuation);
+                if (v0 == var20_5) {
+                    return var20_5;
+                }
+                ** GOTO lbl27
+            }
+            case 1: {
+                returnData = (ReturnData)$continuation.L$2;
+                context = (RoutingContext)$continuation.L$1;
+                this = (BookController)$continuation.L$0;
+                ResultKt.throwOnFailure((Object)$result);
+                v0 = $result;
+lbl27:
+                // 2 sources
+
+                if (!((Boolean)v0).booleanValue()) {
+                    return ReturnData.setData$default(returnData, "NEED_LOGIN", null, 2, null).setErrorMsg("\u8bf7\u767b\u5f55\u540e\u4f7f\u7528");
+                }
+                var4_7 = null;
+                var5_8 = null;
+                var6_9 = null;
+                if (context.request().method() == HttpMethod.POST) {
+                    var7_10 = context.getBodyAsJson().getString("bookUrl");
+                    Intrinsics.checkNotNullExpressionValue((Object)var7_10, (String)"context.bodyAsJson.getString(\"bookUrl\")");
+                    bookUrl = var7_10;
+                    var7_10 = context.getBodyAsJson().getString("newUrl");
+                    Intrinsics.checkNotNullExpressionValue((Object)var7_10, (String)"context.bodyAsJson.getString(\"newUrl\")");
+                    newBookUrl = var7_10;
+                    var7_10 = context.getBodyAsJson().getString("bookSourceUrl");
+                    Intrinsics.checkNotNullExpressionValue((Object)var7_10, (String)"context.bodyAsJson.getString(\"bookSourceUrl\")");
+                    var6_9 = var7_10;
+                } else {
+                    var8_11 = context.queryParam("bookUrl");
+                    Intrinsics.checkNotNullExpressionValue((Object)var8_11, (String)"context.queryParam(\"bookUrl\")");
+                    var7_10 = (String)CollectionsKt.firstOrNull((List)var8_11);
+                    bookUrl = var7_10 == null ? "" : var7_10;
+                    var8_11 = context.queryParam("newUrl");
+                    Intrinsics.checkNotNullExpressionValue((Object)var8_11, (String)"context.queryParam(\"newUrl\")");
+                    var7_10 = (String)CollectionsKt.firstOrNull((List)var8_11);
+                    newBookUrl = var7_10 == null ? "" : var7_10;
+                    var8_11 = context.queryParam("bookSourceUrl");
+                    Intrinsics.checkNotNullExpressionValue((Object)var8_11, (String)"context.queryParam(\"bookSourceUrl\")");
+                    var7_10 = (String)CollectionsKt.firstOrNull((List)var8_11);
+                    bookSourceUrl /* !! */  = var7_10 == null ? "" : var7_10;
+                }
+                var7_10 = bookUrl;
+                var8_12 = false;
+                var9_14 = false;
+                if (var7_10.length() == 0) {
+                    return returnData.setErrorMsg("\u4e66\u7c4d\u94fe\u63a5\u4e0d\u80fd\u4e3a\u7a7a");
+                }
+                var7_10 = newBookUrl;
+                var8_12 = false;
+                var9_14 = false;
+                if (var7_10.length() == 0) {
+                    return returnData.setErrorMsg("\u65b0\u6e90\u4e66\u7c4d\u94fe\u63a5\u4e0d\u80fd\u4e3a\u7a7a");
+                }
+                var7_10 = bookSourceUrl /* !! */ ;
+                var8_12 = false;
+                var9_14 = false;
+                if (var7_10.length() == 0) {
+                    return returnData.setErrorMsg("\u4e66\u6e90\u94fe\u63a5\u4e0d\u80fd\u4e3a\u7a7a");
+                }
+                userNameSpace = this.getUserNameSpace(context);
+                book = this.getShelfBookByURL(bookUrl, userNameSpace);
+                if (book == null) {
+                    return returnData.setErrorMsg("\u4e66\u7c4d\u4fe1\u606f\u9519\u8bef");
+                }
+                bookSourceString = this.getBookSourceStringBySourceURLOpt(bookSourceUrl /* !! */ , userNameSpace);
+                searchBook = null;
+                var11_17 = bookSourceString;
+                var12_18 = false;
+                var13_24 = 0;
+                if (var11_17 == null || var11_17.length() == 0) {
+                    var12_19 = new String[]{book.getName() + '_' + book.getAuthor(), "bookSource"};
+                    localBookSourceList = ExtKt.asJsonArray(this.getUserStorage(userNameSpace, var12_19));
+                    if (localBookSourceList != null && (var12_20 = 0) < (var13_24 = localBookSourceList.size())) {
+                        do {
+                            if (!(_searchBook = (SearchBook)localBookSourceList.getJsonObject(i = var12_20++).mapTo(SearchBook.class)).getBookUrl().equals(newBookUrl)) continue;
+                            searchBook = _searchBook.toBook();
+                            break;
+                        } while (var12_20 < var13_24);
+                    }
+                    if (searchBook == null) {
+                        return returnData.setErrorMsg("\u4e66\u6e90\u4fe1\u606f\u9519\u8bef");
+                    }
+                }
+                v1 = newBookInfo = new Ref.ObjectRef();
+                if (searchBook == null) ** GOTO lbl94
+                v2 = searchBook;
+                ** GOTO lbl125
+lbl94:
+                // 1 sources
+
+                var12_21 = bookSourceString;
+                var13_24 = 0;
+                var14_25 = false;
+                if (var12_21 == null || var12_21.length() == 0) {
+                    return returnData.setErrorMsg("\u4e66\u6e90\u4fe1\u606f\u9519\u8bef");
+                }
+                var16_27 = v1;
+                $continuation.L$0 = this;
+                $continuation.L$1 = returnData;
+                $continuation.L$2 = userNameSpace;
+                $continuation.L$3 = book;
+                $continuation.L$4 = bookSourceString;
+                $continuation.L$5 = newBookInfo;
+                $continuation.L$6 = var16_27;
+                $continuation.label = 2;
+                v3 = WebBook.getBookInfo$default(new WebBook(bookSourceString, this.getAppConfig().getDebugLog(), null, userNameSpace, 4, null), newBookUrl, false, (Continuation)$continuation, 2, null);
+                if (v3 == var20_5) {
+                    return var20_5;
+                }
+                ** GOTO lbl122
+            }
+            case 2: {
+                var16_27 = (Ref.ObjectRef)$continuation.L$6;
+                var11_17 = (Ref.ObjectRef)$continuation.L$5;
+                var9_15 = (String)$continuation.L$4;
+                var8_13 = (Book)$continuation.L$3;
+                var7_10 = (String)$continuation.L$2;
+                var3_6 = (ReturnData)$continuation.L$1;
+                this = (BookController)$continuation.L$0;
+                ResultKt.throwOnFailure((Object)$result);
+                v3 = $result;
+lbl122:
+                // 2 sources
+
+                var17_28 = v3;
+                v1 = var16_27;
+                v2 = (Book)var17_28;
+lbl125:
+                // 2 sources
+
+                v1.element = v2;
+                $continuation.L$0 = this;
+                $continuation.L$1 = var3_6;
+                $continuation.L$2 = var7_10;
+                $continuation.L$3 = var9_15;
+                $continuation.L$4 = var11_17;
+                $continuation.L$5 = null;
+                $continuation.L$6 = null;
+                $continuation.label = 3;
+                v4 = this.editShelfBook(var8_13, (String)var7_10, (Function1<? super Book, Book>)((Function1)new Function1<Book, Book>((Ref.ObjectRef<Book>)var11_17){
+                    final /* synthetic */ Ref.ObjectRef<Book> $newBookInfo;
+                    {
+                        this.$newBookInfo = $newBookInfo;
+                        super(1);
+                    }
+
+                    @NotNull
+                    public final Book invoke(@NotNull Book existBook) {
+                        Intrinsics.checkNotNullParameter((Object)existBook, (String)"existBook");
+                        existBook.setOrigin(((Book)this.$newBookInfo.element).getOrigin());
+                        existBook.setOriginName(((Book)this.$newBookInfo.element).getOriginName());
+                        existBook.setBookUrl(((Book)this.$newBookInfo.element).getBookUrl());
+                        existBook.setTocUrl(((Book)this.$newBookInfo.element).getTocUrl());
+                        existBook.setInShelf(true);
+                        CharSequence charSequence = existBook.getCoverUrl();
+                        boolean bl = false;
+                        boolean bl2 = false;
+                        if (charSequence == null || charSequence.length() == 0) {
+                            charSequence = ((Book)this.$newBookInfo.element).getCoverUrl();
+                            bl = false;
+                            bl2 = false;
+                            if (!(charSequence == null || charSequence.length() == 0)) {
+                                existBook.setCoverUrl(((Book)this.$newBookInfo.element).getCoverUrl());
+                            }
+                        }
+                        BookControllerKt.access$getLogger$p().info("setBookSource: {}", (Object)existBook);
+                        this.$newBookInfo.element = existBook;
+                        return existBook;
+                    }
+                }), (Continuation<? super Book>)$continuation);
+                if (v4 == var20_5) {
+                    return var20_5;
+                }
+                ** GOTO lbl147
+            }
+            case 3: {
+                var11_17 = (Ref.ObjectRef)$continuation.L$4;
+                var9_15 = (String)$continuation.L$3;
+                var7_10 = (String)$continuation.L$2;
+                var3_6 = (ReturnData)$continuation.L$1;
+                this = (BookController)$continuation.L$0;
+                ResultKt.throwOnFailure((Object)$result);
+                v4 = $result;
+lbl147:
+                // 3 sources
+
+                var12_22 = var9_15;
+                $continuation.L$0 = var3_6;
+                $continuation.L$1 = var11_17;
+                $continuation.L$2 = null;
+                $continuation.L$3 = null;
+                $continuation.L$4 = null;
+                $continuation.label = 4;
+                v5 = BookController.getLocalChapterList$default(this, (Book)var11_17.element, var12_22 == null ? "" : var12_22, true, (String)var7_10, false, null, (Continuation)$continuation, 48, null);
+                ** if (v5 != var20_5) goto lbl158
+lbl157:
+                // 1 sources
+
+                return var20_5;
+lbl158:
+                // 1 sources
+
+                ** GOTO lbl169
+            }
+            case 4: {
+                var11_17 = (Ref.ObjectRef)$continuation.L$1;
+                var3_6 = (ReturnData)$continuation.L$0;
+                try {
+                    ResultKt.throwOnFailure((Object)$result);
+                    v5 = $result;
+                }
+                catch (Exception var12_23) {
+                    // empty catch block
+                }
+lbl169:
+                // 3 sources
+
+                return ReturnData.setData$default(var3_6, var11_17.element, null, 2, null);
+            }
+        }
+        throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
+    }

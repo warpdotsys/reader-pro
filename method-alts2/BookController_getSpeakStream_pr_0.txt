@@ -1,0 +1,137 @@
+    public final Object getSpeakStream(@NotNull HttpTTS httpTts, @NotNull String speakText, int speechRate, @NotNull final Continuation<? super InputStream> $completion) {
+        final Continuation $continuation;
+        Label_0053: {
+            if ($completion instanceof BookController$getSpeakStream.BookController$getSpeakStream$1) {
+                final BookController$getSpeakStream.BookController$getSpeakStream$1 bookController$getSpeakStream$1 = (BookController$getSpeakStream.BookController$getSpeakStream$1)$completion;
+                if ((bookController$getSpeakStream$1.label & Integer.MIN_VALUE) != 0x0) {
+                    final BookController$getSpeakStream.BookController$getSpeakStream$1 bookController$getSpeakStream$2 = bookController$getSpeakStream$1;
+                    bookController$getSpeakStream$2.label -= Integer.MIN_VALUE;
+                    break Label_0053;
+                }
+            }
+            $continuation = (Continuation)new BookController$getSpeakStream.BookController$getSpeakStream$1(this, (Continuation)$completion);
+        }
+        final Object $result = ((BookController$getSpeakStream.BookController$getSpeakStream$1)$continuation).result;
+        final Object coroutine_SUSPENDED = IntrinsicsKt.getCOROUTINE_SUSPENDED();
+        Label_0919: {
+            switch (((BookController$getSpeakStream.BookController$getSpeakStream$1)$continuation).label) {
+                case 0: {
+                    ResultKt.throwOnFailure($result);
+                    final Ref$IntRef downloadErrorNo = new Ref$IntRef();
+                }
+                case 1: {
+                    Label_0240: {
+                        break Label_0240;
+                        while (true) {
+                            try {
+                                AnalyzeUrl analyzeUrl = new AnalyzeUrl(httpTts.getUrl(), null, null, speakText, Boxing.boxInt(speechRate), null, httpTts, null, null, httpTts.getHeaderMap(true), Debug.INSTANCE, 422, null);
+                                Object l$6;
+                                Ref$ObjectRef response = (Ref$ObjectRef)(l$6 = new Ref$ObjectRef());
+                                final AnalyzeUrl analyzeUrl2 = analyzeUrl;
+                                final Continuation $completion2 = $continuation;
+                                ((BookController$getSpeakStream.BookController$getSpeakStream$1)$continuation).L$0 = this;
+                                ((BookController$getSpeakStream.BookController$getSpeakStream$1)$continuation).L$1 = httpTts;
+                                ((BookController$getSpeakStream.BookController$getSpeakStream$1)$continuation).L$2 = speakText;
+                                Ref$IntRef downloadErrorNo = null;
+                                ((BookController$getSpeakStream.BookController$getSpeakStream$1)$continuation).L$3 = downloadErrorNo;
+                                ((BookController$getSpeakStream.BookController$getSpeakStream$1)$continuation).L$4 = analyzeUrl;
+                                ((BookController$getSpeakStream.BookController$getSpeakStream$1)$continuation).L$5 = response;
+                                ((BookController$getSpeakStream.BookController$getSpeakStream$1)$continuation).L$6 = l$6;
+                                ((BookController$getSpeakStream.BookController$getSpeakStream$1)$continuation).I$0 = speechRate;
+                                ((BookController$getSpeakStream.BookController$getSpeakStream$1)$continuation).label = 1;
+                                Object responseAwait;
+                                if ((responseAwait = analyzeUrl2.getResponseAwait((Continuation<? super Response>)$completion2)) == coroutine_SUSPENDED) {
+                                    return coroutine_SUSPENDED;
+                                }
+                                while (true) {
+                                    ((Ref$ObjectRef)l$6).element = responseAwait;
+                                    JobKt.ensureActive(this.getCoroutineContext());
+                                    final String loginCheckJs;
+                                    final String checkJs = loginCheckJs = httpTts.getLoginCheckJs();
+                                    if (loginCheckJs != null && !StringsKt.isBlank((CharSequence)loginCheckJs)) {
+                                        final Ref$ObjectRef ref$ObjectRef = response;
+                                        final Object evalJS = analyzeUrl.evalJS(checkJs, response.element);
+                                        if (evalJS == null) {
+                                            throw new NullPointerException("null cannot be cast to non-null type okhttp3.Response");
+                                        }
+                                        ref$ObjectRef.element = evalJS;
+                                    }
+                                    final String value = ((Response)response.element).headers().get("Content-Type");
+                                    if (value != null) {
+                                        final String contentType = value;
+                                        final int n = 0;
+                                        final String ct = httpTts.getContentType();
+                                        if (Intrinsics.areEqual((Object)contentType, (Object)"application/json")) {
+                                            final ResponseBody body = ((Response)response.element).body();
+                                            Intrinsics.checkNotNull((Object)body);
+                                            throw new NoStackTraceException(body.string());
+                                        }
+                                        final String s = ct;
+                                        if (s != null && !StringsKt.isBlank((CharSequence)s) && !new Regex(ct).matches((CharSequence)contentType)) {
+                                            final String s2 = "TTS\u670d\u52a1\u5668\u8fd4\u56de\u9519\u8bef\uff1a";
+                                            final ResponseBody body2 = ((Response)response.element).body();
+                                            Intrinsics.checkNotNull((Object)body2);
+                                            throw new NoStackTraceException(Intrinsics.stringPlus(s2, (Object)body2.string()));
+                                        }
+                                    }
+                                    JobKt.ensureActive(this.getCoroutineContext());
+                                    final ResponseBody body3 = ((Response)response.element).body();
+                                    Intrinsics.checkNotNull((Object)body3);
+                                    final InputStream stream = body3.byteStream();
+                                    final int n2 = 0;
+                                    downloadErrorNo.element = 0;
+                                    return stream;
+                                    speechRate = ((BookController$getSpeakStream.BookController$getSpeakStream$1)$continuation).I$0;
+                                    l$6 = ((BookController$getSpeakStream.BookController$getSpeakStream$1)$continuation).L$6;
+                                    response = (Ref$ObjectRef)((BookController$getSpeakStream.BookController$getSpeakStream$1)$continuation).L$5;
+                                    analyzeUrl = (AnalyzeUrl)((BookController$getSpeakStream.BookController$getSpeakStream$1)$continuation).L$4;
+                                    downloadErrorNo = (Ref$IntRef)((BookController$getSpeakStream.BookController$getSpeakStream$1)$continuation).L$3;
+                                    speakText = (String)((BookController$getSpeakStream.BookController$getSpeakStream$1)$continuation).L$2;
+                                    httpTts = (HttpTTS)((BookController$getSpeakStream.BookController$getSpeakStream$1)$continuation).L$1;
+                                    this = (BookController)((BookController$getSpeakStream.BookController$getSpeakStream$1)$continuation).L$0;
+                                    ResultKt.throwOnFailure($result);
+                                    responseAwait = $result;
+                                    continue;
+                                }
+                            }
+                            catch (final Exception e) {
+                                final Exception ex = e;
+                                if (ex instanceof CancellationException) {
+                                    throw e;
+                                }
+                                if (ex instanceof ScriptException || ex instanceof WrappedException) {
+                                    BookControllerKt.access$getLogger$p().error(Intrinsics.stringPlus("js\u9519\u8bef\n", (Object)e.getLocalizedMessage()), (Throwable)e);
+                                    throw e;
+                                }
+                                if (ex instanceof SocketTimeoutException || ex instanceof ConnectException) {
+                                    final Ref$IntRef downloadErrorNo;
+                                    ++downloadErrorNo.element;
+                                    if (downloadErrorNo.element > 5) {
+                                        final String msg = Intrinsics.stringPlus("tts\u8d85\u65f6\u6216\u8fde\u63a5\u9519\u8bef\u8d85\u8fc75\u6b21\n", (Object)e.getLocalizedMessage());
+                                        BookControllerKt.access$getLogger$p().error(msg, (Throwable)e);
+                                        throw e;
+                                    }
+                                    continue;
+                                }
+                                else {
+                                    final Ref$IntRef downloadErrorNo;
+                                    ++downloadErrorNo.element;
+                                    BookControllerKt.access$getLogger$p().error(Intrinsics.stringPlus("tts\u4e0b\u8f7d\u9519\u8bef\n", (Object)e.getLocalizedMessage()), (Throwable)e);
+                                    if (downloadErrorNo.element > 5) {
+                                        final String msg2 = "TTS\u670d\u52a1\u5668\u8fde\u7eed5\u6b21\u9519\u8bef\uff0c\u5df2\u6682\u505c\u9605\u8bfb\u3002";
+                                        BookControllerKt.access$getLogger$p().error(msg2, (Throwable)e);
+                                        throw e;
+                                    }
+                                    BookControllerKt.access$getLogger$p().error(Intrinsics.stringPlus("TTS\u4e0b\u8f7d\u97f3\u9891\u51fa\u9519\uff0c\u4f7f\u7528\u65e0\u58f0\u97f3\u9891\u4ee3\u66ff\u3002\n\u6717\u8bfb\u6587\u672c\uff1a", (Object)speakText));
+                                    return null;
+                                }
+                            }
+                            break Label_0919;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
+    }

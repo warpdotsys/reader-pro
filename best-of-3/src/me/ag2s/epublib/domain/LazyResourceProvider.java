@@ -1,0 +1,10 @@
+/* Decompiled (CFR); headers trimmed */
+package me.ag2s.epublib.domain;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+public interface LazyResourceProvider {
+    public InputStream getResourceStream(String var1) throws IOException;
+}
+

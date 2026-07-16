@@ -1,0 +1,186 @@
+    public static /* synthetic */ Object ttsByApi$default(BookController bookController, HttpServerResponse httpServerResponse, String string, String string2, Map map, Continuation continuation, int n, Object object) {
+        if ((n & 8) != 0) {
+            map = null;
+        }
+        return bookController.ttsByApi(httpServerResponse, string, string2, map, (Continuation<? super Unit>)continuation);
+    }
+
+    /*
+     * Unable to fully structure code
+     * Could not resolve type clashes
+     */
+    @Nullable
+    public final Object getSpeakStream(@NotNull HttpTTS var1_1, @NotNull String var2_2, int var3_3, @NotNull Continuation<? super InputStream> var4_4) {
+        if (!(var4_4 instanceof getSpeakStream.1)) ** GOTO lbl-1000
+        var22_5 = var4_4;
+        if ((var22_5.label & -2147483648) != 0) {
+            var22_5.label -= -2147483648;
+        } else lbl-1000:
+        // 2 sources
+
+        {
+            $continuation = new ContinuationImpl(this, var4_4){
+                Object L$0;
+                Object L$1;
+                Object L$2;
+                Object L$3;
+                Object L$4;
+                Object L$5;
+                Object L$6;
+                int I$0;
+                /* synthetic */ Object result;
+                final /* synthetic */ BookController this$0;
+                int label;
+                {
+                    this.this$0 = this$0;
+                    super($completion);
+                }
+
+                @Nullable
+                public final Object invokeSuspend(@NotNull Object $result) {
+                    this.result = $result;
+                    this.label |= Integer.MIN_VALUE;
+                    return this.this$0.getSpeakStream(null, null, 0, (Continuation<? super InputStream>)((Continuation)this));
+                }
+            };
+        }
+        $result = $continuation.result;
+        var23_7 = IntrinsicsKt.getCOROUTINE_SUSPENDED();
+        switch ($continuation.label) {
+            case 0: {
+                ResultKt.throwOnFailure((Object)$result);
+                downloadErrorNo = new Ref.IntRef();
+                while (true) {
+                    analyzeUrl = new AnalyzeUrl(httpTts.getUrl(), null, null, speakText, Boxing.boxInt((int)speechRate), null, httpTts, null, null, httpTts.getHeaderMap(true), Debug.INSTANCE, 422, null);
+                    var19_16 = response = new Ref.ObjectRef();
+                    $continuation.L$0 = this;
+                    $continuation.L$1 = httpTts;
+                    $continuation.L$2 = speakText;
+                    $continuation.L$3 = downloadErrorNo;
+                    $continuation.L$4 = analyzeUrl;
+                    $continuation.L$5 = response;
+                    $continuation.L$6 = var19_16;
+                    $continuation.I$0 = speechRate;
+                    $continuation.label = 1;
+                    v0 = analyzeUrl.getResponseAwait((Continuation<? super Response>)$continuation);
+                    ** if (v0 != var23_7) goto lbl31
+lbl30:
+                    // 1 sources
+
+                    return var23_7;
+lbl31:
+                    // 1 sources
+
+                    ** GOTO lbl45
+                    break;
+                }
+            }
+            case 1: {
+                speechRate = $continuation.I$0;
+                var19_16 = (Ref.ObjectRef)$continuation.L$6;
+                response = (Ref.ObjectRef)$continuation.L$5;
+                analyzeUrl = (AnalyzeUrl)$continuation.L$4;
+                downloadErrorNo = (Ref.IntRef)$continuation.L$3;
+                speakText = (String)$continuation.L$2;
+                httpTts = (HttpTTS)$continuation.L$1;
+                this = (BookController)$continuation.L$0;
+                try {
+                    ResultKt.throwOnFailure((Object)$result);
+                    v0 = $result;
+lbl45:
+                    // 2 sources
+
+                    var19_16.element = var20_17 = v0;
+                    JobKt.ensureActive((CoroutineContext)this.getCoroutineContext());
+                    checkJs = httpTts.getLoginCheckJs();
+                    var9_18 = checkJs;
+                    if (var9_18 == null) {
+                        v1 = false;
+                    } else {
+                        var10_19 = (CharSequence)var9_18;
+                        var11_21 = false;
+                        v1 = StringsKt.isBlank((CharSequence)var10_19) == false == true;
+                    }
+                    if (v1) {
+                        var9_18 = analyzeUrl.evalJS(checkJs, response.element);
+                        if (var9_18 == null) {
+                            throw new NullPointerException("null cannot be cast to non-null type okhttp3.Response");
+                        }
+                        response.element = (Response)var9_18;
+                    }
+                    if ((var9_18 = ((Response)response.element).headers().get("Content-Type")) != null) {
+                        var10_19 = var9_18;
+                        var11_21 = false;
+                        var12_22 = false;
+                        contentType = var10_19;
+                        $i$a$-let-BookController$getSpeakStream$2 = false;
+                        ct = httpTts.getContentType();
+                        if (Intrinsics.areEqual((Object)contentType, (Object)"application/json")) {
+                            v2 = ((Response)response.element).body();
+                            Intrinsics.checkNotNull((Object)v2);
+                            throw new NoStackTraceException(v2.string());
+                        }
+                        var16_28 /* !! */  = ct;
+                        if (var16_28 /* !! */  == null) {
+                            v3 = false;
+                        } else {
+                            var17_29 = var16_28 /* !! */ ;
+                            var18_30 = false;
+                            v3 = StringsKt.isBlank((CharSequence)var17_29) == false == true;
+                        }
+                        if (v3) {
+                            var16_28 /* !! */  = (CharSequence)contentType;
+                            var17_29 = ct;
+                            var18_30 = false;
+                            var17_29 = new Regex((String)var17_29);
+                            var18_30 = false;
+                            if (!var17_29.matches(var16_28 /* !! */ )) {
+                                v4 = ((Response)response.element).body();
+                                Intrinsics.checkNotNull((Object)v4);
+                                throw new NoStackTraceException(Intrinsics.stringPlus((String)"TTS\u670d\u52a1\u5668\u8fd4\u56de\u9519\u8bef\uff1a", (Object)v4.string()));
+                            }
+                        }
+                    }
+                    JobKt.ensureActive((CoroutineContext)this.getCoroutineContext());
+                    v5 = ((Response)response.element).body();
+                    Intrinsics.checkNotNull((Object)v5);
+                    var9_18 = v5.byteStream();
+                    var10_20 = false;
+                    var11_21 = false;
+                    stream = var9_18;
+                    $i$a$-let-BookController$getSpeakStream$3 = false;
+                    downloadErrorNo.element = 0;
+                    return stream;
+                }
+                catch (Exception e) {
+                    var7_11 = e;
+                    if (var7_11 instanceof CancellationException) {
+                        throw e;
+                    }
+                    if (var7_11 instanceof ScriptException != false ? true : var7_11 instanceof WrappedException) {
+                        BookControllerKt.access$getLogger$p().error(Intrinsics.stringPlus((String)"js\u9519\u8bef\n", (Object)e.getLocalizedMessage()), (Throwable)e);
+                        throw e;
+                    }
+                    if (var7_11 instanceof SocketTimeoutException != false ? true : var7_11 instanceof ConnectException) {
+                        checkJs = downloadErrorNo.element;
+                        downloadErrorNo.element = checkJs + 1;
+                        if (downloadErrorNo.element <= 5) ** continue;
+                        msg = Intrinsics.stringPlus((String)"tts\u8d85\u65f6\u6216\u8fde\u63a5\u9519\u8bef\u8d85\u8fc75\u6b21\n", (Object)e.getLocalizedMessage());
+                        BookControllerKt.access$getLogger$p().error(msg, (Throwable)e);
+                        throw e;
+                    }
+                    msg = downloadErrorNo.element;
+                    downloadErrorNo.element = msg + 1;
+                    BookControllerKt.access$getLogger$p().error(Intrinsics.stringPlus((String)"tts\u4e0b\u8f7d\u9519\u8bef\n", (Object)e.getLocalizedMessage()), (Throwable)e);
+                    if (downloadErrorNo.element > 5) {
+                        msg1 = "TTS\u670d\u52a1\u5668\u8fde\u7eed5\u6b21\u9519\u8bef\uff0c\u5df2\u6682\u505c\u9605\u8bfb\u3002";
+                        BookControllerKt.access$getLogger$p().error(msg1, (Throwable)e);
+                        throw e;
+                    }
+                    BookControllerKt.access$getLogger$p().error(Intrinsics.stringPlus((String)"TTS\u4e0b\u8f7d\u97f3\u9891\u51fa\u9519\uff0c\u4f7f\u7528\u65e0\u58f0\u97f3\u9891\u4ee3\u66ff\u3002\n\u6717\u8bfb\u6587\u672c\uff1a", (Object)speakText));
+                    return null;
+                }
+            }
+        }
+        throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
+    }

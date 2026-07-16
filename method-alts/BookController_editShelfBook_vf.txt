@@ -1,0 +1,333 @@
+   public suspend fun editShelfBook(book: Book, userNameSpace: String, handler: (Book) -> Book): Book? {
+      // $VF: Couldn't be decompiled
+      // Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
+      // java.lang.IndexOutOfBoundsException: Index -1 out of bounds for length 0
+      //   at java.base/jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:64)
+      //   at java.base/jdk.internal.util.Preconditions.outOfBoundsCheckIndex(Preconditions.java:70)
+      //   at java.base/jdk.internal.util.Preconditions.checkIndex(Preconditions.java:266)
+      //   at java.base/java.util.Objects.checkIndex(Objects.java:361)
+      //   at java.base/java.util.ArrayList.remove(ArrayList.java:504)
+      //   at org.jetbrains.java.decompiler.modules.decompiler.FinallyProcessor.removeExceptionInstructionsEx(FinallyProcessor.java:1064)
+      //   at org.jetbrains.java.decompiler.modules.decompiler.FinallyProcessor.verifyFinallyEx(FinallyProcessor.java:565)
+      //   at org.jetbrains.java.decompiler.modules.decompiler.FinallyProcessor.iterateGraph(FinallyProcessor.java:90)
+      //
+      // Bytecode:
+      // 000: aload 4
+      // 002: instanceof com/htmake/reader/api/controller/BookController$editShelfBook$1
+      // 005: ifeq 029
+      // 008: aload 4
+      // 00a: checkcast com/htmake/reader/api/controller/BookController$editShelfBook$1
+      // 00d: astore 15
+      // 00f: aload 15
+      // 011: getfield com/htmake/reader/api/controller/BookController$editShelfBook$1.label I
+      // 014: ldc -2147483648
+      // 016: iand
+      // 017: ifeq 029
+      // 01a: aload 15
+      // 01c: dup
+      // 01d: getfield com/htmake/reader/api/controller/BookController$editShelfBook$1.label I
+      // 020: ldc -2147483648
+      // 022: isub
+      // 023: putfield com/htmake/reader/api/controller/BookController$editShelfBook$1.label I
+      // 026: goto 035
+      // 029: new com/htmake/reader/api/controller/BookController$editShelfBook$1
+      // 02c: dup
+      // 02d: aload 0
+      // 02e: aload 4
+      // 030: invokespecial com/htmake/reader/api/controller/BookController$editShelfBook$1.<init> (Lcom/htmake/reader/api/controller/BookController;Lkotlin/coroutines/Continuation;)V
+      // 033: astore 15
+      // 035: aload 15
+      // 037: getfield com/htmake/reader/api/controller/BookController$editShelfBook$1.result Ljava/lang/Object;
+      // 03a: astore 14
+      // 03c: invokestatic kotlin/coroutines/intrinsics/IntrinsicsKt.getCOROUTINE_SUSPENDED ()Ljava/lang/Object;
+      // 03f: astore 16
+      // 041: aload 15
+      // 043: getfield com/htmake/reader/api/controller/BookController$editShelfBook$1.label I
+      // 046: tableswitch 646 0 2 26 85 208
+      // 060: aload 14
+      // 062: invokestatic kotlin/ResultKt.throwOnFailure (Ljava/lang/Object;)V
+      // 065: getstatic com/htmake/reader/utils/UserMutex.INSTANCE Lcom/htmake/reader/utils/UserMutex;
+      // 068: aload 2
+      // 069: ldc_w "@bookshelf"
+      // 06c: invokestatic kotlin/jvm/internal/Intrinsics.stringPlus (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/String;
+      // 06f: aload 15
+      // 071: aload 15
+      // 073: aload 0
+      // 074: putfield com/htmake/reader/api/controller/BookController$editShelfBook$1.L$0 Ljava/lang/Object;
+      // 077: aload 15
+      // 079: aload 1
+      // 07a: putfield com/htmake/reader/api/controller/BookController$editShelfBook$1.L$1 Ljava/lang/Object;
+      // 07d: aload 15
+      // 07f: aload 2
+      // 080: putfield com/htmake/reader/api/controller/BookController$editShelfBook$1.L$2 Ljava/lang/Object;
+      // 083: aload 15
+      // 085: aload 3
+      // 086: putfield com/htmake/reader/api/controller/BookController$editShelfBook$1.L$3 Ljava/lang/Object;
+      // 089: aload 15
+      // 08b: bipush 1
+      // 08c: putfield com/htmake/reader/api/controller/BookController$editShelfBook$1.label I
+      // 08f: invokevirtual com/htmake/reader/utils/UserMutex.getLocker (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+      // 092: dup
+      // 093: aload 16
+      // 095: if_acmpne 0c6
+      // 098: aload 16
+      // 09a: areturn
+      // 09b: aload 15
+      // 09d: getfield com/htmake/reader/api/controller/BookController$editShelfBook$1.L$3 Ljava/lang/Object;
+      // 0a0: checkcast kotlin/jvm/functions/Function1
+      // 0a3: astore 3
+      // 0a4: aload 15
+      // 0a6: getfield com/htmake/reader/api/controller/BookController$editShelfBook$1.L$2 Ljava/lang/Object;
+      // 0a9: checkcast java/lang/String
+      // 0ac: astore 2
+      // 0ad: aload 15
+      // 0af: getfield com/htmake/reader/api/controller/BookController$editShelfBook$1.L$1 Ljava/lang/Object;
+      // 0b2: checkcast io/legado/app/data/entities/Book
+      // 0b5: astore 1
+      // 0b6: aload 15
+      // 0b8: getfield com/htmake/reader/api/controller/BookController$editShelfBook$1.L$0 Ljava/lang/Object;
+      // 0bb: checkcast com/htmake/reader/api/controller/BookController
+      // 0be: astore 0
+      // 0bf: aload 14
+      // 0c1: invokestatic kotlin/ResultKt.throwOnFailure (Ljava/lang/Object;)V
+      // 0c4: aload 14
+      // 0c6: checkcast kotlinx/coroutines/sync/Mutex
+      // 0c9: astore 5
+      // 0cb: nop
+      // 0cc: invokestatic com/htmake/reader/api/controller/BookControllerKt.access$getLogger$p ()Lmu/KLogger;
+      // 0cf: ldc_w "wait for lock {}"
+      // 0d2: aload 2
+      // 0d3: ldc_w "@bookshelf"
+      // 0d6: invokestatic kotlin/jvm/internal/Intrinsics.stringPlus (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/String;
+      // 0d9: invokeinterface mu/KLogger.info (Ljava/lang/String;Ljava/lang/Object;)V 3
+      // 0de: aload 5
+      // 0e0: aconst_null
+      // 0e1: aload 15
+      // 0e3: bipush 1
+      // 0e4: aconst_null
+      // 0e5: aload 15
+      // 0e7: aload 0
+      // 0e8: putfield com/htmake/reader/api/controller/BookController$editShelfBook$1.L$0 Ljava/lang/Object;
+      // 0eb: aload 15
+      // 0ed: aload 1
+      // 0ee: putfield com/htmake/reader/api/controller/BookController$editShelfBook$1.L$1 Ljava/lang/Object;
+      // 0f1: aload 15
+      // 0f3: aload 2
+      // 0f4: putfield com/htmake/reader/api/controller/BookController$editShelfBook$1.L$2 Ljava/lang/Object;
+      // 0f7: aload 15
+      // 0f9: aload 3
+      // 0fa: putfield com/htmake/reader/api/controller/BookController$editShelfBook$1.L$3 Ljava/lang/Object;
+      // 0fd: aload 15
+      // 0ff: aload 5
+      // 101: putfield com/htmake/reader/api/controller/BookController$editShelfBook$1.L$4 Ljava/lang/Object;
+      // 104: aload 15
+      // 106: bipush 2
+      // 107: putfield com/htmake/reader/api/controller/BookController$editShelfBook$1.label I
+      // 10a: invokestatic kotlinx/coroutines/sync/Mutex$DefaultImpls.lock$default (Lkotlinx/coroutines/sync/Mutex;Ljava/lang/Object;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+      // 10d: dup
+      // 10e: aload 16
+      // 110: if_acmpne 14c
+      // 113: aload 16
+      // 115: areturn
+      // 116: aload 15
+      // 118: getfield com/htmake/reader/api/controller/BookController$editShelfBook$1.L$4 Ljava/lang/Object;
+      // 11b: checkcast kotlinx/coroutines/sync/Mutex
+      // 11e: astore 5
+      // 120: aload 15
+      // 122: getfield com/htmake/reader/api/controller/BookController$editShelfBook$1.L$3 Ljava/lang/Object;
+      // 125: checkcast kotlin/jvm/functions/Function1
+      // 128: astore 3
+      // 129: aload 15
+      // 12b: getfield com/htmake/reader/api/controller/BookController$editShelfBook$1.L$2 Ljava/lang/Object;
+      // 12e: checkcast java/lang/String
+      // 131: astore 2
+      // 132: aload 15
+      // 134: getfield com/htmake/reader/api/controller/BookController$editShelfBook$1.L$1 Ljava/lang/Object;
+      // 137: checkcast io/legado/app/data/entities/Book
+      // 13a: astore 1
+      // 13b: aload 15
+      // 13d: getfield com/htmake/reader/api/controller/BookController$editShelfBook$1.L$0 Ljava/lang/Object;
+      // 140: checkcast com/htmake/reader/api/controller/BookController
+      // 143: astore 0
+      // 144: nop
+      // 145: aload 14
+      // 147: invokestatic kotlin/ResultKt.throwOnFailure (Ljava/lang/Object;)V
+      // 14a: aload 14
+      // 14c: pop
+      // 14d: invokestatic com/htmake/reader/api/controller/BookControllerKt.access$getLogger$p ()Lmu/KLogger;
+      // 150: ldc_w "lock success"
+      // 153: invokeinterface mu/KLogger.info (Ljava/lang/String;)V 2
+      // 158: aload 0
+      // 159: aload 2
+      // 15a: bipush 1
+      // 15b: anewarray 96
+      // 15e: astore 7
+      // 160: aload 7
+      // 162: bipush 0
+      // 163: ldc_w "bookshelf"
+      // 166: aastore
+      // 167: aload 7
+      // 169: invokevirtual com/htmake/reader/api/controller/BookController.getUserStorage (Ljava/lang/Object;[Ljava/lang/String;)Ljava/lang/String;
+      // 16c: invokestatic com/htmake/reader/utils/ExtKt.asJsonArray (Ljava/lang/Object;)Lio/vertx/core/json/JsonArray;
+      // 16f: astore 6
+      // 171: aload 6
+      // 173: ifnonnull 17f
+      // 176: new io/vertx/core/json/JsonArray
+      // 179: dup
+      // 17a: invokespecial io/vertx/core/json/JsonArray.<init> ()V
+      // 17d: astore 6
+      // 17f: bipush -1
+      // 180: istore 7
+      // 182: bipush 0
+      // 183: istore 8
+      // 185: aload 6
+      // 187: invokevirtual io/vertx/core/json/JsonArray.size ()I
+      // 18a: istore 9
+      // 18c: iload 8
+      // 18e: iload 9
+      // 190: if_icmpge 248
+      // 193: iload 8
+      // 195: istore 10
+      // 197: iinc 8 1
+      // 19a: aload 6
+      // 19c: iload 10
+      // 19e: invokevirtual io/vertx/core/json/JsonArray.getJsonObject (I)Lio/vertx/core/json/JsonObject;
+      // 1a1: ldc_w io/legado/app/data/entities/Book
+      // 1a4: invokevirtual io/vertx/core/json/JsonObject.mapTo (Ljava/lang/Class;)Ljava/lang/Object;
+      // 1a7: checkcast io/legado/app/data/entities/Book
+      // 1aa: astore 11
+      // 1ac: aload 1
+      // 1ad: invokevirtual io/legado/app/data/entities/Book.getBookUrl ()Ljava/lang/String;
+      // 1b0: checkcast java/lang/CharSequence
+      // 1b3: astore 12
+      // 1b5: bipush 0
+      // 1b6: istore 13
+      // 1b8: aload 12
+      // 1ba: invokeinterface java/lang/CharSequence.length ()I 1
+      // 1bf: ifle 1c6
+      // 1c2: bipush 1
+      // 1c3: goto 1c7
+      // 1c6: bipush 0
+      // 1c7: ifeq 1e0
+      // 1ca: aload 11
+      // 1cc: invokevirtual io/legado/app/data/entities/Book.getBookUrl ()Ljava/lang/String;
+      // 1cf: aload 1
+      // 1d0: invokevirtual io/legado/app/data/entities/Book.getBookUrl ()Ljava/lang/String;
+      // 1d3: invokevirtual java/lang/String.equals (Ljava/lang/Object;)Z
+      // 1d6: ifeq 1e0
+      // 1d9: iload 10
+      // 1db: istore 7
+      // 1dd: goto 248
+      // 1e0: aload 1
+      // 1e1: invokevirtual io/legado/app/data/entities/Book.getName ()Ljava/lang/String;
+      // 1e4: checkcast java/lang/CharSequence
+      // 1e7: astore 12
+      // 1e9: bipush 0
+      // 1ea: istore 13
+      // 1ec: aload 12
+      // 1ee: invokeinterface java/lang/CharSequence.length ()I 1
+      // 1f3: ifle 1fa
+      // 1f6: bipush 1
+      // 1f7: goto 1fb
+      // 1fa: bipush 0
+      // 1fb: ifeq 241
+      // 1fe: aload 11
+      // 200: invokevirtual io/legado/app/data/entities/Book.getName ()Ljava/lang/String;
+      // 203: aload 1
+      // 204: invokevirtual io/legado/app/data/entities/Book.getName ()Ljava/lang/String;
+      // 207: invokevirtual java/lang/String.equals (Ljava/lang/Object;)Z
+      // 20a: ifeq 241
+      // 20d: aload 1
+      // 20e: invokevirtual io/legado/app/data/entities/Book.getAuthor ()Ljava/lang/String;
+      // 211: checkcast java/lang/CharSequence
+      // 214: astore 12
+      // 216: bipush 0
+      // 217: istore 13
+      // 219: aload 12
+      // 21b: invokeinterface java/lang/CharSequence.length ()I 1
+      // 220: ifle 227
+      // 223: bipush 1
+      // 224: goto 228
+      // 227: bipush 0
+      // 228: ifeq 241
+      // 22b: aload 11
+      // 22d: invokevirtual io/legado/app/data/entities/Book.getAuthor ()Ljava/lang/String;
+      // 230: aload 1
+      // 231: invokevirtual io/legado/app/data/entities/Book.getAuthor ()Ljava/lang/String;
+      // 234: invokevirtual java/lang/String.equals (Ljava/lang/Object;)Z
+      // 237: ifeq 241
+      // 23a: iload 10
+      // 23c: istore 7
+      // 23e: goto 248
+      // 241: iload 8
+      // 243: iload 9
+      // 245: if_icmplt 193
+      // 248: iload 7
+      // 24a: iflt 2b2
+      // 24d: aload 6
+      // 24f: invokevirtual io/vertx/core/json/JsonArray.getList ()Ljava/util/List;
+      // 252: astore 8
+      // 254: aload 6
+      // 256: iload 7
+      // 258: invokevirtual io/vertx/core/json/JsonArray.getJsonObject (I)Lio/vertx/core/json/JsonObject;
+      // 25b: ldc_w io/legado/app/data/entities/Book
+      // 25e: invokevirtual io/vertx/core/json/JsonObject.mapTo (Ljava/lang/Class;)Ljava/lang/Object;
+      // 261: checkcast io/legado/app/data/entities/Book
+      // 264: astore 9
+      // 266: aload 3
+      // 267: aload 9
+      // 269: astore 10
+      // 26b: aload 10
+      // 26d: ldc_w "existBook"
+      // 270: invokestatic kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue (Ljava/lang/Object;Ljava/lang/String;)V
+      // 273: aload 10
+      // 275: invokeinterface kotlin/jvm/functions/Function1.invoke (Ljava/lang/Object;)Ljava/lang/Object; 2
+      // 27a: checkcast io/legado/app/data/entities/Book
+      // 27d: astore 9
+      // 27f: aload 8
+      // 281: iload 7
+      // 283: aload 9
+      // 285: invokestatic io/vertx/core/json/JsonObject.mapFrom (Ljava/lang/Object;)Lio/vertx/core/json/JsonObject;
+      // 288: invokeinterface java/util/List.set (ILjava/lang/Object;)Ljava/lang/Object; 3
+      // 28d: pop
+      // 28e: new io/vertx/core/json/JsonArray
+      // 291: dup
+      // 292: aload 8
+      // 294: invokespecial io/vertx/core/json/JsonArray.<init> (Ljava/util/List;)V
+      // 297: astore 6
+      // 299: aload 0
+      // 29a: aload 2
+      // 29b: ldc_w "bookshelf"
+      // 29e: aload 6
+      // 2a0: invokevirtual com/htmake/reader/api/controller/BookController.saveUserStorage (Ljava/lang/Object;Ljava/lang/String;Ljava/lang/Object;)V
+      // 2a3: aload 9
+      // 2a5: astore 10
+      // 2a7: aload 5
+      // 2a9: aconst_null
+      // 2aa: bipush 1
+      // 2ab: aconst_null
+      // 2ac: invokestatic kotlinx/coroutines/sync/Mutex$DefaultImpls.unlock$default (Lkotlinx/coroutines/sync/Mutex;Ljava/lang/Object;ILjava/lang/Object;)V
+      // 2af: aload 10
+      // 2b1: areturn
+      // 2b2: aload 5
+      // 2b4: aconst_null
+      // 2b5: bipush 1
+      // 2b6: aconst_null
+      // 2b7: invokestatic kotlinx/coroutines/sync/Mutex$DefaultImpls.unlock$default (Lkotlinx/coroutines/sync/Mutex;Ljava/lang/Object;ILjava/lang/Object;)V
+      // 2ba: goto 2ca
+      // 2bd: astore 6
+      // 2bf: aload 5
+      // 2c1: aconst_null
+      // 2c2: bipush 1
+      // 2c3: aconst_null
+      // 2c4: invokestatic kotlinx/coroutines/sync/Mutex$DefaultImpls.unlock$default (Lkotlinx/coroutines/sync/Mutex;Ljava/lang/Object;ILjava/lang/Object;)V
+      // 2c7: aload 6
+      // 2c9: athrow
+      // 2ca: aconst_null
+      // 2cb: areturn
+      // 2cc: new java/lang/IllegalStateException
+      // 2cf: dup
+      // 2d0: ldc_w "call to 'resume' before 'invoke' with coroutine"
+      // 2d3: invokespecial java/lang/IllegalStateException.<init> (Ljava/lang/String;)V
+      // 2d6: athrow
+   }

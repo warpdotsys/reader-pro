@@ -1,0 +1,15 @@
+                v1 = this.editShelfBook(bookInfo, userNameSpace, (Function1<? super Book, Book>)((Function1)new Function1<Book, Book>(bookInfo){
+                    final /* synthetic */ Book $bookInfo;
+                    {
+                        this.$bookInfo = $bookInfo;
+                        super(1);
+                    }
+
+                    @NotNull
+                    public final Book invoke(@NotNull Book existBook) {
+                        Intrinsics.checkNotNullParameter((Object)existBook, (String)"existBook");
+                        existBook.setCoverUrl(this.$bookInfo.getCoverUrl());
+                        BookControllerKt.access$getLogger$p().info("refreshLocalBook: {}", (Object)existBook);
+                        return existBook;
+                    }
+                }

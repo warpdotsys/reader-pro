@@ -1,0 +1,4 @@
+                v4 = this.saveBookCover((Book)var7_10, var5_8, (String)bookSource, (Continuation<? super Unit>)$continuation);
+                if (v4 == var12_5) {
+                    return var12_5;
+                }

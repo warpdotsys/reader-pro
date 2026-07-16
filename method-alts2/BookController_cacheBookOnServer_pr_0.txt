@@ -1,0 +1,288 @@
+    public final Object cacheBookOnServer(@NotNull JsonArray bookUrlList, @NotNull String userNameSpace, @NotNull final Continuation<? super Unit> $completion) {
+        final Continuation $continuation;
+        Label_0050: {
+            if ($completion instanceof BookController$cacheBookOnServer.BookController$cacheBookOnServer$3) {
+                final BookController$cacheBookOnServer.BookController$cacheBookOnServer$3 bookController$cacheBookOnServer$3 = (BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$completion;
+                if ((bookController$cacheBookOnServer$3.label & Integer.MIN_VALUE) != 0x0) {
+                    final BookController$cacheBookOnServer.BookController$cacheBookOnServer$3 bookController$cacheBookOnServer$4 = bookController$cacheBookOnServer$3;
+                    bookController$cacheBookOnServer$4.label -= Integer.MIN_VALUE;
+                    break Label_0050;
+                }
+            }
+            $continuation = (Continuation)new BookController$cacheBookOnServer.BookController$cacheBookOnServer$3(this, (Continuation)$completion);
+        }
+        final Object $result = ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).result;
+        final Object coroutine_SUSPENDED = IntrinsicsKt.getCOROUTINE_SUSPENDED();
+    Label_0485_Outer:
+        while (true) {
+            int i$0 = 0;
+            int i$2 = 0;
+            Label_1277: {
+                Book book = null;
+                Label_1264: {
+                    while (true) {
+                        String l$4;
+                        Object localChapterList$default = null;
+                        int j;
+                        int chapterIndex;
+                        List chapterList;
+                        BookChapter chapterInfo;
+                        String nextChapterUrl;
+                        BookChapter nextChapterInfo;
+                        WebBook webBook;
+                        Book book2;
+                        BookChapter bookChapter;
+                        String nextChapterUrl2;
+                        Continuation $completion2;
+                        Set cachedChapterContentSet;
+                        File localCacheDir;
+                        int n = 0;
+                        int n2 = 0;
+                        Object bookContent;
+                        String content;
+                        File chapterCacheFile;
+                        BookHelp instance;
+                        CoroutineScope scope;
+                        Object fromJson-IoAF18A;
+                        BookSource bookSource2;
+                        BookSource bookSource3;
+                        Book book3;
+                        BookChapter bookChapter2;
+                        String content2;
+                        Continuation $completion3;
+                        Set set;
+                        int i$3;
+                        File file;
+                        List list;
+                        int i;
+                        String bookUrl;
+                        Book bookInfo;
+                        String bookSource;
+                        CharSequence charSequence;
+                        Book book4;
+                        String s;
+                        boolean b;
+                        boolean b2;
+                        Mutex mutex;
+                        Continuation continuation;
+                        int n3;
+                        Object o;
+                        Label_1257:Label_1102_Outer:
+                        while (true) {
+                            Label_0441: {
+                                while (true) {
+                                    switch (((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).label) {
+                                        case 0: {
+                                            ResultKt.throwOnFailure($result);
+                                            i$0 = 0;
+                                            i$2 = bookUrlList.size();
+                                            if (i$0 < i$2) {
+                                                break;
+                                            }
+                                            return Unit.INSTANCE;
+                                        }
+                                        case 1: {
+                                            i$2 = ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).I$1;
+                                            i$0 = ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).I$0;
+                                            l$4 = (String)((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$4;
+                                            book = (Book)((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$3;
+                                            userNameSpace = (String)((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$2;
+                                            bookUrlList = (JsonArray)((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$1;
+                                            this = (BookController)((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$0;
+                                            ResultKt.throwOnFailure($result);
+                                            localChapterList$default = $result;
+                                            break Label_0441;
+                                        }
+                                        case 2: {
+                                            Label_0707: {
+                                                break Label_0707;
+                                                chapterIndex = j;
+                                                chapterInfo = chapterList.get(j);
+                                                try {
+                                                    nextChapterUrl = null;
+                                                    if (chapterIndex + 1 < chapterList.size()) {
+                                                        nextChapterInfo = chapterList.get(chapterIndex + 1);
+                                                        nextChapterUrl = nextChapterInfo.getUrl();
+                                                    }
+                                                    webBook = new WebBook(l$4, this.getAppConfig().getDebugLog(), null, userNameSpace, 4, null);
+                                                    book2 = book;
+                                                    bookChapter = chapterInfo;
+                                                    nextChapterUrl2 = nextChapterUrl;
+                                                    $completion2 = $continuation;
+                                                    ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$0 = this;
+                                                    ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$1 = bookUrlList;
+                                                    ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$2 = userNameSpace;
+                                                    ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$3 = book;
+                                                    ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$4 = l$4;
+                                                    ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$5 = chapterList;
+                                                    ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$6 = cachedChapterContentSet;
+                                                    ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$7 = localCacheDir;
+                                                    ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$8 = chapterInfo;
+                                                    ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).I$0 = i$0;
+                                                    ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).I$1 = i$2;
+                                                    ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).I$2 = n;
+                                                    ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).I$3 = n2;
+                                                    ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).I$4 = chapterIndex;
+                                                    ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).label = 2;
+                                                    if ((bookContent = webBook.getBookContent(book2, bookChapter, nextChapterUrl2, (Continuation<? super String>)$completion2)) == coroutine_SUSPENDED) {
+                                                        return coroutine_SUSPENDED;
+                                                    }
+                                                Label_1222_Outer:
+                                                    while (true) {
+                                                        content = (String)bookContent;
+                                                        chapterCacheFile = new File(localCacheDir.getAbsolutePath() + (Object)File.separator + chapterIndex + ".txt");
+                                                        FilesKt.writeText$default(chapterCacheFile, content, (Charset)null, 2, (Object)null);
+                                                        instance = BookHelp.INSTANCE;
+                                                        scope = (CoroutineScope)this;
+                                                        fromJson-IoAF18A = BookSource.Companion.fromJson-IoAF18A(l$4);
+                                                        bookSource2 = (BookSource)(Result.isFailure-impl(fromJson-IoAF18A) ? null : fromJson-IoAF18A);
+                                                        bookSource3 = ((bookSource2 == null) ? new BookSource(null, null, null, 0, null, 0, false, false, null, null, null, null, null, null, null, null, 0L, 0L, 0, null, null, null, null, null, null, null, 67108863, null) : bookSource2);
+                                                        book3 = book;
+                                                        bookChapter2 = chapterInfo;
+                                                        content2 = content;
+                                                        $completion3 = $continuation;
+                                                        ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$0 = this;
+                                                        ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$1 = bookUrlList;
+                                                        ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$2 = userNameSpace;
+                                                        ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$3 = book;
+                                                        ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$4 = l$4;
+                                                        ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$5 = chapterList;
+                                                        ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$6 = cachedChapterContentSet;
+                                                        ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$7 = localCacheDir;
+                                                        ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$8 = null;
+                                                        ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).I$0 = i$0;
+                                                        ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).I$1 = i$2;
+                                                        ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).I$2 = n;
+                                                        ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).I$3 = n2;
+                                                        ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).I$4 = chapterIndex;
+                                                        ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).label = 3;
+                                                        if (instance.saveImages(scope, bookSource3, book3, bookChapter2, content2, (Continuation<? super Unit>)$completion3) == coroutine_SUSPENDED) {
+                                                            return coroutine_SUSPENDED;
+                                                        }
+                                                        while (true) {
+                                                            set.add(Boxing.boxInt(i$3));
+                                                            break Label_1257;
+                                                            i$3 = ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).I$4;
+                                                            n2 = ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).I$3;
+                                                            n = ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).I$2;
+                                                            i$2 = ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).I$1;
+                                                            i$0 = ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).I$0;
+                                                            file = (File)((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$7;
+                                                            set = (Set)((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$6;
+                                                            list = (List)((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$5;
+                                                            l$4 = (String)((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$4;
+                                                            book = (Book)((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$3;
+                                                            userNameSpace = (String)((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$2;
+                                                            bookUrlList = (JsonArray)((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$1;
+                                                            this = (BookController)((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$0;
+                                                            ResultKt.throwOnFailure($result);
+                                                            continue Label_1102_Outer;
+                                                        }
+                                                        chapterIndex = ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).I$4;
+                                                        n2 = ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).I$3;
+                                                        n = ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).I$2;
+                                                        i$2 = ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).I$1;
+                                                        i$0 = ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).I$0;
+                                                        chapterInfo = (BookChapter)((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$8;
+                                                        localCacheDir = (File)((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$7;
+                                                        cachedChapterContentSet = (Set)((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$6;
+                                                        chapterList = (List)((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$5;
+                                                        l$4 = (String)((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$4;
+                                                        book = (Book)((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$3;
+                                                        userNameSpace = (String)((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$2;
+                                                        bookUrlList = (JsonArray)((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$1;
+                                                        this = (BookController)((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$0;
+                                                        ResultKt.throwOnFailure($result);
+                                                        bookContent = $result;
+                                                        continue Label_1222_Outer;
+                                                    }
+                                                }
+                                                catch (final Exception e) {
+                                                    BookControllerKt.access$getLogger$p().info("cacheBookOnServer error: {}", (Object)e.getMessage());
+                                                }
+                                            }
+                                            break Label_1257;
+                                        }
+                                        case 3: {
+                                            continue Label_0485_Outer;
+                                        }
+                                        default: {
+                                            throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
+                                        }
+                                    }
+                                    break;
+                                }
+                                i = i$0;
+                                ++i$0;
+                                bookUrl = bookUrlList.getString(i);
+                                Intrinsics.checkNotNullExpressionValue((Object)bookUrl, "bookUrl");
+                                bookInfo = this.getShelfBookByURL(bookUrl, userNameSpace);
+                                if (bookInfo == null) {
+                                    BookControllerKt.access$getLogger$p().info("\u672a\u627e\u5230\u4e66\u7c4d\u4fe1\u606f: {}", (Object)bookUrl);
+                                    break Label_1277;
+                                }
+                                if (bookInfo.isLocalBook()) {
+                                    BookControllerKt.access$getLogger$p().info("\u672c\u5730\u4e66\u7c4d\u8df3\u8fc7\u7f13\u5b58: {}", (Object)bookUrl);
+                                    break Label_1277;
+                                }
+                                BookControllerKt.access$getLogger$p().info("\u5f00\u59cb\u7f13\u5b58\u4e66\u7c4d: {}", (Object)bookInfo);
+                                bookSource = this.getBookSourceStringBySourceURLOpt(bookInfo.getOrigin(), userNameSpace);
+                                charSequence = bookSource;
+                                if (charSequence == null || charSequence.length() == 0) {
+                                    BookControllerKt.access$getLogger$p().info("\u672a\u627e\u5230\u4e66\u6e90\u4fe1\u606f: {}", (Object)bookUrl);
+                                    break Label_1277;
+                                }
+                                book4 = bookInfo;
+                                s = bookSource;
+                                b = false;
+                                b2 = false;
+                                mutex = null;
+                                continuation = $continuation;
+                                n3 = 48;
+                                o = null;
+                                ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$0 = this;
+                                ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$1 = bookUrlList;
+                                ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$2 = userNameSpace;
+                                ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$3 = bookInfo;
+                                ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$4 = bookSource;
+                                ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$5 = null;
+                                ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$6 = null;
+                                ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$7 = null;
+                                ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).L$8 = null;
+                                ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).I$0 = i$0;
+                                ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).I$1 = i$2;
+                                ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$3)$continuation).label = 1;
+                                if ((localChapterList$default = getLocalChapterList$default(this, book4, s, b, userNameSpace, b2, mutex, continuation, n3, o)) == coroutine_SUSPENDED) {
+                                    return coroutine_SUSPENDED;
+                                }
+                            }
+                            chapterList = (List)localChapterList$default;
+                            cachedChapterContentSet = this.getCachedChapterContentSet(book, userNameSpace);
+                            localCacheDir = this.getChapterCacheDir(book, userNameSpace);
+                            n = 0;
+                            n2 = chapterList.size() - 1;
+                            if (n > n2) {
+                                break Label_1264;
+                            }
+                            j = n;
+                            ++n;
+                            if (!cachedChapterContentSet.contains(Boxing.boxInt(j))) {
+                                continue Label_0485_Outer;
+                            }
+                            break;
+                        }
+                        if (n <= n2) {
+                            continue;
+                        }
+                        break;
+                    }
+                }
+                BookControllerKt.access$getLogger$p().info("\u7f13\u5b58\u4e66\u7c4d\u5b8c\u6210: {}", (Object)book);
+            }
+            if (i$0 < i$2) {
+                continue;
+            }
+            break;
+        }
+        return Unit.INSTANCE;
+    }

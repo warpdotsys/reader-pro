@@ -1,0 +1,97 @@
+    public final Object saveBookCover(@NotNull Book var1_1, @NotNull String var2_2, @Nullable String var3_3, @NotNull Continuation<? super Unit> var4_4) {
+        if (!(var4_4 instanceof saveBookCover.1)) ** GOTO lbl-1000
+        var19_5 = var4_4;
+        if ((var19_5.label & -2147483648) != 0) {
+            var19_5.label -= -2147483648;
+        } else lbl-1000:
+        // 2 sources
+
+        {
+            $continuation = new ContinuationImpl(this, var4_4){
+                Object L$0;
+                Object L$1;
+                Object L$2;
+                /* synthetic */ Object result;
+                final /* synthetic */ BookController this$0;
+                int label;
+                {
+                    this.this$0 = this$0;
+                    super($completion);
+                }
+
+                @Nullable
+                public final Object invokeSuspend(@NotNull Object $result) {
+                    this.result = $result;
+                    this.label |= Integer.MIN_VALUE;
+                    return this.this$0.saveBookCover(null, null, null, (Continuation<? super Unit>)((Continuation)this));
+                }
+            };
+        }
+        $result = $continuation.result;
+        var20_7 = IntrinsicsKt.getCOROUTINE_SUSPENDED();
+        switch ($continuation.label) {
+            case 0: {
+                ResultKt.throwOnFailure((Object)$result);
+                coverUrl = book.getDisplayCover();
+                if (coverUrl == null || StringsKt.startsWith$default((String)coverUrl, (String)"/", (boolean)false, (int)2, null)) ** GOTO lbl65
+                var7_9 = bookSource;
+                bookSource = var7_9 == null ? this.getBookSourceStringBySourceURLOpt(book.getOrigin(), (String)userNameSpace) : var7_9;
+                ext = this.getFileExt(coverUrl, "jpg");
+                md5Encode = MD5Utils.INSTANCE.md5Encode(coverUrl).toString();
+                var10_12 = new String[]{"storage", "assets", userNameSpace, "covers", md5Encode + '.' + ext};
+                cachePath = ExtKt.getWorkDir(var10_12);
+                cachedCoverUrl = "/assets/" + (String)userNameSpace + "/covers/" + md5Encode + '.' + ext;
+                cacheFile = new File(cachePath);
+                if (cacheFile.exists()) {
+                    book.setCoverUrl(cachedCoverUrl);
+                    return Unit.INSTANCE;
+                }
+                v0 = bookSource;
+                Intrinsics.checkNotNull((Object)v0);
+                var13_15 = BookSource.Companion.fromJson-IoAF18A((String)v0);
+                var14_18 = false;
+                analyzeUrl = new AnalyzeUrl(coverUrl, null, null, null, null, null, (BaseSource)(Result.isFailure-impl((Object)var13_15) != false ? null : var13_15), null, null, null, null, 1982, null);
+                $continuation.L$0 = book;
+                $continuation.L$1 = cachePath;
+                $continuation.L$2 = cachedCoverUrl;
+                $continuation.label = 1;
+                v1 = analyzeUrl.getByteArrayAwait((Continuation<? super byte[]>)$continuation);
+                ** if (v1 != var20_7) goto lbl39
+lbl38:
+                // 1 sources
+
+                return var20_7;
+lbl39:
+                // 1 sources
+
+                ** GOTO lbl49
+            }
+            case 1: {
+                var10_12 = (String[])$continuation.L$2;
+                var9_13 = (String)$continuation.L$1;
+                var1_1 = (Book)$continuation.L$0;
+                try {
+                    ResultKt.throwOnFailure((Object)$result);
+                    v1 = $result;
+lbl49:
+                    // 2 sources
+
+                    var13_15 = v1;
+                    var14_18 = false;
+                    var15_20 = false;
+                    it = (byte[])var13_15;
+                    $i$a$-let-BookController$saveBookCover$2 = false;
+                    FileUtils.INSTANCE.writeBytes(var9_13, it);
+                    var1_1.setCoverUrl((String)var10_12);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+lbl65:
+                // 3 sources
+
+                return Unit.INSTANCE;
+            }
+        }
+        throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
+    }

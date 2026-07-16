@@ -1,0 +1,4 @@
+                v1 = this.getSpeakStream(httpTTS, (String)text, (int)speechRate, (Continuation<? super InputStream>)$continuation);
+                if (v1 == var17_8) {
+                    return var17_8;
+                }

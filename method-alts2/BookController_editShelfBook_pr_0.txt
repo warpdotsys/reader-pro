@@ -1,0 +1,121 @@
+    public final Object editShelfBook(@NotNull Book book, @NotNull String userNameSpace, @NotNull Function1<? super Book, Book> handler, @NotNull final Continuation<? super Book> $completion) {
+        final Continuation $continuation;
+        Label_0053: {
+            if ($completion instanceof BookController$editShelfBook.BookController$editShelfBook$1) {
+                final BookController$editShelfBook.BookController$editShelfBook$1 bookController$editShelfBook$1 = (BookController$editShelfBook.BookController$editShelfBook$1)$completion;
+                if ((bookController$editShelfBook$1.label & Integer.MIN_VALUE) != 0x0) {
+                    final BookController$editShelfBook.BookController$editShelfBook$1 bookController$editShelfBook$2 = bookController$editShelfBook$1;
+                    bookController$editShelfBook$2.label -= Integer.MIN_VALUE;
+                    break Label_0053;
+                }
+            }
+            $continuation = (Continuation)new BookController$editShelfBook.BookController$editShelfBook$1(this, (Continuation)$completion);
+        }
+        final Object $result = ((BookController$editShelfBook.BookController$editShelfBook$1)$continuation).result;
+        final Object coroutine_SUSPENDED = IntrinsicsKt.getCOROUTINE_SUSPENDED();
+        Label_0198: {
+            switch (((BookController$editShelfBook.BookController$editShelfBook$1)$continuation).label) {
+                case 0: {
+                    ResultKt.throwOnFailure($result);
+                    final UserMutex instance = UserMutex.INSTANCE;
+                    final String stringPlus = Intrinsics.stringPlus(userNameSpace, (Object)"@bookshelf");
+                    final Continuation $completion2 = $continuation;
+                    ((BookController$editShelfBook.BookController$editShelfBook$1)$continuation).L$0 = this;
+                    ((BookController$editShelfBook.BookController$editShelfBook$1)$continuation).L$1 = book;
+                    ((BookController$editShelfBook.BookController$editShelfBook$1)$continuation).L$2 = userNameSpace;
+                    ((BookController$editShelfBook.BookController$editShelfBook$1)$continuation).L$3 = handler;
+                    ((BookController$editShelfBook.BookController$editShelfBook$1)$continuation).label = 1;
+                    final Object locker;
+                    if ((locker = instance.getLocker(stringPlus, (Continuation<? super Mutex>)$completion2)) == coroutine_SUSPENDED) {
+                        return coroutine_SUSPENDED;
+                    }
+                    break Label_0198;
+                }
+                case 1: {
+                    handler = (Function1)((BookController$editShelfBook.BookController$editShelfBook$1)$continuation).L$3;
+                    userNameSpace = (String)((BookController$editShelfBook.BookController$editShelfBook$1)$continuation).L$2;
+                    book = (Book)((BookController$editShelfBook.BookController$editShelfBook$1)$continuation).L$1;
+                    this = (BookController)((BookController$editShelfBook.BookController$editShelfBook$1)$continuation).L$0;
+                    ResultKt.throwOnFailure($result);
+                    final Object locker = $result;
+                    break Label_0198;
+                }
+                case 2: {
+                    Label_0278: {
+                        break Label_0278;
+                        final Object locker;
+                        Mutex mutex = (Mutex)locker;
+                        try {
+                            BookControllerKt.access$getLogger$p().info("wait for lock {}", (Object)Intrinsics.stringPlus(userNameSpace, (Object)"@bookshelf"));
+                            final Mutex mutex2 = mutex;
+                            final Object o = null;
+                            final Continuation continuation = $continuation;
+                            final int n = 1;
+                            final Object o2 = null;
+                            ((BookController$editShelfBook.BookController$editShelfBook$1)$continuation).L$0 = this;
+                            ((BookController$editShelfBook.BookController$editShelfBook$1)$continuation).L$1 = book;
+                            ((BookController$editShelfBook.BookController$editShelfBook$1)$continuation).L$2 = userNameSpace;
+                            ((BookController$editShelfBook.BookController$editShelfBook$1)$continuation).L$3 = handler;
+                            ((BookController$editShelfBook.BookController$editShelfBook$1)$continuation).L$4 = mutex;
+                            ((BookController$editShelfBook.BookController$editShelfBook$1)$continuation).label = 2;
+                            if (Mutex$DefaultImpls.lock$default(mutex2, o, continuation, n, o2) == coroutine_SUSPENDED) {
+                                return coroutine_SUSPENDED;
+                            }
+                            while (true) {
+                                BookControllerKt.access$getLogger$p().info("lock success");
+                                JsonArray bookshelf = ExtKt.asJsonArray(this.getUserStorage(userNameSpace, "bookshelf"));
+                                if (bookshelf == null) {
+                                    bookshelf = new JsonArray();
+                                }
+                                int existIndex = -1;
+                                int j = 0;
+                                final int size = bookshelf.size();
+                                if (j < size) {
+                                    do {
+                                        final int i = j;
+                                        ++j;
+                                        final Book _book = (Book)bookshelf.getJsonObject(i).mapTo((Class)Book.class);
+                                        if (book.getBookUrl().length() > 0 && _book.getBookUrl().equals(book.getBookUrl())) {
+                                            existIndex = i;
+                                            break;
+                                        }
+                                        if (book.getName().length() > 0 && _book.getName().equals(book.getName()) && book.getAuthor().length() > 0 && _book.getAuthor().equals(book.getAuthor())) {
+                                            existIndex = i;
+                                            break;
+                                        }
+                                    } while (j < size);
+                                }
+                                if (existIndex >= 0) {
+                                    final List bookList = bookshelf.getList();
+                                    Book existBook = (Book)bookshelf.getJsonObject(existIndex).mapTo((Class)Book.class);
+                                    final Function1 function1 = handler;
+                                    final Book book2 = existBook;
+                                    Intrinsics.checkNotNullExpressionValue((Object)book2, "existBook");
+                                    existBook = (Book)function1.invoke((Object)book2);
+                                    bookList.set(existIndex, JsonObject.mapFrom((Object)existBook));
+                                    bookshelf = new JsonArray(bookList);
+                                    this.saveUserStorage(userNameSpace, "bookshelf", bookshelf);
+                                    return existBook;
+                                }
+                                return null;
+                                mutex = (Mutex)((BookController$editShelfBook.BookController$editShelfBook$1)$continuation).L$4;
+                                handler = (Function1)((BookController$editShelfBook.BookController$editShelfBook$1)$continuation).L$3;
+                                userNameSpace = (String)((BookController$editShelfBook.BookController$editShelfBook$1)$continuation).L$2;
+                                book = (Book)((BookController$editShelfBook.BookController$editShelfBook$1)$continuation).L$1;
+                                this = (BookController)((BookController$editShelfBook.BookController$editShelfBook$1)$continuation).L$0;
+                                ResultKt.throwOnFailure($result);
+                                continue;
+                            }
+                        }
+                        finally {
+                            Mutex$DefaultImpls.unlock$default(mutex, (Object)null, 1, (Object)null);
+                        }
+                    }
+                    return null;
+                }
+                default: {
+                    throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
+                }
+            }
+        }
+    }

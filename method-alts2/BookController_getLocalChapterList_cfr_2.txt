@@ -1,0 +1,18 @@
+                                    public final Object invokeSuspend(@NotNull Object object) {
+                                        Object object2 = IntrinsicsKt.getCOROUTINE_SUSPENDED();
+                                        switch (this.label) {
+                                            case 0: {
+                                                ResultKt.throwOnFailure((Object)object);
+                                                Object object3 = this.$book.element;
+                                                Intrinsics.checkNotNullExpressionValue((Object)object3, (String)"book");
+                                                this.label = 1;
+                                                Object object4 = this.this$0.getLocalChapterList((Book)object3, (String)this.$bookSource.element, this.$refresh, this.$userNameSpace, false, this.$mutex, (Continuation<? super List<BookChapter>>)((Continuation)this));
+                                                if (object4 != object2) return object4;
+                                                return object2;
+                                            }
+                                            case 1: {
+                                                void $result;
+                                                ResultKt.throwOnFailure((Object)$result);
+                                                Object object4 = $result;
+                                                return object4;
+                                            }

@@ -1,0 +1,4 @@
+        final Object editShelfBook = this.editShelfBook((Book)book.element, userNameSpace, (Function1<? super Book, Book>)new BookController$syncBookProgressFromWebdav.BookController$syncBookProgressFromWebdav$2(book), (Continuation<? super Book>)$completion);
+        if (editShelfBook == IntrinsicsKt.getCOROUTINE_SUSPENDED()) {
+            return editShelfBook;
+        }

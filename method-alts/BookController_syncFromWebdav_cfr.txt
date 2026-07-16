@@ -1,0 +1,142 @@
+    public final Object syncFromWebdav(@NotNull String var1_1, @NotNull String var2_2, @NotNull Continuation<? super Boolean> var3_3) {
+        if (!(var3_3 instanceof syncFromWebdav.1)) ** GOTO lbl-1000
+        var20_4 = var3_3;
+        if ((var20_4.label & -2147483648) != 0) {
+            var20_4.label -= -2147483648;
+        } else lbl-1000:
+        // 2 sources
+
+        {
+            $continuation = new ContinuationImpl(this, var3_3){
+                Object L$0;
+                Object L$1;
+                Object L$2;
+                Object L$3;
+                int I$0;
+                int I$1;
+                /* synthetic */ Object result;
+                final /* synthetic */ BookController this$0;
+                int label;
+                {
+                    this.this$0 = this$0;
+                    super($completion);
+                }
+
+                @Nullable
+                public final Object invokeSuspend(@NotNull Object $result) {
+                    this.result = $result;
+                    this.label |= Integer.MIN_VALUE;
+                    return this.this$0.syncFromWebdav(null, null, (Continuation<? super Boolean>)((Continuation)this));
+                }
+            };
+        }
+        $result = $continuation.result;
+        var21_6 = IntrinsicsKt.getCOROUTINE_SUSPENDED();
+        block4 : switch ($continuation.label) {
+            case 0: {
+                ResultKt.throwOnFailure((Object)$result);
+                descDir = null;
+                var5_8 = new String[]{"storage", "data", userNameSpace, "tmp"};
+                descDir = ExtKt.getWorkDir(var5_8);
+                descDirFile = new File(descDir);
+                try {
+                    userHome = this.getUserWebdavHome(userNameSpace);
+                    zipFile = new File((String)zipFilePath);
+                    if (!zipFile.exists()) {
+                        var8_13 = Boxing.boxBoolean((boolean)false);
+                        ExtKt.deleteRecursively(descDirFile);
+                        return var8_13;
+                    }
+                    ExtKt.deleteRecursively(descDirFile);
+                    ZipUtils.INSTANCE.unzipFile(zipFile, descDirFile);
+                    var9_15 = this.getBackupFileNames();
+                    syncDataFileList = CollectionsKt.arrayListOf((Object[])Arrays.copyOf(var9_15, var9_15.length));
+                    $this$forEach$iv = syncDataFileList;
+                    $i$f$forEach = false;
+                    for (E element$iv : $this$forEach$iv) {
+                        it = (String)element$iv;
+                        $i$a$-forEach-BookController$syncFromWebdav$2 = false;
+                        backupFile = new File(descDir + File.separator + it);
+                        if (!backupFile.exists()) continue;
+                        var16_26 = new String[]{"storage", "data", userNameSpace, it};
+                        userDataFile = new File(ExtKt.getWorkDir(var16_26));
+                        ExtKt.deleteRecursively(userDataFile);
+                        FilesKt.copyRecursively$default((File)backupFile, (File)userDataFile, (boolean)false, null, (int)6, null);
+                    }
+                    backupBooksDir = new File(descDir + File.separator + "books");
+                    if (backupBooksDir.exists()) {
+                        var11_19 = new String[]{"storage", "data", userNameSpace, "webdav", "books"};
+                        webdavBooksDir = new File(ExtKt.getWorkDir((String[])var11_19));
+                        ExtKt.deleteRecursively(webdavBooksDir);
+                        FilesKt.copyRecursively$default((File)backupBooksDir, (File)webdavBooksDir, (boolean)false, null, (int)6, null);
+                    }
+                    if (!(bookProgressDir = new File(userHome + File.separator + "bookProgress")).exists()) {
+                        bookProgressDir = new File(userHome + File.separator + "legado" + File.separator + "bookProgress");
+                    }
+                    if (!bookProgressDir.exists() || !bookProgressDir.isDirectory()) ** GOTO lbl62
+                    var11_19 = bookProgressDir.listFiles();
+                    Intrinsics.checkNotNullExpressionValue((Object)var11_19, (String)"bookProgressDir.listFiles()");
+                    $this$forEach$iv = var11_19;
+                    $i$f$forEach = false;
+                    var13_22 = $this$forEach$iv;
+                    var14_23 = var13_22.length;
+                    var15_25 = 0;
+lbl60:
+                    // 2 sources
+
+                    while (true) {
+                        if (var15_25 < var14_23) break;
+lbl62:
+                        // 2 sources
+
+                        var11_19 = Boxing.boxBoolean((boolean)true);
+                        break block4;
+                        break;
+                    }
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                    return Boxing.boxBoolean((boolean)false);
+                }
+                element$iv = var13_22[var15_25];
+                it = (File)element$iv;
+                $i$a$-forEach-BookController$syncFromWebdav$3 = false;
+                Intrinsics.checkNotNullExpressionValue((Object)it, (String)"it");
+                $continuation.L$0 = this;
+                $continuation.L$1 = userNameSpace;
+                $continuation.L$2 = descDirFile;
+                $continuation.L$3 = var13_22;
+                $continuation.I$0 = var14_23;
+                $continuation.I$1 = var15_25;
+                $continuation.label = 1;
+                v0 = this.syncBookProgressFromWebdav(it, (String)userNameSpace, (Continuation<? super Unit>)$continuation);
+                if (v0 == var21_6) {
+                    return var21_6;
+                }
+                ** GOTO lbl98
+            }
+            case 1: {
+                $i$f$forEach = false;
+                $i$a$-forEach-BookController$syncFromWebdav$3 = false;
+                var15_25 = $continuation.I$1;
+                var14_23 = $continuation.I$0;
+                var13_22 = (Object[])$continuation.L$3;
+                var5_8 = (File)$continuation.L$2;
+                var2_2 = (String)$continuation.L$1;
+                this = (BookController)$continuation.L$0;
+                ResultKt.throwOnFailure((Object)$result);
+                v0 = $result;
+lbl98:
+                // 2 sources
+
+                ++var15_25;
+                ** continue;
+            }
+        }
+        ExtKt.deleteRecursively((File)var5_8);
+        return var11_19;
+        finally {
+            ExtKt.deleteRecursively((File)var5_8);
+        }
+        throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
+    }

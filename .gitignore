@@ -1,0 +1,17 @@
+# Local JDK / decompiler binaries (large, machine-local)
+tools/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.iml
+
+# Logs that can be regenerated
+*.log
+
+# Secrets — never commit tokens
+.env
+*.pem
+*.key

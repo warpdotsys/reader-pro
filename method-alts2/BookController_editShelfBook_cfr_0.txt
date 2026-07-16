@@ -1,0 +1,152 @@
+    public static /* synthetic */ Object saveShelfBookLatestChapter$default(BookController bookController, Book book, List list2, String string, Mutex mutex, Continuation continuation, int n, Object object) {
+        if ((n & 8) != 0) {
+            mutex = null;
+        }
+        return bookController.saveShelfBookLatestChapter(book, list2, string, mutex, (Continuation<? super Unit>)continuation);
+    }
+
+    /*
+     * WARNING - Removed try catching itself - possible behaviour change.
+     * Unable to fully structure code
+     */
+    @Nullable
+    public final Object editShelfBook(@NotNull Book var1_1, @NotNull String var2_2, @NotNull Function1<? super Book, Book> var3_3, @NotNull Continuation<? super Book> var4_4) {
+        if (!(var4_4 instanceof editShelfBook.1)) ** GOTO lbl-1000
+        var15_5 = var4_4;
+        if ((var15_5.label & -2147483648) != 0) {
+            var15_5.label -= -2147483648;
+        } else lbl-1000:
+        // 2 sources
+
+        {
+            $continuation = new ContinuationImpl(this, var4_4){
+                Object L$0;
+                Object L$1;
+                Object L$2;
+                Object L$3;
+                Object L$4;
+                /* synthetic */ Object result;
+                final /* synthetic */ BookController this$0;
+                int label;
+                {
+                    this.this$0 = this$0;
+                    super($completion);
+                }
+
+                @Nullable
+                public final Object invokeSuspend(@NotNull Object $result) {
+                    this.result = $result;
+                    this.label |= Integer.MIN_VALUE;
+                    return this.this$0.editShelfBook(null, null, null, (Continuation<? super Book>)((Continuation)this));
+                }
+            };
+        }
+        $result = $continuation.result;
+        var16_7 = IntrinsicsKt.getCOROUTINE_SUSPENDED();
+        switch ($continuation.label) {
+            case 0: {
+                ResultKt.throwOnFailure((Object)$result);
+                $continuation.L$0 = this;
+                $continuation.L$1 = book;
+                $continuation.L$2 = userNameSpace;
+                $continuation.L$3 = handler;
+                $continuation.label = 1;
+                v0 = UserMutex.INSTANCE.getLocker(Intrinsics.stringPlus((String)userNameSpace, (Object)"@bookshelf"), (Continuation<? super Mutex>)$continuation);
+                if (v0 == var16_7) {
+                    return var16_7;
+                }
+                ** GOTO lbl28
+            }
+            case 1: {
+                handler = (Function1)$continuation.L$3;
+                userNameSpace = (String)$continuation.L$2;
+                book = (Book)$continuation.L$1;
+                this = (BookController)$continuation.L$0;
+                ResultKt.throwOnFailure((Object)$result);
+                v0 = $result;
+lbl28:
+                // 2 sources
+
+                mutex = (Mutex)v0;
+                BookControllerKt.access$getLogger$p().info("wait for lock {}", (Object)Intrinsics.stringPlus((String)userNameSpace, (Object)"@bookshelf"));
+                $continuation.L$0 = this;
+                $continuation.L$1 = book;
+                $continuation.L$2 = userNameSpace;
+                $continuation.L$3 = handler;
+                $continuation.L$4 = mutex;
+                $continuation.label = 2;
+                v1 = Mutex.DefaultImpls.lock$default((Mutex)mutex, null, (Continuation)$continuation, (int)1, null);
+                ** if (v1 != var16_7) goto lbl41
+lbl40:
+                // 1 sources
+
+                return var16_7;
+lbl41:
+                // 1 sources
+
+                ** GOTO lbl52
+            }
+            case 2: {
+                mutex = (Mutex)$continuation.L$4;
+                handler = (Function1)$continuation.L$3;
+                userNameSpace = (String)$continuation.L$2;
+                book = (Book)$continuation.L$1;
+                this = (BookController)$continuation.L$0;
+                try {
+                    ResultKt.throwOnFailure((Object)$result);
+                    v1 = $result;
+lbl52:
+                    // 2 sources
+
+                    BookControllerKt.access$getLogger$p().info("lock success");
+                    var7_9 = new String[]{"bookshelf"};
+                    bookshelf = ExtKt.asJsonArray(this.getUserStorage(userNameSpace, var7_9));
+                    if (bookshelf == null) {
+                        bookshelf = new JsonArray();
+                    }
+                    existIndex = -1;
+                    var8_13 = 0;
+                    var9_15 = bookshelf.size();
+                    if (var8_13 < var9_15) {
+                        do {
+                            i = var8_13++;
+                            _book = (Book)bookshelf.getJsonObject(i).mapTo(Book.class);
+                            var12_20 = book.getBookUrl();
+                            var13_21 = false;
+                            if (var12_20.length() > 0 && _book.getBookUrl().equals(book.getBookUrl())) {
+                                existIndex = i;
+                                break;
+                            }
+                            var12_20 = book.getName();
+                            var13_21 = false;
+                            if (!(var12_20.length() > 0) || !_book.getName().equals(book.getName())) continue;
+                            var12_20 = book.getAuthor();
+                            var13_21 = false;
+                            if (!(var12_20.length() > 0) || !_book.getAuthor().equals(book.getAuthor())) continue;
+                            existIndex = i;
+                            break;
+                        } while (var8_13 < var9_15);
+                    }
+                    if (existIndex >= 0) {
+                        bookList = bookshelf.getList();
+                        var10_18 = existBook = (Book)bookshelf.getJsonObject(existIndex).mapTo(Book.class);
+                        Intrinsics.checkNotNullExpressionValue((Object)var10_18, (String)"existBook");
+                        existBook = (Book)handler.invoke((Object)var10_18);
+                        bookList.set(existIndex, JsonObject.mapFrom((Object)existBook));
+                        bookshelf = new JsonArray(bookList);
+                        this.saveUserStorage(userNameSpace, "bookshelf", bookshelf);
+                        var10_18 = existBook;
+                        return var10_18;
+                    }
+                }
+                catch (Throwable var6_12) {
+                    throw var6_12;
+                }
+                finally {
+                    Mutex.DefaultImpls.unlock$default((Mutex)mutex, null, (int)1, null);
+                }
+                return null;
+            }
+        }
+        throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
+    }

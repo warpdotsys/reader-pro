@@ -1,0 +1,15 @@
+Apply time: 2026-07-16T21:04:24.912230
+REPLACED: io\legado\app\help\BookHelp.kt::saveImage old=998 new=998
+REPLACED: com\htmake\reader\api\controller\UserController.kt::logout old=2278 new=2278
+REPLACED: com\htmake\reader\api\controller\BookController.kt::saveBookCover old=1357 new=1357
+REPLACED: com\htmake\reader\api\controller\BookController.kt::editShelfBook old=1889 new=1889
+REPLACED: com\htmake\reader\api\controller\BookController.kt::saveShelfBookLatestChapter old=1385 new=1385
+REPLACED: com\htmake\reader\api\controller\BookController.kt::setCover old=1511 new=1511
+REPLACED: com\htmake\reader\api\controller\BookController.kt::syncFromWebdav old=2197 new=2197
+REPLACED: com\htmake\reader\api\controller\BookController.kt::getSpeakStream old=3223 new=3223
+REPLACED: com\htmake\reader\api\controller\BookController.kt::cacheBookOnServer old=2647 new=2647
+REPLACED: com\htmake\reader\api\controller\BookController.kt::getLocalChapterList old=4136 new=4136
+Remaining Couldn't in BookController: [5318, 6487, 6522, 6766, 6801, 7047, 8047, 8560, 9418]
+After patch io\legado\app\help\BookHelp.kt: Couldn't count=1
+After patch com\htmake\reader\api\controller\UserController.kt: Couldn't count=1
+After patch com\htmake\reader\api\controller\BookController.kt: Couldn't count=9

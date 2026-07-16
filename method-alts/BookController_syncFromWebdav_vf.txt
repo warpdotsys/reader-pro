@@ -1,0 +1,405 @@
+   public suspend fun syncFromWebdav(zipFilePath: String, userNameSpace: String): Boolean {
+      // $VF: Couldn't be decompiled
+      // Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
+      // java.lang.NullPointerException: Cannot invoke "org.jetbrains.java.decompiler.code.cfg.ExceptionRangeCFG.isCircular()" because "range" is null
+      //   at org.jetbrains.java.decompiler.modules.decompiler.decompose.DomHelper.graphToStatement(DomHelper.java:84)
+      //   at org.jetbrains.java.decompiler.modules.decompiler.decompose.DomHelper.parseGraph(DomHelper.java:203)
+      //   at org.jetbrains.java.decompiler.modules.decompiler.decompose.DomHelper.createStatement(DomHelper.java:27)
+      //   at org.jetbrains.java.decompiler.main.rels.MethodProcessor.codeToJava(MethodProcessor.java:157)
+      //
+      // Bytecode:
+      // 000: aload 3
+      // 001: instanceof com/htmake/reader/api/controller/BookController$syncFromWebdav$1
+      // 004: ifeq 027
+      // 007: aload 3
+      // 008: checkcast com/htmake/reader/api/controller/BookController$syncFromWebdav$1
+      // 00b: astore 20
+      // 00d: aload 20
+      // 00f: getfield com/htmake/reader/api/controller/BookController$syncFromWebdav$1.label I
+      // 012: ldc -2147483648
+      // 014: iand
+      // 015: ifeq 027
+      // 018: aload 20
+      // 01a: dup
+      // 01b: getfield com/htmake/reader/api/controller/BookController$syncFromWebdav$1.label I
+      // 01e: ldc -2147483648
+      // 020: isub
+      // 021: putfield com/htmake/reader/api/controller/BookController$syncFromWebdav$1.label I
+      // 024: goto 032
+      // 027: new com/htmake/reader/api/controller/BookController$syncFromWebdav$1
+      // 02a: dup
+      // 02b: aload 0
+      // 02c: aload 3
+      // 02d: invokespecial com/htmake/reader/api/controller/BookController$syncFromWebdav$1.<init> (Lcom/htmake/reader/api/controller/BookController;Lkotlin/coroutines/Continuation;)V
+      // 030: astore 20
+      // 032: aload 20
+      // 034: getfield com/htmake/reader/api/controller/BookController$syncFromWebdav$1.result Ljava/lang/Object;
+      // 037: astore 19
+      // 039: invokestatic kotlin/coroutines/intrinsics/IntrinsicsKt.getCOROUTINE_SUSPENDED ()Ljava/lang/Object;
+      // 03c: astore 21
+      // 03e: aload 20
+      // 040: getfield com/htmake/reader/api/controller/BookController$syncFromWebdav$1.label I
+      // 043: tableswitch 784 0 1 21 666
+      // 058: aload 19
+      // 05a: invokestatic kotlin/ResultKt.throwOnFailure (Ljava/lang/Object;)V
+      // 05d: aconst_null
+      // 05e: astore 4
+      // 060: bipush 4
+      // 061: anewarray 96
+      // 064: astore 5
+      // 066: aload 5
+      // 068: bipush 0
+      // 069: ldc "storage"
+      // 06b: aastore
+      // 06c: aload 5
+      // 06e: bipush 1
+      // 06f: ldc_w "data"
+      // 072: aastore
+      // 073: aload 5
+      // 075: bipush 2
+      // 076: aload 2
+      // 077: aastore
+      // 078: aload 5
+      // 07a: bipush 3
+      // 07b: ldc_w "tmp"
+      // 07e: aastore
+      // 07f: aload 5
+      // 081: invokestatic com/htmake/reader/utils/ExtKt.getWorkDir ([Ljava/lang/String;)Ljava/lang/String;
+      // 084: astore 4
+      // 086: new java/io/File
+      // 089: dup
+      // 08a: aload 4
+      // 08c: invokespecial java/io/File.<init> (Ljava/lang/String;)V
+      // 08f: astore 5
+      // 091: nop
+      // 092: aload 0
+      // 093: aload 2
+      // 094: invokevirtual com/htmake/reader/api/controller/BookController.getUserWebdavHome (Ljava/lang/Object;)Ljava/lang/String;
+      // 097: astore 6
+      // 099: new java/io/File
+      // 09c: dup
+      // 09d: aload 1
+      // 09e: invokespecial java/io/File.<init> (Ljava/lang/String;)V
+      // 0a1: astore 7
+      // 0a3: aload 7
+      // 0a5: invokevirtual java/io/File.exists ()Z
+      // 0a8: ifne 0b9
+      // 0ab: bipush 0
+      // 0ac: invokestatic kotlin/coroutines/jvm/internal/Boxing.boxBoolean (Z)Ljava/lang/Boolean;
+      // 0af: astore 8
+      // 0b1: aload 5
+      // 0b3: invokestatic com/htmake/reader/utils/ExtKt.deleteRecursively (Ljava/io/File;)V
+      // 0b6: aload 8
+      // 0b8: areturn
+      // 0b9: aload 5
+      // 0bb: invokestatic com/htmake/reader/utils/ExtKt.deleteRecursively (Ljava/io/File;)V
+      // 0be: getstatic io/legado/app/utils/ZipUtils.INSTANCE Lio/legado/app/utils/ZipUtils;
+      // 0c1: aload 7
+      // 0c3: aload 5
+      // 0c5: invokevirtual io/legado/app/utils/ZipUtils.unzipFile (Ljava/io/File;Ljava/io/File;)Ljava/util/List;
+      // 0c8: pop
+      // 0c9: aload 0
+      // 0ca: invokespecial com/htmake/reader/api/controller/BookController.getBackupFileNames ()[Ljava/lang/String;
+      // 0cd: astore 9
+      // 0cf: aload 9
+      // 0d1: aload 9
+      // 0d3: arraylength
+      // 0d4: invokestatic java/util/Arrays.copyOf ([Ljava/lang/Object;I)[Ljava/lang/Object;
+      // 0d7: invokestatic kotlin/collections/CollectionsKt.arrayListOf ([Ljava/lang/Object;)Ljava/util/ArrayList;
+      // 0da: astore 8
+      // 0dc: aload 8
+      // 0de: checkcast java/lang/Iterable
+      // 0e1: astore 9
+      // 0e3: bipush 0
+      // 0e4: istore 10
+      // 0e6: aload 9
+      // 0e8: invokeinterface java/lang/Iterable.iterator ()Ljava/util/Iterator; 1
+      // 0ed: astore 11
+      // 0ef: aload 11
+      // 0f1: invokeinterface java/util/Iterator.hasNext ()Z 1
+      // 0f6: ifeq 179
+      // 0f9: aload 11
+      // 0fb: invokeinterface java/util/Iterator.next ()Ljava/lang/Object; 1
+      // 100: astore 12
+      // 102: aload 12
+      // 104: checkcast java/lang/String
+      // 107: astore 13
+      // 109: bipush 0
+      // 10a: istore 14
+      // 10c: new java/io/File
+      // 10f: dup
+      // 110: new java/lang/StringBuilder
+      // 113: dup
+      // 114: invokespecial java/lang/StringBuilder.<init> ()V
+      // 117: aload 4
+      // 119: invokevirtual java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
+      // 11c: getstatic java/io/File.separator Ljava/lang/String;
+      // 11f: invokevirtual java/lang/StringBuilder.append (Ljava/lang/Object;)Ljava/lang/StringBuilder;
+      // 122: aload 13
+      // 124: invokevirtual java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
+      // 127: invokevirtual java/lang/StringBuilder.toString ()Ljava/lang/String;
+      // 12a: invokespecial java/io/File.<init> (Ljava/lang/String;)V
+      // 12d: astore 15
+      // 12f: aload 15
+      // 131: invokevirtual java/io/File.exists ()Z
+      // 134: ifeq 175
+      // 137: new java/io/File
+      // 13a: dup
+      // 13b: bipush 4
+      // 13c: anewarray 96
+      // 13f: astore 16
+      // 141: aload 16
+      // 143: bipush 0
+      // 144: ldc "storage"
+      // 146: aastore
+      // 147: aload 16
+      // 149: bipush 1
+      // 14a: ldc_w "data"
+      // 14d: aastore
+      // 14e: aload 16
+      // 150: bipush 2
+      // 151: aload 2
+      // 152: aastore
+      // 153: aload 16
+      // 155: bipush 3
+      // 156: aload 13
+      // 158: aastore
+      // 159: aload 16
+      // 15b: invokestatic com/htmake/reader/utils/ExtKt.getWorkDir ([Ljava/lang/String;)Ljava/lang/String;
+      // 15e: invokespecial java/io/File.<init> (Ljava/lang/String;)V
+      // 161: astore 17
+      // 163: aload 17
+      // 165: invokestatic com/htmake/reader/utils/ExtKt.deleteRecursively (Ljava/io/File;)V
+      // 168: aload 15
+      // 16a: aload 17
+      // 16c: bipush 0
+      // 16d: aconst_null
+      // 16e: bipush 6
+      // 170: aconst_null
+      // 171: invokestatic kotlin/io/FilesKt.copyRecursively$default (Ljava/io/File;Ljava/io/File;ZLkotlin/jvm/functions/Function2;ILjava/lang/Object;)Z
+      // 174: pop
+      // 175: nop
+      // 176: goto 0ef
+      // 179: nop
+      // 17a: new java/io/File
+      // 17d: dup
+      // 17e: new java/lang/StringBuilder
+      // 181: dup
+      // 182: invokespecial java/lang/StringBuilder.<init> ()V
+      // 185: aload 4
+      // 187: invokevirtual java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
+      // 18a: getstatic java/io/File.separator Ljava/lang/String;
+      // 18d: invokevirtual java/lang/StringBuilder.append (Ljava/lang/Object;)Ljava/lang/StringBuilder;
+      // 190: ldc_w "books"
+      // 193: invokevirtual java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
+      // 196: invokevirtual java/lang/StringBuilder.toString ()Ljava/lang/String;
+      // 199: invokespecial java/io/File.<init> (Ljava/lang/String;)V
+      // 19c: astore 9
+      // 19e: aload 9
+      // 1a0: invokevirtual java/io/File.exists ()Z
+      // 1a3: ifeq 1ec
+      // 1a6: new java/io/File
+      // 1a9: dup
+      // 1aa: bipush 5
+      // 1ab: anewarray 96
+      // 1ae: astore 11
+      // 1b0: aload 11
+      // 1b2: bipush 0
+      // 1b3: ldc "storage"
+      // 1b5: aastore
+      // 1b6: aload 11
+      // 1b8: bipush 1
+      // 1b9: ldc_w "data"
+      // 1bc: aastore
+      // 1bd: aload 11
+      // 1bf: bipush 2
+      // 1c0: aload 2
+      // 1c1: aastore
+      // 1c2: aload 11
+      // 1c4: bipush 3
+      // 1c5: ldc_w "webdav"
+      // 1c8: aastore
+      // 1c9: aload 11
+      // 1cb: bipush 4
+      // 1cc: ldc_w "books"
+      // 1cf: aastore
+      // 1d0: aload 11
+      // 1d2: invokestatic com/htmake/reader/utils/ExtKt.getWorkDir ([Ljava/lang/String;)Ljava/lang/String;
+      // 1d5: invokespecial java/io/File.<init> (Ljava/lang/String;)V
+      // 1d8: astore 10
+      // 1da: aload 10
+      // 1dc: invokestatic com/htmake/reader/utils/ExtKt.deleteRecursively (Ljava/io/File;)V
+      // 1df: aload 9
+      // 1e1: aload 10
+      // 1e3: bipush 0
+      // 1e4: aconst_null
+      // 1e5: bipush 6
+      // 1e7: aconst_null
+      // 1e8: invokestatic kotlin/io/FilesKt.copyRecursively$default (Ljava/io/File;Ljava/io/File;ZLkotlin/jvm/functions/Function2;ILjava/lang/Object;)Z
+      // 1eb: pop
+      // 1ec: new java/io/File
+      // 1ef: dup
+      // 1f0: new java/lang/StringBuilder
+      // 1f3: dup
+      // 1f4: invokespecial java/lang/StringBuilder.<init> ()V
+      // 1f7: aload 6
+      // 1f9: invokevirtual java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
+      // 1fc: getstatic java/io/File.separator Ljava/lang/String;
+      // 1ff: invokevirtual java/lang/StringBuilder.append (Ljava/lang/Object;)Ljava/lang/StringBuilder;
+      // 202: ldc_w "bookProgress"
+      // 205: invokevirtual java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
+      // 208: invokevirtual java/lang/StringBuilder.toString ()Ljava/lang/String;
+      // 20b: invokespecial java/io/File.<init> (Ljava/lang/String;)V
+      // 20e: astore 10
+      // 210: aload 10
+      // 212: invokevirtual java/io/File.exists ()Z
+      // 215: ifne 248
+      // 218: new java/io/File
+      // 21b: dup
+      // 21c: new java/lang/StringBuilder
+      // 21f: dup
+      // 220: invokespecial java/lang/StringBuilder.<init> ()V
+      // 223: aload 6
+      // 225: invokevirtual java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
+      // 228: getstatic java/io/File.separator Ljava/lang/String;
+      // 22b: invokevirtual java/lang/StringBuilder.append (Ljava/lang/Object;)Ljava/lang/StringBuilder;
+      // 22e: ldc_w "legado"
+      // 231: invokevirtual java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
+      // 234: getstatic java/io/File.separator Ljava/lang/String;
+      // 237: invokevirtual java/lang/StringBuilder.append (Ljava/lang/Object;)Ljava/lang/StringBuilder;
+      // 23a: ldc_w "bookProgress"
+      // 23d: invokevirtual java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
+      // 240: invokevirtual java/lang/StringBuilder.toString ()Ljava/lang/String;
+      // 243: invokespecial java/io/File.<init> (Ljava/lang/String;)V
+      // 246: astore 10
+      // 248: aload 10
+      // 24a: invokevirtual java/io/File.exists ()Z
+      // 24d: ifeq 327
+      // 250: aload 10
+      // 252: invokevirtual java/io/File.isDirectory ()Z
+      // 255: ifeq 327
+      // 258: aload 10
+      // 25a: invokevirtual java/io/File.listFiles ()[Ljava/io/File;
+      // 25d: astore 11
+      // 25f: aload 11
+      // 261: ldc_w "bookProgressDir.listFiles()"
+      // 264: invokestatic kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue (Ljava/lang/Object;Ljava/lang/String;)V
+      // 267: aload 11
+      // 269: checkcast [Ljava/lang/Object;
+      // 26c: astore 11
+      // 26e: bipush 0
+      // 26f: istore 12
+      // 271: aload 11
+      // 273: astore 13
+      // 275: aload 13
+      // 277: arraylength
+      // 278: istore 14
+      // 27a: bipush 0
+      // 27b: istore 15
+      // 27d: iload 15
+      // 27f: iload 14
+      // 281: if_icmpge 326
+      // 284: aload 13
+      // 286: iload 15
+      // 288: aaload
+      // 289: astore 16
+      // 28b: aload 16
+      // 28d: checkcast java/io/File
+      // 290: astore 17
+      // 292: bipush 0
+      // 293: istore 18
+      // 295: aload 0
+      // 296: aload 17
+      // 298: ldc_w "it"
+      // 29b: invokestatic kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue (Ljava/lang/Object;Ljava/lang/String;)V
+      // 29e: aload 17
+      // 2a0: aload 2
+      // 2a1: aload 20
+      // 2a3: aload 20
+      // 2a5: aload 0
+      // 2a6: putfield com/htmake/reader/api/controller/BookController$syncFromWebdav$1.L$0 Ljava/lang/Object;
+      // 2a9: aload 20
+      // 2ab: aload 2
+      // 2ac: putfield com/htmake/reader/api/controller/BookController$syncFromWebdav$1.L$1 Ljava/lang/Object;
+      // 2af: aload 20
+      // 2b1: aload 5
+      // 2b3: putfield com/htmake/reader/api/controller/BookController$syncFromWebdav$1.L$2 Ljava/lang/Object;
+      // 2b6: aload 20
+      // 2b8: aload 13
+      // 2ba: putfield com/htmake/reader/api/controller/BookController$syncFromWebdav$1.L$3 Ljava/lang/Object;
+      // 2bd: aload 20
+      // 2bf: iload 14
+      // 2c1: putfield com/htmake/reader/api/controller/BookController$syncFromWebdav$1.I$0 I
+      // 2c4: aload 20
+      // 2c6: iload 15
+      // 2c8: putfield com/htmake/reader/api/controller/BookController$syncFromWebdav$1.I$1 I
+      // 2cb: aload 20
+      // 2cd: bipush 1
+      // 2ce: putfield com/htmake/reader/api/controller/BookController$syncFromWebdav$1.label I
+      // 2d1: invokevirtual com/htmake/reader/api/controller/BookController.syncBookProgressFromWebdav (Ljava/lang/Object;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+      // 2d4: dup
+      // 2d5: aload 21
+      // 2d7: if_acmpne 31f
+      // 2da: aload 21
+      // 2dc: areturn
+      // 2dd: bipush 0
+      // 2de: istore 12
+      // 2e0: bipush 0
+      // 2e1: istore 18
+      // 2e3: aload 20
+      // 2e5: getfield com/htmake/reader/api/controller/BookController$syncFromWebdav$1.I$1 I
+      // 2e8: istore 15
+      // 2ea: aload 20
+      // 2ec: getfield com/htmake/reader/api/controller/BookController$syncFromWebdav$1.I$0 I
+      // 2ef: istore 14
+      // 2f1: aload 20
+      // 2f3: getfield com/htmake/reader/api/controller/BookController$syncFromWebdav$1.L$3 Ljava/lang/Object;
+      // 2f6: checkcast [Ljava/lang/Object;
+      // 2f9: astore 13
+      // 2fb: aload 20
+      // 2fd: getfield com/htmake/reader/api/controller/BookController$syncFromWebdav$1.L$2 Ljava/lang/Object;
+      // 300: checkcast java/io/File
+      // 303: astore 5
+      // 305: aload 20
+      // 307: getfield com/htmake/reader/api/controller/BookController$syncFromWebdav$1.L$1 Ljava/lang/Object;
+      // 30a: checkcast java/lang/String
+      // 30d: astore 2
+      // 30e: aload 20
+      // 310: getfield com/htmake/reader/api/controller/BookController$syncFromWebdav$1.L$0 Ljava/lang/Object;
+      // 313: checkcast com/htmake/reader/api/controller/BookController
+      // 316: astore 0
+      // 317: nop
+      // 318: aload 19
+      // 31a: invokestatic kotlin/ResultKt.throwOnFailure (Ljava/lang/Object;)V
+      // 31d: aload 19
+      // 31f: pop
+      // 320: iinc 15 1
+      // 323: goto 27d
+      // 326: nop
+      // 327: bipush 1
+      // 328: invokestatic kotlin/coroutines/jvm/internal/Boxing.boxBoolean (Z)Ljava/lang/Boolean;
+      // 32b: astore 11
+      // 32d: aload 5
+      // 32f: invokestatic com/htmake/reader/utils/ExtKt.deleteRecursively (Ljava/io/File;)V
+      // 332: aload 11
+      // 334: areturn
+      // 335: astore 6
+      // 337: aload 6
+      // 339: invokevirtual java/lang/Exception.printStackTrace ()V
+      // 33c: aload 5
+      // 33e: invokestatic com/htmake/reader/utils/ExtKt.deleteRecursively (Ljava/io/File;)V
+      // 341: goto 34e
+      // 344: astore 6
+      // 346: aload 5
+      // 348: invokestatic com/htmake/reader/utils/ExtKt.deleteRecursively (Ljava/io/File;)V
+      // 34b: aload 6
+      // 34d: athrow
+      // 34e: bipush 0
+      // 34f: invokestatic kotlin/coroutines/jvm/internal/Boxing.boxBoolean (Z)Ljava/lang/Boolean;
+      // 352: areturn
+      // 353: new java/lang/IllegalStateException
+      // 356: dup
+      // 357: ldc_w "call to 'resume' before 'invoke' with coroutine"
+      // 35a: invokespecial java/lang/IllegalStateException.<init> (Ljava/lang/String;)V
+      // 35d: athrow
+   }

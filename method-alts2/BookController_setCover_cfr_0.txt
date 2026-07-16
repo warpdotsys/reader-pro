@@ -1,0 +1,107 @@
+    private final Object setCover(Book var1_1, EpubBook var2_2, String var3_3, Continuation<? super Unit> var4_4) {
+        if (!(var4_4 instanceof setCover.1)) ** GOTO lbl-1000
+        var17_5 = var4_4;
+        if ((var17_5.label & -2147483648) != 0) {
+            var17_5.label -= -2147483648;
+        } else lbl-1000:
+        // 2 sources
+
+        {
+            $continuation = new ContinuationImpl(this, var4_4){
+                Object L$0;
+                /* synthetic */ Object result;
+                final /* synthetic */ BookController this$0;
+                int label;
+                {
+                    this.this$0 = this$0;
+                    super($completion);
+                }
+
+                @Nullable
+                public final Object invokeSuspend(@NotNull Object $result) {
+                    this.result = $result;
+                    this.label |= Integer.MIN_VALUE;
+                    return BookController.access$setCover(this.this$0, null, null, null, (Continuation)this);
+                }
+            };
+        }
+        $result = $continuation.result;
+        var18_7 = IntrinsicsKt.getCOROUTINE_SUSPENDED();
+        switch ($continuation.label) {
+            case 0: {
+                ResultKt.throwOnFailure((Object)$result);
+                coverUrl = book.getDisplayCover();
+                if (coverUrl == null) ** GOTO lbl72
+                if (!StringsKt.startsWith$default((String)coverUrl, (String)"/", (boolean)false, (int)2, null)) ** GOTO lbl30
+                var7_9 = new String[2];
+                var7_9[0] = "storage";
+                var8_11 = File.separator;
+                Intrinsics.checkNotNullExpressionValue((Object)var8_11, (String)"separator");
+                var8_11 = StringsKt.replace$default((String)coverUrl, (String)"/", (String)var8_11, (boolean)false, (int)4, null);
+                var9_13 = 1;
+                var10_15 = false;
+                v0 = var8_11;
+                if (v0 == null) {
+                    throw new NullPointerException("null cannot be cast to non-null type java.lang.String");
+                }
+                Intrinsics.checkNotNullExpressionValue((Object)v0.substring(var9_13), (String)"(this as java.lang.String).substring(startIndex)");
+                coverFile = new File(ExtKt.getWorkDir(var7_9));
+                byteArray = FilesKt.readBytes((File)coverFile);
+                epubBook.setCoverImage(new Resource(byteArray, "Images/cover.jpg"));
+                ** GOTO lbl72
+lbl30:
+                // 1 sources
+
+                if (bookSourceString == null) ** GOTO lbl72
+                ext = this.getFileExt(coverUrl, "jpg");
+                md5Encode = MD5Utils.INSTANCE.md5Encode(coverUrl).toString();
+                var9_14 = new String[]{"storage", "cache", md5Encode + '.' + ext};
+                cachePath = ExtKt.getWorkDir(var9_14);
+                cacheFile = new File(cachePath);
+                if (cacheFile.exists()) {
+                    byteArray = FilesKt.readBytes((File)cacheFile);
+                    epubBook.setCoverImage(new Resource(byteArray, "Images/cover.jpg"));
+                    return Unit.INSTANCE;
+                }
+                var11_20 = BookSource.Companion.fromJson-IoAF18A((String)bookSourceString);
+                var12_23 = false;
+                analyzeUrl = new AnalyzeUrl(coverUrl, null, null, null, null, null, (BaseSource)(Result.isFailure-impl((Object)var11_20) != false ? null : var11_20), null, null, null, null, 1982, null);
+                $continuation.L$0 = epubBook;
+                $continuation.label = 1;
+                v1 = analyzeUrl.getByteArrayAwait((Continuation<? super byte[]>)$continuation);
+                ** if (v1 != var18_7) goto lbl50
+lbl49:
+                // 1 sources
+
+                return var18_7;
+lbl50:
+                // 1 sources
+
+                ** GOTO lbl58
+            }
+            case 1: {
+                var2_2 = (EpubBook)$continuation.L$0;
+                try {
+                    ResultKt.throwOnFailure((Object)$result);
+                    v1 = $result;
+lbl58:
+                    // 2 sources
+
+                    var11_20 = v1;
+                    var12_23 = false;
+                    var13_24 = false;
+                    it = (byte[])var11_20;
+                    $i$a$-let-BookController$setCover$2 = false;
+                    var2_2.setCoverImage(new Resource(it, "Images/cover.jpg"));
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+lbl72:
+                // 5 sources
+
+                return Unit.INSTANCE;
+            }
+        }
+        throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
+    }

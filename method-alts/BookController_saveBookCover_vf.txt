@@ -1,0 +1,247 @@
+   public suspend fun saveBookCover(book: Book, userNameSpace: String, bookSource: String? = ...) {
+      // $VF: Couldn't be decompiled
+      // Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
+      // java.lang.NullPointerException: Cannot invoke "org.jetbrains.java.decompiler.code.cfg.ExceptionRangeCFG.isCircular()" because "range" is null
+      //   at org.jetbrains.java.decompiler.modules.decompiler.decompose.DomHelper.graphToStatement(DomHelper.java:84)
+      //   at org.jetbrains.java.decompiler.modules.decompiler.decompose.DomHelper.parseGraph(DomHelper.java:203)
+      //   at org.jetbrains.java.decompiler.modules.decompiler.decompose.DomHelper.createStatement(DomHelper.java:27)
+      //   at org.jetbrains.java.decompiler.main.rels.MethodProcessor.codeToJava(MethodProcessor.java:157)
+      //
+      // Bytecode:
+      // 000: aload 4
+      // 002: instanceof com/htmake/reader/api/controller/BookController$saveBookCover$1
+      // 005: ifeq 029
+      // 008: aload 4
+      // 00a: checkcast com/htmake/reader/api/controller/BookController$saveBookCover$1
+      // 00d: astore 19
+      // 00f: aload 19
+      // 011: getfield com/htmake/reader/api/controller/BookController$saveBookCover$1.label I
+      // 014: ldc -2147483648
+      // 016: iand
+      // 017: ifeq 029
+      // 01a: aload 19
+      // 01c: dup
+      // 01d: getfield com/htmake/reader/api/controller/BookController$saveBookCover$1.label I
+      // 020: ldc -2147483648
+      // 022: isub
+      // 023: putfield com/htmake/reader/api/controller/BookController$saveBookCover$1.label I
+      // 026: goto 035
+      // 029: new com/htmake/reader/api/controller/BookController$saveBookCover$1
+      // 02c: dup
+      // 02d: aload 0
+      // 02e: aload 4
+      // 030: invokespecial com/htmake/reader/api/controller/BookController$saveBookCover$1.<init> (Lcom/htmake/reader/api/controller/BookController;Lkotlin/coroutines/Continuation;)V
+      // 033: astore 19
+      // 035: aload 19
+      // 037: getfield com/htmake/reader/api/controller/BookController$saveBookCover$1.result Ljava/lang/Object;
+      // 03a: astore 18
+      // 03c: invokestatic kotlin/coroutines/intrinsics/IntrinsicsKt.getCOROUTINE_SUSPENDED ()Ljava/lang/Object;
+      // 03f: astore 20
+      // 041: aload 19
+      // 043: getfield com/htmake/reader/api/controller/BookController$saveBookCover$1.label I
+      // 046: tableswitch 436 0 1 22 340
+      // 05c: aload 18
+      // 05e: invokestatic kotlin/ResultKt.throwOnFailure (Ljava/lang/Object;)V
+      // 061: aload 1
+      // 062: invokevirtual io/legado/app/data/entities/Book.getDisplayCover ()Ljava/lang/String;
+      // 065: astore 5
+      // 067: aload 5
+      // 069: ifnull 1f6
+      // 06c: aload 5
+      // 06e: ldc_w "/"
+      // 071: bipush 0
+      // 072: bipush 2
+      // 073: aconst_null
+      // 074: invokestatic kotlin/text/StringsKt.startsWith$default (Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Z
+      // 077: ifne 1f6
+      // 07a: aload 3
+      // 07b: astore 7
+      // 07d: aload 7
+      // 07f: ifnonnull 08e
+      // 082: aload 0
+      // 083: aload 1
+      // 084: invokevirtual io/legado/app/data/entities/Book.getOrigin ()Ljava/lang/String;
+      // 087: aload 2
+      // 088: invokevirtual com/htmake/reader/api/controller/BookController.getBookSourceStringBySourceURLOpt (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+      // 08b: goto 090
+      // 08e: aload 7
+      // 090: astore 6
+      // 092: aload 0
+      // 093: aload 5
+      // 095: ldc_w "jpg"
+      // 098: invokevirtual com/htmake/reader/api/controller/BookController.getFileExt (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+      // 09b: astore 7
+      // 09d: getstatic io/legado/app/utils/MD5Utils.INSTANCE Lio/legado/app/utils/MD5Utils;
+      // 0a0: aload 5
+      // 0a2: invokevirtual io/legado/app/utils/MD5Utils.md5Encode (Ljava/lang/String;)Ljava/lang/String;
+      // 0a5: invokevirtual java/lang/String.toString ()Ljava/lang/String;
+      // 0a8: astore 8
+      // 0aa: bipush 5
+      // 0ab: anewarray 96
+      // 0ae: astore 10
+      // 0b0: aload 10
+      // 0b2: bipush 0
+      // 0b3: ldc "storage"
+      // 0b5: aastore
+      // 0b6: aload 10
+      // 0b8: bipush 1
+      // 0b9: ldc_w "assets"
+      // 0bc: aastore
+      // 0bd: aload 10
+      // 0bf: bipush 2
+      // 0c0: aload 2
+      // 0c1: aastore
+      // 0c2: aload 10
+      // 0c4: bipush 3
+      // 0c5: ldc_w "covers"
+      // 0c8: aastore
+      // 0c9: aload 10
+      // 0cb: bipush 4
+      // 0cc: new java/lang/StringBuilder
+      // 0cf: dup
+      // 0d0: invokespecial java/lang/StringBuilder.<init> ()V
+      // 0d3: aload 8
+      // 0d5: invokevirtual java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
+      // 0d8: bipush 46
+      // 0da: invokevirtual java/lang/StringBuilder.append (C)Ljava/lang/StringBuilder;
+      // 0dd: aload 7
+      // 0df: invokevirtual java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
+      // 0e2: invokevirtual java/lang/StringBuilder.toString ()Ljava/lang/String;
+      // 0e5: aastore
+      // 0e6: aload 10
+      // 0e8: invokestatic com/htmake/reader/utils/ExtKt.getWorkDir ([Ljava/lang/String;)Ljava/lang/String;
+      // 0eb: astore 9
+      // 0ed: new java/lang/StringBuilder
+      // 0f0: dup
+      // 0f1: invokespecial java/lang/StringBuilder.<init> ()V
+      // 0f4: ldc_w "/assets/"
+      // 0f7: invokevirtual java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
+      // 0fa: aload 2
+      // 0fb: invokevirtual java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
+      // 0fe: ldc_w "/covers/"
+      // 101: invokevirtual java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
+      // 104: aload 8
+      // 106: invokevirtual java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
+      // 109: bipush 46
+      // 10b: invokevirtual java/lang/StringBuilder.append (C)Ljava/lang/StringBuilder;
+      // 10e: aload 7
+      // 110: invokevirtual java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
+      // 113: invokevirtual java/lang/StringBuilder.toString ()Ljava/lang/String;
+      // 116: astore 10
+      // 118: new java/io/File
+      // 11b: dup
+      // 11c: aload 9
+      // 11e: invokespecial java/io/File.<init> (Ljava/lang/String;)V
+      // 121: astore 11
+      // 123: aload 11
+      // 125: invokevirtual java/io/File.exists ()Z
+      // 128: ifeq 135
+      // 12b: aload 1
+      // 12c: aload 10
+      // 12e: invokevirtual io/legado/app/data/entities/Book.setCoverUrl (Ljava/lang/String;)V
+      // 131: getstatic kotlin/Unit.INSTANCE Lkotlin/Unit;
+      // 134: areturn
+      // 135: new io/legado/app/model/analyzeRule/AnalyzeUrl
+      // 138: dup
+      // 139: aload 5
+      // 13b: aconst_null
+      // 13c: aconst_null
+      // 13d: aconst_null
+      // 13e: aconst_null
+      // 13f: aconst_null
+      // 140: getstatic io/legado/app/data/entities/BookSource.Companion Lio/legado/app/data/entities/BookSource$Companion;
+      // 143: aload 6
+      // 145: dup
+      // 146: invokestatic kotlin/jvm/internal/Intrinsics.checkNotNull (Ljava/lang/Object;)V
+      // 149: invokevirtual io/legado/app/data/entities/BookSource$Companion.fromJson-IoAF18A (Ljava/lang/String;)Ljava/lang/Object;
+      // 14c: astore 13
+      // 14e: bipush 0
+      // 14f: istore 14
+      // 151: aload 13
+      // 153: invokestatic kotlin/Result.isFailure-impl (Ljava/lang/Object;)Z
+      // 156: ifeq 15d
+      // 159: aconst_null
+      // 15a: goto 15f
+      // 15d: aload 13
+      // 15f: checkcast io/legado/app/data/entities/BaseSource
+      // 162: aconst_null
+      // 163: aconst_null
+      // 164: aconst_null
+      // 165: aconst_null
+      // 166: sipush 1982
+      // 169: aconst_null
+      // 16a: invokespecial io/legado/app/model/analyzeRule/AnalyzeUrl.<init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Lio/legado/app/data/entities/BaseSource;Lio/legado/app/model/analyzeRule/RuleDataInterface;Lio/legado/app/data/entities/BookChapter;Ljava/util/Map;Lio/legado/app/model/DebugLog;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+      // 16d: astore 12
+      // 16f: nop
+      // 170: aload 12
+      // 172: aload 19
+      // 174: aload 19
+      // 176: aload 1
+      // 177: putfield com/htmake/reader/api/controller/BookController$saveBookCover$1.L$0 Ljava/lang/Object;
+      // 17a: aload 19
+      // 17c: aload 9
+      // 17e: putfield com/htmake/reader/api/controller/BookController$saveBookCover$1.L$1 Ljava/lang/Object;
+      // 181: aload 19
+      // 183: aload 10
+      // 185: putfield com/htmake/reader/api/controller/BookController$saveBookCover$1.L$2 Ljava/lang/Object;
+      // 188: aload 19
+      // 18a: bipush 1
+      // 18b: putfield com/htmake/reader/api/controller/BookController$saveBookCover$1.label I
+      // 18e: invokevirtual io/legado/app/model/analyzeRule/AnalyzeUrl.getByteArrayAwait (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+      // 191: dup
+      // 192: aload 20
+      // 194: if_acmpne 1bf
+      // 197: aload 20
+      // 199: areturn
+      // 19a: aload 19
+      // 19c: getfield com/htmake/reader/api/controller/BookController$saveBookCover$1.L$2 Ljava/lang/Object;
+      // 19f: checkcast java/lang/String
+      // 1a2: astore 10
+      // 1a4: aload 19
+      // 1a6: getfield com/htmake/reader/api/controller/BookController$saveBookCover$1.L$1 Ljava/lang/Object;
+      // 1a9: checkcast java/lang/String
+      // 1ac: astore 9
+      // 1ae: aload 19
+      // 1b0: getfield com/htmake/reader/api/controller/BookController$saveBookCover$1.L$0 Ljava/lang/Object;
+      // 1b3: checkcast io/legado/app/data/entities/Book
+      // 1b6: astore 1
+      // 1b7: nop
+      // 1b8: aload 18
+      // 1ba: invokestatic kotlin/ResultKt.throwOnFailure (Ljava/lang/Object;)V
+      // 1bd: aload 18
+      // 1bf: astore 13
+      // 1c1: bipush 0
+      // 1c2: istore 14
+      // 1c4: bipush 0
+      // 1c5: istore 15
+      // 1c7: aload 13
+      // 1c9: checkcast [B
+      // 1cc: astore 16
+      // 1ce: bipush 0
+      // 1cf: istore 17
+      // 1d1: getstatic io/legado/app/utils/FileUtils.INSTANCE Lio/legado/app/utils/FileUtils;
+      // 1d4: aload 9
+      // 1d6: aload 16
+      // 1d8: invokevirtual io/legado/app/utils/FileUtils.writeBytes (Ljava/lang/String;[B)Z
+      // 1db: pop
+      // 1dc: aload 1
+      // 1dd: aload 10
+      // 1df: invokevirtual io/legado/app/data/entities/Book.setCoverUrl (Ljava/lang/String;)V
+      // 1e2: nop
+      // 1e3: nop
+      // 1e4: goto 1f6
+      // 1e7: astore 13
+      // 1e9: aload 13
+      // 1eb: invokevirtual java/lang/Exception.printStackTrace ()V
+      // 1ee: goto 1f6
+      // 1f1: astore 13
+      // 1f3: aload 13
+      // 1f5: athrow
+      // 1f6: getstatic kotlin/Unit.INSTANCE Lkotlin/Unit;
+      // 1f9: areturn
+      // 1fa: new java/lang/IllegalStateException
+      // 1fd: dup
+      // 1fe: ldc_w "call to 'resume' before 'invoke' with coroutine"
+      // 201: invokespecial java/lang/IllegalStateException.<init> (Ljava/lang/String;)V
+      // 204: athrow
+   }

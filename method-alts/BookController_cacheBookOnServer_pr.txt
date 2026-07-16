@@ -1,0 +1,119 @@
+    public final Object cacheBookOnServer(@NotNull RoutingContext context, @NotNull final Continuation<? super ReturnData> $completion) {
+        final Continuation $continuation;
+        Label_0050: {
+            if ($completion instanceof BookController$cacheBookOnServer.BookController$cacheBookOnServer$1) {
+                final BookController$cacheBookOnServer.BookController$cacheBookOnServer$1 bookController$cacheBookOnServer$1 = (BookController$cacheBookOnServer.BookController$cacheBookOnServer$1)$completion;
+                if ((bookController$cacheBookOnServer$1.label & Integer.MIN_VALUE) != 0x0) {
+                    final BookController$cacheBookOnServer.BookController$cacheBookOnServer$1 bookController$cacheBookOnServer$2 = bookController$cacheBookOnServer$1;
+                    bookController$cacheBookOnServer$2.label -= Integer.MIN_VALUE;
+                    break Label_0050;
+                }
+            }
+            $continuation = (Continuation)new BookController$cacheBookOnServer.BookController$cacheBookOnServer$1(this, (Continuation)$completion);
+        }
+        final Object $result = ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$1)$continuation).result;
+        final Object coroutine_SUSPENDED = IntrinsicsKt.getCOROUTINE_SUSPENDED();
+        ReturnData returnData = null;
+        Object checkAuth = null;
+        switch (((BookController$cacheBookOnServer.BookController$cacheBookOnServer$1)$continuation).label) {
+            case 0: {
+                ResultKt.throwOnFailure($result);
+                returnData = new ReturnData();
+                final BookController bookController = this;
+                final RoutingContext context2 = context;
+                final Continuation $completion2 = $continuation;
+                ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$1)$continuation).L$0 = this;
+                ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$1)$continuation).L$1 = context;
+                ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$1)$continuation).L$2 = returnData;
+                ((BookController$cacheBookOnServer.BookController$cacheBookOnServer$1)$continuation).label = 1;
+                if ((checkAuth = bookController.checkAuth(context2, (Continuation<? super Boolean>)$completion2)) == coroutine_SUSPENDED) {
+                    return coroutine_SUSPENDED;
+                }
+                break;
+            }
+            case 1: {
+                returnData = (ReturnData)((BookController$cacheBookOnServer.BookController$cacheBookOnServer$1)$continuation).L$2;
+                context = (RoutingContext)((BookController$cacheBookOnServer.BookController$cacheBookOnServer$1)$continuation).L$1;
+                this = (BookController)((BookController$cacheBookOnServer.BookController$cacheBookOnServer$1)$continuation).L$0;
+                ResultKt.throwOnFailure($result);
+                checkAuth = $result;
+                break;
+            }
+            default: {
+                throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
+            }
+        }
+        if (!(boolean)checkAuth) {
+            return ReturnData.setData$default(returnData, "NEED_LOGIN", null, 2, null).setErrorMsg("\u8bf7\u767b\u5f55\u540e\u4f7f\u7528");
+        }
+        final JsonArray jsonArray = context.getBodyAsJson().getJsonArray("bookUrlList");
+        final JsonArray bookUrlList = (jsonArray == null) ? new JsonArray() : jsonArray;
+        if (bookUrlList.size() <= 0) {
+            return returnData.setErrorMsg("\u8bf7\u8f93\u5165\u4e66\u7c4d\u94fe\u63a5");
+        }
+        final int $i$f$CoroutineExceptionHandler = 0;
+        final CoroutineExceptionHandler exceptionHandler = (CoroutineExceptionHandler)new CoroutineExceptionHandler(CoroutineExceptionHandler.Key) {
+            public void handleException(@NotNull final CoroutineContext context, @NotNull final Throwable exception) {
+                // 
+                // This method could not be decompiled.
+                // 
+                // Original Bytecode:
+                // 
+                //     1: aload_2         /* exception */
+                //     2: astore_3       
+                //     3: astore          ctx
+                //     5: iconst_0       
+                //     6: istore          $i$a$-CoroutineExceptionHandler-BookController$cacheBookOnServer$exceptionHandler$1
+                //     8: invokestatic    com/htmake/reader/api/controller/BookControllerKt.access$getLogger$p:()Lmu/KLogger;
+                //    11: ldc             "cacheBookOnServer error: {}"
+                //    13: aload_3         /* ex */
+                //    14: invokevirtual   java/lang/Throwable.getMessage:()Ljava/lang/String;
+                //    17: invokeinterface mu/KLogger.info:(Ljava/lang/String;Ljava/lang/Object;)V
+                //    22: nop            
+                //    23: return         
+                // 
+                // The error that occurred was:
+                // 
+                // java.lang.NullPointerException: Cannot read field "references" because "newVariable" is null
+                //     at com.strobel.decompiler.ast.AstBuilder.convertLocalVariables(AstBuilder.java:2945)
+                //     at com.strobel.decompiler.ast.AstBuilder.performStackAnalysis(AstBuilder.java:2501)
+                //     at com.strobel.decompiler.ast.AstBuilder.build(AstBuilder.java:108)
+                //     at com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.createMethodBody(AstMethodBodyBuilder.java:203)
+                //     at com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.createMethodBody(AstMethodBodyBuilder.java:93)
+                //     at com.strobel.decompiler.languages.java.ast.AstBuilder.createMethodBody(AstBuilder.java:868)
+                //     at com.strobel.decompiler.languages.java.ast.AstBuilder.createMethod(AstBuilder.java:761)
+                //     at com.strobel.decompiler.languages.java.ast.AstBuilder.addTypeMembers(AstBuilder.java:638)
+                //     at com.strobel.decompiler.languages.java.ast.AstBuilder.createTypeCore(AstBuilder.java:605)
+                //     at com.strobel.decompiler.languages.java.ast.AstBuilder.createTypeNoCache(AstBuilder.java:195)
+                //     at com.strobel.decompiler.languages.java.ast.AstBuilder.createType(AstBuilder.java:162)
+                //     at com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformCall(AstMethodBodyBuilder.java:1151)
+                //     at com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformByteCode(AstMethodBodyBuilder.java:993)
+                //     at com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformExpression(AstMethodBodyBuilder.java:534)
+                //     at com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformByteCode(AstMethodBodyBuilder.java:548)
+                //     at com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformExpression(AstMethodBodyBuilder.java:534)
+                //     at com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformByteCode(AstMethodBodyBuilder.java:548)
+                //     at com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformExpression(AstMethodBodyBuilder.java:534)
+                //     at com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformNode(AstMethodBodyBuilder.java:377)
+                //     at com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformBlock(AstMethodBodyBuilder.java:318)
+                //     at com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.createMethodBody(AstMethodBodyBuilder.java:213)
+                //     at com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.createMethodBody(AstMethodBodyBuilder.java:93)
+                //     at com.strobel.decompiler.languages.java.ast.AstBuilder.createMethodBody(AstBuilder.java:868)
+                //     at com.strobel.decompiler.languages.java.ast.AstBuilder.createMethod(AstBuilder.java:761)
+                //     at com.strobel.decompiler.languages.java.ast.AstBuilder.addTypeMembers(AstBuilder.java:638)
+                //     at com.strobel.decompiler.languages.java.ast.AstBuilder.createTypeCore(AstBuilder.java:605)
+                //     at com.strobel.decompiler.languages.java.ast.AstBuilder.createTypeNoCache(AstBuilder.java:195)
+                //     at com.strobel.decompiler.languages.java.ast.AstBuilder.createType(AstBuilder.java:162)
+                //     at com.strobel.decompiler.languages.java.ast.AstBuilder.addType(AstBuilder.java:137)
+                //     at com.strobel.decompiler.languages.java.JavaLanguage.buildAst(JavaLanguage.java:71)
+                //     at com.strobel.decompiler.languages.java.JavaLanguage.decompileType(JavaLanguage.java:59)
+                //     at com.strobel.decompiler.DecompilerDriver.decompileType(DecompilerDriver.java:333)
+                //     at com.strobel.decompiler.DecompilerDriver.decompileJar(DecompilerDriver.java:254)
+                //     at com.strobel.decompiler.DecompilerDriver.main(DecompilerDriver.java:129)
+                // 
+                throw new IllegalStateException("An error occurred while decompiling this method.");
+            }
+        };
+        final String userNameSpace = this.getUserNameSpace(context);
+        BuildersKt.launch$default((CoroutineScope)this, new MDCContext((Map)null, 1, (DefaultConstructorMarker)null).plus((CoroutineContext)Dispatchers.getIO()).plus((CoroutineContext)exceptionHandler), (CoroutineStart)null, (Function2)new BookController$cacheBookOnServer.BookController$cacheBookOnServer$2(this, bookUrlList, userNameSpace, (Continuation)null), 2, (Object)null);
+        return ReturnData.setData$default(returnData, "", null, 2, null);
+    }

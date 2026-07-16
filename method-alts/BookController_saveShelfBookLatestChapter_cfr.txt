@@ -1,0 +1,4 @@
+        v5 = this.saveShelfBookLatestChapter(var1_1, newChapterList, var4_4, var6_6, (Continuation<? super Unit>)$continuation);
+        if (v5 == var23_10) {
+            return var23_10;
+        }

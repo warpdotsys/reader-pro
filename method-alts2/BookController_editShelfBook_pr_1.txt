@@ -1,0 +1,5 @@
+    public final Object saveShelfBookProgress(@NotNull final Book book, @NotNull final BookChapter bookChapter, @NotNull final String userNameSpace, @NotNull final Continuation<? super Unit> $completion) {
+        final Object editShelfBook = this.editShelfBook(book, userNameSpace, (Function1<? super Book, Book>)new BookController$saveShelfBookProgress.BookController$saveShelfBookProgress$2(bookChapter), (Continuation<? super Book>)$completion);
+        if (editShelfBook == IntrinsicsKt.getCOROUTINE_SUSPENDED()) {
+            return editShelfBook;
+        }
