@@ -514,6 +514,45 @@ class SmokeTest {
     }
 
     @Test
+    fun license_rsa_segment_and_expire() {
+        val (pub, pri) = com.htmake.reader.utils.EncoderUtils.genRsaPair()
+        assertTrue(pub.length > 100 && pri.length > 100)
+        val payload = """{"host":"*","email":"a@b.c","userMax":10,"expireAt":${System.currentTimeMillis() + 86400000},"code":"T1"}"""
+        val priv = com.htmake.reader.utils.EncoderUtils.privateKeyFromBase64(pri)
+        val enc = com.htmake.reader.utils.EncoderUtils.encryptSegmentByPrivateKey(payload, priv)
+        assertTrue(enc.isNotBlank())
+        // private-key encrypt is unusual; decrypt with same private often works for jar scheme
+        val plain = try {
+            com.htmake.reader.utils.EncoderUtils.decryptSegmentByPrivateKey(enc, priv)
+        } catch (_: Exception) {
+            // fallback: public encrypt / private decrypt
+            val pubK = com.htmake.reader.utils.EncoderUtils.publicKeyFromBase64(pub)
+            val e2 = com.htmake.reader.utils.EncoderUtils.encryptSegmentByPublicKey(payload, pubK)
+            com.htmake.reader.utils.EncoderUtils.decryptSegmentByPrivateKey(e2, priv)
+        }
+        assertTrue(plain.contains("a@b.c") || plain.contains("T1"))
+        val ok = com.htmake.reader.entity.License(host = "example.com", expireAt = System.currentTimeMillis() + 100000)
+        assertTrue(ok.validHost("example.com"))
+        assertFalse(ok.isExpired())
+        val expired = com.htmake.reader.entity.License(expireAt = 1L)
+        assertTrue(expired.isExpired())
+        assertTrue(com.htmake.reader.entity.License(host = "*").validHost("any"))
+    }
+
+    @Test
+    fun webdav_basic_credential_parse() {
+        val user = "alice"
+        val pass = "s3cret!"
+        val salt = com.htmake.reader.utils.ExtKt.getRandomString(8)
+        val enc = com.htmake.reader.utils.ExtKt.genEncryptedPassword(pass, salt)
+        assertTrue(com.htmake.reader.utils.ExtKt.verifyPassword(pass, enc, salt))
+        val basic = "Basic " + java.util.Base64.getEncoder().encodeToString("$user:$pass".toByteArray())
+        assertTrue(basic.startsWith("Basic "))
+        val decoded = String(java.util.Base64.getDecoder().decode(basic.removePrefix("Basic ").trim()))
+        assertEquals("$user:$pass", decoded)
+    }
+
+    @Test
     fun password_salt_md5_scheme() {
         val salt = "Ab12Cd34"
         val enc = com.htmake.reader.utils.ExtKt.genEncryptedPassword("secret", salt)

@@ -1,62 +1,75 @@
-/** Business rewrite from reader-pro-3.2.14.jar — phase2. Readability/audit. */
-
 package com.htmake.reader.api.controller
 
 import com.htmake.reader.api.ReturnData
+import com.htmake.reader.entity.ActiveLicense
 import com.htmake.reader.entity.License
-import com.htmake.reader.utils.ExtKt
 import com.htmake.reader.utils.EncoderUtils
+import com.htmake.reader.utils.ExtKt
 import io.vertx.core.json.Json
 import io.vertx.core.json.JsonObject
 import io.vertx.ext.web.RoutingContext
 import java.io.File
-import java.security.KeyFactory
-import java.security.KeyPairGenerator
-import java.security.spec.PKCS8EncodedKeySpec
-import java.security.spec.X509EncodedKeySpec
-import java.util.Base64
 import kotlin.coroutines.CoroutineContext
 
 /**
- * License Pro:
- * - Keys stored under storage/data/privateKey (and public)
- * - generateKeys: RSA KeyPairGenerator
- * - generateLicense / activate: encrypt license JSON segments with private key (EncoderUtils)
- * - Remote activate may call https://r.htmake.com/reader3/activateLicense
+ * License Pro API surface:
+ * keys under storage/data/{publicKey,privateKey}; license.json; activeLicense.json
  */
-class LicenseController(coroutineContext: CoroutineContext) : BaseController(coroutineContext) {
+class LicenseController(cc: CoroutineContext) : BaseController(cc) {
 
-    private var privateKeyContent: String = ""
+    private var privateKeyCache: String = ""
 
     private fun licenseFile() = File(ExtKt.getWorkDir("storage", "data", "license.json"))
     private fun privateKeyFile() = File(ExtKt.getWorkDir("storage", "data", "privateKey"))
+    private fun publicKeyFile() = File(ExtKt.getWorkDir("storage", "data", "publicKey"))
+    private fun activeFile() = File(ExtKt.getWorkDir("storage", "data", "activeLicense.json"))
 
     private fun ensurePrivateKey(): String {
-        if (privateKeyContent.isNotEmpty()) return privateKeyContent
-        privateKeyContent = privateKeyFile().takeIf { it.isFile }?.readText().orEmpty()
-        return privateKeyContent
+        if (privateKeyCache.isNotEmpty()) return privateKeyCache
+        privateKeyCache = privateKeyFile().takeIf { it.isFile }?.readText().orEmpty()
+        return privateKeyCache
     }
 
     fun loadLicense(): License? {
         val f = licenseFile()
-        if (!f.isFile) return null
+        if (!f.isFile) {
+            // legacy storage path via ExtKt
+            val raw = ExtKt.getStorage("data", "license") ?: return null
+            return runCatching { Json.decodeValue(raw, License::class.java) }.getOrNull()
+        }
         return runCatching { Json.decodeValue(f.readText(), License::class.java) }.getOrNull()
     }
 
     fun saveLicense(license: License) {
         licenseFile().apply { parentFile?.mkdirs() }.writeText(Json.encode(license))
+        ExtKt.saveStorage(arrayOf("data", "license"), Json.encode(license))
     }
 
-    suspend fun getLicense(context: RoutingContext): ReturnData {
-        val rd = ReturnData()
-        val lic = loadLicense() ?: return rd.setErrorMsg("未导入授权")
-        return rd.setData(lic)
+    fun checkLicense(license: License) {
+        if (license.isExpired()) error("授权已过期")
     }
 
-    suspend fun importLicense(context: RoutingContext): ReturnData {
+    suspend fun getLicense(ctx: RoutingContext): ReturnData {
+        val lic = loadLicense() ?: return ReturnData().setErrorMsg("未导入授权")
+        return ReturnData().setData(
+            mapOf(
+                "host" to lic.host,
+                "email" to lic.email,
+                "code" to lic.code,
+                "userMax" to lic.userMax,
+                "expireAt" to lic.expireAt,
+                "activated" to lic.activated,
+                "activatedAt" to lic.activatedAt,
+                "expired" to lic.isExpired()
+            )
+        )
+    }
+
+    suspend fun importLicense(ctx: RoutingContext): ReturnData {
         val rd = ReturnData()
-        val raw = context.bodyAsJson?.getString("license")
-            ?: context.bodyAsString
+        val raw = ctx.bodyAsJson?.getString("license")
+            ?: ctx.bodyAsJson?.encode()
+            ?: ctx.bodyAsString
             ?: return rd.setErrorMsg("请输入授权内容")
         return try {
             val lic = parseAndVerify(raw)
@@ -68,102 +81,149 @@ class LicenseController(coroutineContext: CoroutineContext) : BaseController(cor
         }
     }
 
-    suspend fun generateKeys(context: RoutingContext): ReturnData {
+    suspend fun generateKeys(ctx: RoutingContext): ReturnData {
         val rd = ReturnData()
-        if (!checkManagerAuth(context)) return rd.setData("NEED_SECURE_KEY").setErrorMsg("请输入管理密码")
-        val kpg = KeyPairGenerator.getInstance("RSA").apply { initialize(2048) }
-        val kp = kpg.generateKeyPair()
-        val pub = Base64.getEncoder().encodeToString(kp.public.encoded)
-        val pri = Base64.getEncoder().encodeToString(kp.private.encoded)
+        if (!checkManagerAuth(ctx)) return rd.setData("NEED_SECURE_KEY").setErrorMsg("请输入管理密码")
+        val (pub, pri) = EncoderUtils.genRsaPair()
         privateKeyFile().apply { parentFile?.mkdirs() }.writeText(pri)
-        File(ExtKt.getWorkDir("storage", "data", "publicKey")).writeText(pub)
-        privateKeyContent = pri
+        publicKeyFile().writeText(pub)
+        privateKeyCache = pri
         return rd.setData(mapOf("publicKey" to pub, "privateKey" to pri))
     }
 
-    suspend fun generateLicense(context: RoutingContext): ReturnData {
+    suspend fun generateLicense(ctx: RoutingContext): ReturnData {
         val rd = ReturnData()
-        if (!checkManagerAuth(context)) return rd.setData("NEED_SECURE_KEY").setErrorMsg("请输入管理密码")
-        val body = context.bodyAsJson ?: return rd.setErrorMsg("参数错误")
-        // licenseContent JSON → encrypt with private key segments
-        val licenseContent = body.encode()
+        if (!checkManagerAuth(ctx)) return rd.setData("NEED_SECURE_KEY").setErrorMsg("请输入管理密码")
+        val body = ctx.bodyAsJson ?: return rd.setErrorMsg("参数错误")
+        val host = body.getString("host") ?: "*"
+        val email = body.getString("email") ?: ""
+        val userMax = body.getInteger("userMax") ?: body.getInteger("userLimit") ?: 50
+        val expireAt = body.getLong("expireAt")
+            ?: body.getLong("expiredAt")
+            ?: (System.currentTimeMillis() + 365L * 24 * 3600 * 1000)
+        val lic = License(
+            host = host,
+            email = email,
+            code = body.getString("code") ?: "DEMO",
+            userMax = userMax,
+            expireAt = expireAt,
+            simpleWebExpiredAt = body.getLong("simpleWebExpiredAt") ?: 0,
+            activated = false
+        )
         val pri = ensurePrivateKey()
-        if (pri.isEmpty()) return rd.setErrorMsg("请先 generateKeys")
-        val privateKey = KeyFactory.getInstance("RSA")
-            .generatePrivate(PKCS8EncodedKeySpec(Base64.getDecoder().decode(pri)))
-        val licenseKey = EncoderUtils.encryptSegmentByPrivateKey(licenseContent, privateKey)
-        return rd.setData(mapOf("license" to licenseKey, "payload" to body.map))
+        if (pri.isEmpty()) {
+            // still return plaintext license for offline demo
+            return rd.setData(mapOf("license" to Json.encode(lic), "payload" to lic, "encrypted" to false))
+        }
+        val privateKey = EncoderUtils.privateKeyFromBase64(pri)
+        val enc = EncoderUtils.encryptSegmentByPrivateKey(Json.encode(lic), privateKey)
+        return rd.setData(mapOf("license" to enc, "payload" to lic, "encrypted" to true))
     }
 
-    suspend fun isHostValid(context: RoutingContext): ReturnData {
-        val rd = ReturnData()
-        val host = context.queryParam("host").firstOrNull()
-            ?: context.bodyAsJson?.getString("host")
-            ?: context.request().host()
-        val lic = loadLicense() ?: return rd.setData(false).setErrorMsg("无授权")
-        val ok = lic.host.isNullOrBlank() || lic.host == "*" || lic.host == host
-        return rd.setData(ok)
+    suspend fun isHostValid(ctx: RoutingContext): ReturnData {
+        val host = ctx.queryParam("host").firstOrNull()
+            ?: ctx.bodyAsJson?.getString("host")
+            ?: ctx.request().host()
+        val lic = loadLicense() ?: return ReturnData().setData(mapOf("isValid" to false)).setErrorMsg("无授权")
+        val ok = !lic.isExpired() && lic.validHost(host)
+        return ReturnData().setData(mapOf("isValid" to ok, "host" to host, "licenseHost" to lic.host))
     }
 
-    suspend fun activateLicense(context: RoutingContext): ReturnData {
+    suspend fun activateLicense(ctx: RoutingContext): ReturnData {
         val rd = ReturnData()
-        val body = context.bodyAsJson ?: return rd.setErrorMsg("参数错误")
-        // May POST to https://r.htmake.com/reader3/activateLicense then store ActiveLicense
-        val activePath = File(ExtKt.getWorkDir("storage", "data", "activeLicense.json"))
-        activePath.parentFile?.mkdirs()
-        activePath.writeText(body.encode())
-        return rd.setData(true)
+        val body = ctx.bodyAsJson ?: JsonObject()
+        val lic = loadLicense()
+        if (lic != null) {
+            try {
+                checkLicense(lic)
+            } catch (e: Exception) {
+                return rd.setErrorMsg(e.message ?: "授权无效")
+            }
+            lic.activated = true
+            lic.activatedAt = System.currentTimeMillis()
+            if (lic.host.isNullOrBlank()) {
+                lic.host = body.getString("host") ?: ctx.request().host()
+            }
+            saveLicense(lic)
+        }
+        val active = ActiveLicense(
+            licenseId = body.getString("licenseId") ?: lic?.code,
+            activatedAt = System.currentTimeMillis(),
+            host = body.getString("host") ?: ctx.request().host(),
+            result = "ok"
+        )
+        activeFile().apply { parentFile?.mkdirs() }.writeText(Json.encode(active))
+        // optional: encrypt result for clients that expect segment payload
+        val pri = ensurePrivateKey()
+        if (pri.isNotEmpty()) {
+            val enc = EncoderUtils.encryptSegmentByPrivateKey(Json.encode(active), EncoderUtils.privateKeyFromBase64(pri))
+            return rd.setData(mapOf("result" to enc, "activated" to true))
+        }
+        return rd.setData(mapOf("activated" to true, "active" to active))
     }
 
-    suspend fun isLicenseValid(context: RoutingContext): ReturnData {
-        val rd = ReturnData()
-        val lic = loadLicense() ?: return rd.setData(false)
+    suspend fun isLicenseValid(ctx: RoutingContext): ReturnData {
+        val lic = loadLicense() ?: return ReturnData().setData(false).setErrorMsg("未导入授权")
         return try {
             checkLicense(lic)
-            rd.setData(true)
+            ReturnData().setData(true)
         } catch (e: Exception) {
-            rd.setData(false).setErrorMsg(e.message ?: "invalid")
+            ReturnData().setData(false).setErrorMsg(e.message ?: "invalid")
         }
     }
 
-    suspend fun decryptLicense(context: RoutingContext): ReturnData {
+    suspend fun decryptLicense(ctx: RoutingContext): ReturnData {
         val rd = ReturnData()
-        val payload = context.bodyAsJson?.getString("license") ?: return rd.setErrorMsg("参数错误")
-        val pri = ensurePrivateKey()
-        if (pri.isEmpty()) return rd.setErrorMsg("无私钥")
-        val privateKey = KeyFactory.getInstance("RSA")
-            .generatePrivate(PKCS8EncodedKeySpec(Base64.getDecoder().decode(pri)))
-        // decrypt may use public encrypt / private decrypt depending on direction — see EncoderUtils
-        val plain = EncoderUtils.decryptSegmentByPrivateKey(payload, privateKey)
-        return rd.setData(plain)
+        val payload = ctx.bodyAsJson?.getString("license") ?: return rd.setErrorMsg("参数错误")
+        return try {
+            val plain = tryDecrypt(payload)
+            rd.setData(mapOf("plain" to plain, "license" to runCatching {
+                Json.decodeValue(plain, License::class.java)
+            }.getOrNull()))
+        } catch (e: Exception) {
+            rd.setErrorMsg(e.message ?: "解密失败")
+        }
     }
 
-    fun checkLicense(license: License) {
-        val now = System.currentTimeMillis()
-        if (license.expireAt > 0 && now > license.expireAt) error("授权已过期")
+    suspend fun sendCodeToEmail(ctx: RoutingContext): ReturnData {
+        val email = ctx.bodyAsJson?.getString("email") ?: return ReturnData().setErrorMsg("请输入邮箱")
+        // SMTP not configured in rebuild — accept and acknowledge
+        return ReturnData().setData(mapOf("email" to email, "sent" to true, "note" to "SMTP未配置，仅占位成功"))
     }
+
+    suspend fun supplyLicense(ctx: RoutingContext): ReturnData = ReturnData().setData(true)
 
     private fun parseAndVerify(raw: String): License {
-        // try plain JSON first, else decrypt
-        return runCatching { Json.decodeValue(raw, License::class.java) }.getOrElse {
-            val pri = ensurePrivateKey()
-            if (pri.isNotEmpty()) {
-                val privateKey = KeyFactory.getInstance("RSA")
-                    .generatePrivate(PKCS8EncodedKeySpec(Base64.getDecoder().decode(pri)))
-                val plain = EncoderUtils.decryptSegmentByPrivateKey(raw, privateKey)
-                Json.decodeValue(plain, License::class.java)
-            } else error("无法解析授权")
+        val trimmed = raw.trim()
+        // plain JSON object
+        if (trimmed.startsWith("{")) {
+            return Json.decodeValue(trimmed, License::class.java)
         }
+        // nested { "license": "..." }
+        runCatching {
+            val o = JsonObject(trimmed)
+            o.getString("license")?.let { return parseAndVerify(it) }
+        }
+        val plain = tryDecrypt(trimmed)
+        return Json.decodeValue(plain, License::class.java)
     }
 
-    suspend fun sendCodeToEmail(context: RoutingContext): ReturnData {
-        val rd = ReturnData()
-        val email = context.bodyAsJson?.getString("email") ?: return rd.setErrorMsg("请输入邮箱")
-        return rd.setData(mapOf("email" to email, "sent" to true))
-    }
-
-    suspend fun supplyLicense(context: RoutingContext): ReturnData {
-        val rd = ReturnData()
-        return rd.setData(true)
+    private fun tryDecrypt(payload: String): String {
+        val pri = ensurePrivateKey()
+        if (pri.isNotEmpty()) {
+            runCatching {
+                return EncoderUtils.decryptSegmentByPrivateKey(payload, EncoderUtils.privateKeyFromBase64(pri))
+            }
+            runCatching {
+                return EncoderUtils.rsaDecrypt(pri, payload)
+            }
+        }
+        val pub = publicKeyFile().takeIf { it.isFile }?.readText()
+        if (!pub.isNullOrBlank()) {
+            runCatching {
+                return EncoderUtils.decryptSegmentByPublicKey(payload, EncoderUtils.publicKeyFromBase64(pub))
+            }
+        }
+        error("无法解密授权（缺少密钥或格式错误）")
     }
 }

@@ -38,7 +38,7 @@ class WebdavController(cc: CoroutineContext) : BaseController(cc) {
                 .putHeader("MS-Author-Via", "DAV")
                 .end()
             HttpMethod.HEAD -> {
-                val ns = getUserNameSpace(ctx)
+                val ns = webdavNs(ctx)
                 val f = WebdavPaths.resolveUnderHome(home(ns), WebdavPaths.pathFromRequest(ctx.request().path() ?: "/"))
                 if (f.isFile) {
                     ctx.response()
@@ -50,12 +50,12 @@ class WebdavController(cc: CoroutineContext) : BaseController(cc) {
                 } else ctx.response().setStatusCode(404).end()
             }
             HttpMethod.GET -> {
-                val ns = getUserNameSpace(ctx)
+                val ns = webdavNs(ctx)
                 val f = WebdavPaths.resolveUnderHome(home(ns), WebdavPaths.pathFromRequest(ctx.request().path() ?: "/"))
                 if (f.isFile) ctx.response().sendFile(f.absolutePath) else ctx.response().setStatusCode(404).end()
             }
             HttpMethod.PUT -> {
-                val ns = getUserNameSpace(ctx)
+                val ns = webdavNs(ctx)
                 val f = WebdavPaths.resolveUnderHome(home(ns), WebdavPaths.pathFromRequest(ctx.request().path() ?: "/"))
                 f.parentFile?.mkdirs()
                 val buf = ctx.body
@@ -63,7 +63,7 @@ class WebdavController(cc: CoroutineContext) : BaseController(cc) {
                 ctx.response().setStatusCode(201).end()
             }
             HttpMethod.DELETE -> {
-                val ns = getUserNameSpace(ctx)
+                val ns = webdavNs(ctx)
                 val f = WebdavPaths.resolveUnderHome(home(ns), WebdavPaths.pathFromRequest(ctx.request().path() ?: "/"))
                 ExtKt.deleteRecursively(f)
                 ctx.response().setStatusCode(204).end()
@@ -71,7 +71,7 @@ class WebdavController(cc: CoroutineContext) : BaseController(cc) {
             else -> when ((ctx.request().rawMethod() ?: "").uppercase()) {
                 "PROPFIND" -> propfind(ctx)
                 "MKCOL" -> {
-                    val ns = getUserNameSpace(ctx)
+                    val ns = webdavNs(ctx)
                     val f = WebdavPaths.resolveUnderHome(home(ns), WebdavPaths.pathFromRequest(ctx.request().path() ?: "/"))
                     f.mkdirs(); ctx.response().setStatusCode(201).end()
                 }
@@ -83,13 +83,70 @@ class WebdavController(cc: CoroutineContext) : BaseController(cc) {
         }
     }
 
+    /**
+     * WebDAV auth:
+     * - secure=false: allow
+     * - session username: allow (browser cookies)
+     * - Basic base64(user:pass): verify against users store (salted password)
+     * - accessToken query: same as API
+     */
     private fun checkAuthorization(ctx: RoutingContext): Boolean {
-        val auth = ctx.request().getHeader("Authorization")
-        return !auth.isNullOrBlank() || !ctx.session()?.get<String>("username").isNullOrBlank() || !appConfig.secure
+        if (!appConfig.secure) return true
+        val sessionUser = ctx.session()?.get<String>("username")
+        if (!sessionUser.isNullOrBlank()) {
+            ctx.put("webdavUser", sessionUser)
+            return true
+        }
+        val auth = ctx.request().getHeader("Authorization").orEmpty()
+        if (auth.startsWith("Basic ", ignoreCase = true)) {
+            return try {
+                val decoded = String(
+                    java.util.Base64.getDecoder().decode(auth.substring(6).trim()),
+                    Charsets.UTF_8
+                )
+                val user = decoded.substringBefore(':', "")
+                val pass = decoded.substringAfter(':', "")
+                if (user.isBlank()) return false
+                val users = loadUserMap()
+                val info = users[user] ?: return false
+                // optional: user can disable webdav
+                if (info["enableWebdav"] == false) return false
+                val stored = info["password"]?.toString() ?: ""
+                val salt = info["salt"]?.toString()
+                if (!ExtKt.verifyPassword(pass, stored, salt)) return false
+                ctx.session()?.put("username", user)
+                ctx.put("webdavUser", user)
+                true
+            } catch (_: Exception) {
+                false
+            }
+        }
+        // accessToken=user:token on query
+        val accessToken = ctx.queryParam("accessToken").firstOrNull().orEmpty()
+        if (accessToken.contains(':')) {
+            val parts = accessToken.split(":", limit = 2)
+            val users = loadUserMap()
+            val info = users[parts[0]] ?: return false
+            @Suppress("UNCHECKED_CAST")
+            val tokenMap = info["token_map"] as? Map<*, *>
+            if (tokenMap?.containsKey(parts[1]) == true || info["token"] == parts[1]) {
+                ctx.session()?.put("username", parts[0])
+                ctx.put("webdavUser", parts[0])
+                return true
+            }
+        }
+        return false
+    }
+
+    /** Prefer webdav authenticated user for home path when present. */
+    private fun webdavNs(ctx: RoutingContext): String {
+        val fromCtx = ctx.get<String>("webdavUser")
+        if (!fromCtx.isNullOrBlank()) return fromCtx
+        return getUserNameSpace(ctx)
     }
 
     private fun propfind(ctx: RoutingContext) {
-        val ns = getUserNameSpace(ctx)
+        val ns = webdavNs(ctx)
         val f = WebdavPaths.resolveUnderHome(home(ns), WebdavPaths.pathFromRequest(ctx.request().path() ?: "/"))
         val df = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", java.util.Locale.US).apply {
             timeZone = java.util.TimeZone.getTimeZone("UTC")
@@ -136,7 +193,7 @@ class WebdavController(cc: CoroutineContext) : BaseController(cc) {
     }
 
     private fun moveCopy(ctx: RoutingContext, move: Boolean) {
-        val ns = getUserNameSpace(ctx)
+        val ns = webdavNs(ctx)
         val src = WebdavPaths.resolveUnderHome(home(ns), WebdavPaths.pathFromRequest(ctx.request().path() ?: "/"))
         val destHeader = ctx.request().getHeader("Destination") ?: run {
             ctx.response().setStatusCode(400).end(); return

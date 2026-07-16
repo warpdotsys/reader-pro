@@ -237,3 +237,9 @@ _business_utils_entities.py
 - **密码**：md5(md5(pw+salt)+salt) + salt 存盘；addUser/resetPassword 对齐 jar
 - **checkAuth**：accessToken 查询/头/Bearer；session
 - **getInvalidBookSources**：读 invalid 缓存目录
+
+## Phase 21（License RSA + WebDAV Basic）
+
+- **EncoderUtils**：RSA 分段加解密（公私钥）、genRsaPair
+- **LicenseController**：generateKeys/import/activate/isLicenseValid/isHostValid/decrypt、过期与 host 校验
+- **WebDAV Basic**：用户+加盐密码校验；accessToken；按用户 webdav home
