@@ -39,10 +39,26 @@ open class YueduApi : RestVerticle() {
     private lateinit var replace: ReplaceRuleController
     private lateinit var httpTts: HttpTTSController
 
-    override fun getContextPath(): String = ""
+    override fun getContextPath(): String {
+        return try {
+            val env = SpringContextUtils.getBean(org.springframework.core.env.Environment::class.java)
+            env.getProperty("reader.server.contextPath")?.takeIf { it.isNotBlank() } ?: ""
+        } catch (_: Exception) {
+            ""
+        }
+    }
 
     override suspend fun initRouter(router: Router) {
-        port = System.getProperty("server.port")?.toIntOrNull() ?: 8080
+        port = System.getProperty("server.port")?.toIntOrNull()
+            ?: System.getenv("READER_SERVER_PORT")?.toIntOrNull()
+            ?: System.getenv("SERVER_PORT")?.toIntOrNull()
+            ?: try {
+                SpringContextUtils.getBean(org.springframework.core.env.Environment::class.java)
+                    .getProperty("reader.server.port")?.toIntOrNull()
+            } catch (_: Exception) {
+                null
+            }
+            ?: 8080
 
         book = BookController(coroutineContext)
         bookSource = BookSourceController(coroutineContext)
@@ -57,24 +73,7 @@ open class YueduApi : RestVerticle() {
         httpTts = HttpTTSController(coroutineContext)
         webdav.mount(router, this)
 
-        // static (original jar also mounts assets / book-assets / epub)
-        router.route("/web/*").handler(StaticHandler.create("web").setDefaultContentEncoding("UTF-8"))
-        router.route("/simple-web/*").handler(StaticHandler.create("simple-web"))
-        router.route("/assets/*").handler(
-            StaticHandler.create().setAllowRootFileSystemAccess(true)
-                .setWebRoot(ExtKt.getWorkDir("storage", "assets"))
-        )
-        router.route("/book-assets/*").handler(
-            StaticHandler.create().setAllowRootFileSystemAccess(true)
-                .setWebRoot(ExtKt.getWorkDir("storage", "data"))
-        )
-        router.route("/epub/*").handler(
-            StaticHandler.create().setAllowRootFileSystemAccess(true)
-                .setWebRoot(ExtKt.getWorkDir("storage", "data"))
-        )
-        router.get("/").handler { it.reroute("/web/index.html") }
-
-        // ---- system ----
+        // ---- system (API first; SPA static last like original jar) ----
         get(router, "/reader3/getSystemInfo") { getSystemInfo(it) }
         get(router, "/reader3/openapi.json") { openApiJson(it); null }
         get(router, "/reader3/apiDocs") { apiDocsHtml(it); null }
@@ -250,6 +249,61 @@ open class YueduApi : RestVerticle() {
         post(router, "/reader3/listMongoBackups") { book.listMongoBackups(it) }
         post(router, "/reader3/deleteMongoBackup") { book.deleteMongoBackup(it) }
         post(router, "/reader3/backupAllToMongodb") { book.backupAllToMongodb(it) }
+
+        // Static UI last (match original fat-jar): SPA at site root with relative css/js
+        mountStaticLikeJar(router)
+    }
+
+    private fun mountStaticLikeJar(router: Router) {
+        val assetsDir = java.io.File(ExtKt.getWorkDir("storage", "assets")).apply { mkdirs() }
+        val readerCss = java.io.File(assetsDir, "reader.css")
+        if (!readerCss.isFile) {
+            readerCss.writeText("// custom styles: storage/assets/reader.css\n")
+        }
+        router.route("/assets/*").handler(
+            StaticHandler.create()
+                .setAllowRootFileSystemAccess(true)
+                .setWebRoot(ExtKt.getWorkDir("storage", "assets"))
+                .setDefaultContentEncoding("UTF-8")
+        )
+        router.route("/book-assets/*").handler(
+            StaticHandler.create()
+                .setAllowRootFileSystemAccess(true)
+                .setWebRoot(ExtKt.getWorkDir("storage", "data"))
+                .setDefaultContentEncoding("UTF-8")
+        )
+        router.route("/epub/*").handler(
+            StaticHandler.create()
+                .setAllowRootFileSystemAccess(true)
+                .setWebRoot(ExtKt.getWorkDir("storage", "data"))
+                .setDefaultContentEncoding("UTF-8")
+        )
+        router.route("/simple-web").handler { ctx ->
+            val p = ctx.request().path() ?: ""
+            if (p.endsWith("/simple-web")) {
+                ctx.response().putHeader("Location", "$p/").setStatusCode(302).end()
+            } else {
+                ctx.next()
+            }
+        }
+        router.route("/simple-web/*").handler(
+            StaticHandler.create("simple-web")
+                .setDefaultContentEncoding("UTF-8")
+                .setIndexPage("index.html")
+        )
+        // alias under /web for bookmarks that used rebuild path
+        router.route("/web/*").handler(
+            StaticHandler.create("web")
+                .setDefaultContentEncoding("UTF-8")
+                .setIndexPage("index.html")
+        )
+        // original jar: StaticHandler.create("web") on all remaining paths
+        router.route("/*").handler(
+            StaticHandler.create("web")
+                .setDefaultContentEncoding("UTF-8")
+                .setIndexPage("index.html")
+                .setIncludeHidden(false)
+        )
     }
 
     private fun get(router: Router, path: String, block: suspend (RoutingContext) -> Any?) {

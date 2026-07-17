@@ -265,3 +265,10 @@ _business_utils_entities.py
 - **ReaderJobs.shelfUpdateTick**：按 shelfUpdateInteval 执行
 - **OpenAPI**：/reader3/openapi.json · /reader3/apiDocs · /reader3/apiRoutes.md
 - **refreshShelfBooks** 手动触发当前用户
+
+## Phase 25（Docker / WebUI 对齐源 jar）
+
+- Web SPA 挂在站点根 /*（相对 css/js），不再只靠 /web 重写
+- application.yml / AppConfig 对齐源 jar 字段（userLimit=15、proxy、defaultUser*）
+- Docker: workDir=/data 卷、TZ、entrypoint、healthcheck、compose 与 GHCR
+- banner + logback-spring 从源 jar 回填

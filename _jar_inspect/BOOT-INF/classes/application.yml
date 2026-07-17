@@ -31,39 +31,11 @@ reader:
     autoBackupUserData: false
     minUserPasswordLength: 8
     remoteBookSourceUpdateInterval: 720
-    # rebuild extensions (optional)
-    remoteActivateUrl: "https://r.htmake.com/reader3/activateLicense"
-    remoteActivateEnabled: false
-    autoBackupIntervalMs: 3600000
-    autoClearIntervalMs: 86400000
-    smtpHost: ""
-    smtpPort: 465
-    smtpUser: ""
-    smtpPassword: ""
-    smtpFrom: ""
-    smtpSsl: true
-    smtpStartTls: false
 
   server:
     port: 8080
     contextPath: ""
     webUrl: http://localhost:${reader.server.port}${reader.server.contextPath}
 
-# Spring Boot (Vert.x owns HTTP; keep web type none like fat-jar usage)
-spring:
-  main:
-    web-application-type: none
-  application:
-    name: reader-pro
-  profiles:
-    active: default
-
-server:
-  port: ${reader.server.port:8080}
-
 logging:
   path: "${reader.app.workDir}/logs"
-  level:
-    root: INFO
-    com.htmake.reader: INFO
-    io.netty: WARN

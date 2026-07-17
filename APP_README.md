@@ -15,12 +15,23 @@ Elegant, self-contained rebuild of **reader-pro 3.2.14** semantics:
 
 ```bash
 ./gradlew bootJar
-java -jar build/libs/reader-pro-*.jar
+java -Dreader.app.workDir=. -jar build/libs/reader-pro-*.jar
+# WebUI: http://localhost:8080/   (same as original jar — SPA at site root)
+# API:   http://localhost:8080/reader3/getSystemInfo
 ```
+
+## Docker（对齐源 jar）
+
+```bash
+docker compose up -d --build
+# data volume: ./data → /data  (storage + logs)
+```
+
+See [DOCKER.md](DOCKER.md).
 
 ## API
 
-See `API_ROUTES.md` (original 133 routes). Core routes are wired in `YueduApi`.
+See `API_ROUTES.md` and live `/reader3/apiDocs`.
 
 ## Layout
 

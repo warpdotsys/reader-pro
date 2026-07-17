@@ -79,11 +79,13 @@ best-of-3/               # 逆向归档（参考，不参与编译）
 
 - **UMD**：内置 `me.ag2s.umdlib` 只读解析（章节/正文/封面）
 - **书源登录**：`SourceLogin` + `POST /reader3/loginBookSource` / `logoutBookSource`；网书请求前 `ensureLoginIfNeeded`
-- **Docker**：`Dockerfile` + `docker-compose.yml` + Actions `docker.yml` 构建校验
+- **Docker**：与源 jar 相同数据布局与 Web 挂载，详见 [DOCKER.md](DOCKER.md)
 
 ```bash
-docker compose up --build
-# http://localhost:8080/
+docker compose up -d --build
+# WebUI（与源 jar 一致）: http://localhost:8080/
+# API: http://localhost:8080/reader3/getSystemInfo
+# 数据卷: ./data → /data （storage + logs）
 ```
 
 仍可加深：loginUi 前端交互表单、生产级 Mongo 运维、更多 golden 对照用例。

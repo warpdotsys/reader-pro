@@ -14,7 +14,11 @@ object ExtKt {
     }
 
     fun getWorkDir(vararg parts: String): String {
-        val base = File(appConfig().workDir).absoluteFile
+        // Prefer live system property / env so Docker -Dreader.app.workDir=/data always wins
+        val configured = System.getProperty("reader.app.workDir")
+            ?: System.getenv("READER_APP_WORKDIR")
+            ?: appConfig().workDir
+        val base = File(configured.ifBlank { "." }).absoluteFile
         return if (parts.isEmpty()) base.absolutePath
         else File(base, parts.joinToString(File.separator)).absolutePath
     }
