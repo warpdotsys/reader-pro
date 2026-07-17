@@ -23,22 +23,20 @@ object ExtKt {
         else File(base, parts.joinToString(File.separator)).absolutePath
     }
 
+    fun getStoragePath(): String = File(getWorkDir(), "storage").absolutePath
+
     fun getStorage(vararg path: String): String? {
         if (path.isEmpty()) return null
-        val file = File(getWorkDir(*path))
+        val file = File(getStoragePath(), path.joinToString(File.separator))
         val withJson = if (file.extension.isEmpty()) File(file.parent, file.name + ".json") else file
-        val target = when {
-            file.isFile -> file
-            withJson.isFile -> withJson
-            else -> File(getWorkDir(*path.dropLast(1).toTypedArray() + (path.last() + ".json")))
-        }
+        val target = if (file.isFile) file else withJson
         return if (target.isFile) target.readText(Charsets.UTF_8) else null
     }
 
     fun saveStorage(path: Array<String>, value: String) {
         if (path.isEmpty()) return
         val name = path.last().let { if (it.endsWith(".json")) it else "$it.json" }
-        val dir = File(getWorkDir(*path.dropLast(1).toTypedArray()))
+        val dir = if (path.size > 1) File(getStoragePath(), path.dropLast(1).joinToString(File.separator)) else File(getStoragePath())
         dir.mkdirs()
         File(dir, name).writeText(value, Charsets.UTF_8)
     }
