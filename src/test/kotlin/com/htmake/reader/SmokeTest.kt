@@ -380,6 +380,8 @@ class SmokeTest {
             val book = io.legado.app.data.entities.Book(
                 bookUrl = tmp.absolutePath,
                 origin = "loc_book",
+                originName = tmp.absolutePath,
+                rootDir = "",
                 name = "测试",
                 tocUrl = """^(第[0-9零一二三四五六七八九十百千]+章.*)$"""
             )
@@ -387,6 +389,60 @@ class SmokeTest {
             assertTrue(chapters.size >= 2, "chapters=${chapters.map { it.title }}")
             val c0 = io.legado.app.model.localBook.TextFile(book).getContent(chapters.first { it.title.contains("一") })
             assertTrue(c0!!.contains("内容一") || c0.contains("第一章"))
+        } finally {
+            tmp.delete()
+        }
+    }
+
+    @Test
+    fun textFile_detectsGb18030AndUsesByteOffsets() {
+        val tmp = File.createTempFile("gb18030-novel", ".txt")
+        try {
+            val text = "\u7b2c\u4e00\u7ae0 \u8d77\u70b9\n\u6b63\u6587\u7532\n\u7b2c\u4e8c\u7ae0 \u7ee7\u7eed\n\u6b63\u6587\u4e59"
+            tmp.writeText(text, java.nio.charset.Charset.forName("GB18030"))
+            val book = io.legado.app.data.entities.Book(
+                bookUrl = tmp.absolutePath,
+                origin = "loc_book",
+                originName = tmp.absolutePath,
+                rootDir = "",
+                name = "gb18030",
+                tocUrl = "^\\u7b2c[\\u4e00\\u4e8c]\\u7ae0.*$"
+            )
+
+            val chapters = io.legado.app.model.localBook.TextFile(book).getChapterList()
+
+            assertEquals("GB18030", book.charset)
+            assertEquals(2, chapters.size)
+            assertTrue((chapters[1].start ?: 0) > text.indexOf("\u7b2c\u4e8c\u7ae0"))
+            assertTrue(io.legado.app.model.localBook.TextFile(book).getContent(chapters[1])!!.contains("\u6b63\u6587\u4e59"))
+        } finally {
+            tmp.delete()
+        }
+    }
+
+    @Test
+    fun textFile_keepsChapterBoundaryAcrossReadWindows() {
+        val tmp = File.createTempFile("large-novel", ".txt")
+        try {
+            val text = "Chapter 1\n" + "a".repeat(511_700) + "\n" +
+                "x".repeat(100) + "Chapter 2" + "y".repeat(200) + "\nend"
+            tmp.writeText(text, Charsets.UTF_8)
+            val book = io.legado.app.data.entities.Book(
+                bookUrl = tmp.absolutePath,
+                origin = "loc_book",
+                originName = tmp.absolutePath,
+                rootDir = "",
+                name = "large",
+                charset = "UTF-8",
+                tocUrl = "Chapter [12]"
+            )
+
+            val chapters = io.legado.app.model.localBook.TextFile(book).getChapterList()
+
+            assertEquals(2, chapters.size)
+            assertEquals(text.indexOf("Chapter 2").toLong(), chapters[1].start)
+            assertEquals(chapters[1].start, chapters[0].end)
+            assertTrue(io.legado.app.model.localBook.TextFile(book).getContent(chapters[1])!!.contains("end"))
         } finally {
             tmp.delete()
         }
