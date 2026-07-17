@@ -14,6 +14,7 @@ class UserController(cc: CoroutineContext) : BaseController(cc) {
         val body = ctx.bodyAsJson ?: return rd.setErrorMsg("参数错误")
         val username = body.getString("username") ?: return rd.setErrorMsg("用户名不能为空")
         val password = body.getString("password") ?: return rd.setErrorMsg("密码不能为空")
+        val isLogin = body.getBoolean("isLogin", false)
         if (!appConfig.secure) {
             ctx.session()?.put("username", username)
             return rd.setData(
@@ -25,7 +26,39 @@ class UserController(cc: CoroutineContext) : BaseController(cc) {
             )
         }
         val users = loadUserMap()
-        val u = users[username] ?: return rd.setErrorMsg("用户不存在")
+        var u = users[username]
+        if (u == null) {
+            if (isLogin) return rd.setErrorMsg("用户不存在")
+            // isLogin=false: 注册分支（原版 login 接口行为，邀请码字段为 code）
+            if (username.length < 5) return rd.setErrorMsg("用户名不能低于5位")
+            val minLen = appConfig.minUserPasswordLength.takeIf { it > 0 } ?: 6
+            if (password.length < minLen) return rd.setErrorMsg("密码不能低于${minLen}位")
+            if (username == "default") return rd.setErrorMsg("用户名不能为非法字符")
+            if (!Regex("[a-z0-9]+", RegexOption.IGNORE_CASE).matches(username)) {
+                return rd.setErrorMsg("用户名只能由字母和数字组成")
+            }
+            if (appConfig.inviteCode.isNotBlank()) {
+                val code = body.getString("code") ?: ""
+                if (code.isEmpty()) return rd.setErrorMsg("请输入邀请码")
+                if (code != appConfig.inviteCode) return rd.setErrorMsg("邀请码错误")
+            }
+            if (users.size >= appConfig.userLimit) return rd.setErrorMsg("超过用户数上限")
+            val salt = ExtKt.getRandomString(8)
+            u = mutableMapOf(
+                "password" to ExtKt.genEncryptedPassword(password, salt),
+                "salt" to salt,
+                "created_at" to System.currentTimeMillis(),
+                "enableWebdav" to appConfig.defaultUserEnableWebdav,
+                "enableLocalStore" to appConfig.defaultUserEnableLocalStore,
+                "enableBookSource" to appConfig.defaultUserEnableBookSource,
+                "enableRssSource" to appConfig.defaultUserEnableRssSource,
+                "bookSourceLimit" to appConfig.defaultUserBookSourceLimit,
+                "bookLimit" to (appConfig.defaultUserBookLimit.takeIf { it > 0 } ?: appConfig.userBookLimit)
+            )
+            users[username] = u
+        } else if (!isLogin) {
+            return rd.setErrorMsg("用户名已被占用")
+        }
         val stored = u["password"]?.toString() ?: ""
         val salt = u["salt"]?.toString()
         if (!ExtKt.verifyPassword(password, stored, salt)) return rd.setErrorMsg("密码错误")
