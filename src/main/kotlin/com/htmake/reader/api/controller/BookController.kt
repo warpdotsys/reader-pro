@@ -136,7 +136,6 @@ class BookController(coroutineContext: CoroutineContext) : BaseController(corout
             WebBook(src, appConfig.debugLog, null, ns).getBookContent(book, chapter, nextUrl)
         }
         content = ContentProcessor.applyContent(ns, book, content)
-        println("DEBUG getBookContent: finalContentLen=${content.length}")
         cacheDir.mkdirs()
         cacheFile.writeText(content)
         return rd.setData(content)
