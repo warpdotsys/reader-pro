@@ -77,3 +77,24 @@ environment:
 docker pull ghcr.io/warpdotsys/reader-pro:latest
 docker run -d -p 8080:8080 -v $PWD/data:/data ghcr.io/warpdotsys/reader-pro:latest
 ```
+
+## 兼容 hectorqin/reader 旧 compose
+
+你之前的挂载是：
+
+```yaml
+volumes:
+  - ./logs:/logs
+  - ./storage:/storage
+```
+
+entrypoint 会在检测到 /storage 或 /logs 时自动把 workDir 设为 /，与官方镜像路径一致。
+
+也可用仓库内示例：
+
+```bash
+docker compose -f docker-compose.hectorqin-compat.yml up -d --build
+# 访问 http://localhost:4396/
+```
+
+环境变量 `READER_APP_*` 与 Spring 松散绑定一致，可直接沿用原配置键名。

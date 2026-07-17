@@ -86,13 +86,30 @@ class UserController(cc: CoroutineContext) : BaseController(cc) {
 
     suspend fun addUser(ctx: RoutingContext): ReturnData {
         val rd = ReturnData()
-        if (!checkManagerAuth(ctx)) return rd.setErrorMsg("需要管理密码")
         val body = ctx.bodyAsJson ?: return rd.setErrorMsg("参数错误")
         val username = body.getString("username") ?: return rd.setErrorMsg("用户名不能为空")
         val password = body.getString("password") ?: return rd.setErrorMsg("密码不能为空")
+        // Public self-register when secure=true: need inviteCode if configured;
+        // admin can always create with secureKey (checkManagerAuth).
+        val asAdmin = checkManagerAuth(ctx)
+        if (!asAdmin) {
+            if (!appConfig.secure) {
+                // open mode: allow create without manager key
+            } else {
+                val invite = body.getString("inviteCode")
+                    ?: ctx.queryParam("inviteCode").firstOrNull()
+                    ?: ""
+                if (appConfig.inviteCode.isNotBlank() && invite != appConfig.inviteCode) {
+                    return rd.setErrorMsg("邀请码错误")
+                }
+            }
+        }
         val minLen = appConfig.minUserPasswordLength.takeIf { it > 0 } ?: 6
         if (password.length < minLen) return rd.setErrorMsg("密码不能低于${minLen}位")
         val users = loadUserMap()
+        if (users.size >= appConfig.userLimit && !users.containsKey(username)) {
+            return rd.setErrorMsg("用户数已达上限(${appConfig.userLimit})")
+        }
         if (users.containsKey(username)) return rd.setErrorMsg("用户已存在")
         val salt = ExtKt.getRandomString(8)
         val enc = ExtKt.genEncryptedPassword(password, salt)
@@ -100,9 +117,12 @@ class UserController(cc: CoroutineContext) : BaseController(cc) {
             "password" to enc,
             "salt" to salt,
             "created_at" to System.currentTimeMillis(),
-            "enableWebdav" to true,
-            "enableBookSource" to true,
-            "enableRssSource" to true
+            "enableWebdav" to appConfig.defaultUserEnableWebdav,
+            "enableLocalStore" to appConfig.defaultUserEnableLocalStore,
+            "enableBookSource" to appConfig.defaultUserEnableBookSource,
+            "enableRssSource" to appConfig.defaultUserEnableRssSource,
+            "bookSourceLimit" to appConfig.defaultUserBookSourceLimit,
+            "bookLimit" to (appConfig.defaultUserBookLimit.takeIf { it > 0 } ?: appConfig.userBookLimit)
         )
         saveUserMap(users)
         return rd.setData(true)

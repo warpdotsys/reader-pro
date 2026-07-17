@@ -1,0 +1,67 @@
+# Drop-in compatible with common hectorqin/reader compose (your previous layout).
+# Differences from hectorqin image only:
+#   - image: build this repo (or ghcr.io/warpdotsys/reader-pro)
+#   - remote-webview still optional (field READER_APP_REMOTEWEBVIEWAPI is accepted)
+#
+# Usage (from this repo root):
+#   docker compose -f docker-compose.hectorqin-compat.yml up -d --build
+#
+# Or point image to a prebuilt rebuild image and keep your host paths.
+
+version: "3.1"
+services:
+  reader:
+    build: .
+    image: reader-pro:3.2.14
+    # image: ghcr.io/warpdotsys/reader-pro:latest
+    container_name: reader
+    restart: always
+    ports:
+      - "4396:8080"
+    networks:
+      - share_net
+    volumes:
+      # Same as hectorqin/reader community compose
+      - ./logs:/logs
+      - ./storage:/storage
+    environment:
+      - TZ=Asia/Shanghai
+      - SPRING_PROFILES_ACTIVE=prod
+      # workDir=/ so that /storage and /logs match host mounts (auto-detected by entrypoint too)
+      - READER_APP_WORKDIR=/
+      - READER_APP_USERLIMIT=50
+      - READER_APP_USERBOOKLIMIT=20000
+      - READER_APP_CACHECHAPTERCONTENT=true
+      - READER_APP_REMOTEWEBVIEWAPI=http://remote-webview:8050
+      - READER_APP_SECURE=true
+      - READER_APP_SECUREKEY=20070828Xyt
+      - READER_APP_INVITECODE=readwarpdotsyscom
+      - READER_APP_DEFAULTUSERENABLEWEBDAV=true
+      - READER_APP_DEFAULTUSERENABLELOCALSTORE=true
+      - READER_APP_DEFAULTUSERENABLEBOOKSOURCE=true
+      - READER_APP_DEFAULTUSERENABLERSSSOURCE=true
+      - READER_APP_DEFAULTUSERBOOKSOURCELIMIT=80000
+  remote-webview:
+    image: hectorqin/remote-webview
+    container_name: remote-webview
+    restart: always
+    ports:
+      - "8050:8050"
+    networks:
+      - share_net
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    # Only watch rebuild image containers if you publish to a registry
+    command: reader watchtower --cleanup --schedule "0 0 4 * * *"
+    networks:
+      - share_net
+
+networks:
+  share_net:
+    driver: bridge
