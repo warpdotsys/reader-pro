@@ -47,7 +47,18 @@ data class Book(
     override fun getVariable(key: String): String? = variableMap[key]
 
     fun localFile(): java.io.File {
-        val path = bookUrl.removePrefix("file://").removePrefix("file:")
-        return java.io.File(path)
+        // 原版逻辑：本地书文件 = rootDir + originName；epub/cbz/pdf 指向目录内 index.*
+        var p = originName
+        val root = rootDir ?: com.htmake.reader.utils.ExtKt.getWorkDir()
+        if (root.isNotEmpty() && p.startsWith(root)) p = p.removePrefix(root)
+        val base = java.io.File(root + p)
+        if (!p.contains("localStore") && !p.contains("webdav")) {
+            when {
+                isEpub -> return java.io.File(base, "index.epub")
+                isCbz -> return java.io.File(base, "index.cbz")
+                isPdf -> return java.io.File(base, "index.pdf")
+            }
+        }
+        return base
     }
 }
