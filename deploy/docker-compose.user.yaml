@@ -1,4 +1,4 @@
-﻿# reader-pro rebuild 鈥?鍩轰簬浣犲師鍏?hectorqin 閰嶇疆鐨勮惤鍦扮増
+# reader-pro rebuild 鈥?鍩轰簬浣犲師鍏?hectorqin 閰嶇疆鐨勮惤鍦扮増
 # 璁块棶: http://localhost:4396/
 # 鏁版嵁: ./storage  鏃ュ織: ./logs  锛堜笌瀹樻柟闀滃儚璺緞涓€鑷达級
 #
@@ -11,8 +11,6 @@
 # 鎵嬪姩鏇存柊 rebuild 闀滃儚鍚?
 #   docker compose pull && docker compose up -d
 #   # 鎴栨湰鍦版簮鐮? docker compose up -d --build
-
-version: "3.1"
 
 services:
   # reader 鍦ㄧ嚎闃呰锛坵arpdotsys rebuild锛屽吋瀹瑰師 READER_APP_* 鍙傛暟锛?  # 涔︽簮闆嗗悎: https://legado.aoaostar.com/
