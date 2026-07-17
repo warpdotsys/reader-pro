@@ -108,7 +108,7 @@ class BookController(coroutineContext: CoroutineContext) : BaseController(corout
         val ns = getUserNameSpace(context)
         val book = resolveBook(context, ns) ?: return rd.setErrorMsg("书籍信息错误")
         val sourceStr = getBookSourceString(book, ns)
-        val refresh = param(context, "refresh")?.toBoolean() ?: false
+        val refresh = (intParam(context, "refresh") ?: 0) > 0
         val chapters = getLocalChapterList(book, sourceStr, refresh, ns)
         return rd.setData(chapters)
     }
@@ -118,7 +118,7 @@ class BookController(coroutineContext: CoroutineContext) : BaseController(corout
         if (!checkAuth(context)) return rd.setData("NEED_LOGIN").setErrorMsg("请登录后使用")
         val ns = getUserNameSpace(context)
         val book = resolveBook(context, ns) ?: return rd.setErrorMsg("书籍信息错误")
-        val index = param(context, "index")?.toIntOrNull() ?: 0
+        val index = intParam(context, "index") ?: 0
         val sourceStr = getBookSourceString(book, ns)
         val chapters = getLocalChapterList(book, sourceStr, false, ns)
         if (index !in chapters.indices) return rd.setErrorMsg("章节不存在")
@@ -126,7 +126,7 @@ class BookController(coroutineContext: CoroutineContext) : BaseController(corout
         val nextUrl = chapters.getOrNull(index + 1)?.url
         val cacheDir = getChapterCacheDir(book, ns)
         val cacheFile = File(cacheDir, "$index.txt")
-        if (cacheFile.exists() && param(context, "refresh") != "true") {
+        if (cacheFile.exists() && (intParam(context, "refresh") ?: 0) <= 0) {
             return rd.setData(cacheFile.readText())
         }
         var content = if (book.isLocalBook) {
@@ -269,8 +269,26 @@ class BookController(coroutineContext: CoroutineContext) : BaseController(corout
 
     private fun param(ctx: RoutingContext, key: String): String? {
         if (ctx.request().method() == HttpMethod.POST) {
-            ctx.bodyAsJson?.getString(key)?.let { return it }
+            when (val v = ctx.bodyAsJson?.getValue(key)) {
+                null -> {}
+                is String -> return v
+                else -> return v.toString()
+            }
         }
         return ctx.queryParam(key).firstOrNull()
+    }
+
+    // 原版以 getInteger 读取 refresh/index 等数值参数（refresh > 0 为 true）
+    private fun intParam(ctx: RoutingContext, key: String): Int? {
+        if (ctx.request().method() == HttpMethod.POST) {
+            when (val v = ctx.bodyAsJson?.getValue(key)) {
+                null -> {}
+                is Number -> return v.toInt()
+                is Boolean -> return if (v) 1 else 0
+                is String -> v.toIntOrNull()?.let { return it }
+                else -> {}
+            }
+        }
+        return ctx.queryParam(key).firstOrNull()?.toIntOrNull()
     }
 }
