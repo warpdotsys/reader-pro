@@ -29,3 +29,6 @@ storage/
 *.log
 build/
 .gradle/
+
+_jar_inspect/
+
