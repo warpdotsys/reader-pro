@@ -24,16 +24,8 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Test + BootJar
-        run: ./gradlew --no-daemon clean test bootJar
-
-      - name: Upload boot jar
-        uses: actions/upload-artifact@v4
-        if: success()
-        with:
-          name: reader-pro-bootjar
-          path: build/libs/*.jar
-          if-no-files-found: warn
+      - name: Test
+        run: ./gradlew --no-daemon clean test
 
       - name: Upload test report
         uses: actions/upload-artifact@v4
