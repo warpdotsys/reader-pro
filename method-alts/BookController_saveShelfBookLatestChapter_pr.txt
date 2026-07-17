@@ -1,3 +1,0 @@
-        if (bookController2.saveShelfBookLatestChapter(book4, bookChapterList, userNameSpace3, mutex5, (Continuation<? super Unit>)$completion4) == coroutine_SUSPENDED) {
-            return coroutine_SUSPENDED;
-        }

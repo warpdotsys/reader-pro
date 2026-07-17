@@ -1,20 +1,19 @@
 # Reader Pro 3.2.14（可编译重建版）
 
-优雅、完整、可通过 **GitHub Actions** 编译的 Kotlin 源码工程。  
-语义对齐 `reader-pro-3.2.14`（Spring Boot + Vert.x + 阅读书源引擎），非原 jar 字节码级复刻。
+对 `reader-pro-3.2.14.jar` 逆向重建的 Kotlin 源码工程（Spring Boot + Vert.x + 阅读书源引擎）。
+目标：行为、WebUI、数据布局与源 jar 一致；可持续修复与演进。
 
 ## 特性
 
 | 模块 | 说明 |
 |------|------|
-| HTTP | Vert.x 3.9 Router + 协程控制器 |
-| 书源 | 搜索 / 发现 / 详情 / 目录 / 正文 |
-| 规则引擎 | JSoup · XPath-lite · JsonPath · Rhino JS |
-| 本地书 | TXT · EPUB · CBZ · PDF |
-| 多用户 | `storage/data/{user}/` JSON 存储 |
+| HTTP | Vert.x Router + Kotlin 协程控制器，`/reader3/*` 133 条路由 |
+| 书源 | 搜索 / 发现 / 详情 / 目录 / 正文（JSoup · XPath · JsonPath · Rhino JS） |
+| 本地书 | TXT · EPUB · CBZ · PDF · UMD |
+| 多用户 | `storage/data/{user}/` JSON 存储，邀请码注册 |
 | WebDAV | PROPFIND/GET/PUT/DELETE/MKCOL/MOVE/COPY + 备份 |
-| 替换规则 | scope / timeout / bookName |
-| CI | `.github/workflows/build.yml` |
+| 前端 | 原 jar `web/` SPA + `simple-web` |
+| CI | Build（jar）+ Docker（GHCR 镜像）两个 workflow |
 
 ## 快速开始
 
@@ -22,13 +21,21 @@
 # 需要 JDK 17+
 ./gradlew bootJar
 java -jar build/libs/reader-pro-3.2.14-rebuild.jar
+# WebUI: http://localhost:8080/
+# API:   http://localhost:8080/reader3/getSystemInfo
 ```
 
-默认端口 **8080**。系统信息：
+## Docker
 
+```bash
+docker compose up -d --build          # 本地源码构建
+# 或直接使用 CI 构建产物：
+#   image: ghcr.io/warpdotsys/reader-pro:latest
+docker compose pull && docker compose up -d
 ```
-GET http://localhost:8080/reader3/getSystemInfo
-```
+
+数据布局与 hectorqin 部署一致：挂载 `./storage:/storage`、`./logs:/logs`，
+`READER_APP_WORKDIR=/`，详见 [DOCKER.md](DOCKER.md)。
 
 ## 工程结构
 
@@ -36,65 +43,26 @@ GET http://localhost:8080/reader3/getSystemInfo
 src/main/kotlin/
   com/htmake/reader/     # 启动、路由、控制器、配置
   io/legado/app/         # 阅读引擎（规则、网书、本地书、RSS）
-  me/ag2s/epublib/       # 轻量 EPUB 写出桩
-src/main/resources/      # application.yml + 静态页
-.github/workflows/       # Actions 构建
-best-of-3/               # 逆向归档（参考，不参与编译）
+src/main/resources/      # application.yml + web/ + simple-web
+docker/                  # 入口脚本
+deploy/                  # 用户侧 compose 示例
+.github/workflows/       # build.yml(jar) + docker.yml(GHCR)
 ```
 
-## 构建（GitHub Actions）
+## CI
 
 推送到 `main` 后自动：
 
-1. Setup Temurin JDK 17  
-2. `./gradlew clean compileKotlin bootJar -x test`  
-3. 上传 `build/libs/*.jar` artifact  
+1. **Build**：`./gradlew clean compileKotlin bootJar`，上传 jar artifact
+2. **Docker**：构建并推送 `ghcr.io/warpdotsys/reader-pro:latest`（含 semver 标签）
 
 ## 配置
 
-`src/main/resources/application.yml`：
+`src/main/resources/application.yml`，亦可用 `READER_APP_*` 环境变量覆盖：
 
-- `reader.app.workDir` — 数据根目录  
-- `reader.app.secure` — 是否强制登录  
-- `reader.app.secureKey` — 管理密码  
-
-## 完成度（持续推进）
-
-| 项 | 状态 |
-|----|------|
-| `/reader3/*` 路由 | 已按 `API_ROUTES.md` **挂满 133 条** |
-| 核心阅读链路 | 搜索/多源/发现/目录/正文/缓存 SSE/导出 |
-| TTS | `/reader3/book/tts`（text-to-speech.cn + HttpTTS api） |
-| 前端 | 原 jar `web/` + `simple-web` 已回填 resources |
-| 可编译 | `./gradlew bootJar` + GitHub Actions |
-
-### 最近加深（phase 深度）
-
-- **XPath**：接入 **Xsoup**（Jsoup+XPath），支持 `&&/||/%%`
-- **EPUB**：OPF spine + NCX/nav 标题合并 + 封面/元数据
-- **TTS**：`EdgeTts`（反射原 TTSService → fallback text-to-speech.cn）
-- **测试**：`SmokeTest`（规则/书源/EPUB/路由冒烟）+ CI 跑 `test bootJar`
-
-### 再推进
-
-- **UMD**：内置 `me.ag2s.umdlib` 只读解析（章节/正文/封面）
-- **书源登录**：`SourceLogin` + `POST /reader3/loginBookSource` / `logoutBookSource`；网书请求前 `ensureLoginIfNeeded`
-- **Docker**：与源 jar 相同数据布局与 Web 挂载，详见 [DOCKER.md](DOCKER.md)
-
-```bash
-docker compose up -d --build
-# WebUI（与源 jar 一致）: http://localhost:8080/
-# API: http://localhost:8080/reader3/getSystemInfo
-# 数据卷: ./data → /data （storage + logs）
-```
-
-仍可加深：loginUi 前端交互表单、生产级 Mongo 运维、更多 golden 对照用例。
-
-## 说明
-
-- **可编译源码** 位于 `src/main/kotlin`。  
-- `best-of-3/` 为逆向归档 + business 语义树（与主线同步推进）。  
-- `best-of-3/` **不进入** 编译 classpath。
+- `reader.app.workDir` — 数据根目录
+- `reader.app.secure` / `secureKey` / `inviteCode` — 多用户与注册
+- `reader.app.userLimit` 等限额参数
 
 ## License
 

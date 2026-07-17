@@ -1,7 +1,0 @@
-    public static final /* synthetic */ Object access$exportToEpub(BookController $this, File exportDir, Book book, String bookSource, String userNameSpace, Continuation $completion) {
-        return $this.exportToEpub(exportDir, book, bookSource, userNameSpace, (Continuation<? super File>)$completion);
-    }
-
-    public static final /* synthetic */ Object access$setCover(BookController $this, Book book, EpubBook epubBook, String bookSourceString, Continuation $completion) {
-        return $this.setCover(book, epubBook, bookSourceString, (Continuation<? super Unit>)$completion);
-    }

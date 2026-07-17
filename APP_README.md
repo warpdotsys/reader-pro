@@ -23,8 +23,9 @@ java -Dreader.app.workDir=. -jar build/libs/reader-pro-*.jar
 ## Docker（对齐源 jar）
 
 ```bash
-docker compose up -d --build
-# data volume: ./data → /data  (storage + logs)
+docker compose up -d --build          # 本地构建
+# 或用 CI 产物: ghcr.io/warpdotsys/reader-pro:latest
+# 数据: ./storage /storage, ./logs /logs（hectorqin 布局）
 ```
 
 See [DOCKER.md](DOCKER.md).
@@ -39,5 +40,4 @@ See `API_ROUTES.md` and live `/reader3/apiDocs`.
 src/main/kotlin/com/htmake/reader/   # server
 src/main/kotlin/io/legado/app/       # reading engine
 src/main/resources/                  # yml + static web
-best-of-3/                           # reverse-engineering archive (reference)
 ```

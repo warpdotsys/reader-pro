@@ -1,7 +1,0 @@
-    public static final /* synthetic */ Object access$setCover(BookController $this, Book book, EpubBook epubBook, String bookSourceString, Continuation $completion) {
-        return $this.setCover(book, epubBook, bookSourceString, (Continuation<? super Unit>)$completion);
-    }
-
-    public static final /* synthetic */ Object access$setEpubContent(BookController $this, String contentModel, Book book, EpubBook epubBook, String bookSourceString, String userNameSpace, Continuation $completion) {
-        return $this.setEpubContent(contentModel, book, epubBook, bookSourceString, userNameSpace, (Continuation<? super Unit>)$completion);
-    }

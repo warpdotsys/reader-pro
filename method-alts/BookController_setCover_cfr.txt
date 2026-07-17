@@ -1,4 +1,0 @@
-                v0 = this.setCover(book, epubBook, bookSource, (Continuation<? super Unit>)$continuation);
-                if (v0 == var13_8) {
-                    return var13_8;
-                }

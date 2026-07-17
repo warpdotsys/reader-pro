@@ -1,100 +1,58 @@
-# Docker 部署（对齐源 jar 行为）
+# Docker 部署（与源 jar 行为一致）
 
-源 jar 以工作目录为数据根，内置 Vue「阅读」WebUI 挂在 **站点根路径**，API 在 `/reader3/*`。
+镜像保持 hectorqin/reader 的部署约定：
 
-本镜像保持同一约定：
+| 项 | 约定 |
+|----|------|
+| HTTP | 容器内 `8080`，默认映射宿主机 `4396` |
+| WebUI | 站点根路径 `/`（Vue SPA），简版 `/simple-web/` |
+| 数据根 | `READER_APP_WORKDIR=/`，挂载 `./storage:/storage`、`./logs:/logs` |
+| 用户数据 | `storage/data/{user}/`（书架、书源、章节缓存） |
+| 远程 webview | 可选服务 `hectorqin/remote-webview`（`READER_APP_REMOTEWEBVIEWAPI`） |
 
-| 项 | 源 jar | 本镜像 |
-|----|--------|--------|
-| HTTP 端口 | 8080 | 8080 |
-| WebUI | `/` + 相对路径 `css/` `js/` | 同左（`StaticHandler("web")` on `/*`） |
-| 简版 UI | `/simple-web/` | 同左 |
-| 数据根 | 启动 cwd / `reader.app.workDir` | 容器内 `/data` |
-| 用户数据 | `{workDir}/storage/data` | `/data/storage/data` |
-| 日志 | `{workDir}/logs` | `/data/logs` |
-| 自定义样式 | `storage/assets/reader.css` | 同左（首次自动生成占位） |
+## 方式 A：GHCR 镜像（推荐）
 
-## 快速启动
+CI 已自动构建并推送 `ghcr.io/warpdotsys/reader-pro:latest`：
+
+```bash
+docker compose pull && docker compose up -d
+```
+
+watchtower 会每天自动跟进 `latest`。
+
+## 方式 B：本地源码构建
 
 ```bash
 docker compose up -d --build
-# 浏览器
-#   http://localhost:8080/           # 与源 jar 相同的主界面
-#   http://localhost:8080/simple-web/
-#   http://localhost:8080/reader3/getSystemInfo
 ```
 
-数据默认落在宿主机 `./data`（可改环境变量 `READER_DATA`）。
+构建使用 BuildKit 缓存挂载复用 `/root/.gradle`，增量构建约 1-2 分钟。
 
 ## 等价于 jar 的运行方式
 
 ```bash
 # 源 jar
-java -Dreader.app.workDir=/path/data -jar reader-pro-3.2.14.jar
+java -Dreader.app.workDir=/ -jar reader-pro-3.2.14.jar
 
-# 本镜像
-docker run -d --name reader-pro -p 8080:8080 \
-  -v /path/data:/data \
-  -e TZ=Asia/Shanghai \
-  reader-pro:3.2.14
+# 本镜像（与 compose 相同的挂载约定）
+docker run -d --name reader -p 4396:8080 \
+  -v ./storage:/storage -v ./logs:/logs \
+  -e READER_APP_WORKDIR=/ \
+  ghcr.io/warpdotsys/reader-pro:latest
 ```
 
 ## 常用环境变量
 
-与 Spring 松散绑定 / 源配置键一致：
-
-| 环境变量 | 含义 | 默认 |
-|----------|------|------|
-| `READER_APP_WORKDIR` | 数据根 | `/data` |
-| `READER_SERVER_PORT` | 端口 | `8080` |
-| `READER_APP_SECURE` | 多用户鉴权 | `false` |
-| `READER_APP_SECUREKEY` | 管理密钥 | 空 |
-| `READER_APP_INVITECODE` | 邀请码 | 空 |
-| `READER_APP_USERLIMIT` | 用户上限 | `15`（与源 yml 一致） |
-| `READER_APP_MONGOURI` | Mongo 备份 | 空（文件回落） |
+| 变量 | 含义 | 默认 |
+|------|------|------|
+| `READER_APP_WORKDIR` | 数据根 | `/`（镜像内默认 `/data`） |
+| `READER_SERVER_PORT` | 容器内端口 | `8080` |
+| `READER_APP_SECURE` | 多用户鉴权 | `true` |
+| `READER_APP_SECUREKEY` | 管理密码 | — |
+| `READER_APP_INVITECODE` | 注册邀请码 | — |
+| `READER_APP_USERLIMIT` | 用户上限 | `50` |
+| `READER_APP_USERBOOKLIMIT` | 用户书籍上限 | `20000` |
+| `READER_APP_REMOTEWEBVIEWAPI` | 远程 webview 地址 | — |
 | `JAVA_OPTS` | JVM 参数 | `-Xms256m -Xmx512m` |
-| `TZ` | 时区 | `Asia/Shanghai` |
 
-## docker-compose 示例（开启安全）
-
-```yaml
-environment:
-  READER_APP_SECURE: "true"
-  READER_APP_SECUREKEY: "your-admin-key"
-  READER_APP_INVITECODE: "invite"
-```
-
-## 与错误挂载的区别
-
-- **错误**：只挂 `/app/storage` 且 `workDir=/app` 却期望配置在别处  
-- **正确**：挂载 **整个 workDir** 到 `/data`（本 compose 已如此）
-
-## GHCR
-
-推送 `main` 后 Actions 构建 `ghcr.io/<org>/reader-pro`。
-
-```bash
-docker pull ghcr.io/warpdotsys/reader-pro:latest
-docker run -d -p 8080:8080 -v $PWD/data:/data ghcr.io/warpdotsys/reader-pro:latest
-```
-
-## ���� hectorqin/reader �� compose
-
-��֮ǰ�Ĺ����ǣ�
-
-```yaml
-volumes:
-  - ./logs:/logs
-  - ./storage:/storage
-```
-
-entrypoint ���ڼ�⵽ /storage �� /logs ʱ�Զ��� workDir ��Ϊ /����ٷ�����·��һ�¡�
-
-Ҳ���òֿ���ʾ����
-
-```bash
-docker compose -f docker-compose.hectorqin-compat.yml up -d --build
-# ���� http://localhost:4396/
-```
-
-�������� `READER_APP_*` �� Spring ��ɢ��һ�£���ֱ������ԭ���ü�����
+完整示例见仓库根目录 `docker-compose.yml` 与 `deploy/docker-compose.user.yaml`。

@@ -1,3 +1,0 @@
-        if (bookController2.editShelfBook(book2, userNameSpace2, (Function1<? super Book, Book>)handler, (Continuation<? super Book>)$completion3) == coroutine_SUSPENDED) {
-            return coroutine_SUSPENDED;
-        }

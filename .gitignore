@@ -32,3 +32,27 @@ build/
 
 _jar_inspect/
 
+
+# Reverse-engineering archives (local reference only, not part of the repo)
+extracted-classes/
+best-of-3/
+decompiled-improved/
+decompiled-src/
+decompiled-src-verify/
+full-cfr/
+full-procyon/
+full-vineflower/
+retry-procyon/
+retry-vineflower/
+retry-vineflower-java/
+method-alts/
+method-alts2/
+method-javap/
+manual-patches/
+/resources/
+_*.py
+BEST_OF_3_*
+RETRY_*
+SOURCE_INVENTORY.md
+imperfect-*
+app-classes.jar
