@@ -136,6 +136,7 @@ class BookController(coroutineContext: CoroutineContext) : BaseController(corout
             WebBook(src, appConfig.debugLog, null, ns).getBookContent(book, chapter, nextUrl)
         }
         content = ContentProcessor.applyContent(ns, book, content)
+        println("DEBUG getBookContent: finalContentLen=${content.length}")
         cacheDir.mkdirs()
         cacheFile.writeText(content)
         return rd.setData(content)
@@ -248,8 +249,9 @@ class BookController(coroutineContext: CoroutineContext) : BaseController(corout
     }
 
     fun getChapterCacheDir(book: Book, userNameSpace: String): File {
+        // 原版布局: storage/data/<ns>/<name>_<author>/<md5(bookUrl)>/
         val md5 = MD5Utils.md5Encode(book.bookUrl)
-        return File(ExtKt.getWorkDir("storage", "data", userNameSpace, "cache", md5))
+        return File(ExtKt.getWorkDir("storage", "data", userNameSpace, "${book.name}_${book.author}", md5))
     }
 
     fun getInvalidBookSourceCache(userNameSpace: String): ACache =

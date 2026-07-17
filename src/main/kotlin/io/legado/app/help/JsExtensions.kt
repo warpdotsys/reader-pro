@@ -9,6 +9,9 @@ import okhttp3.Request
 import java.util.Base64
 import java.util.UUID
 import java.util.concurrent.TimeUnit
+import javax.crypto.Cipher
+import javax.crypto.spec.IvParameterSpec
+import javax.crypto.spec.SecretKeySpec
 
 interface JsExtensions {
     fun getSource(): BaseSource?
@@ -52,4 +55,41 @@ interface JsExtensions {
     fun getLoginInfo(): String? = getSource()?.getLoginInfo()
 
     fun putLoginInfo(info: String): Boolean = getSource()?.putLoginInfo(info) ?: false
+
+    // ---- legado AES 函数族（与原版 JsExtensions 行为一致） ----
+
+    private fun aesCipher(
+        data: ByteArray, key: String, transformation: String, iv: String, mode: Int, base64Input: Boolean
+    ): ByteArray? = try {
+        val secretKey = SecretKeySpec(key.toByteArray(Charsets.UTF_8), transformation.substringBefore("/"))
+        val cipher = Cipher.getInstance(transformation)
+        val ivBytes = iv.toByteArray(Charsets.UTF_8)
+        if (ivBytes.isEmpty()) cipher.init(mode, secretKey)
+        else cipher.init(mode, secretKey, IvParameterSpec(ivBytes))
+        cipher.doFinal(if (base64Input) Base64.getDecoder().decode(data) else data)
+    } catch (e: Exception) {
+        log(e.localizedMessage ?: "aesCipherERROR")
+        null
+    }
+
+    fun aesDecodeToByteArray(str: String, key: String, transformation: String, iv: String): ByteArray? =
+        aesCipher(str.toByteArray(Charsets.UTF_8), key, transformation, iv, Cipher.DECRYPT_MODE, false)
+
+    fun aesDecodeToString(str: String, key: String, transformation: String, iv: String): String? =
+        aesDecodeToByteArray(str, key, transformation, iv)?.let { String(it, Charsets.UTF_8) }
+
+    fun aesBase64DecodeToByteArray(str: String, key: String, transformation: String, iv: String): ByteArray? =
+        aesCipher(str.toByteArray(Charsets.UTF_8), key, transformation, iv, Cipher.DECRYPT_MODE, true)
+
+    fun aesBase64DecodeToString(str: String, key: String, transformation: String, iv: String): String? =
+        aesBase64DecodeToByteArray(str, key, transformation, iv)?.let { String(it, Charsets.UTF_8) }
+
+    fun aesEncodeToByteArray(data: String, key: String, transformation: String, iv: String): ByteArray? =
+        aesCipher(data.toByteArray(Charsets.UTF_8), key, transformation, iv, Cipher.ENCRYPT_MODE, false)
+
+    fun aesEncodeToString(data: String, key: String, transformation: String, iv: String): String? =
+        aesEncodeToByteArray(data, key, transformation, iv)?.let { String(it, Charsets.UTF_8) }
+
+    fun aesEncodeToBase64String(data: String, key: String, transformation: String, iv: String): String? =
+        aesEncodeToByteArray(data, key, transformation, iv)?.let { Base64.getEncoder().encodeToString(it) }
 }

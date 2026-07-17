@@ -152,6 +152,10 @@ class AnalyzeRule(
         val cx = Context.enter()
         try {
             cx.optimizationLevel = -1
+            cx.languageVersion = Context.VERSION_ES6
+            // 原版(RhinoScriptEngine)关闭 javaPrimitiveWrap：
+            // Java 返回的 String 转成 JS 字符串而非 NativeJavaObject 包装
+            cx.wrapFactory.isJavaPrimitiveWrap = false
             val scope: Scriptable = cx.initStandardObjects()
             scope.put("java", scope, this)
             scope.put("cookie", scope, CookieStore(getUserNameSpace()))

@@ -18,7 +18,8 @@ object BookContent {
         nextChapterUrl: String? = null,
         debugLog: DebugLog? = null
     ): String {
-        val rule = bookSource.ruleContent?.content ?: return ""
+        val rule = bookSource.ruleContent?.content?.takeIf { it.isNotBlank() }
+            ?: return bookChapter.url // 原版：正文规则为空时直接返回章节链接
         val analyzeUrl = AnalyzeUrl(
             mUrl = baseUrl.ifBlank { bookChapter.url },
             source = bookSource,

@@ -44,10 +44,18 @@ class WebBook(
             debugLog = debugLogger
         )
 
-    suspend fun getBookContent(book: Book, chapter: BookChapter, nextChapterUrl: String? = null): String =
-        BookContent.analyzeContent(
-            book = book, bookChapter = chapter, bookSource = source,
-            baseUrl = chapter.url, redirectUrl = chapter.url,
-            nextChapterUrl = nextChapterUrl, debugLog = debugLogger
+    suspend fun getBookContent(book: Book, chapter: BookChapter, nextChapterUrl: String? = null): String {
+        // 原版使用 chapter.getAbsoluteURL()：相对章节链接按 tocUrl/bookUrl 绝对化
+        val absChapterUrl = io.legado.app.utils.NetworkUtils.getAbsoluteURL(
+            book.tocUrl.ifBlank { book.bookUrl }, chapter.url
         )
+        val absNextUrl = nextChapterUrl?.let {
+            io.legado.app.utils.NetworkUtils.getAbsoluteURL(book.tocUrl.ifBlank { book.bookUrl }, it)
+        }
+        return BookContent.analyzeContent(
+            book = book, bookChapter = chapter, bookSource = source,
+            baseUrl = absChapterUrl, redirectUrl = absChapterUrl,
+            nextChapterUrl = absNextUrl, debugLog = debugLogger
+        )
+    }
 }
