@@ -1,0 +1,94 @@
+﻿# reader-pro rebuild 鈥?鍩轰簬浣犲師鍏?hectorqin 閰嶇疆鐨勮惤鍦扮増
+# 璁块棶: http://localhost:4396/
+# 鏁版嵁: ./storage  鏃ュ織: ./logs  锛堜笌瀹樻柟闀滃儚璺緞涓€鑷达級
+#
+# 棣栨鍚姩锛堜粠鏈満婧愮爜鏋勫缓 rebuild 闀滃儚锛?
+#   docker compose up -d --build
+#
+# 鑻ュ凡鎺ㄩ€佸埌 GHCR锛屽彲鏀逛负鍙敤闀滃儚锛堝彇娑?build锛屾敼鐢?image 琛岋級:
+#   image: ghcr.io/warpdotsys/reader-pro:latest
+#
+# 鎵嬪姩鏇存柊 rebuild 闀滃儚鍚?
+#   docker compose pull && docker compose up -d
+#   # 鎴栨湰鍦版簮鐮? docker compose up -d --build
+
+version: "3.1"
+
+services:
+  # reader 鍦ㄧ嚎闃呰锛坵arpdotsys rebuild锛屽吋瀹瑰師 READER_APP_* 鍙傛暟锛?  # 涔︽簮闆嗗悎: https://legado.aoaostar.com/
+  reader:
+    # --- 浜岄€変竴 ---
+    # A) 浠庢湰鏈?reverse 宸ョ▼鏋勫缓锛堟帹鑽愰娆★級
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    image: reader-pro:3.2.14
+    # B) 浣跨敤 GHCR锛堟瀯寤哄苟 push 鍚庡惎鐢ㄤ笅闈竴琛岋紝骞舵敞閲婃帀涓婇潰鐨?build锛?    # image: ghcr.io/warpdotsys/reader-pro:latest
+
+    container_name: reader
+    restart: always
+    ports:
+      - "4396:8080"
+    networks:
+      - share_net
+    volumes:
+      # 涓?hectorqin/reader 鐩稿悓鎸傝浇绾﹀畾锛坋ntrypoint 鑷姩 workDir=/锛?      - ./logs:/logs
+      - ./storage:/storage
+    environment:
+      - TZ=Asia/Shanghai
+      - LANG=C.UTF-8
+      - SPRING_PROFILES_ACTIVE=prod
+      - JAVA_OPTS=-Xms256m -Xmx512m -Dfile.encoding=UTF-8
+      # 鏄惧紡鎸囧畾锛屼笌 ./storage ./logs 鎸傝浇涓€鑷?      - READER_APP_WORKDIR=/
+      - READER_SERVER_PORT=8080
+
+      - READER_APP_USERLIMIT=50
+      - READER_APP_USERBOOKLIMIT=20000
+      - READER_APP_CACHECHAPTERCONTENT=true
+      # 杩滅▼ webview锛堥渶涓嬮潰 remote-webview 鏈嶅姟锛?      - READER_APP_REMOTEWEBVIEWAPI=http://remote-webview:8050
+
+      # 澶氱敤鎴?      - READER_APP_SECURE=true
+      - READER_APP_SECUREKEY=20070828Xyt
+      - READER_APP_INVITECODE=readwarpdotsyscom
+      - READER_APP_DEFAULTUSERENABLEWEBDAV=true
+      - READER_APP_DEFAULTUSERENABLELOCALSTORE=true
+      - READER_APP_DEFAULTUSERENABLEBOOKSOURCE=true
+      - READER_APP_DEFAULTUSERENABLERSSSOURCE=true
+      - READER_APP_DEFAULTUSERBOOKSOURCELIMIT=80000
+    depends_on:
+      - remote-webview
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8080' || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+  remote-webview:
+    image: hectorqin/remote-webview
+    container_name: remote-webview
+    restart: always
+    ports:
+      - "8050:8050"
+    networks:
+      - share_net
+
+  # 鑷姩鏇存柊锛氫粎褰?reader 浣跨敤鍙?pull 鐨?registry 闀滃儚鏃舵湁鎰忎箟
+  # 鏈湴 build 鐨?reader-pro:3.2.14 涓嶄細琚?watchtower 鏇存柊
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    # 鏇存柊 remote-webview + 鑷韩锛況eader 鑻ユ敼 GHCR 闀滃儚鍙姞鍥?reader
+    command: remote-webview watchtower --cleanup --schedule "0 0 4 * * *"
+    networks:
+      - share_net
+
+networks:
+  share_net:
+    driver: bridge
+
