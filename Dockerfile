@@ -9,7 +9,8 @@ WORKDIR /workspace
 COPY gradlew settings.gradle.kts build.gradle.kts gradle.properties ./
 COPY gradle ./gradle
 COPY src ./src
-RUN chmod +x gradlew \
+RUN --mount=type=cache,target=/root/.gradle \
+    chmod +x gradlew \
     && ./gradlew --no-daemon bootJar -x test \
     && JAR=$(ls build/libs/*.jar | head -n1) \
     && cp "$JAR" /workspace/app.jar
