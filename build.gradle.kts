@@ -51,6 +51,7 @@ dependencies {
     implementation("org.mozilla:rhino:1.7.14")
     implementation("commons-lang:commons-lang:2.6")
     implementation("org.apache.commons:commons-lang3:3.14.0")
+    implementation("xmlpull:xmlpull:1.1.3.1")
 
     // PDF
     implementation("org.apache.pdfbox:pdfbox:2.0.31")
