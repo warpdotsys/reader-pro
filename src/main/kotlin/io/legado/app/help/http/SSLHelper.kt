@@ -85,16 +85,18 @@ object SSLHelper {
         return null
     }
 
-    private fun prepareKeyManager(bksFile: InputStream?, password: String?): Array<KeyManager>? = try {
-        if (bksFile == null || password == null) return null
-        val clientKeyStore = KeyStore.getInstance("BKS")
-        clientKeyStore.load(bksFile, password.toCharArray())
-        KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm()).apply {
-            init(clientKeyStore, password.toCharArray())
-        }.keyManagers
-    } catch (error: Exception) {
-        error.printStackTrace()
-        null
+    private fun prepareKeyManager(bksFile: InputStream?, password: String?): Array<KeyManager>? {
+        return try {
+            if (bksFile == null || password == null) return null
+            val clientKeyStore = KeyStore.getInstance("BKS")
+            clientKeyStore.load(bksFile, password.toCharArray())
+            KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm()).apply {
+                init(clientKeyStore, password.toCharArray())
+            }.keyManagers
+        } catch (error: Exception) {
+            error.printStackTrace()
+            null
+        }
     }
 
     private fun prepareTrustManager(vararg certificates: InputStream): Array<TrustManager> {
