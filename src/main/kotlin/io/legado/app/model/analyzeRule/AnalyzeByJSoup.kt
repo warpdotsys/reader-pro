@@ -278,6 +278,7 @@ class AnalyzeByJSoup(doc: Any) {
         /**
          * 获取Elements按照一个规则
          */
+        @Suppress("UNCHECKED_CAST", "TYPE_MISMATCH")
         fun getElementsSingle(temp: Element, rule: String): Elements {
 
             findIndexSet(rule) //执行索引列表处理器
