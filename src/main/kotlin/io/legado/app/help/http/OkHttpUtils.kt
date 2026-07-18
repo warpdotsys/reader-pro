@@ -49,7 +49,8 @@ suspend fun OkHttpClient.newCall(retry: Int = 0, builder: Request.Builder.() -> 
         response = currentResponse
         if (currentResponse.isSuccessful) return currentResponse.body!!
     }
-    return response!!.body ?: throw IOException(response.message)
+    val finalResponse = requireNotNull(response)
+    return finalResponse.body ?: throw IOException(finalResponse.message)
 }
 
 suspend fun OkHttpClient.newCallStrResponse(
@@ -63,7 +64,8 @@ suspend fun OkHttpClient.newCallStrResponse(
         response = currentResponse
         if (currentResponse.isSuccessful) return StrResponse(currentResponse, currentResponse.body!!.text())
     }
-    return StrResponse(response!!, response.body?.text() ?: response.message)
+    val finalResponse = requireNotNull(response)
+    return StrResponse(finalResponse, finalResponse.body?.text() ?: finalResponse.message)
 }
 
 suspend fun Call.await(): Response = suspendCancellableCoroutine { continuation ->
