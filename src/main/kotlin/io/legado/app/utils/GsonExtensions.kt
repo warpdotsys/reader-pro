@@ -8,7 +8,6 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.io.OutputStream
 import java.io.OutputStreamWriter
-import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 import kotlin.math.ceil
 
@@ -69,40 +68,6 @@ fun Gson.writeToOutputStream(out: OutputStream, any: Any) {
     }
     writer.close()
 }
-
-class ParameterizedTypeImpl(private val clazz: Class<*>) : ParameterizedType {
-    override fun getRawType(): Type = List::class.java
-
-    override fun getOwnerType(): Type? = null
-
-    override fun getActualTypeArguments(): Array<Type> = arrayOf(clazz)
-}
-
-/**
- * int类型转化失败时跳过
- */
-class IntJsonDeserializer : JsonDeserializer<Int?> {
-
-    override fun deserialize(
-        json: JsonElement,
-        typeOfT: Type?,
-        context: JsonDeserializationContext?
-    ): Int? {
-        return when {
-            json.isJsonPrimitive -> {
-                val prim = json.asJsonPrimitive
-                if (prim.isNumber) {
-                    prim.asNumber.toInt()
-                } else {
-                    null
-                }
-            }
-            else -> null
-        }
-    }
-
-}
-
 
 /**
  * 修复Int变为Double的问题
