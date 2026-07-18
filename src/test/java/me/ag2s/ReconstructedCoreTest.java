@@ -13,6 +13,7 @@ import io.legado.app.adapters.DefaultAdpater;
 import io.legado.app.help.http.CookieStore;
 import io.legado.app.help.http.StrResponse;
 import io.legado.app.utils.EncodingDetect;
+import com.htmake.reader.init.appCtx;
 import me.ag2s.epublib.domain.Date;
 import me.ag2s.epublib.domain.MediaTypes;
 import me.ag2s.epublib.util.commons.io.BOMInputStream;
@@ -67,6 +68,7 @@ class ReconstructedCoreTest {
                 adapter.getCacheDir()
         );
         assertEquals("storage" + File.separator + "cache", adapter.getRelativePath("", "storage", "cache"));
+        assertEquals(adapter.getCacheDir(), appCtx.INSTANCE.getCacheDir());
     }
 
     @Test

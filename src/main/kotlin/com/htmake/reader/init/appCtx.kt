@@ -1,9 +1,9 @@
 package com.htmake.reader.init
 
-import com.htmake.reader.utils.getWorkDir
+import io.legado.app.adapters.ReaderAdapterHelper
 
 object appCtx {
     val cacheDir: String by lazy {
-        getWorkDir("storage", "cache")
+        ReaderAdapterHelper.getAdapter().cacheDir
     }
 }
