@@ -78,10 +78,15 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict", "-opt-in=kotlin.RequiresOptIn")
         jvmTarget = "17"
-        // allow business tree gradual strictness
-        allWarningsAsErrors = false
-        suppressWarnings = true
+        // Warnings remain visible in local and CI builds.
+        allWarningsAsErrors = true
+        suppressWarnings = false
     }
+}
+
+tasks.withType<JavaCompile>().configureEach {
+    options.encoding = "UTF-8"
+    options.compilerArgs.add("-Xlint:all")
 }
 
 tasks.withType<Test> {
