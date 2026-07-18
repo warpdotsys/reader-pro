@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-import me.ag2s.epublib.epub.PackageDocumentBase;
-
 /**
  * A Date used by the book's metadata.
  * <p>
@@ -16,6 +14,7 @@ import me.ag2s.epublib.epub.PackageDocumentBase;
 public class Date implements Serializable {
 
     private static final long serialVersionUID = 7533866830395120136L;
+    private static final String DATE_FORMAT = "yyyy-MM-dd";
 
     public enum Event {
         PUBLICATION("publication"),
@@ -61,7 +60,7 @@ public class Date implements Serializable {
     }
 
     public Date(java.util.Date date, Event event) {
-        this((new SimpleDateFormat(PackageDocumentBase.dateFormat, Locale.US)).format(date),
+        this((new SimpleDateFormat(DATE_FORMAT, Locale.US)).format(date),
                 event);
     }
 
@@ -71,7 +70,7 @@ public class Date implements Serializable {
     }
 
     public Date(java.util.Date date, String event) {
-        this((new SimpleDateFormat(PackageDocumentBase.dateFormat, Locale.US)).format(date),
+        this((new SimpleDateFormat(DATE_FORMAT, Locale.US)).format(date),
                 event);
     }
 
