@@ -123,7 +123,7 @@ object StringUtils {
             if (c[i] == ' ') {
                 c[i] = '\u3000'
             } else if (c[i] in '\uff01'..'\uff5e') {
-                c[i] += 0xFEE0
+                c[i] = (c[i].code + 0xFEE0).toChar()
             }
         }
         return String(c)
@@ -138,7 +138,7 @@ object StringUtils {
             if (c[i] == '\u3000') {
                 c[i] = ' '
             } else if (c[i] in '\uff01'..'\uff5e') {
-                c[i] -= 0xFEE0
+                c[i] = (c[i].code - 0xFEE0).toChar()
             }
         }
         return String(c)
