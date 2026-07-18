@@ -16,7 +16,7 @@ class UmdHeader {
 
     fun buildHeader(wos: WrapOutputStream) {
         wos.writeBytes(137,155,154,222,35,1,0,0,8,1)
-        wos.writeBytes(UmdUtils.genRandomBytes(2))
+        wos.write(UmdUtils.genRandomBytes(2))
         listOf(2 to title,3 to author,4 to year,5 to month,6 to day,7 to bookType,8 to bookMan,9 to shopKeeper).forEach { (type, content) -> buildType(wos,type.toByte(),content) }
     }
     fun buildType(wos: WrapOutputStream, type: Byte, content: String?) {

@@ -13,9 +13,9 @@ class UmdCover(var coverData: ByteArray? = null) {
         if (data.isEmpty()) return
         wos.writeBytes(35, 130, 0, 1, 10, 1)
         val randomBytes = UmdUtils.genRandomBytes(4)
-        wos.writeBytes(randomBytes)
+        wos.write(randomBytes)
         wos.write(36)
-        wos.writeBytes(randomBytes)
+        wos.write(randomBytes)
         wos.writeInt(data.size + 9)
         wos.write(data)
     }
