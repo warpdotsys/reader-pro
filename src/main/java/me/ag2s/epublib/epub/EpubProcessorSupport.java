@@ -1,5 +1,7 @@
 package me.ag2s.epublib.epub;
 
+import me.ag2s.epublib.Constants;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -8,88 +10,130 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.URL;
 import java.util.Objects;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xmlpull.v1.XmlPullParserFactory;
 import org.xmlpull.v1.XmlSerializer;
 
+/**
+ * Various low-level support methods for reading/writing epubs.
+ *
+ * @author paul.siegmann
+ */
 public class EpubProcessorSupport {
-   private static final String TAG = EpubProcessorSupport.class.getName();
-   protected static DocumentBuilderFactory documentBuilderFactory;
 
-   private static void init() {
-      documentBuilderFactory = DocumentBuilderFactory.newInstance();
-      documentBuilderFactory.setNamespaceAware(true);
-      documentBuilderFactory.setValidating(false);
-   }
+    private static final String TAG = EpubProcessorSupport.class.getName();
 
-   public static XmlSerializer createXmlSerializer(OutputStream out) throws UnsupportedEncodingException {
-      return createXmlSerializer((Writer)(new OutputStreamWriter(out, "UTF-8")));
-   }
+    protected static DocumentBuilderFactory documentBuilderFactory;
 
-   public static XmlSerializer createXmlSerializer(Writer out) {
-      XmlSerializer result = null;
+    static {
+        init();
+    }
 
-      try {
-         XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-         factory.setValidating(true);
-         result = factory.newSerializer();
-         result.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);
-         result.setOutput(out);
-      } catch (Exception e) {
-         e.printStackTrace();
-      }
+    static class EntityResolverImpl implements EntityResolver {
 
-      return result;
-   }
+        private String previousLocation;
 
-   public static EntityResolver getEntityResolver() {
-      return new EntityResolverImpl();
-   }
+        @Override
+        public InputSource resolveEntity(String publicId, String systemId)
+                throws IOException {
+            String resourcePath;
+            if (systemId.startsWith("http:")) {
+                URL url = new URL(systemId);
+                resourcePath = "dtd/" + url.getHost() + url.getPath();
+                previousLocation = resourcePath
+                        .substring(0, resourcePath.lastIndexOf('/'));
+            } else {
+                resourcePath =
+                        previousLocation + systemId.substring(systemId.lastIndexOf('/'));
+            }
 
-   public DocumentBuilderFactory getDocumentBuilderFactory() {
-      return documentBuilderFactory;
-   }
+            if (Objects.requireNonNull(this.getClass().getClassLoader()).getResource(resourcePath) == null) {
+                throw new RuntimeException(
+                        "remote resource is not cached : [" + systemId
+                                + "] cannot continue");
+            }
 
-   public static DocumentBuilder createDocumentBuilder() {
-      DocumentBuilder result = null;
-
-      try {
-         result = documentBuilderFactory.newDocumentBuilder();
-         result.setEntityResolver(getEntityResolver());
-      } catch (ParserConfigurationException e) {
-         e.printStackTrace();
-      }
-
-      return result;
-   }
-
-   static {
-      init();
-   }
-
-   static class EntityResolverImpl implements EntityResolver {
-      private String previousLocation;
-
-      public InputSource resolveEntity(String publicId, String systemId) throws IOException {
-         String resourcePath;
-         if (systemId.startsWith("http:")) {
-            URL url = new URL(systemId);
-            resourcePath = "dtd/" + url.getHost() + url.getPath();
-            this.previousLocation = resourcePath.substring(0, resourcePath.lastIndexOf(47));
-         } else {
-            resourcePath = this.previousLocation + systemId.substring(systemId.lastIndexOf(47));
-         }
-
-         if (((ClassLoader)Objects.requireNonNull(this.getClass().getClassLoader())).getResource(resourcePath) == null) {
-            throw new RuntimeException("remote resource is not cached : [" + systemId + "] cannot continue");
-         } else {
-            InputStream in = ((ClassLoader)Objects.requireNonNull(EpubProcessorSupport.class.getClassLoader())).getResourceAsStream(resourcePath);
+            InputStream in = Objects.requireNonNull(EpubProcessorSupport.class.getClassLoader())
+                    .getResourceAsStream(resourcePath);
             return new InputSource(in);
-         }
-      }
-   }
+        }
+    }
+
+
+    private static void init() {
+        EpubProcessorSupport.documentBuilderFactory = DocumentBuilderFactory
+                .newInstance();
+        documentBuilderFactory.setNamespaceAware(true);
+        documentBuilderFactory.setValidating(false);
+    }
+
+    public static XmlSerializer createXmlSerializer(OutputStream out)
+            throws UnsupportedEncodingException {
+        return createXmlSerializer(
+                new OutputStreamWriter(out, Constants.CHARACTER_ENCODING));
+    }
+
+    public static XmlSerializer createXmlSerializer(Writer out) {
+        XmlSerializer result = null;
+        try {
+            /*
+             * Disable XmlPullParserFactory here before it doesn't work when
+             * building native image using GraalVM
+             */
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            factory.setValidating(true);
+            result = factory.newSerializer();
+
+            //result = new KXmlSerializer();
+            result.setFeature(
+                    "http://xmlpull.org/v1/doc/features.html#indent-output", true);
+            result.setOutput(out);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Log.e(TAG,
+            //         "When creating XmlSerializer: " + e.getClass().getName() + ": " + e
+            //                 .getMessage());
+        }
+        return result;
+    }
+
+    /**
+     * Gets an EntityResolver that loads dtd's and such from the epub4j classpath.
+     * In order to enable the loading of relative urls the given EntityResolver contains the previousLocation.
+     * Because of a new EntityResolver is created every time this method is called.
+     * Fortunately the EntityResolver created uses up very little memory per instance.
+     *
+     * @return an EntityResolver that loads dtd's and such from the epub4j classpath.
+     */
+    public static EntityResolver getEntityResolver() {
+        return new EntityResolverImpl();
+    }
+
+    @SuppressWarnings("unused")
+    public DocumentBuilderFactory getDocumentBuilderFactory() {
+        return documentBuilderFactory;
+    }
+
+    /**
+     * Creates a DocumentBuilder that looks up dtd's and schema's from epub4j's classpath.
+     *
+     * @return a DocumentBuilder that looks up dtd's and schema's from epub4j's classpath.
+     */
+    public static DocumentBuilder createDocumentBuilder() {
+        DocumentBuilder result = null;
+        try {
+            result = documentBuilderFactory.newDocumentBuilder();
+            result.setEntityResolver(getEntityResolver());
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+            // Log.e(TAG, e.getMessage());
+        }
+        return result;
+    }
 }
