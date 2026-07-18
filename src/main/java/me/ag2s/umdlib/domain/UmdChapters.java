@@ -13,11 +13,11 @@ import me.ag2s.umdlib.tool.WrapOutputStream;
 public class UmdChapters {
    private static final int DEFAULT_CHUNK_INIT_SIZE = 32768;
    private int TotalContentLen;
-   private List titles = new ArrayList();
-   public List contentLengths = new ArrayList();
+   private List<byte[]> titles = new ArrayList();
+   public List<Integer> contentLengths = new ArrayList();
    public ByteArrayOutputStream contents = new ByteArrayOutputStream();
 
-   public List getTitles() {
+   public List<byte[]> getTitles() {
       return this.titles;
    }
 

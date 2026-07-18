@@ -24,7 +24,7 @@ public class MediaTypes {
    public static final MediaType XPGT = new MediaType("application/adobe-page-template+xml", ".xpgt");
    public static final MediaType PLS = new MediaType("application/pls+xml", ".pls");
    public static final MediaType[] mediaTypes;
-   public static final Map mediaTypesByName;
+   public static final Map<String, MediaType> mediaTypesByName;
 
    public static boolean isBitmapImage(MediaType mediaType) {
       return mediaType == JPG || mediaType == PNG || mediaType == GIF;

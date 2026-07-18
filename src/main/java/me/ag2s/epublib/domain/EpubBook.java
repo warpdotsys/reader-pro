@@ -159,7 +159,7 @@ public class EpubBook implements Serializable {
       return new ArrayList(result.values());
    }
 
-   private static void addToContentsResult(Resource resource, Map allReachableResources) {
+   private static void addToContentsResult(Resource resource, Map<String, Resource> allReachableResources) {
       if (resource != null && !allReachableResources.containsKey(resource.getHref())) {
          allReachableResources.put(resource.getHref(), resource);
       }

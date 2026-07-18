@@ -18,7 +18,7 @@ public class Metadata implements Serializable {
    private String language = "en";
    private Map otherProperties = new HashMap();
    private List rights = new ArrayList();
-   private List titles = new ArrayList();
+   private List<String> titles = new ArrayList();
    private List identifiers = new ArrayList();
    private List subjects = new ArrayList();
    private String format;

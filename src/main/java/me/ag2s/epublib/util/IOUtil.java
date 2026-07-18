@@ -340,7 +340,7 @@ public class IOUtil {
 
    }
 
-   public static void close(final Closeable closeable, final IOConsumer consumer) throws IOException {
+   public static void close(final Closeable closeable, final IOConsumer<IOException> consumer) throws IOException {
       if (closeable != null) {
          try {
             closeable.close();

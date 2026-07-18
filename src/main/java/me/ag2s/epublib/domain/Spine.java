@@ -9,7 +9,7 @@ import me.ag2s.epublib.util.StringUtil;
 public class Spine implements Serializable {
    private static final long serialVersionUID = 3878483958947357246L;
    private Resource tocResource;
-   private List spineReferences;
+   private List<SpineReference> spineReferences;
 
    public Spine() {
       this((List)(new ArrayList()));
@@ -19,11 +19,11 @@ public class Spine implements Serializable {
       this.spineReferences = createSpineReferences(tableOfContents.getAllUniqueResources());
    }
 
-   public Spine(List spineReferences) {
+   public Spine(List<SpineReference> spineReferences) {
       this.spineReferences = spineReferences;
    }
 
-   public static List createSpineReferences(Collection resources) {
+   public static List<SpineReference> createSpineReferences(Collection<Resource> resources) {
       List<SpineReference> result = new ArrayList(resources.size());
 
       for(Resource resource : resources) {
@@ -33,11 +33,11 @@ public class Spine implements Serializable {
       return result;
    }
 
-   public List getSpineReferences() {
+   public List<SpineReference> getSpineReferences() {
       return this.spineReferences;
    }
 
-   public void setSpineReferences(List spineReferences) {
+   public void setSpineReferences(List<SpineReference> spineReferences) {
       this.spineReferences = spineReferences;
    }
 

@@ -7,8 +7,8 @@ import java.util.List;
 
 public class TOCReference extends TitledResourceReference implements Serializable {
    private static final long serialVersionUID = 5787958246077042456L;
-   private List children;
-   private static final Comparator COMPARATOR_BY_TITLE_IGNORE_CASE = (tocReference1, tocReference2) -> String.CASE_INSENSITIVE_ORDER.compare(tocReference1.getTitle(), tocReference2.getTitle());
+   private List<TOCReference> children;
+   private static final Comparator<TOCReference> COMPARATOR_BY_TITLE_IGNORE_CASE = (tocReference1, tocReference2) -> String.CASE_INSENSITIVE_ORDER.compare(tocReference1.getTitle(), tocReference2.getTitle());
 
    /** @deprecated */
    @Deprecated
@@ -24,16 +24,16 @@ public class TOCReference extends TitledResourceReference implements Serializabl
       this(name, resource, fragmentId, new ArrayList());
    }
 
-   public TOCReference(String title, Resource resource, String fragmentId, List children) {
+   public TOCReference(String title, Resource resource, String fragmentId, List<TOCReference> children) {
       super(resource, title, fragmentId);
       this.children = children;
    }
 
-   public static Comparator getComparatorByTitleIgnoreCase() {
+   public static Comparator<TOCReference> getComparatorByTitleIgnoreCase() {
       return COMPARATOR_BY_TITLE_IGNORE_CASE;
    }
 
-   public List getChildren() {
+   public List<TOCReference> getChildren() {
       return this.children;
    }
 
@@ -42,7 +42,7 @@ public class TOCReference extends TitledResourceReference implements Serializabl
       return childSection;
    }
 
-   public void setChildren(List children) {
+   public void setChildren(List<TOCReference> children) {
       this.children = children;
    }
 }

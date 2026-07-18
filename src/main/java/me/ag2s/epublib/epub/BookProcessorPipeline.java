@@ -7,13 +7,13 @@ import me.ag2s.epublib.domain.EpubBook;
 
 public class BookProcessorPipeline implements BookProcessor {
    private static final String TAG = BookProcessorPipeline.class.getName();
-   private List bookProcessors;
+   private List<BookProcessor> bookProcessors;
 
    public BookProcessorPipeline() {
       this((List)null);
    }
 
-   public BookProcessorPipeline(List bookProcessingPipeline) {
+   public BookProcessorPipeline(List<BookProcessor> bookProcessingPipeline) {
       this.bookProcessors = bookProcessingPipeline;
    }
 
@@ -41,7 +41,7 @@ public class BookProcessorPipeline implements BookProcessor {
       this.bookProcessors.add(bookProcessor);
    }
 
-   public void addBookProcessors(Collection bookProcessors) {
+   public void addBookProcessors(Collection<BookProcessor> bookProcessors) {
       if (this.bookProcessors == null) {
          this.bookProcessors = new ArrayList();
       }
@@ -49,11 +49,11 @@ public class BookProcessorPipeline implements BookProcessor {
       this.bookProcessors.addAll(bookProcessors);
    }
 
-   public List getBookProcessors() {
+   public List<BookProcessor> getBookProcessors() {
       return this.bookProcessors;
    }
 
-   public void setBookProcessingPipeline(List bookProcessingPipeline) {
+   public void setBookProcessingPipeline(List<BookProcessor> bookProcessingPipeline) {
       this.bookProcessors = bookProcessingPipeline;
    }
 }

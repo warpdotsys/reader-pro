@@ -14,7 +14,7 @@ public class Resources implements Serializable {
    private static final String IMAGE_PREFIX = "image_";
    private static final String ITEM_PREFIX = "item_";
    private int lastId = 1;
-   private Map resources = new HashMap();
+   private Map<String, Resource> resources = new HashMap();
 
    public Resource add(Resource resource) {
       this.fixResourceHref(resource);
@@ -160,11 +160,11 @@ public class Resources implements Serializable {
       return this.resources.size();
    }
 
-   public Map getResourceMap() {
+   public Map<String, Resource> getResourceMap() {
       return this.resources;
    }
 
-   public Collection getAll() {
+   public Collection<Resource> getAll() {
       return this.resources.values();
    }
 
@@ -180,12 +180,12 @@ public class Resources implements Serializable {
       return !this.notContainsByHref(href);
    }
 
-   public void set(Collection resources) {
+   public void set(Collection<Resource> resources) {
       this.resources.clear();
       this.addAll(resources);
    }
 
-   public void addAll(Collection resources) {
+   public void addAll(Collection<Resource> resources) {
       for(Resource resource : resources) {
          this.fixResourceHref(resource);
          this.resources.put(resource.getHref(), resource);
@@ -193,7 +193,7 @@ public class Resources implements Serializable {
 
    }
 
-   public void set(Map resources) {
+   public void set(Map<String, Resource> resources) {
       this.resources = new HashMap(resources);
    }
 
@@ -219,7 +219,7 @@ public class Resources implements Serializable {
       return findFirstResourceByMediaType(this.resources.values(), mediaType);
    }
 
-   public static Resource findFirstResourceByMediaType(Collection resources, MediaType mediaType) {
+   public static Resource findFirstResourceByMediaType(Collection<Resource> resources, MediaType mediaType) {
       for(Resource resource : resources) {
          if (resource.getMediaType() == mediaType) {
             return resource;
@@ -229,7 +229,7 @@ public class Resources implements Serializable {
       return null;
    }
 
-   public List getResourcesByMediaType(MediaType mediaType) {
+   public List<Resource> getResourcesByMediaType(MediaType mediaType) {
       List<Resource> result = new ArrayList();
       if (mediaType == null) {
          return result;
@@ -244,7 +244,7 @@ public class Resources implements Serializable {
       }
    }
 
-   public List getResourcesByMediaTypes(MediaType[] mediaTypes) {
+   public List<Resource> getResourcesByMediaTypes(MediaType[] mediaTypes) {
       List<Resource> result = new ArrayList();
       if (mediaTypes == null) {
          return result;
@@ -261,7 +261,7 @@ public class Resources implements Serializable {
       }
    }
 
-   public Collection getAllHrefs() {
+   public Collection<String> getAllHrefs() {
       return this.resources.keySet();
    }
 }

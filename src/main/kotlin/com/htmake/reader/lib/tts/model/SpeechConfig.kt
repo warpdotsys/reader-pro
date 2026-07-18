@@ -1,4 +1,0 @@
-package com.htmake.reader.lib.tts.model
-import com.htmake.reader.lib.tts.constant.OutputFormat
-import com.htmake.reader.lib.tts.util.Tools
-class SpeechConfig private constructor(private var outputFormat: OutputFormat?) { init { if (outputFormat == null) outputFormat = OutputFormat.audio_24khz_48kbitrate_mono_mp3 }; fun getOutputFormat() = outputFormat; fun setOutputFormat(value: OutputFormat?) { outputFormat = value }; override fun toString() = String.format(CONFIG_PATTERN, Tools.date(), outputFormat!!.value); companion object { const val CONFIG_PATTERN = "X-Timestamp:%s\r\nContent-Type:application/json; charset=utf-8\r\nPath:speech.config\r\n\r\n{\"context\":{\"synthesis\":{\"audio\":{\"metadataoptions\":{\"sentenceBoundaryEnabled\":\"false\",\"wordBoundaryEnabled\":\"true\"},\"outputFormat\":\"%s\"}}}}"; @JvmStatic fun of(outputFormat: OutputFormat?) = SpeechConfig(outputFormat) } }

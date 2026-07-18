@@ -7,16 +7,16 @@ import java.util.List;
 public class Guide implements Serializable {
    private static final long serialVersionUID = -6256645339915751189L;
    public static final String DEFAULT_COVER_TITLE = "cover";
-   private List references = new ArrayList();
+   private List<GuideReference> references = new ArrayList();
    private static final int COVERPAGE_NOT_FOUND = -1;
    private static final int COVERPAGE_UNITIALIZED = -2;
    private int coverPageIndex = -1;
 
-   public List getReferences() {
+   public List<GuideReference> getReferences() {
       return this.references;
    }
 
-   public void setReferences(List references) {
+   public void setReferences(List<GuideReference> references) {
       this.references = references;
       this.uncheckCoverPage();
    }

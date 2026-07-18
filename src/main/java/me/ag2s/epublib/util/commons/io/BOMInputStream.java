@@ -9,14 +9,14 @@ import me.ag2s.epublib.util.IOUtil;
 
 public class BOMInputStream extends ProxyInputStream {
    private final boolean include;
-   private final List boms;
+   private final List<ByteOrderMark> boms;
    private ByteOrderMark byteOrderMark;
    private int[] firstBytes;
    private int fbLength;
    private int fbIndex;
    private int markFbIndex;
    private boolean markedAtStart;
-   private static final Comparator ByteOrderMarkLengthComparator = (bom1, bom2) -> {
+   private static final Comparator<ByteOrderMark> ByteOrderMarkLengthComparator = (bom1, bom2) -> {
       int len1 = bom1.length();
       int len2 = bom2.length();
       return Integer.compare(len2, len1);

@@ -21,7 +21,7 @@ public class Identifier implements Serializable {
       this.value = value;
    }
 
-   public static Identifier getBookIdIdentifier(List identifiers) {
+   public static Identifier getBookIdIdentifier(List<Identifier> identifiers) {
       if (identifiers != null && !identifiers.isEmpty()) {
          Identifier result = null;
 
