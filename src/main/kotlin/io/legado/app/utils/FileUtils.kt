@@ -203,17 +203,15 @@ object FileUtils {
             return arrayOf()
         }
         val files = f.listFiles { file ->
-            if (file == null) {
-                return@listFiles false
+            when {
+                file == null -> false
+                file.isDirectory -> false
+                filterPattern == null -> true
+                else -> {
+                    val matcher = filterPattern.matcher(file.name)
+                    matcher?.find() ?: true
+                }
             }
-            if (file.isDirectory) {
-                return@listFiles false
-            }
-            if (filterPattern == null) {
-                return@listFiles true
-            }
-            val matcher = filterPattern.matcher(file.name)
-            matcher?.find() ?: true
         } ?: return arrayOf()
         for (file in files) {
             fileList.add(file.absoluteFile)
@@ -531,7 +529,7 @@ object FileUtils {
         }
     }
 
-    fun getMimeType(pathOrUrl: String): String {
+    fun getMimeType(@Suppress("UNUSED_PARAMETER") pathOrUrl: String): String {
         throw Exception("Not implemented")
     }
 
