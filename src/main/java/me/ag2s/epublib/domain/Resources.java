@@ -1,5 +1,8 @@
 package me.ag2s.epublib.domain;
 
+import me.ag2s.epublib.Constants;
+import me.ag2s.epublib.util.StringUtil;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,261 +10,393 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import me.ag2s.epublib.util.StringUtil;
 
+/**
+ * All the resources that make up the book.
+ * XHTML files, images and epub xml documents must be here.
+ *
+ * @author paul
+ */
 public class Resources implements Serializable {
-   private static final long serialVersionUID = 2450876953383871451L;
-   private static final String IMAGE_PREFIX = "image_";
-   private static final String ITEM_PREFIX = "item_";
-   private int lastId = 1;
-   private Map<String, Resource> resources = new HashMap();
 
-   public Resource add(Resource resource) {
-      this.fixResourceHref(resource);
-      this.fixResourceId(resource);
-      this.resources.put(resource.getHref(), resource);
-      return resource;
-   }
+    private static final long serialVersionUID = 2450876953383871451L;
+    private static final String IMAGE_PREFIX = "image_";
+    private static final String ITEM_PREFIX = "item_";
+    private int lastId = 1;
 
-   public void fixResourceId(Resource resource) {
-      String resourceId = resource.getId();
-      if (StringUtil.isBlank(resource.getId())) {
-         resourceId = StringUtil.substringBeforeLast(resource.getHref(), '.');
-         resourceId = StringUtil.substringAfterLast(resourceId, '/');
-      }
+    private Map<String, Resource> resources = new HashMap<>();
 
-      resourceId = this.makeValidId(resourceId, resource);
-      if (StringUtil.isBlank(resourceId) || this.containsId(resourceId)) {
-         resourceId = this.createUniqueResourceId(resource);
-      }
+    /**
+     * Adds a resource to the resources.
+     * <p>
+     * Fixes the resources id and href if necessary.
+     *
+     * @param resource resource
+     * @return the newly added resource
+     */
+    public Resource add(Resource resource) {
+        fixResourceHref(resource);
+        fixResourceId(resource);
+        this.resources.put(resource.getHref(), resource);
+        return resource;
+    }
 
-      resource.setId(resourceId);
-   }
+    /**
+     * Checks the id of the given resource and changes to a unique identifier if it isn't one already.
+     *
+     * @param resource resource
+     */
+    public void fixResourceId(Resource resource) {
+        String resourceId = resource.getId();
 
-   private String makeValidId(String resourceId, Resource resource) {
-      if (StringUtil.isNotBlank(resourceId) && !Character.isJavaIdentifierStart(resourceId.charAt(0))) {
-         resourceId = this.getResourceItemPrefix(resource) + resourceId;
-      }
+        // first try and create a unique id based on the resource's href
+        if (StringUtil.isBlank(resource.getId())) {
+            resourceId = StringUtil.substringBeforeLast(resource.getHref(), '.');
+            resourceId = StringUtil.substringAfterLast(resourceId, '/');
+        }
 
-      return resourceId;
-   }
+        resourceId = makeValidId(resourceId, resource);
 
-   private String getResourceItemPrefix(Resource resource) {
-      String result;
-      if (MediaTypes.isBitmapImage(resource.getMediaType())) {
-         result = "image_";
-      } else {
-         result = "item_";
-      }
+        // check if the id is unique. if not: create one from scratch
+        if (StringUtil.isBlank(resourceId) || containsId(resourceId)) {
+            resourceId = createUniqueResourceId(resource);
+        }
+        resource.setId(resourceId);
+    }
 
-      return result;
-   }
+    /**
+     * Check if the id is a valid identifier. if not: prepend with valid identifier
+     *
+     * @param resource resource
+     * @return a valid id
+     */
+    private String makeValidId(String resourceId, Resource resource) {
+        if (StringUtil.isNotBlank(resourceId) && !Character
+                .isJavaIdentifierStart(resourceId.charAt(0))) {
+            resourceId = getResourceItemPrefix(resource) + resourceId;
+        }
+        return resourceId;
+    }
 
-   private String createUniqueResourceId(Resource resource) {
-      int counter = this.lastId;
-      if (counter == Integer.MAX_VALUE) {
-         if (this.resources.size() == Integer.MAX_VALUE) {
-            throw new IllegalArgumentException("Resources contains 2147483647 elements: no new elements can be added");
-         }
+    private String getResourceItemPrefix(Resource resource) {
+        String result;
+        if (MediaTypes.isBitmapImage(resource.getMediaType())) {
+            result = IMAGE_PREFIX;
+        } else {
+            result = ITEM_PREFIX;
+        }
+        return result;
+    }
 
-         counter = 1;
-      }
-
-      String prefix = this.getResourceItemPrefix(resource);
-
-      String result;
-      StringBuilder var10000;
-      for(result = prefix + counter; this.containsId(result); result = var10000.append(counter).toString()) {
-         var10000 = (new StringBuilder()).append(prefix);
-         ++counter;
-      }
-
-      this.lastId = counter;
-      return result;
-   }
-
-   public boolean containsId(String id) {
-      if (StringUtil.isBlank(id)) {
-         return false;
-      } else {
-         for(Resource resource : this.resources.values()) {
-            if (id.equals(resource.getId())) {
-               return true;
+    /**
+     * Creates a new resource id that is guaranteed to be unique for this set of Resources
+     *
+     * @param resource resource
+     * @return a new resource id that is guaranteed to be unique for this set of Resources
+     */
+    private String createUniqueResourceId(Resource resource) {
+        int counter = lastId;
+        if (counter == Integer.MAX_VALUE) {
+            if (resources.size() == Integer.MAX_VALUE) {
+                throw new IllegalArgumentException(
+                        "Resources contains " + Integer.MAX_VALUE
+                                + " elements: no new elements can be added");
+            } else {
+                counter = 1;
             }
-         }
+        }
+        String prefix = getResourceItemPrefix(resource);
+        String result = prefix + counter;
+        while (containsId(result)) {
+            result = prefix + (++counter);
+        }
+        lastId = counter;
+        return result;
+    }
 
-         return false;
-      }
-   }
-
-   public Resource getById(String id) {
-      if (StringUtil.isBlank(id)) {
-         return null;
-      } else {
-         for(Resource resource : this.resources.values()) {
+    /**
+     * Whether the map of resources already contains a resource with the given id.
+     *
+     * @param id id
+     * @return Whether the map of resources already contains a resource with the given id.
+     */
+    public boolean containsId(String id) {
+        if (StringUtil.isBlank(id)) {
+            return false;
+        }
+        for (Resource resource : resources.values()) {
             if (id.equals(resource.getId())) {
-               return resource;
+                return true;
             }
-         }
+        }
+        return false;
+    }
 
-         return null;
-      }
-   }
+    /**
+     * Gets the resource with the given id.
+     *
+     * @param id id
+     * @return null if not found
+     */
+    public Resource getById(String id) {
+        if (StringUtil.isBlank(id)) {
+            return null;
+        }
+        for (Resource resource : resources.values()) {
+            if (id.equals(resource.getId())) {
+                return resource;
+            }
+        }
+        return null;
+    }
 
-   public Resource getByProperties(String properties) {
-      if (StringUtil.isBlank(properties)) {
-         return null;
-      } else {
-         for(Resource resource : this.resources.values()) {
+    public Resource getByProperties(String properties) {
+        if (StringUtil.isBlank(properties)) {
+            return null;
+        }
+        for (Resource resource : resources.values()) {
             if (properties.equals(resource.getProperties())) {
-               return resource;
+                return resource;
             }
-         }
+        }
+        return null;
+    }
 
-         return null;
-      }
-   }
+    /**
+     * Remove the resource with the given href.
+     *
+     * @param href href
+     * @return the removed resource, null if not found
+     */
+    public Resource remove(String href) {
+        return resources.remove(href);
+    }
 
-   public Resource remove(String href) {
-      return (Resource)this.resources.remove(href);
-   }
-
-   private void fixResourceHref(Resource resource) {
-      if (!StringUtil.isNotBlank(resource.getHref()) || this.resources.containsKey(resource.getHref())) {
-         if (StringUtil.isBlank(resource.getHref())) {
+    private void fixResourceHref(Resource resource) {
+        if (StringUtil.isNotBlank(resource.getHref())
+                && !resources.containsKey(resource.getHref())) {
+            return;
+        }
+        if (StringUtil.isBlank(resource.getHref())) {
             if (resource.getMediaType() == null) {
-               throw new IllegalArgumentException("Resource must have either a MediaType or a href");
+                throw new IllegalArgumentException(
+                        "Resource must have either a MediaType or a href");
             }
-
             int i = 1;
-
-            String href;
-            MediaType var10001;
-            for(href = this.createHref(resource.getMediaType(), i); this.resources.containsKey(href); href = this.createHref(var10001, i)) {
-               var10001 = resource.getMediaType();
-               ++i;
+            String href = createHref(resource.getMediaType(), i);
+            while (resources.containsKey(href)) {
+                href = createHref(resource.getMediaType(), (++i));
             }
-
             resource.setHref(href);
-         }
+        }
+    }
 
-      }
-   }
+    private String createHref(MediaType mediaType, int counter) {
+        if (MediaTypes.isBitmapImage(mediaType)) {
+            return IMAGE_PREFIX + counter + mediaType.getDefaultExtension();
+        } else {
+            return ITEM_PREFIX + counter + mediaType.getDefaultExtension();
+        }
+    }
 
-   private String createHref(MediaType mediaType, int counter) {
-      return MediaTypes.isBitmapImage(mediaType) ? "image_" + counter + mediaType.getDefaultExtension() : "item_" + counter + mediaType.getDefaultExtension();
-   }
 
-   public boolean isEmpty() {
-      return this.resources.isEmpty();
-   }
+    public boolean isEmpty() {
+        return resources.isEmpty();
+    }
 
-   public int size() {
-      return this.resources.size();
-   }
+    /**
+     * The number of resources
+     *
+     * @return The number of resources
+     */
+    public int size() {
+        return resources.size();
+    }
 
-   public Map<String, Resource> getResourceMap() {
-      return this.resources;
-   }
+    /**
+     * The resources that make up this book.
+     * Resources can be xhtml pages, images, xml documents, etc.
+     *
+     * @return The resources that make up this book.
+     */
+    @SuppressWarnings("unused")
+    public Map<String, Resource> getResourceMap() {
+        return resources;
+    }
 
-   public Collection<Resource> getAll() {
-      return this.resources.values();
-   }
+    public Collection<Resource> getAll() {
+        return resources.values();
+    }
 
-   public boolean notContainsByHref(String href) {
-      if (StringUtil.isBlank(href)) {
-         return true;
-      } else {
-         return !this.resources.containsKey(StringUtil.substringBefore(href, '#'));
-      }
-   }
 
-   public boolean containsByHref(String href) {
-      return !this.notContainsByHref(href);
-   }
+    /**
+     * Whether there exists a resource with the given href
+     *
+     * @param href href
+     * @return Whether there exists a resource with the given href
+     */
+    public boolean notContainsByHref(String href) {
+        if (StringUtil.isBlank(href)) {
+            return true;
+        } else {
+            return !resources.containsKey(
+                    StringUtil.substringBefore(href, Constants.FRAGMENT_SEPARATOR_CHAR));
+        }
+    }
+    /**
+     * Whether there exists a resource with the given href
+     *
+     * @param href href
+     * @return Whether there exists a resource with the given href
+     */
+    @SuppressWarnings("unused")
+    public boolean containsByHref(String href) {
+        return !notContainsByHref(href);
+    }
 
-   public void set(Collection<Resource> resources) {
-      this.resources.clear();
-      this.addAll(resources);
-   }
+    /**
+     * Sets the collection of Resources to the given collection of resources
+     *
+     * @param resources resources
+     */
+    public void set(Collection<Resource> resources) {
+        this.resources.clear();
+        addAll(resources);
+    }
 
-   public void addAll(Collection<Resource> resources) {
-      for(Resource resource : resources) {
-         this.fixResourceHref(resource);
-         this.resources.put(resource.getHref(), resource);
-      }
+    /**
+     * Adds all resources from the given Collection of resources to the existing collection.
+     *
+     * @param resources resources
+     */
+    public void addAll(Collection<Resource> resources) {
+        for (Resource resource : resources) {
+            fixResourceHref(resource);
+            this.resources.put(resource.getHref(), resource);
+        }
+    }
 
-   }
+    /**
+     * Sets the collection of Resources to the given collection of resources
+     *
+     * @param resources A map with as keys the resources href and as values the Resources
+     */
+    public void set(Map<String, Resource> resources) {
+        this.resources = new HashMap<>(resources);
+    }
 
-   public void set(Map<String, Resource> resources) {
-      this.resources = new HashMap(resources);
-   }
 
-   public Resource getByIdOrHref(String idOrHref) {
-      Resource resource = this.getById(idOrHref);
-      if (resource == null) {
-         resource = this.getByHref(idOrHref);
-      }
+    /**
+     * First tries to find a resource with as id the given idOrHref, if that
+     * fails it tries to find one with the idOrHref as href.
+     *
+     * @param idOrHref idOrHref
+     * @return the found Resource
+     */
+    public Resource getByIdOrHref(String idOrHref) {
+        Resource resource = getById(idOrHref);
+        if (resource == null) {
+            resource = getByHref(idOrHref);
+        }
+        return resource;
+    }
 
-      return resource;
-   }
 
-   public Resource getByHref(String href) {
-      if (StringUtil.isBlank(href)) {
-         return null;
-      } else {
-         href = StringUtil.substringBefore(href, '#');
-         return (Resource)this.resources.get(href);
-      }
-   }
+    /**
+     * Gets the resource with the given href.
+     * If the given href contains a fragmentId then that fragment id will be ignored.
+     *
+     * @param href href
+     * @return null if not found.
+     */
+    public Resource getByHref(String href) {
+        if (StringUtil.isBlank(href)) {
+            return null;
+        }
+        href = StringUtil.substringBefore(href, Constants.FRAGMENT_SEPARATOR_CHAR);
+        return resources.get(href);
+    }
 
-   public Resource findFirstResourceByMediaType(MediaType mediaType) {
-      return findFirstResourceByMediaType(this.resources.values(), mediaType);
-   }
+    /**
+     * Gets the first resource (random order) with the give mediatype.
+     * <p>
+     * Useful for looking up the table of contents as it's supposed to be the only resource with NCX mediatype.
+     *
+     * @param mediaType mediaType
+     * @return the first resource (random order) with the give mediatype.
+     */
+    public Resource findFirstResourceByMediaType(MediaType mediaType) {
+        return findFirstResourceByMediaType(resources.values(), mediaType);
+    }
 
-   public static Resource findFirstResourceByMediaType(Collection<Resource> resources, MediaType mediaType) {
-      for(Resource resource : resources) {
-         if (resource.getMediaType() == mediaType) {
-            return resource;
-         }
-      }
-
-      return null;
-   }
-
-   public List<Resource> getResourcesByMediaType(MediaType mediaType) {
-      List<Resource> result = new ArrayList();
-      if (mediaType == null) {
-         return result;
-      } else {
-         for(Resource resource : this.getAll()) {
+    /**
+     * Gets the first resource (random order) with the give mediatype.
+     * <p>
+     * Useful for looking up the table of contents as it's supposed to be the only resource with NCX mediatype.
+     *
+     * @param mediaType mediaType
+     * @return the first resource (random order) with the give mediatype.
+     */
+    public static Resource findFirstResourceByMediaType(
+            Collection<Resource> resources, MediaType mediaType) {
+        for (Resource resource : resources) {
             if (resource.getMediaType() == mediaType) {
-               result.add(resource);
+                return resource;
             }
-         }
+        }
+        return null;
+    }
 
-         return result;
-      }
-   }
+    /**
+     * All resources that have the given MediaType.
+     *
+     * @param mediaType mediaType
+     * @return All resources that have the given MediaType.
+     */
+    public List<Resource> getResourcesByMediaType(MediaType mediaType) {
+        List<Resource> result = new ArrayList<>();
+        if (mediaType == null) {
+            return result;
+        }
+        for (Resource resource : getAll()) {
+            if (resource.getMediaType() == mediaType) {
+                result.add(resource);
+            }
+        }
+        return result;
+    }
 
-   public List<Resource> getResourcesByMediaTypes(MediaType[] mediaTypes) {
-      List<Resource> result = new ArrayList();
-      if (mediaTypes == null) {
-         return result;
-      } else {
-         List<MediaType> mediaTypesList = Arrays.asList(mediaTypes);
+    /**
+     * All Resources that match any of the given list of MediaTypes
+     *
+     * @param mediaTypes mediaType
+     * @return All Resources that match any of the given list of MediaTypes
+     */
+    @SuppressWarnings("unused")
+    public List<Resource> getResourcesByMediaTypes(MediaType[] mediaTypes) {
+        List<Resource> result = new ArrayList<>();
+        if (mediaTypes == null) {
+            return result;
+        }
 
-         for(Resource resource : this.getAll()) {
+        // this is the fastest way of doing this according to
+        // http://stackoverflow.com/questions/1128723/in-java-how-can-i-test-if-an-array-contains-a-certain-value
+        List<MediaType> mediaTypesList = Arrays.asList(mediaTypes);
+        for (Resource resource : getAll()) {
             if (mediaTypesList.contains(resource.getMediaType())) {
-               result.add(resource);
+                result.add(resource);
             }
-         }
+        }
+        return result;
+    }
 
-         return result;
-      }
-   }
 
-   public Collection<String> getAllHrefs() {
-      return this.resources.keySet();
-   }
+    /**
+     * All resource hrefs
+     *
+     * @return all resource hrefs
+     */
+    public Collection<String> getAllHrefs() {
+        return resources.keySet();
+    }
 }
