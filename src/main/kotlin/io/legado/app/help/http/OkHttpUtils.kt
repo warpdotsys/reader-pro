@@ -28,7 +28,7 @@ suspend fun OkHttpClient.newCallResponse(retry: Int = 0, builder: Request.Builde
     withContext(Dispatchers.IO) {
         val requestBuilder = Request.Builder().apply(builder)
         var response: Response? = null
-        for (_ in 0..retry) {
+        repeat(retry + 1) {
             response = newCall(requestBuilder.build()).await()
             if (response.isSuccessful) return@withContext response
         }
@@ -43,7 +43,7 @@ suspend fun OkHttpClient.newCallResponseBody(
 suspend fun OkHttpClient.newCall(retry: Int = 0, builder: Request.Builder.() -> Unit): ResponseBody {
     val requestBuilder = Request.Builder().apply(builder)
     var response: Response? = null
-    for (_ in 0..retry) {
+    repeat(retry + 1) {
         response = newCall(requestBuilder.build()).await()
         if (response.isSuccessful) return response.body!!
     }
@@ -56,7 +56,7 @@ suspend fun OkHttpClient.newCallStrResponse(
 ): StrResponse {
     val requestBuilder = Request.Builder().apply(builder)
     var response: Response? = null
-    for (_ in 0..retry) {
+    repeat(retry + 1) {
         response = newCall(requestBuilder.build()).await()
         if (response.isSuccessful) return StrResponse(response, response.body!!.text())
     }
