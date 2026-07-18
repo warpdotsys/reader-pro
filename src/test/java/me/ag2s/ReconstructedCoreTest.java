@@ -10,6 +10,7 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import io.legado.app.adapters.DefaultAdpater;
+import io.legado.app.help.http.CookieStore;
 import io.legado.app.help.http.StrResponse;
 import me.ag2s.epublib.domain.Date;
 import me.ag2s.epublib.domain.MediaTypes;
@@ -75,5 +76,14 @@ class ReconstructedCoreTest {
         assertTrue(response.isSuccessful());
         assertEquals("https://example.com/chapter", response.getUrl());
         assertEquals("body", response.body());
+    }
+
+    @Test
+    void cookieStoreKeepsJarParsingRules() {
+        CookieStore cookieStore = new CookieStore("test");
+
+        assertEquals("two", cookieStore.cookieToMap("one=two; blank=; null=null").get("one"));
+        assertFalse(cookieStore.cookieToMap("one=two; blank=; null=null").containsKey("blank"));
+        assertEquals("null", cookieStore.cookieToMap("one=two; blank=; null=null").get("null"));
     }
 }
