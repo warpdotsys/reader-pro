@@ -59,6 +59,7 @@ dependencies {
 
     // XPath (Jsoup + XPath, legado-compatible)
     implementation("us.codecraft:xsoup:0.3.2")
+    implementation("cn.wanghaomiao:JsoupXpath:2.5.0")
 
     // Mongo optional
     implementation("org.mongodb:mongodb-driver-sync:4.11.1")
