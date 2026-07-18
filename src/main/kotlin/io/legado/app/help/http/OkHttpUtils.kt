@@ -71,7 +71,7 @@ suspend fun OkHttpClient.newCallStrResponse(
 suspend fun Call.await(): Response = suspendCancellableCoroutine { continuation ->
     continuation.invokeOnCancellation { cancel() }
     enqueue(object : Callback {
-        override fun onFailure(call: Call, error: IOException) = continuation.resumeWithException(error)
+        override fun onFailure(call: Call, e: IOException) = continuation.resumeWithException(e)
 
         override fun onResponse(call: Call, response: Response) = continuation.resume(response)
     })
