@@ -79,7 +79,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
         freeCompilerArgs = listOf("-Xjsr305=strict", "-opt-in=kotlin.RequiresOptIn")
         jvmTarget = "17"
         // Warnings remain visible in local and CI builds.
-        allWarningsAsErrors = false
+        allWarningsAsErrors = true
         suppressWarnings = false
     }
 }
