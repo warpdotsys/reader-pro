@@ -95,11 +95,11 @@ tasks.named<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
     archiveVersion.set(project.version.toString())
 }
 
-// Soft-fail: compile only main sources we control
+// Reconstructed sources deliberately retain the JAR's original Java/Kotlin split.
 sourceSets {
     main {
         java {
-            // no java sources expected
+            srcDir("src/main/java")
         }
     }
 }
