@@ -12,6 +12,7 @@ import java.util.Arrays;
 import io.legado.app.adapters.DefaultAdpater;
 import io.legado.app.help.http.CookieStore;
 import io.legado.app.help.http.StrResponse;
+import io.legado.app.utils.EncodingDetect;
 import me.ag2s.epublib.domain.Date;
 import me.ag2s.epublib.domain.MediaTypes;
 import me.ag2s.epublib.util.commons.io.BOMInputStream;
@@ -85,5 +86,13 @@ class ReconstructedCoreTest {
         assertEquals("two", cookieStore.cookieToMap("one=two; blank=; null=null").get("one"));
         assertFalse(cookieStore.cookieToMap("one=two; blank=; null=null").containsKey("blank"));
         assertEquals("null", cookieStore.cookieToMap("one=two; blank=; null=null").get("null"));
+    }
+
+    @Test
+    void encodingDetectPrefersHtmlMetaCharset() {
+        byte[] html = "<html><head><meta charset=\"GBK\"></head><body></body></html>"
+                .getBytes(StandardCharsets.US_ASCII);
+
+        assertEquals("GBK", EncodingDetect.INSTANCE.getHtmlEncode(html));
     }
 }
