@@ -361,7 +361,7 @@ class AnalyzeByJSoup(doc: Any) {
 
                 val es = Elements()
 
-                for (pcInt in indexSet) elements[pcInt]?.let(es::add)
+                for (pcInt in indexSet) es.add(elements[pcInt])
 
                 elements = es
 
