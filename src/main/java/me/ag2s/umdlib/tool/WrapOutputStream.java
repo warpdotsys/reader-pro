@@ -4,85 +4,88 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class WrapOutputStream extends OutputStream {
-   private OutputStream os;
-   private int written;
 
-   public WrapOutputStream(OutputStream os) {
-      this.os = os;
-   }
+	private OutputStream os;
+	private int written;
 
-   private void incCount(int value) {
-      int temp = this.written + value;
-      if (temp < 0) {
-         temp = Integer.MAX_VALUE;
-      }
+	public WrapOutputStream(OutputStream os) {
+		this.os = os;
+	}
 
-      this.written = temp;
-   }
+    private void incCount(int value) {
+        int temp = written + value;
+        if (temp < 0) {
+            temp = Integer.MAX_VALUE;
+        }
+        written = temp;
+    }
 
-   public void writeInt(int v) throws IOException {
-      this.os.write(v >>> 0 & 255);
-      this.os.write(v >>> 8 & 255);
-      this.os.write(v >>> 16 & 255);
-      this.os.write(v >>> 24 & 255);
-      this.incCount(4);
-   }
+    // it is different from the writeInt of DataOutputStream
+	public void writeInt(int v) throws IOException {
+        os.write((v >>>  0) & 0xFF);
+        os.write((v >>>  8) & 0xFF);
+        os.write((v >>> 16) & 0xFF);
+        os.write((v >>> 24) & 0xFF);
+		incCount(4);
+	}
 
-   public void writeByte(byte b) throws IOException {
-      this.write(b);
-   }
+	public void writeByte(byte b) throws IOException {
+		write(b);
+	}
 
-   public void writeByte(int n) throws IOException {
-      this.write(n);
-   }
+	public void writeByte(int n) throws IOException {
+		write(n);
+	}
 
-   public void writeBytes(byte... bytes) throws IOException {
-      this.write(bytes);
-   }
+	public void writeBytes(byte ... bytes) throws IOException {
+		write(bytes);
+	}
 
-   public void writeBytes(int... vals) throws IOException {
-      for(int v : vals) {
-         this.write(v);
-      }
+	public void writeBytes(int ... vals) throws IOException {
+		for (int v : vals) {
+			write(v);
+		}
+	}
 
-   }
+	public void write(byte[] b, int off, int len) throws IOException {
+		os.write(b, off, len);
+		incCount(len);
+	}
 
-   public void write(byte[] b, int off, int len) throws IOException {
-      this.os.write(b, off, len);
-      this.incCount(len);
-   }
+	public void write(byte[] b) throws IOException {
+		os.write(b);
+		incCount(b.length);
+	}
 
-   public void write(byte[] b) throws IOException {
-      this.os.write(b);
-      this.incCount(b.length);
-   }
+	public void write(int b) throws IOException {
+		os.write(b);
+		incCount(1);
+	}
 
-   public void write(int b) throws IOException {
-      this.os.write(b);
-      this.incCount(1);
-   }
+	/////////////////////////////////////////////////
 
-   public void close() throws IOException {
-      this.os.close();
-   }
+	public void close() throws IOException {
+		os.close();
+	}
 
-   public void flush() throws IOException {
-      this.os.flush();
-   }
+	public void flush() throws IOException {
+		os.flush();
+	}
 
-   public boolean equals(Object obj) {
-      return this.os.equals(obj);
-   }
+	public boolean equals(Object obj) {
+		return os.equals(obj);
+	}
 
-   public int hashCode() {
-      return this.os.hashCode();
-   }
+	public int hashCode() {
+		return os.hashCode();
+	}
 
-   public String toString() {
-      return this.os.toString();
-   }
+	public String toString() {
+		return os.toString();
+	}
 
-   public int getWritten() {
-      return this.written;
-   }
+	public int getWritten() {
+		return written;
+	}
+
 }

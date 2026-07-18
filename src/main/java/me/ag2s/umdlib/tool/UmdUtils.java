@@ -1,3 +1,4 @@
+
 package me.ag2s.umdlib.tool;
 
 import java.io.BufferedInputStream;
@@ -11,136 +12,148 @@ import java.io.IOException;
 import java.util.Random;
 import java.util.zip.InflaterInputStream;
 
+
 public class UmdUtils {
-   private static final int EOF = -1;
-   private static final int BUFFER_SIZE = 8192;
-   private static Random random = new Random();
 
-   public static byte[] stringToUnicodeBytes(String s) {
-      if (s == null) {
-         throw new NullPointerException();
-      } else {
-         int len = s.length();
-         byte[] ret = new byte[len * 2];
+	private static final int EOF = -1;
+	private static final int BUFFER_SIZE = 8 * 1024;
 
-         for(int i = 0; i < len; ++i) {
-            int c = s.charAt(i);
-            int a = c >> 8;
-            int b = c & 255;
-            if (a < 0) {
-               a += 255;
-            }
 
-            if (b < 0) {
-               b += 255;
-            }
+	/**
+	 * 将字符串编码成Unicode形式的byte[]
+	 * @param s 要编码的字符串
+	 * @return 编码好的byte[]
+	 */
+	public static byte[] stringToUnicodeBytes(String s) {
+		if (s == null) {
+			throw new NullPointerException();
+		}
 
-            ret[i * 2] = (byte)b;
-            ret[i * 2 + 1] = (byte)a;
-         }
+		int len = s.length();
+		byte[] ret = new byte[len * 2];
+		int a, b, c;
+		for (int i = 0; i < len; i++) {
+			c = s.charAt(i);
+			a = c >> 8;
+			b = c & 0xFF;
+			if (a < 0) {
+				a += 0xFF;
+			}
+			if (b < 0) {
+				b += 0xFF;
+			}
+			ret[i * 2] = (byte) b;
+			ret[i * 2 + 1] = (byte) a;
+		}
+		return ret;
+	}
 
-         return ret;
-      }
-   }
+	/**
+	 * 将编码成Unicode形式的byte[]解码成原始字符串
+	 * @param bytes 编码成Unicode形式的byte[]
+	 * @return 原始字符串
+	 */
+	public static String unicodeBytesToString(byte[] bytes){
+		char[] s=new char[bytes.length/2];
+		StringBuilder sb=new StringBuilder();
+		int a,b,c;
+		for(int i=0;i<s.length;i++){
+			a=bytes[i*2+1];
+			b=bytes[i*2];
+			c=(a&0xff)<<8|(b&0xff);
+			if(c<0){
+				c+=0xffff;
+			}
+			char[] c1=Character.toChars(c);
+			sb.append(c1);
 
-   public static String unicodeBytesToString(byte[] bytes) {
-      char[] s = new char[bytes.length / 2];
-      StringBuilder sb = new StringBuilder();
+		}
+		return sb.toString();
+	}
 
-      for(int i = 0; i < s.length; ++i) {
-         int a = bytes[i * 2 + 1];
-         int b = bytes[i * 2];
-         int c = (a & 255) << 8 | b & 255;
-         if (c < 0) {
-            c += 65535;
-         }
+	/**
+	 * 将byte[]转化成Hex形式
+	 * @param bArr byte[]
+	 * @return 目标HEX字符串
+	 */
+	public static String toHex(byte[] bArr){
+		StringBuilder sb = new StringBuilder(bArr.length);
+		String sTmp;
 
-         char[] c1 = Character.toChars(c);
-         sb.append(c1);
-      }
+		for (int i = 0; i < bArr.length; i++) {
+			sTmp = Integer.toHexString(0xFF & bArr[i]);
+			if (sTmp.length() < 2)
+				sb.append(0);
+			sb.append(sTmp.toUpperCase());
+		}
 
-      return sb.toString();
-   }
+		return sb.toString();
+	}
 
-   public static String toHex(byte[] bArr) {
-      StringBuilder sb = new StringBuilder(bArr.length);
+	/**
+	 * 解压缩zip的byte[]
+	 * @param compress zippered byte[]
+	 * @return decompressed byte[]
+	 * @throws Exception 解码时失败时
+	 */
+	public static byte[] decompress(byte[] compress) throws Exception {
+		ByteArrayInputStream bais = new ByteArrayInputStream(compress);
+		InflaterInputStream iis = new InflaterInputStream(bais);
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		int c = 0;
+		byte[] buf = new byte[BUFFER_SIZE];
+		while (true) {
+			c = iis.read(buf);
 
-      for(int i = 0; i < bArr.length; ++i) {
-         String sTmp = Integer.toHexString(255 & bArr[i]);
-         if (sTmp.length() < 2) {
-            sb.append(0);
-         }
+			if (c == EOF)
+				break;
+			baos.write(buf, 0, c);
+		}
+		baos.flush();
+		return baos.toByteArray();
+	}
 
-         sb.append(sTmp.toUpperCase());
-      }
 
-      return sb.toString();
-   }
 
-   public static byte[] decompress(byte[] compress) throws Exception {
-      ByteArrayInputStream bais = new ByteArrayInputStream(compress);
-      InflaterInputStream iis = new InflaterInputStream(bais);
-      ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      int c = 0;
-      byte[] buf = new byte[8192];
 
-      while(true) {
-         c = iis.read(buf);
-         if (c == -1) {
-            baos.flush();
-            return baos.toByteArray();
-         }
+	public static void saveFile(File f, byte[] content) throws IOException {
+		FileOutputStream fos = new FileOutputStream(f);
+		try {
+			BufferedOutputStream bos = new BufferedOutputStream(fos);
+			bos.write(content);
+			bos.flush();
+		} finally {
+			fos.close();
+		}
+	}
 
-         baos.write(buf, 0, c);
-      }
-   }
+	public static byte[] readFile(File f) throws IOException {
+		FileInputStream fis = new FileInputStream(f);
+		try {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			BufferedInputStream bis = new BufferedInputStream(fis);
+			int ch;
+			while ((ch = bis.read()) >= 0) {
+				baos.write(ch);
+			}
+			baos.flush();
+			return baos.toByteArray();
+		} finally {
+			fis.close();
+		}
+	}
 
-   public static void saveFile(File f, byte[] content) throws IOException {
-      FileOutputStream fos = new FileOutputStream(f);
+	private static Random random = new Random();
 
-      try {
-         BufferedOutputStream bos = new BufferedOutputStream(fos);
-         bos.write(content);
-         bos.flush();
-      } finally {
-         fos.close();
-      }
+	public static byte[] genRandomBytes(int len) {
+		if (len <= 0) {
+			throw new IllegalArgumentException("Length must > 0: " + len);
+		}
+		byte[] ret = new byte[len];
+		for (int i = 0; i < ret.length; i++) {
+			ret[i] = (byte) random.nextInt(256);
+		}
+		return ret;
+	}
 
-   }
-
-   public static byte[] readFile(File f) throws IOException {
-      FileInputStream fis = new FileInputStream(f);
-
-      byte[] var5;
-      try {
-         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-         BufferedInputStream bis = new BufferedInputStream(fis);
-
-         int ch;
-         while((ch = bis.read()) >= 0) {
-            baos.write(ch);
-         }
-
-         baos.flush();
-         var5 = baos.toByteArray();
-      } finally {
-         fis.close();
-      }
-
-      return var5;
-   }
-
-   public static byte[] genRandomBytes(int len) {
-      if (len <= 0) {
-         throw new IllegalArgumentException("Length must > 0: " + len);
-      } else {
-         byte[] ret = new byte[len];
-
-         for(int i = 0; i < ret.length; ++i) {
-            ret[i] = (byte)random.nextInt(256);
-         }
-
-         return ret;
-      }
-   }
 }
