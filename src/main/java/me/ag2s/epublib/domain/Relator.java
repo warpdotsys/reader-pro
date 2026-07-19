@@ -467,7 +467,174 @@ public enum Relator {
   EDITOR("edt", "Editor"),
 
   /**
-   * Use for a person responsible for setting up a lighting rig and focusing the lights fo…1693 tokens truncated…, "Libelee-appellant"),
+   * Use for a person responsible for setting up a lighting rig and focusing the lights for a production, and running the lighting at a performance.
+   */
+  ELECTRICIAN("elg", "Electrician"),
+
+  /**
+   * Use for a person or organization who creates a duplicate printing surface by pressure molding and electrodepositing of metal that is then backed up with lead for printing.
+   */
+  ELECTROTYPER("elt", "Electrotyper"),
+
+  /**
+   * Use for a person or organization that is responsible for technical planning and design, particularly with construction.
+   */
+  ENGINEER("eng", "Engineer"),
+
+  /**
+   * Use for a person or organization who cuts letters, figures, etc. on a surface, such as a wooden or metal plate, for printing.
+   */
+  ENGRAVER("egr", "Engraver"),
+
+  /**
+   * Use for a person or organization who produces text or images for printing by subjecting metal, glass, or some other surface to acid or the corrosive action of some other substance.
+   */
+  ETCHER("etr", "Etcher"),
+
+  /**
+   * Use for the name of the place where an event such as a conference or a concert took place.
+   */
+  EVENT_PLACE("evp", "Event place"),
+
+  /**
+   * Use for a person or organization in charge of the description and appraisal of the value of goods, particularly rare items, works of art, etc.
+   */
+  EXPERT("exp", "Expert"),
+
+  /**
+   * Use for a person or organization that executed the facsimile.
+   */
+  FACSIMILIST("fac", "Facsimilist"),
+
+  /**
+   * Use for a person or organization that manages or supervises the work done to collect raw data or do research in an actual setting or environment (typically applies to the natural and social sciences).
+   */
+  FIELD_DIRECTOR("fld", "Field director"),
+
+  /**
+   * Use for a person or organization who is an editor of a motion picture film. This term is used regardless of the medium upon which the motion picture is produced or manufactured (e.g., acetate film, video tape).
+   */
+  FILM_EDITOR("flm", "Film editor"),
+
+  /**
+   * Use for a person or organization who is identified as the only party or the party of the first part. In the case of transfer of right, this is the assignor, transferor, licensor, grantor, etc. Multiple parties can be named jointly as the first party
+   */
+  FIRST_PARTY("fpy", "First party"),
+
+  /**
+   * Use for a person or organization who makes or imitates something of value or importance, especially with the intent to defraud.
+   */
+  FORGER("frg", "Forger"),
+
+  /**
+   * Use for a person or organization who owned an item at any time in the past. Includes those to whom the material was once presented. A person or organization giving the item to the present owner is designated as Donor [dnr]
+   */
+  FORMER_OWNER("fmo", "Former owner"),
+
+  /**
+   * Use for a person or organization that furnished financial support for the production of the work.
+   */
+  FUNDER("fnd", "Funder"),
+
+  /**
+   * Use for a person responsible for geographic information system (GIS) development and integration with global positioning system data.
+   */
+  GEOGRAPHIC_INFORMATION_SPECIALIST("gis", "Geographic information specialist"),
+
+  /**
+   * Use for a person or organization in memory or honor of whom a book, manuscript, etc. is donated.
+   */
+  HONOREE("hnr", "Honoree"),
+
+  /**
+   * Use for a person who is invited or regularly leads a program (often broadcast) that includes other guests, performers, etc. (e.g., talk show host).
+   */
+  HOST("hst", "Host"),
+
+  /**
+   * Use for a person or organization responsible for the decoration of a work (especially manuscript material) with precious metals or color, usually with elaborate designs and motifs.
+   */
+  ILLUMINATOR("ilu", "Illuminator"),
+
+  /**
+   * Use for a person or organization who conceives, and perhaps also implements, a design or illustration, usually to accompany a written text.
+   */
+  ILLUSTRATOR("ill", "Illustrator"),
+
+  /**
+   * Use for a person who signs a presentation statement.
+   */
+  INSCRIBER("ins", "Inscriber"),
+
+  /**
+   * Use for a person or organization who principally plays an instrument in a musical or dramatic presentation or entertainment.
+   */
+  INSTRUMENTALIST("itr", "Instrumentalist"),
+
+  /**
+   * Use for a person or organization who is interviewed at a consultation or meeting, usually by a reporter, pollster, or some other information gathering agent.
+   */
+  INTERVIEWEE("ive", "Interviewee"),
+
+  /**
+   * Use for a person or organization who acts as a reporter, pollster, or other information gathering agent in a consultation or meeting involving one or more individuals.
+   */
+  INTERVIEWER("ivr", "Interviewer"),
+
+  /**
+   * Use for a person or organization who first produces a particular useful item, or develops a new process for obtaining a known item or result.
+   */
+  INVENTOR("inv", "Inventor"),
+
+  /**
+   * Use for an institution that provides scientific analyses of material samples.
+   */
+  LABORATORY("lbr", "Laboratory"),
+
+  /**
+   * Use for a person or organization that manages or supervises work done in a controlled setting or environment.
+   */
+  LABORATORY_DIRECTOR("ldr", "Laboratory director"),
+
+  /**
+   * Use for a person or organization whose work involves coordinating the arrangement of existing and proposed land features and structures.
+   */
+  LANDSCAPE_ARCHITECT("lsa", "Landscape architect"),
+
+  /**
+   * Use to indicate that a person or organization takes primary responsibility for a particular activity or endeavor. Use with another relator term or code to show the greater importance this person or organization has regarding that particular role. If more than one relator is assigned to a heading, use the Lead relator only if it applies to all the relators.
+   */
+  LEAD("led", "Lead"),
+
+  /**
+   * Use for a person or organization permitting the temporary use of a book, manuscript, etc., such as for photocopying or microfilming.
+   */
+  LENDER("len", "Lender"),
+
+  /**
+   * Use for the party who files a libel in an ecclesiastical or admiralty case.
+   */
+  LIBELANT("lil", "Libelant"),
+
+  /**
+   * Use for a libelant who takes an appeal from one ecclesiastical court or admiralty to another to reverse the judgment.
+   */
+  LIBELANT_APPELLANT("lit", "Libelant-appellant"),
+
+  /**
+   * Use for a libelant against whom an appeal is taken from one ecclesiastical court or admiralty to another to reverse the judgment.
+   */
+  LIBELANT_APPELLEE("lie", "Libelant-appellee"),
+
+  /**
+   * Use for a party against whom a libel has been filed in an ecclesiastical court or admiralty.
+   */
+  LIBELEE("lel", "Libelee"),
+
+  /**
+   * Use for a libelee who takes an appeal from one ecclesiastical court or admiralty to another to reverse the judgment.
+   */
+  LIBELEE_APPELLANT("let", "Libelee-appellant"),
 
   /**
    * Use for a libelee against whom an appeal is taken from one ecclesiastical court or admiralty to another to reverse the judgment.

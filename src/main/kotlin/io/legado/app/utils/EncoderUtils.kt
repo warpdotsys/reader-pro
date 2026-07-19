@@ -1,6 +1,11 @@
 package io.legado.app.utils
 
 import io.legado.app.utils.Base64
+import java.io.ByteArrayOutputStream
+import java.security.KeyPair
+import java.security.KeyPairGenerator
+import java.security.PrivateKey
+import java.security.PublicKey
 import java.security.spec.AlgorithmParameterSpec
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
@@ -336,6 +341,145 @@ object EncoderUtils {
         iv: ByteArray? = null
     ): ByteArray? {
         return symmetricTemplate(data, key, "DESede", transformation, iv, false)
+    }
+
+    fun encryptByPrivateKey(input: String, privateKey: PrivateKey): String {
+        val cipher = Cipher.getInstance("RSA")
+        cipher.init(Cipher.ENCRYPT_MODE, privateKey)
+        val encrypt = cipher.doFinal(input.toByteArray(Charsets.UTF_8))
+        return Base64.encodeToString(encrypt, Base64.NO_WRAP)
+    }
+
+    fun decryptByPublicKey(input: String, publicKey: PublicKey): String {
+        val decode = Base64.decode(input, Base64.NO_WRAP)
+        val cipher = Cipher.getInstance("RSA")
+        cipher.init(Cipher.DECRYPT_MODE, publicKey)
+        val encrypt = cipher.doFinal(decode)
+        return String(encrypt, Charsets.UTF_8)
+    }
+
+    fun encryptByPublicKey(input: String, publicKey: PublicKey): String {
+        val cipher = Cipher.getInstance("RSA")
+        cipher.init(Cipher.ENCRYPT_MODE, publicKey)
+        val encrypt = cipher.doFinal(input.toByteArray(Charsets.UTF_8))
+        return Base64.encodeToString(encrypt, Base64.NO_WRAP)
+    }
+
+    fun decryptByPrivateKey(input: String, privateKey: PrivateKey): String {
+        val decode = Base64.decode(input, Base64.NO_WRAP)
+        val cipher = Cipher.getInstance("RSA")
+        cipher.init(Cipher.DECRYPT_MODE, privateKey)
+        val encrypt = cipher.doFinal(decode)
+        return String(encrypt, Charsets.UTF_8)
+    }
+
+    fun encryptSegmentByPrivateKey(
+        input: String,
+        privateKey: PrivateKey,
+        keySize: Int = 2048
+    ): String {
+        val byteArray = input.toByteArray(Charsets.UTF_8)
+        var temp: ByteArray?
+        var offset = 0
+        val maxEncryptBlock = keySize / 8 - 11
+        val bos = ByteArrayOutputStream()
+        val cipher = Cipher.getInstance("RSA")
+        cipher.init(Cipher.ENCRYPT_MODE, privateKey)
+        while (byteArray.size - offset > 0) {
+            if (byteArray.size - offset >= maxEncryptBlock) {
+                temp = cipher.doFinal(byteArray, offset, maxEncryptBlock)
+                offset += maxEncryptBlock
+            } else {
+                temp = cipher.doFinal(byteArray, offset, byteArray.size - offset)
+                offset = byteArray.size
+            }
+            bos.write(temp)
+        }
+        bos.close()
+        return Base64.encodeToString(bos.toByteArray(), Base64.NO_WRAP)
+    }
+
+    fun decryptSegmentByPublicKey(
+        input: String,
+        publicKey: PublicKey,
+        keySize: Int = 2048
+    ): String? {
+        val byteArray = Base64.decode(input, Base64.NO_WRAP)
+        var temp: ByteArray?
+        var offset = 0
+        val maxDecryptBlock = keySize / 8
+        val bos = ByteArrayOutputStream()
+        val cipher = Cipher.getInstance("RSA")
+        cipher.init(Cipher.DECRYPT_MODE, publicKey)
+        while (byteArray.size - offset > 0) {
+            if (byteArray.size - offset >= maxDecryptBlock) {
+                temp = cipher.doFinal(byteArray, offset, maxDecryptBlock)
+                offset += maxDecryptBlock
+            } else {
+                temp = cipher.doFinal(byteArray, offset, byteArray.size - offset)
+                offset = byteArray.size
+            }
+            bos.write(temp)
+        }
+        bos.close()
+        return String(bos.toByteArray(), Charsets.UTF_8)
+    }
+
+    fun encryptSegmentByPublicKey(
+        input: String,
+        publicKey: PublicKey,
+        keySize: Int = 2048
+    ): String {
+        val byteArray = input.toByteArray(Charsets.UTF_8)
+        var temp: ByteArray?
+        var offset = 0
+        val maxEncryptBlock = keySize / 8 - 11
+        val bos = ByteArrayOutputStream()
+        val cipher = Cipher.getInstance("RSA")
+        cipher.init(Cipher.ENCRYPT_MODE, publicKey)
+        while (byteArray.size - offset > 0) {
+            if (byteArray.size - offset >= maxEncryptBlock) {
+                temp = cipher.doFinal(byteArray, offset, maxEncryptBlock)
+                offset += maxEncryptBlock
+            } else {
+                temp = cipher.doFinal(byteArray, offset, byteArray.size - offset)
+                offset = byteArray.size
+            }
+            bos.write(temp)
+        }
+        bos.close()
+        return Base64.encodeToString(bos.toByteArray(), Base64.NO_WRAP)
+    }
+
+    fun decryptSegmentByPrivateKey(
+        input: String,
+        privateKey: PrivateKey,
+        keySize: Int = 2048
+    ): String? {
+        val byteArray = Base64.decode(input, Base64.NO_WRAP)
+        var temp: ByteArray?
+        var offset = 0
+        val maxDecryptBlock = keySize / 8
+        val bos = ByteArrayOutputStream()
+        val cipher = Cipher.getInstance("RSA")
+        cipher.init(Cipher.DECRYPT_MODE, privateKey)
+        while (byteArray.size - offset > 0) {
+            if (byteArray.size - offset >= maxDecryptBlock) {
+                temp = cipher.doFinal(byteArray, offset, maxDecryptBlock)
+                offset += maxDecryptBlock
+            } else {
+                temp = cipher.doFinal(byteArray, offset, byteArray.size - offset)
+                offset = byteArray.size
+            }
+            bos.write(temp)
+        }
+        bos.close()
+        return String(bos.toByteArray(), Charsets.UTF_8)
+    }
+
+    fun generateKeys(): KeyPair {
+        val generator = KeyPairGenerator.getInstance("RSA")
+        return generator.genKeyPair()
     }
 
 }

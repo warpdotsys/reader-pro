@@ -61,6 +61,7 @@ data class SearchBook(
     }
 
     var origins: LinkedHashSet<String>? = null
+        private set
 
     fun addOrigin(origin: String) {
         if (origins == null) {

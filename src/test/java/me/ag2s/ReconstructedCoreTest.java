@@ -97,4 +97,12 @@ class ReconstructedCoreTest {
 
         assertEquals("GBK", EncodingDetect.INSTANCE.getHtmlEncode(html));
     }
+
+    @Test
+    void encodingDetectScansMetaWithoutExplicitHeadElement() {
+        byte[] html = "<meta charset=\"windows-1252\"><body>reader</body>"
+                .getBytes(StandardCharsets.UTF_8);
+
+        assertEquals("windows-1252", EncodingDetect.INSTANCE.getHtmlEncode(html));
+    }
 }
