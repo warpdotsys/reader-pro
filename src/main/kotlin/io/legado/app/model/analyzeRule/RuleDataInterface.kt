@@ -6,6 +6,8 @@ interface RuleDataInterface {
 
     fun putVariable(key: String, value: String?)
 
+    fun getUserNameSpace(): String
+
     fun getVariable(key: String): String? {
         return variableMap[key]
     }
