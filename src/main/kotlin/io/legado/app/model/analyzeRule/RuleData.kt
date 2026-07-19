@@ -16,6 +16,10 @@ class RuleData : RuleDataInterface {
         }
     }
 
+    override fun getUserNameSpace(): String {
+        return "unknow"
+    }
+
     fun getVariable(): String? {
         if (variableMap.isEmpty()) {
             return null
