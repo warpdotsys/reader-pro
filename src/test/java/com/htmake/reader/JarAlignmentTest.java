@@ -9,13 +9,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.htmake.reader.entity.ActiveLicense;
 import com.htmake.reader.entity.License;
 import io.legado.app.data.entities.SearchBook;
+import io.legado.app.help.JsExtensions;
 import io.legado.app.utils.EncoderUtils;
+import java.io.File;
 import java.lang.reflect.Method;
 import java.security.Key;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.interfaces.RSAKey;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class JarAlignmentTest {
@@ -118,6 +121,38 @@ class JarAlignmentTest {
         assertThrows(
                 NoSuchMethodException.class,
                 () -> SearchBook.class.getDeclaredMethod("setOrigins", java.util.LinkedHashSet.class)
+        );
+    }
+
+    @Test
+    void jsExtensionsDoesNotExposeExtraSingleArgumentCookieMethod() throws NoSuchMethodException {
+        assertThrows(
+                NoSuchMethodException.class,
+                () -> JsExtensions.class.getDeclaredMethod("getCookie", String.class)
+        );
+        assertEquals(
+                String.class,
+                JsExtensions.class.getDeclaredMethod("getCookie", String.class, String.class).getReturnType()
+        );
+    }
+
+    @Test
+    void extDeepListFilesMatchesTheJarMethodBoundary() throws ReflectiveOperationException {
+        Method method = Class.forName("com.htmake.reader.utils.ExtKt").getDeclaredMethod(
+                "deepListFiles",
+                File.class,
+                String[].class
+        );
+        assertEquals(List.class, method.getReturnType());
+        assertThrows(
+                NoSuchMethodException.class,
+                () -> Class.forName("com.htmake.reader.utils.ExtKt").getDeclaredMethod(
+                        "deepListFiles$default",
+                        java.io.File.class,
+                        String[].class,
+                        int.class,
+                        Object.class
+                )
         );
     }
 

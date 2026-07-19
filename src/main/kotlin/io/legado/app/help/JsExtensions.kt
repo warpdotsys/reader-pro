@@ -140,8 +140,6 @@ interface JsExtensions {
         }
     }
 
-    fun getCookie(tag: String): String = getCookie(tag, null)
-
     fun getCookie(tag: String, key: String? = null): String {
         val cookieStore = CookieStore(getUserNameSpace())
         val cookie = cookieStore.getCookie(tag)

@@ -1,7 +1,7 @@
 # reader-pro 3.2.14 JAR 对齐与代码库审计
 
 审计日期：2026-07-19
-审计基线：`d95c411`（PR #27 合并后的 `main`）
+审计基线：`a238c46`（PR #28 合并后的 `main`）
 目标制品：`reader-pro-3.2.14.jar`
 状态：本批实现恢复完成；整体 JAR 对齐进行中；安全问题仅记录、暂不修复
 
@@ -17,9 +17,9 @@
 
 当前源码只是一个可编译的阶段性子闭包，尚不能替代原 JAR：
 
-1. `clean test` 有 29/29 通过，但 `bootJar` 仍无法确定主类并直接失败。
-2. 目标应用与 Legado 范围仍缺 56 个顶层符号，包括入口、控制器、数据库、WebBook、RSS 和规则分析运行栈。
-3. `Relator`、`License`、`EncoderUtils`、`SearchBook`、`EncodingDetect` 的已证实偏差均已按目标 JAR 回正；另恢复 14 个低耦合源码单元。
+1. `clean test` 有 36/36 通过，但 `bootJar` 仍无法确定主类并直接失败。
+2. 目标应用与 Legado 范围仍缺 47 个顶层符号，集中在入口、控制器、WebBook、RSS 和规则分析运行栈。
+3. 本批恢复 `ExtKt`、`SpringContextUtils`、`MongoManager`、DB 栈与 `User`，并回正 `appCtx`、`VertExt` 和 `JsExtensions.getCookie`；新增的 9 个目标顶层类公开 descriptor 已对账。
 4. EPUB 所需 DTD、模板、KXml 源码和 provider 已恢复，标准 NCX 读取与 XML serializer 均有回归测试覆盖。
 5. CI 仍只执行 `clean test`，无法阻止不可执行制品进入 `main`。
 
@@ -31,25 +31,25 @@
 
 | 口径 | 原 JAR | 当前编译产物 | 差异 |
 | --- | ---: | ---: | ---: |
-| 全部顶层 class | 276 | 239 | 缺 56，多 19 |
-| 项目与 Legado 顶层符号 | 198 | 142 | 缺 56 |
+| 全部顶层 class | 276 | 248 | 缺 47，多 19 |
+| 项目与 Legado 顶层符号 | 198 | 151 | 缺 47 |
 | `me.ag2s` vendored 类型 | 67 | 67 | 已覆盖 |
 | `org.kxml2` vendored 类型 | 11 | 11 | 已恢复 |
 
 当前多出的 19 个类型均为有意恢复到源码树的 `com.script` Rhino 类型；它们在原制品中位于嵌套依赖 JAR，不属于行为偏差。
 
-按目标 class 的 `SourceFile` 聚合后，项目与 Legado 范围共有 163 个源码单元。当前功能上覆盖 127 个，仍有 36 个不完整源码单元（35 Kotlin、1 Java）。已映射的 220 个共同顶层类型语言归属全部一致：118 Kotlin、102 Java，未发现 Java/Kotlin 边界错配。
+按目标 class 的 `SourceFile` 聚合后，项目与 Legado 范围共有 163 个源码单元。当前功能上覆盖 134 个，仍有 29 个 Kotlin 源码单元未恢复。已映射的 229 个共同顶层类型语言归属全部一致：126 Kotlin、103 Java，未发现 Java/Kotlin 边界错配。
 
 ### 3.2 资源
 
 | 口径 | 原 JAR | 当前 `src/main/resources` | 差异 |
 | --- | ---: | ---: | ---: |
 | 非 class 资源 | 159 | 159 | 目标缺 1、额外 1 |
-| 共同路径 | 158 | 158 | 128 字节相同，27 仅换行不同，3 个实质不同 |
+| 共同路径 | 158 | 158 | 153 字节相同，2 个仅换行不同，3 个实质不同 |
 
 本批恢复了 68 个目标资源：50 个 `dtd/**`、6 个 `epub/**`、6 个图标、`images/loading.gif`、根目录 `bookSourceDebug/**`、KXml service provider 与 `simplelogger.properties`；全部新增资源 SHA-256 与目标一致。
 
-唯一未放入源码资源树的目标路径是 `META-INF/reader-pro.kotlin_module`，它由 Kotlin 编译器生成；当前额外路径 `reader3-routes.txt` 是测试用路由清单。3 个实质资源差异见第 9 节。
+唯一未放入源码资源树的目标路径是 `META-INF/reader-pro.kotlin_module`，它由 Kotlin 编译器生成；当前额外路径 `reader3-routes.txt` 是测试用路由清单。上表采用稳定的 Git blob 口径；Windows checkout 因 `core.autocrlf=true` 表现为 69 个字节相同、86 个仅换行不同、3 个实质不同。3 个实质资源差异见第 9 节。
 
 ## 4. P0：运行与打包阻塞
 
@@ -77,12 +77,11 @@ Main class name has not been configured and it could not be resolved
 
 - 启动与配置：`ReaderApplication`、`BookConfig`、`ReaderAdapter`、`YueduApi`、`RestVerticle`。
 - API：`BaseController`、`CURD` 以及 11 个业务 controller。
-- 持久化：`DB`、`JSONTable`、`SQLTable`、`MongoManager`、`User`。
 - 规则与网络书籍：`AnalyzeRule`、`WebBook`、`BookList`、`BookInfo`、`BookChapterList`、`BookContent`、`Debugger`。
 - RSS：`Rss`、`RssParserByRule`、`RssParserDefault` 及 RSS 实体。
-- 支撑工具：`ExtKt`、`SpringContextUtils`、`RemoteWebview`。
+- 支撑工具：`RemoteWebview`。
 
-当前编译产物对这 56 个缺失符号的静态引用仍基本为零，说明工程通过删减调用边维持编译，而不是已恢复完整运行闭包。
+当前编译产物对这 47 个缺失符号的静态引用仍基本为零，说明工程通过删减调用边维持编译，而不是已恢复完整运行闭包。
 
 ## 5. P1：已完成批次的回炉项
 
@@ -92,12 +91,14 @@ Main class name has not been configured and it could not be resolved
 | `License.kt` | 缺 `isValid()`、`validHost(String)`、`toActiveLicense()` | 已修复 |
 | `EncoderUtils.kt` | 缺整套 RSA 密钥生成、四种公私钥 API及分段加解密实现 | 已修复 |
 | `SearchBook.kt` | `origins` 缺 `private set`，额外暴露 `setOrigins` | 已修复 |
-| `appCtx.kt` | 目标调用 `ExtKt.getWorkDir("storage", "cache")`；当前改走 adapter | 随 `ExtKt` 恢复 |
-| `VertExt.kt` | 目标使用 compact、注册 Int/Long adapter 的 `ExtKt.gson`；当前使用 pretty `GSON`，数值 JSON 语义不同 | 随 `ExtKt` 恢复 |
+| `appCtx.kt` | 目标调用 `ExtKt.getWorkDir("storage", "cache")`；当前改走 adapter | 已随 `ExtKt` 回正 |
+| `VertExt.kt` | 目标使用 compact、注册 Int/Long adapter 的 `ExtKt.gson`；当前使用 pretty `GSON`，数值 JSON 语义不同 | 已随 `ExtKt` 回正 |
 | `EncodingDetect` | HTML charset fallback、`String?` 返回与 `File?` 私有参数同目标 Metadata 不一致 | 已修复 |
 | `EncodingDetectHelp`、`EncodeConverter`、协程、独立实体/工具 | 14 个目标 `SourceFile` 单元未恢复或不完整 | 已恢复；公开 descriptor 与目标对账通过 |
 | `org.kxml2` | KXml parser/serializer/provider 未进入运行闭包 | 已恢复 11 个目标同源 Java 单元 |
-| `JsExtensions.kt` | 当前额外声明 `getCookie(String)`；目标仅有 `getCookie(String, String?)` | P2 残余，留待 `JsExtensions` 专项回炉 |
+| `ExtKt`、`SpringContextUtils`、`MongoManager` | 目标工具、Spring 上下文和 Mongo 存储运行栈缺失 | 已恢复；公开 descriptor 与目标对账通过 |
+| `DB`、`JSONTable`、`SQLTable`、`User` | 目标持久化基础与用户实体缺失 | 已恢复；保留目标批量替换与顺序删除行为 |
+| `JsExtensions.kt` | 当前额外声明 `getCookie(String)`；目标仅有 `getCookie(String, String?)` | 已修复；反射 descriptor 测试覆盖 |
 
 其余 descriptor 差异中包含 Kotlin 1.9 生成的 `EnumEntries`、lambda 名称、synthetic accessor 等编译器差异，不能直接当作源码缺陷。每项必须结合反汇编行为再分类。
 
@@ -128,8 +129,8 @@ http://www.daisy.org/z3986/2005/ncx-2005-1.dtd
 
 ### 7.1 测试缺口
 
-- 当前有 6 个测试类、29 个测试，`clean test` 为 29/29 通过。
-- PR #27 新增约 4,397 行生产代码，没有新增测试。
+- 当前有 7 个测试类、36 个测试，`clean test` 为 36/36 通过。
+- 本批新增数据栈行为与存储失败消息测试，并为 `JsExtensions` 和 `ExtKt` 的目标 descriptor 边界增加反射断言。
 - `LocalBook`、TXT、EPUB、CBZ、PDF、UMD 和 `AnalyzeUrl` 主要分支均缺回归覆盖。
 
 建议按风险优先补充：
@@ -170,7 +171,7 @@ http://www.daisy.org/z3986/2005/ncx-2005-1.dtd
 
 ### S-02 书源脚本文件 API 可逃逸缓存目录（高）
 
-- 位置：`JsExtensions.kt:298-348`，经 `BaseSource` 暴露给书源脚本。
+- 位置：`JsExtensions.kt:296-346`，经 `BaseSource` 暴露给书源脚本。
 - 证据：`getFile(path)` 直接拼接 `cachePath + File.separator + path`，未做 canonical containment；`readFile`、`readTxtFile`、`deleteFile` 和 `unzipFile` 复用该路径。
 - 影响：传入 `..\\` 可越过缓存目录读取、删除或写入进程可访问的路径；与 S-01 组合时攻击面更大。
 - 处置：目标 JAR 继承行为，暂缓。
@@ -189,11 +190,11 @@ http://www.daisy.org/z3986/2005/ncx-2005-1.dtd
 - 影响：恶意 CBZ 在被导入和读取元数据时可能访问本地文件或发起外部请求；具体数据回传能力取决于后续使用路径。
 - 处置：继承自目标行为，暂缓。
 
-### S-05 ZIP 解压路径穿越检查不完整（高）
+### S-05 ZIP 解压路径穿越（高，目标 HTTP 栈恢复后可远程触发）
 
-- 位置：`ZipUtils.kt:132-186`，可达调用 `JsExtensions.kt:335-348`。
-- 证据：只拒绝包含 `../` 的 entry；未拒绝 Windows `..\`、绝对路径、UNC/盘符路径，也未做 canonical containment 校验。
-- 影响：恶意压缩包可能把文件写到目标目录之外并覆盖进程可写文件。
+- 位置：`Ext.kt:140-180`；另一路位于 `ZipUtils.kt:132-186`、`JsExtensions.kt:333-346`。
+- 证据：`File.unzip(descDir)` 直接以 `descDir + separator + entry.name` 创建文件，对 entry 名称完全不校验。目标 `BookController.extractEpub/extractCbz` 调用该方法，保存图书路由接收客户端提供的 EPUB/CBZ。`ZipUtils` 一路只拒绝 `../`，未拒绝 Windows `..\`、绝对路径、UNC/盘符路径，也未做 canonical containment；但当前 `JsExtensions` 调用会先被尚未恢复的 `FileUtils.getCachePath()` 阻断。
+- 影响：入口和 controller 恢复后，恶意压缩包可把文件写到目标目录之外并覆盖进程可写文件；默认 `secure=false` 时无需认证。当前源码尚无 HTTP 入口，因此暂不能远程触发。
 - 处置：继承自目标行为，暂缓。
 
 ### S-06 调试 HTTP BODY 日志可能泄露敏感信息（中）
@@ -205,14 +206,14 @@ http://www.daisy.org/z3986/2005/ncx-2005-1.dtd
 
 ### S-07 500 响应暴露内部异常与完整 URI（中）
 
-- 位置：`VertExt.kt:21-36`。
+- 位置：`VertExt.kt:16-31`。
 - 证据：错误响应包含解码后的 `absoluteURI`、`throwable.toString()` 和 `throwable.message`。
 - 影响：查询参数和内部类名、路径或下游错误信息可能返回给客户端。
 - 处置：目标 JAR 原有行为，暂缓。
 
 ### S-08 MDC traceId 未清理（低）
 
-- 位置：`VertExt.kt:38-47`。
+- 位置：`VertExt.kt:34-41`。
 - 证据：请求处理前 `MDC.put`，处理完成或异常后没有 `remove/clear`。
 - 影响：在线程复用时可能发生跨请求日志上下文污染，降低审计可靠性。
 - 处置：目标 JAR 原有行为，暂缓。
@@ -226,10 +227,68 @@ http://www.daisy.org/z3986/2005/ncx-2005-1.dtd
 
 ### S-10 目标用户密码使用快速双 MD5（高，目标栈恢复后可达）
 
-- 位置：目标反编译 `ExtKt.java:1045-1048`、`UserController.java:199-201`、`UserController.java:230-231`；当前这些运行栈尚未恢复。
+- 位置：目标反编译 `ExtKt.java:1045-1048`、`UserController.java:199-201`、`UserController.java:230-231`；`ExtKt/User` 已恢复，`UserController` 与入口栈尚未恢复，因此暂未通过 HTTP API 可达。
 - 证据：目标实现为 `MD5(MD5(password + salt) + salt)`，用户创建与校验使用 8 字符 salt。
 - 影响：数据库泄露后可被高速离线枚举，salt 长度和双轮 MD5 都不能提供现代密码哈希的工作因子。
-- 处置：这是目标行为，先记录；恢复 `ExtKt/UserController` 时不得静默改成新哈希，以免与既有数据和 JAR 行为不兼容。后续安全 PR 需要设计迁移兼容层。
+- 处置：这是目标行为，`ExtKt` 已按原样保留；恢复 `UserController` 时也不得静默改成新哈希，以免与既有数据和 JAR 行为不兼容。后续安全 PR 需要设计迁移兼容层。
+
+### S-11 源码内硬编码 SMTP 账号与密码（高，凭据已暴露）
+
+- 位置：`Ext.kt:715-739`、`Ext.kt:766-778`；目标调用链 `LicenseController.sendCodeToEmail -> ExtKt.sendEmail`，目标路由为 `POST /reader3/sendCodeToEmail`。
+- 证据：SMTP 主机固定为 `smtp.qiye.aliyun.com:465`，`AUTH LOGIN` 使用源码内明文账号和密码；该路由目标实现未调用 `checkAuth`。未尝试使用凭据登录或验证其当前有效性。
+- 影响：凭据必须按已泄露处理；若仍有效，可被用于未授权发信、垃圾邮件或账号滥用。当前 `LicenseController/YueduApi` 尚未恢复，当前构建无远程调用入口。
+- 处置：为保持原 JAR 行为本轮不改代码；凭据应立即在服务端轮换/吊销。兼容性闭合后的安全 PR 应删除硬编码值并只从受保护配置或密钥管理服务读取。
+
+### S-12 默认配置关闭 HTTP 认证（高，入口恢复后可达）
+
+- 位置：`application.yml:7`；目标反编译 `BaseController.checkAuth`。
+- 证据：默认 `reader.app.secure=false`，目标 `checkAuth` 在该值下直接返回 `true`。业务、书源、文件和调试端点因而默认不要求 token。
+- 影响：入口栈恢复后，未显式覆盖默认配置的部署会把高权限 API 暴露给网络调用者，并放大 S-01、S-05 等问题的远程攻击面。
+- 处置：目标默认行为，暂缓修改；运行部署必须显式启用认证。后续安全 PR 需要改为安全默认值，并为升级兼容与首次初始化设计迁移路径。
+
+### S-13 MongoDB 连接 URI 记录到日志（中）
+
+- 位置：`MongoManager.kt:18-23`；目标启动调用链 `YueduApi -> MongoManager.connect(AppConfig.mongoUri)`。
+- 证据：连接异常时把完整 URI 作为日志参数输出；标准 MongoDB URI 可内含用户名和密码。
+- 影响：连接失败会把数据库凭据写入应用日志，扩大日志读取者、采集系统和备份中的秘密暴露范围。当前入口尚未恢复，因此启动调用链暂不可达。
+- 处置：目标行为，暂缓；后续安全 PR 应只记录去除 user-info 与敏感查询参数后的地址。
+
+### S-14 通用文件 API 可逃逸根目录并任意读写删除（严重，目标栈恢复后可达）
+
+- 位置：目标反编译 `FileController.java:100-205`、`:299-300`、`:432-458`、`:561-573`、`:656-658`、`:734`、`:812`、`:902-909`、`:989-990`；路由注册见 `YueduApi.java:5539-6057`。
+- 证据：controller 选择 `__HOME__`、`__WEBDAV__`、`__LOCAL_STORE__` 或 `__STORAGE__` 根后，直接以 `File(root + path/filename)` 处理 list、upload、download、get、save、mkdir、delete 和 deleteMulti；没有 canonical containment。目标 `checkAuth/checkManagerAuth` 在默认 `secure=false` 时放行。旧 WebDAV、LocalStore 和 User 上传路径存在同类拼接。
+- 影响：入口恢复后，默认部署中的远程调用者可用 `..`、绝对路径或平台特定路径逃逸预期根目录，读取、覆盖或删除进程权限范围内的文件，并可与配置、密钥或启动文件组合扩大影响。签名部署若保存 `storage/data/privateKey.key`，该问题还可与 S-16 组合导出许可私钥。
+- 处置：目标行为，暂缓；恢复时不得误写为已修复。后续安全 PR 应统一使用解析后的 canonical/normalized path 做根目录 containment，并在路径解析前强制认证和授权。
+
+### S-15 入站完整 URI、请求正文与 WebDAV Basic 凭据写入日志（高，目标栈恢复后可达）
+
+- 位置：目标反编译 `RestVerticle.java:283-288`、`WebdavController.java:66-85`。
+- 证据：`RestVerticle` 以 INFO 记录完整请求 URI 和小于 1000 字节的请求正文，查询 token 与登录请求中的明文密码会进入日志；`WebdavController` 以 INFO 记录完整 `Authorization: Basic ...` 头。该问题不同于 S-06 的出站调试 HTTP 日志。
+- 影响：应用日志、集中采集、告警和备份会持久化访问 token、账号密码或可解码的 Basic 凭据，扩大低权限运维读者和日志系统被攻破后的横向风险。
+- 处置：目标行为，暂缓；后续安全 PR 应对认证路由和敏感 header/body 做结构化拒绝记录或不可逆脱敏。
+
+### S-16 无认证许可证签发与密钥生成端点（严重，目标栈恢复后可达）
+
+- 位置：目标反编译 `YueduApi.java:4113-4269`、`LicenseController.java:338-490`。
+- 证据：`GET/POST /reader3/generateLicense` 未调用 `checkAuth/checkManagerAuth`，只比较一个可从 JAR 恢复的硬编码共享 key（本报告不复述该值），随后读取服务器私钥并按客户端提供的 host、有效期、用户上限、openApi、实例数和类型签发许可。`/reader3/generateKeys` 同样无认证并返回完整新公私钥对。
+- 影响：部署存在签名私钥时，公开共享 key 等同于远程签名 oracle，攻击者可生成任意授权许可；密钥生成端点还会向匿名调用者返回私钥材料。若签名私钥落在默认存储路径，S-14 还可能导出该私钥并允许离线伪造。当前 controller/入口缺失，当前构建暂不可达。
+- 处置：为对齐原 JAR 本轮不改；后续安全 PR 应删除公网管理端点或置于独立管理面，使用强身份认证、细粒度授权和审计，并轮换可能已受影响的签名材料。
+
+### S-17 远程书源导入接口可发起任意 URL 请求（高，目标栈恢复后可达）
+
+- 位置：目标反编译 `YueduApi.java:745-762`、`BookSourceController.java:1115`、`:1135-1144`、`:1162`。
+- 证据：`POST /reader3/saveFromRemoteSource` 从请求中取得客户端控制的 URL 后直接调用 `webClient.getAbs(url)`；没有限制协议、loopback、内网、链路本地、云元数据地址或 DNS 重绑定。该路由只调用 `checkAuth`，默认 `secure=false` 时放行。
+- 影响：入口恢复后，默认部署中的远程调用者可借服务端网络身份访问本机、内网服务和云元数据端点；响应后续会被书源导入逻辑处理，具体数据回传取决于格式解析与错误路径。
+- 处置：目标行为，暂缓；后续安全 PR 应在解析与每次重定向后执行协议和解析 IP allowlist/denylist，并阻止 DNS 重绑定与代理绕过。
+
+### S-18 登录会话 token 可由用户名和毫秒时间推导（高，目标栈恢复后条件可利用）
+
+- 位置：当前 `Ext.kt:655-656`；目标 `BaseController.kt:77`、`:87-103`、`UserController.java:211`、`:238`，登录路由见 `YueduApi.java:3475-3493`。
+- 证据：目标会话 token 为 `MD5(MD5(username + timestamp_ms) + timestamp_ms)`，全部输入只有公开用户名与登录时的毫秒时间，没有 CSPRNG 或服务端秘密；token 最长保存 7 天，并通过 `username:token`/`accessToken` 使用。
+- 影响：能把登录时间缩小到较窄窗口的攻击者可离线枚举毫秒时间并伪造仍在有效期内的认证 token。利用难度取决于攻击者对登录时间窗口的观测精度；当前 controller/入口缺失，当前构建不可达。
+- 处置：目标行为，暂缓；后续安全 PR 应改用 CSPRNG 生成的高熵不透明 token 或成熟会话机制，并设计已有 token 的失效与迁移策略。
+
+审计残余：本轮未覆盖依赖版本的 CVE 情报、打包后前端静态资产的独立审计和运行态动态利用验证；由于应用入口仍缺失，无法执行端到端渗透测试。定向检查未发现除 S-01 Rhino 外的新命令执行链，`SQLTable` 没有真实 SQL 执行面，`ACache.getAsObject` 的原生反序列化目前没有正常调用链。
 
 ## 9. 有意资源偏差
 
@@ -243,13 +302,12 @@ http://www.daisy.org/z3986/2005/ncx-2005-1.dtd
 
 ## 10. 建议恢复顺序
 
-1. 恢复 `SpringContextUtils + ExtKt + MongoManager`，同时回正 `appCtx/VertExt`。
-2. 恢复 `DB + JSONTable + SQLTable + User`。
-3. 恢复 `AnalyzeRule + WebBook + Debugger`，随后恢复 RSS 栈。
-4. 回炉 `JsExtensions.getCookie` 的额外 overload，并完成其余共同类型成员对账。
-5. 恢复 `BaseController/CURD`、业务 controller、`YueduApi/RestVerticle`。
-6. 最后恢复 `ReaderApplication`，启用 CI `bootJar` 和启动 smoke test。
-7. JAR 对齐闭合后，另起安全修复 PR，逐项处理第 8 节并增加负向测试。
+1. 恢复 `AnalyzeRule + WebBook + Debugger`，随后恢复 RSS 栈。
+2. 恢复 `BookConfig + ReaderAdapter + RemoteWebview`。
+3. 恢复 `BaseController/CURD` 与业务 controller。
+4. 恢复 `YueduApi + RestVerticle`。
+5. 最后恢复 `ReaderApplication`，启用 CI `bootJar` 和启动 smoke test。
+6. JAR 对齐闭合后，另起安全修复 PR，逐项处理第 8 节并增加负向测试。
 
 ## 11. 验收门槛
 
