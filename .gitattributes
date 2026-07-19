@@ -1,0 +1,3 @@
+# Preserve byte-for-byte JAR resource fixtures, including historical whitespace.
+src/main/resources/dtd/** -whitespace
+src/main/resources/epub/main.css -whitespace

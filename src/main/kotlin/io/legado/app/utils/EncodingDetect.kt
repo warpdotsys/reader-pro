@@ -4,29 +4,27 @@ import io.legado.app.lib.icu4j.CharsetDetector
 import org.jsoup.Jsoup
 import java.io.File
 import java.io.FileInputStream
+import java.nio.charset.StandardCharsets
+import java.util.Locale
 
 object EncodingDetect {
-    private val headTagRegex = "(?i)<head>[\\s\\S]*?</head>".toRegex()
-
-    fun getHtmlEncode(bytes: ByteArray): String {
+    fun getHtmlEncode(bytes: ByteArray): String? {
         try {
-            val html = String(bytes)
-            val startIndex = html.indexOf("<head>", ignoreCase = true)
-            val head = if (startIndex > -1) {
-                val endIndex = html.indexOf("</head>", startIndex, ignoreCase = true)
-                if (endIndex > -1) html.substring(startIndex, endIndex + "</head>".length) else null
-            } else {
-                null
-            }
-            val metaTags = Jsoup.parseBodyFragment(head ?: headTagRegex.find(html)!!.value).getElementsByTag("meta")
+            val doc = Jsoup.parse(String(bytes, StandardCharsets.UTF_8))
+            val metaTags = doc.getElementsByTag("meta")
             for (metaTag in metaTags) {
-                val charset = metaTag.attr("charset")
-                if (charset.isNotEmpty()) return charset
-                if (metaTag.attr("http-equiv").equals("content-type", true)) {
-                    val content = metaTag.attr("content")
-                    val index = content.indexOf("charset=", ignoreCase = true)
-                    val detected = if (index > -1) content.substring(index + "charset=".length) else content.substringAfter(";")
-                    if (detected.isNotEmpty()) return detected
+                var charsetStr = metaTag.attr("charset")
+                if (charsetStr.isNotEmpty()) return charsetStr
+                val content = metaTag.attr("content")
+                if (metaTag.attr("http-equiv").lowercase(Locale.getDefault()) == "content-type") {
+                    charsetStr = if (content.lowercase(Locale.getDefault()).contains("charset")) {
+                        content.substring(
+                            content.lowercase(Locale.getDefault()).indexOf("charset") + "charset=".length
+                        )
+                    } else {
+                        content.substring(content.lowercase(Locale.getDefault()).indexOf(";") + 1)
+                    }
+                    if (charsetStr.isNotEmpty()) return charsetStr
                 }
             }
         } catch (_: Exception) {
