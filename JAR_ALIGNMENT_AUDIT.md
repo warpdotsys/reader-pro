@@ -1,7 +1,7 @@
 # reader-pro 3.2.14 JAR 对齐与代码库审计
 
 审计日期：2026-07-20
-审计基线：`f3d53e9`（PR #34 合并后的 `main`）
+审计基线：`006aadd`（PR #35 合并后的 `main`）
 目标制品：`reader-pro-3.2.14.jar`
 状态：本批实现恢复完成；整体 JAR 对齐进行中；安全问题仅记录、暂不修复
 
@@ -17,9 +17,9 @@
 
 当前源码只是一个可编译的阶段性子闭包，尚不能替代原 JAR：
 
-1. `clean test` 有 59/59 通过，但 `bootJar` 仍无法确定主类并直接失败。
-2. 目标应用与 Legado 范围仍缺 17 个顶层符号，集中在入口、配置、剩余业务 controller 和远程 WebView 运行栈。
-3. 本批恢复 `UserController` 及其 Kotlin facade；其公开 descriptor 已与原 JAR 零差异对账。
+1. `clean test` 有 60/60 通过，但 `bootJar` 仍无法确定主类并直接失败。
+2. 目标应用与 Legado 范围仍缺 15 个顶层符号，集中在入口、配置、剩余业务 controller 和远程 WebView 运行栈。
+3. 本批恢复 `WebdavController` 及其 Kotlin facade；其公开 descriptor 已与原 JAR 零差异对账。
 4. EPUB 所需 DTD、模板、KXml 源码和 provider 已恢复，标准 NCX 读取与 XML serializer 均有回归测试覆盖。
 5. CI 仍只执行 `clean test`，无法阻止不可执行制品进入 `main`。
 
@@ -31,14 +31,14 @@
 
 | 口径 | 原 JAR | 当前编译产物 | 差异 |
 | --- | ---: | ---: | ---: |
-| 全部顶层 class | 276 | 278 | 缺 17，多 19 |
-| 项目与 Legado 顶层符号 | 198 | 181 | 缺 17 |
+| 全部顶层 class | 276 | 280 | 缺 15，多 19 |
+| 项目与 Legado 顶层符号 | 198 | 183 | 缺 15 |
 | `me.ag2s` vendored 类型 | 67 | 67 | 已覆盖 |
 | `org.kxml2` vendored 类型 | 11 | 11 | 已恢复 |
 
 当前多出的 19 个类型均为有意恢复到源码树的 `com.script` Rhino 类型；它们在原制品中位于嵌套依赖 JAR，不属于行为偏差。
 
-按目标 class 的 `SourceFile` 聚合后，项目与 Legado 范围共有 163 个源码单元。当前功能上覆盖 153 个，仍有 10 个 Kotlin 源码单元未恢复。已映射的 259 个共同顶层类型语言归属全部一致：156 Kotlin、103 Java，未发现 Java/Kotlin 边界错配。
+按目标 class 的 `SourceFile` 聚合后，项目与 Legado 范围共有 163 个源码单元。当前功能上覆盖 154 个，仍有 9 个 Kotlin 源码单元未恢复。已映射的 261 个共同顶层类型语言归属全部一致：158 Kotlin、103 Java，未发现 Java/Kotlin 边界错配。
 
 ### 3.2 资源
 
@@ -76,10 +76,10 @@ Main class name has not been configured and it could not be resolved
 主要缺失类型按依赖域归类如下：
 
 - 启动与配置：`ReaderApplication`、`BookConfig`、`ReaderAdapter`、`YueduApi`、`RestVerticle`。
-- API：10 个业务 controller（`BaseController`、`CURD`、4 个低耦合数据 controller、`HttpTTSController`、`BookSourceController` 与 `UserController` 已恢复）。
+- API：10 个业务 controller（`BaseController`、`CURD`、4 个低耦合数据 controller、`HttpTTSController`、`BookSourceController`、`UserController` 与 `WebdavController` 已恢复）。
 - 支撑工具：`RemoteWebview`。
 
-当前编译产物仍未闭合这 17 个入口与 API 符号，说明工程尚未恢复完整 HTTP 运行闭包。
+当前编译产物仍未闭合这 15 个入口与 API 符号，说明工程尚未恢复完整 HTTP 运行闭包。
 
 ## 5. P1：已完成批次的回炉项
 
@@ -101,6 +101,7 @@ Main class name has not been configured and it could not be resolved
 | `HttpTTSController` | 通用 CURD 的专用 HTTP TTS 数据控制器缺失 | 已恢复；目标公开 descriptor 零差异对账，覆盖 JSON 解析、名称去重、名称/链接校验与通用 CURD 契约 |
 | `BookSourceController` | 书源的用户/默认回退、编辑、导入、订阅与索引控制器及 Kotlin facade 缺失 | 已恢复；目标公开/合成 descriptor 零差异对账，覆盖用户源回退、URL 去重、授权、默认源发布、文件导入、远程订阅和书源索引缓存契约 |
 | `UserController` | 用户登录、会话、配置、文件和管理控制器及 Kotlin facade 缺失 | 已恢复；目标公开 descriptor 零差异对账，覆盖用户上限、许可证限制、会话、配置、清理和遍历契约 |
+| `WebdavController` | WebDAV Basic 认证、DAV 方法和备份控制器及 Kotlin facade 缺失 | 已恢复；目标公开 descriptor 零差异对账，覆盖 DAV/CORS 响应头、认证失败、PROPFIND、上传冲突、下载、删除、MOVE/COPY 覆盖和 LOCK/UNLOCK 契约；`backupToWebdav` 的真实备份调用仍依赖未恢复的 `BookController` |
 | `JsExtensions.kt` | 当前额外声明 `getCookie(String)`；目标仅有 `getCookie(String, String?)` | 已修复；反射 descriptor 测试覆盖 |
 | `AnalyzeRule`、`WebBook`、`Debugger`、RSS 栈 | 在线书籍与 RSS 运行闭包缺失；旧参考源码不含目标命名空间和 logger 传播 | 已恢复；13 个目标顶层类公开/受保护 descriptor 零差异，目标 RSS provider 类名声明失败行为有回归测试 |
 
@@ -133,7 +134,7 @@ http://www.daisy.org/z3986/2005/ncx-2005-1.dtd
 
 ### 7.1 测试缺口
 
-- 当前有 15 个测试类、59 个测试，`clean test` 为 59/59 通过。
+- 当前有 16 个测试类、60 个测试，`clean test` 为 60/60 通过。
 - 本批新增数据 controller 的 descriptor、分组 ID 分配、书签/替换规则去重键和输入校验回归测试。
 - 本批新增 `AnalyzeRule` 命名空间/脚本作用域测试、WebBook ABI/mask/异常边界测试，以及 Debugger/RSS descriptor 与原版失败行为测试。
 - 目标 `RssParserDefault` 把两个 KXml provider 类名写入没有逗号的多行字符串，而目标同版 `xmlpull-1.1.3.1` 只按逗号分隔；因此默认 RSS XML 解析会抛 `XmlPullParserException`。当前测试有意锁定该原版失败，不把它误报为已修复。
