@@ -1,7 +1,7 @@
 # reader-pro 3.2.14 JAR 对齐与代码库审计
 
 审计日期：2026-07-19
-审计基线：`a238c46`（PR #28 合并后的 `main`）
+审计基线：`8cd55fa`（PR #29 合并后的 `main`）
 目标制品：`reader-pro-3.2.14.jar`
 状态：本批实现恢复完成；整体 JAR 对齐进行中；安全问题仅记录、暂不修复
 
@@ -17,9 +17,9 @@
 
 当前源码只是一个可编译的阶段性子闭包，尚不能替代原 JAR：
 
-1. `clean test` 有 36/36 通过，但 `bootJar` 仍无法确定主类并直接失败。
-2. 目标应用与 Legado 范围仍缺 47 个顶层符号，集中在入口、控制器、WebBook、RSS 和规则分析运行栈。
-3. 本批恢复 `ExtKt`、`SpringContextUtils`、`MongoManager`、DB 栈与 `User`，并回正 `appCtx`、`VertExt` 和 `JsExtensions.getCookie`；新增的 9 个目标顶层类公开 descriptor 已对账。
+1. `clean test` 有 49/49 通过，但 `bootJar` 仍无法确定主类并直接失败。
+2. 目标应用与 Legado 范围仍缺 34 个顶层符号，集中在入口、配置、控制器和远程 WebView 运行栈。
+3. 本批恢复 `AnalyzeRule`、`WebBook` 五文件、`Debugger` 和 RSS 三文件；新增的 13 个目标顶层类公开/受保护 descriptor 已与原 JAR 零差异对账。
 4. EPUB 所需 DTD、模板、KXml 源码和 provider 已恢复，标准 NCX 读取与 XML serializer 均有回归测试覆盖。
 5. CI 仍只执行 `clean test`，无法阻止不可执行制品进入 `main`。
 
@@ -31,14 +31,14 @@
 
 | 口径 | 原 JAR | 当前编译产物 | 差异 |
 | --- | ---: | ---: | ---: |
-| 全部顶层 class | 276 | 248 | 缺 47，多 19 |
-| 项目与 Legado 顶层符号 | 198 | 151 | 缺 47 |
+| 全部顶层 class | 276 | 261 | 缺 34，多 19 |
+| 项目与 Legado 顶层符号 | 198 | 164 | 缺 34 |
 | `me.ag2s` vendored 类型 | 67 | 67 | 已覆盖 |
 | `org.kxml2` vendored 类型 | 11 | 11 | 已恢复 |
 
 当前多出的 19 个类型均为有意恢复到源码树的 `com.script` Rhino 类型；它们在原制品中位于嵌套依赖 JAR，不属于行为偏差。
 
-按目标 class 的 `SourceFile` 聚合后，项目与 Legado 范围共有 163 个源码单元。当前功能上覆盖 134 个，仍有 29 个 Kotlin 源码单元未恢复。已映射的 229 个共同顶层类型语言归属全部一致：126 Kotlin、103 Java，未发现 Java/Kotlin 边界错配。
+按目标 class 的 `SourceFile` 聚合后，项目与 Legado 范围共有 163 个源码单元。当前功能上覆盖 144 个，仍有 19 个 Kotlin 源码单元未恢复。已映射的 242 个共同顶层类型语言归属全部一致：139 Kotlin、103 Java，未发现 Java/Kotlin 边界错配。
 
 ### 3.2 资源
 
@@ -47,7 +47,7 @@
 | 非 class 资源 | 159 | 159 | 目标缺 1、额外 1 |
 | 共同路径 | 158 | 158 | 153 字节相同，2 个仅换行不同，3 个实质不同 |
 
-本批恢复了 68 个目标资源：50 个 `dtd/**`、6 个 `epub/**`、6 个图标、`images/loading.gif`、根目录 `bookSourceDebug/**`、KXml service provider 与 `simplelogger.properties`；全部新增资源 SHA-256 与目标一致。
+前序批次恢复了 68 个目标资源：50 个 `dtd/**`、6 个 `epub/**`、6 个图标、`images/loading.gif`、根目录 `bookSourceDebug/**`、KXml service provider 与 `simplelogger.properties`；全部新增资源 SHA-256 与目标一致。
 
 唯一未放入源码资源树的目标路径是 `META-INF/reader-pro.kotlin_module`，它由 Kotlin 编译器生成；当前额外路径 `reader3-routes.txt` 是测试用路由清单。上表采用稳定的 Git blob 口径；Windows checkout 因 `core.autocrlf=true` 表现为 69 个字节相同、86 个仅换行不同、3 个实质不同。3 个实质资源差异见第 9 节。
 
@@ -77,11 +77,9 @@ Main class name has not been configured and it could not be resolved
 
 - 启动与配置：`ReaderApplication`、`BookConfig`、`ReaderAdapter`、`YueduApi`、`RestVerticle`。
 - API：`BaseController`、`CURD` 以及 11 个业务 controller。
-- 规则与网络书籍：`AnalyzeRule`、`WebBook`、`BookList`、`BookInfo`、`BookChapterList`、`BookContent`、`Debugger`。
-- RSS：`Rss`、`RssParserByRule`、`RssParserDefault` 及 RSS 实体。
 - 支撑工具：`RemoteWebview`。
 
-当前编译产物对这 47 个缺失符号的静态引用仍基本为零，说明工程通过删减调用边维持编译，而不是已恢复完整运行闭包。
+当前编译产物仍未闭合这 34 个入口与 API 符号，说明工程尚未恢复完整 HTTP 运行闭包。
 
 ## 5. P1：已完成批次的回炉项
 
@@ -99,6 +97,7 @@ Main class name has not been configured and it could not be resolved
 | `ExtKt`、`SpringContextUtils`、`MongoManager` | 目标工具、Spring 上下文和 Mongo 存储运行栈缺失 | 已恢复；公开 descriptor 与目标对账通过 |
 | `DB`、`JSONTable`、`SQLTable`、`User` | 目标持久化基础与用户实体缺失 | 已恢复；保留目标批量替换与顺序删除行为 |
 | `JsExtensions.kt` | 当前额外声明 `getCookie(String)`；目标仅有 `getCookie(String, String?)` | 已修复；反射 descriptor 测试覆盖 |
+| `AnalyzeRule`、`WebBook`、`Debugger`、RSS 栈 | 在线书籍与 RSS 运行闭包缺失；旧参考源码不含目标命名空间和 logger 传播 | 已恢复；13 个目标顶层类公开/受保护 descriptor 零差异，目标 RSS provider 类名声明失败行为有回归测试 |
 
 其余 descriptor 差异中包含 Kotlin 1.9 生成的 `EnumEntries`、lambda 名称、synthetic accessor 等编译器差异，不能直接当作源码缺陷。每项必须结合反汇编行为再分类。
 
@@ -129,9 +128,10 @@ http://www.daisy.org/z3986/2005/ncx-2005-1.dtd
 
 ### 7.1 测试缺口
 
-- 当前有 7 个测试类、36 个测试，`clean test` 为 36/36 通过。
-- 本批新增数据栈行为与存储失败消息测试，并为 `JsExtensions` 和 `ExtKt` 的目标 descriptor 边界增加反射断言。
-- `LocalBook`、TXT、EPUB、CBZ、PDF、UMD 和 `AnalyzeUrl` 主要分支均缺回归覆盖。
+- 当前有 10 个测试类、49 个测试，`clean test` 为 49/49 通过。
+- 本批新增 `AnalyzeRule` 命名空间/脚本作用域测试、WebBook ABI/mask/异常边界测试，以及 Debugger/RSS descriptor 与原版失败行为测试。
+- 目标 `RssParserDefault` 把两个 KXml provider 类名写入没有逗号的多行字符串，而目标同版 `xmlpull-1.1.3.1` 只按逗号分隔；因此默认 RSS XML 解析会抛 `XmlPullParserException`。当前测试有意锁定该原版失败，不把它误报为已修复。
+- `LocalBook`、TXT、EPUB、CBZ、PDF、UMD、`AnalyzeUrl` 和 WebBook 的真实 HTTP/分页主要分支仍缺回归覆盖。
 
 建议按风险优先补充：
 
@@ -288,7 +288,35 @@ http://www.daisy.org/z3986/2005/ncx-2005-1.dtd
 - 影响：能把登录时间缩小到较窄窗口的攻击者可离线枚举毫秒时间并伪造仍在有效期内的认证 token。利用难度取决于攻击者对登录时间窗口的观测精度；当前 controller/入口缺失，当前构建不可达。
 - 处置：目标行为，暂缓；后续安全 PR 应改用 CSPRNG 生成的高熵不透明 token 或成熟会话机制，并设计已有 token 的失效与迁移策略。
 
-审计残余：本轮未覆盖依赖版本的 CVE 情报、打包后前端静态资产的独立审计和运行态动态利用验证；由于应用入口仍缺失，无法执行端到端渗透测试。定向检查未发现除 S-01 Rhino 外的新命令执行链，`SQLTable` 没有真实 SQL 执行面，`ACache.getAsObject` 的原生反序列化目前没有正常调用链。
+### S-19 恶意书源可驱动服务端访问任意 URL（高，目标栈恢复后可达）
+
+- 位置：`WebBook.kt:61-78`、`:101-117`、`:144-159`、`:196-211`、`:245-255`，以及 `BookChapterList.kt:63-114`、`BookContent.kt:68-124`。
+- 证据：搜索、发现、详情、目录、正文和分页 URL 均由书源规则或上游响应生成并直接传入 `AnalyzeUrl`；当前链路不限制协议、loopback、内网、链路本地、云元数据地址或重定向后的解析地址。`loginCheckJs` 还会对响应执行书源脚本。该问题不同于 S-17 的“导入书源定义 URL”请求；这里覆盖导入后正常解析流程中的全部书源 URL。
+- 影响：入口/controller 恢复后，能够保存、导入或触发恶意书源的调用者可利用服务器网络身份探测或访问本机、内网服务和云元数据端点，并通过解析规则、脚本、错误或日志路径带出数据。
+- 处置：原 JAR 行为，暂缓；后续安全 PR 应在初始请求和每次重定向处统一校验协议、主机与解析 IP，并阻止 DNS 重绑定和代理绕过。
+
+### S-20 调试路径记录书籍元数据与正文内容（中）
+
+- 位置：`BookList.kt:184-249`、`BookContent.kt:141-151`、`Debugger.kt:19-32`。
+- 证据：调试 logger 会记录书名、作者、简介、封面和详情 URL；正文路径记录章节名、正文长度，以及正文不足 300 字时的全文或较长正文首尾各 150 字。目标 controller 的 SSE 调试链会把这些消息发送给调试客户端，其他 logger 实现也可能持久化。
+- 影响：受版权保护或含账号态/个性化信息的正文、内部 URL 与书源返回元数据可能进入应用日志、集中采集或调试响应；与 S-06 的原始 HTTP BODY 日志构成不同泄露面。
+- 处置：原 JAR 行为，暂缓；后续应按字段分类脱敏，正文只记录长度和不可逆摘要，并对调试端点实施强认证与短期会话授权。
+
+### S-21 缺省 WebBook 命名空间会跨调用共享状态（中）
+
+- 位置：`WebBook.kt:16-20`、`:49-50`、`:57-58`；`AnalyzeRule.kt:659-664`。
+- 证据：两个 `WebBook` 构造器允许省略 `userNameSpace`，随后统一回退到固定字符串 `"unknow"`，并把它写入 `BookSource`/书籍变量；规则脚本的 `CookieStore` 与 `CacheManager` 使用同一命名空间。
+- 影响：多租户调用方若遗漏显式 namespace，不同用户会共享书源 Cookie、登录态、缓存和规则变量，可能发生跨用户数据读取或身份混用。风险取决于后续 controller 是否在每条调用链都正确传入用户名。
+- 处置：原 JAR 行为，暂缓；恢复 controller 时必须逐调用点核对 namespace 传播。后续安全 PR 应取消固定回退值，并让缺失租户上下文显式失败或分配不可共享的作用域。
+
+### S-22 `preciseSearch` 把协程取消包装为普通失败（低）
+
+- 位置：`WebBook.kt:270-282`。
+- 证据：挂起函数整体使用 Kotlin `runCatching`，会捕获 `CancellationException` 在内的所有 `Throwable` 并返回失败的 `Result<Book>`，没有重新抛出取消信号。
+- 影响：请求断开、超时或服务关闭时，上游可能把取消当成普通搜索失败，破坏结构化并发的快速终止与资源回收语义；在高并发或慢书源场景下会放大资源占用。
+- 处置：原 JAR 行为，暂缓；后续应在保留业务异常包装的同时显式重抛 `CancellationException`。
+
+审计残余：本轮未覆盖依赖版本的 CVE 情报、打包后前端静态资产的独立审计和运行态动态利用验证；由于应用入口仍缺失，无法执行端到端渗透测试。定向检查未发现除 S-01 Rhino/书源脚本外的新命令执行链，`SQLTable` 没有真实 SQL 执行面，`ACache.getAsObject` 的原生反序列化目前没有正常调用链。
 
 ## 9. 有意资源偏差
 
@@ -302,12 +330,11 @@ http://www.daisy.org/z3986/2005/ncx-2005-1.dtd
 
 ## 10. 建议恢复顺序
 
-1. 恢复 `AnalyzeRule + WebBook + Debugger`，随后恢复 RSS 栈。
-2. 恢复 `BookConfig + ReaderAdapter + RemoteWebview`。
-3. 恢复 `BaseController/CURD` 与业务 controller。
-4. 恢复 `YueduApi + RestVerticle`。
-5. 最后恢复 `ReaderApplication`，启用 CI `bootJar` 和启动 smoke test。
-6. JAR 对齐闭合后，另起安全修复 PR，逐项处理第 8 节并增加负向测试。
+1. 恢复 `BookConfig + ReaderAdapter + RemoteWebview`。
+2. 恢复 `BaseController/CURD` 与业务 controller。
+3. 恢复 `YueduApi + RestVerticle`。
+4. 最后恢复 `ReaderApplication`，启用 CI `bootJar` 和启动 smoke test。
+5. JAR 对齐闭合后，另起安全修复 PR，逐项处理第 8 节并增加负向测试。
 
 ## 11. 验收门槛
 
