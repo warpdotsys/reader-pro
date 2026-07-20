@@ -1,7 +1,7 @@
 # reader-pro 3.2.14 JAR 对齐与代码库审计
 
-审计日期：2026-07-19
-审计基线：`8cd55fa`（PR #29 合并后的 `main`）
+审计日期：2026-07-20
+审计基线：`8068c8d`（PR #30 合并后的 `main`）
 目标制品：`reader-pro-3.2.14.jar`
 状态：本批实现恢复完成；整体 JAR 对齐进行中；安全问题仅记录、暂不修复
 
@@ -17,9 +17,9 @@
 
 当前源码只是一个可编译的阶段性子闭包，尚不能替代原 JAR：
 
-1. `clean test` 有 49/49 通过，但 `bootJar` 仍无法确定主类并直接失败。
-2. 目标应用与 Legado 范围仍缺 34 个顶层符号，集中在入口、配置、控制器和远程 WebView 运行栈。
-3. 本批恢复 `AnalyzeRule`、`WebBook` 五文件、`Debugger` 和 RSS 三文件；新增的 13 个目标顶层类公开/受保护 descriptor 已与原 JAR 零差异对账。
+1. `clean test` 有 51/51 通过，但 `bootJar` 仍无法确定主类并直接失败。
+2. 目标应用与 Legado 范围仍缺 30 个顶层符号，集中在入口、配置、业务 controller 和远程 WebView 运行栈。
+3. 本批恢复 `BaseController` 和 `CURD`；4 个目标顶层类及公开/受保护 descriptor 已与原 JAR 零差异对账。
 4. EPUB 所需 DTD、模板、KXml 源码和 provider 已恢复，标准 NCX 读取与 XML serializer 均有回归测试覆盖。
 5. CI 仍只执行 `clean test`，无法阻止不可执行制品进入 `main`。
 
@@ -31,14 +31,14 @@
 
 | 口径 | 原 JAR | 当前编译产物 | 差异 |
 | --- | ---: | ---: | ---: |
-| 全部顶层 class | 276 | 261 | 缺 34，多 19 |
-| 项目与 Legado 顶层符号 | 198 | 164 | 缺 34 |
+| 全部顶层 class | 276 | 265 | 缺 30，多 19 |
+| 项目与 Legado 顶层符号 | 198 | 168 | 缺 30 |
 | `me.ag2s` vendored 类型 | 67 | 67 | 已覆盖 |
 | `org.kxml2` vendored 类型 | 11 | 11 | 已恢复 |
 
 当前多出的 19 个类型均为有意恢复到源码树的 `com.script` Rhino 类型；它们在原制品中位于嵌套依赖 JAR，不属于行为偏差。
 
-按目标 class 的 `SourceFile` 聚合后，项目与 Legado 范围共有 163 个源码单元。当前功能上覆盖 144 个，仍有 19 个 Kotlin 源码单元未恢复。已映射的 242 个共同顶层类型语言归属全部一致：139 Kotlin、103 Java，未发现 Java/Kotlin 边界错配。
+按目标 class 的 `SourceFile` 聚合后，项目与 Legado 范围共有 163 个源码单元。当前功能上覆盖 146 个，仍有 17 个 Kotlin 源码单元未恢复。已映射的 246 个共同顶层类型语言归属全部一致：143 Kotlin、103 Java，未发现 Java/Kotlin 边界错配。
 
 ### 3.2 资源
 
@@ -76,10 +76,10 @@ Main class name has not been configured and it could not be resolved
 主要缺失类型按依赖域归类如下：
 
 - 启动与配置：`ReaderApplication`、`BookConfig`、`ReaderAdapter`、`YueduApi`、`RestVerticle`。
-- API：`BaseController`、`CURD` 以及 11 个业务 controller。
+- API：11 个业务 controller（`BaseController`、`CURD` 已恢复）。
 - 支撑工具：`RemoteWebview`。
 
-当前编译产物仍未闭合这 34 个入口与 API 符号，说明工程尚未恢复完整 HTTP 运行闭包。
+当前编译产物仍未闭合这 30 个入口与 API 符号，说明工程尚未恢复完整 HTTP 运行闭包。
 
 ## 5. P1：已完成批次的回炉项
 
@@ -96,6 +96,7 @@ Main class name has not been configured and it could not be resolved
 | `org.kxml2` | KXml parser/serializer/provider 未进入运行闭包 | 已恢复 11 个目标同源 Java 单元 |
 | `ExtKt`、`SpringContextUtils`、`MongoManager` | 目标工具、Spring 上下文和 Mongo 存储运行栈缺失 | 已恢复；公开 descriptor 与目标对账通过 |
 | `DB`、`JSONTable`、`SQLTable`、`User` | 目标持久化基础与用户实体缺失 | 已恢复；保留目标批量替换与顺序删除行为 |
+| `BaseController`、`CURD` | 会话、命名空间、用户存储和通用 JSON 表 CRUD 契约缺失 | 已恢复；目标 4 个顶层 class 与公开/受保护 descriptor 零差异，新增签名和转换回归测试 |
 | `JsExtensions.kt` | 当前额外声明 `getCookie(String)`；目标仅有 `getCookie(String, String?)` | 已修复；反射 descriptor 测试覆盖 |
 | `AnalyzeRule`、`WebBook`、`Debugger`、RSS 栈 | 在线书籍与 RSS 运行闭包缺失；旧参考源码不含目标命名空间和 logger 传播 | 已恢复；13 个目标顶层类公开/受保护 descriptor 零差异，目标 RSS provider 类名声明失败行为有回归测试 |
 
