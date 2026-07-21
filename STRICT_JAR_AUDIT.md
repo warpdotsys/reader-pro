@@ -202,8 +202,37 @@ Main class name has not been configured and it could not be resolved
 ```
 
 This remains consistent with the missing target entrypoint and runtime
-classes: `ReaderApplication`, `YueduApi`, `FileController`, `BookConfig`,
-`ReaderAdapter`, `RemoteWebview`, and `RestVerticle` (including their Kotlin
+classes: `ReaderApplication`, `YueduApi`, `FileController`, `ReaderAdapter`,
+`RemoteWebview`, and `RestVerticle` (including their Kotlin
 file-facade and generated coroutine classes). No executable replacement JAR
 exists yet, so packaging, manifest, nested-library, and ZIP-layout comparison
 remain blocked by source reconstruction rather than treated as passing.
+
+## PR41 Exact `BookConfig` Recovery
+
+`com/htmake/reader/config/BookConfig.class` is now rebuilt byte-for-byte from
+source. The source was reconstructed from the target class's Kotlin metadata,
+constant-pool string fragments, method bytecode, and line-number table; it was
+not accepted based on descriptor compatibility alone.
+
+| Verification | Result |
+| --- | --- |
+| Target SHA-256 | `2914762954B4E9186B9D87EF2466446BA5C330B00F360D16C4E5D882AF598E08` |
+| Rebuilt SHA-256 | `2914762954B4E9186B9D87EF2466446BA5C330B00F360D16C4E5D882AF598E08` |
+| Binary comparison | No differing bytes |
+| Behavior regression | Injects the target EPUB script once; 19 test classes / 65 tests pass |
+
+The exact class inventory comparison after this recovery is:
+
+| Check | PR40 rebuilt output | PR41 rebuilt output |
+| --- | ---: | ---: |
+| Current class files | 694 | 695 |
+| Shared class paths | 639 | 640 |
+| Byte-identical shared classes | 166 | 167 |
+| Different shared classes | 473 | 473 |
+| Target-only classes | 297 | 296 |
+| Current-only classes | 55 | 55 |
+
+`BookConfig` is therefore removed from the missing-class set. The remaining
+entrypoint and runtime classes still block `bootJar`; this recovery is one
+strictly verified class, not a claim that the product artifact is aligned.
