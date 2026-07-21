@@ -344,6 +344,15 @@ http://www.daisy.org/z3986/2005/ncx-2005-1.dtd
 4. 最后恢复 `ReaderApplication`，启用 CI `bootJar` 和启动 smoke test。
 5. JAR 对齐闭合后，另起安全修复 PR，逐项处理第 8 节并增加负向测试。
 
+### 10.1 PR #38 BookController restoration
+
+- Restored `BookController` as a source unit and retained every target non-synthetic public JVM descriptor, including overloads generated for Kotlin default parameters.
+- Restored usable shelf persistence, local and remote chapter/content retrieval, chapter caching, local archive extraction, PDF page rendering, text export, content search, and WebDAV progress/backup flows.
+- `WebdavController.backupToWebdav` now delegates to the restored BookController backup flow rather than returning a directory listing.
+- The target's coroutine compiler accessors differ from Kotlin 1.9 output. The only public `javap` delta is the target's compiler-generated `access$...` methods versus two compiler-generated accessors in this build; all declared product methods and erased descriptors match.
+- Added `BookControllerAlignmentTest` for route-shaped suspend methods, overloads, default bridges, fields, and key JVM descriptors. `clean test` passes with 18 test classes and 64 tests.
+- Remaining behavior work: original remote TTS protocols, EPUB export shaping, and MongoDB backup/restore need fixture-based parity tests before they can be claimed bytecode-equivalent.
+
 ## 11. 验收门槛
 
 只有同时满足以下条件，才能将状态改为“可替代原 JAR”：
