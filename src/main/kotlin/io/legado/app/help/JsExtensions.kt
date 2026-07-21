@@ -294,7 +294,7 @@ interface JsExtensions {
     }
 
     fun getFile(path: String): File {
-        val cachePath = ReaderAdapterHelper.getAdapter().cacheDir
+        val cachePath = ReaderAdapterHelper.getAdapter().getCacheDir()
         val aPath = if (path.startsWith(File.separator)) {
             cachePath + path
         } else {
