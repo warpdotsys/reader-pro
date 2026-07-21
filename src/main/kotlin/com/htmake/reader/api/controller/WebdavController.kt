@@ -186,8 +186,14 @@ class WebdavController(
         if (appConfig.secure && context.get<User>("userInfo")?.enable_webdav != true) {
             return result.setErrorMsg("\u672a\u5f00\u542fwebdav\u529f\u80fd")
         }
-        val home = File(getUserWebdavHome(context))
-        return result.setData(home.listFiles()?.map { it.name } ?: emptyList<String>())
+        val userNameSpace = getUserNameSpace(context)
+        val controller = BookController(coroutineContext)
+        val previousBackup = controller.getLastBackFileFromWebdav(userNameSpace)
+        return if (controller.saveToWebdav(userNameSpace, previousBackup)) {
+            result.setData("")
+        } else {
+            result.setErrorMsg("backup failed")
+        }
     }
 
     private fun launchWebdav(
