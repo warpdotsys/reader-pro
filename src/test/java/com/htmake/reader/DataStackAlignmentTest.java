@@ -1,7 +1,6 @@
 package com.htmake.reader;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -14,27 +13,27 @@ import com.htmake.reader.entity.User;
 import com.htmake.reader.utils.ExtKt;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import kotlin.jvm.functions.Function2;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
 
 class DataStackAlignmentTest {
 
     private static final Function2<JsonObject, Row, Boolean> SAME_ID =
             (stored, candidate) -> stored.getInteger("id") == candidate.getId();
 
-    @TempDir
     Path storageRoot;
 
     private String previousStorageFinalPath;
 
     @BeforeEach
-    void redirectStorage() {
+    void redirectStorage() throws Exception {
         previousStorageFinalPath = ExtKt.getStorageFinalPath();
+        storageRoot = Files.createTempDirectory("reader-pro-");
         ExtKt.setStorageFinalPath(storageRoot.toString());
     }
 
@@ -66,9 +65,9 @@ class DataStackAlignmentTest {
 
     @Test
     void tableFactoryUsesTheJarDriverSelection() {
-        assertInstanceOf(JSONTable.class, DB.Companion.table("factory", "default", "json"));
-        assertInstanceOf(JSONTable.class, DB.Companion.table("factory", "json", "JSON"));
-        assertInstanceOf(SQLTable.class, DB.Companion.table("factory", "sql", "SQL"));
+        assertTrue(DB.Companion.table("factory", "default", "json") instanceof JSONTable);
+        assertTrue(DB.Companion.table("factory", "json", "JSON") instanceof JSONTable);
+        assertTrue(DB.Companion.table("factory", "sql", "SQL") instanceof SQLTable);
     }
 
     @Test
@@ -85,7 +84,7 @@ class DataStackAlignmentTest {
 
         JsonArray persisted = readStored("json", "rows");
         assertEquals(1, persisted.size());
-        assertEquals(2, persisted.getJsonObject(0).getInteger("id"));
+        assertEquals(2, persisted.getJsonObject(0).getInteger("id").intValue());
         assertEquals("second", persisted.getJsonObject(0).getString("value"));
     }
 
@@ -100,14 +99,14 @@ class DataStackAlignmentTest {
 
         JsonArray persisted = readStored("sql", "rows");
         assertEquals(1, persisted.size());
-        assertEquals(2, persisted.getJsonObject(0).getInteger("id"));
+        assertEquals(2, persisted.getJsonObject(0).getInteger("id").intValue());
     }
 
     @Test
     void storageFailuresKeepTheJarMessages() throws Exception {
         Path blockedParent = storageRoot.resolve("data").resolve("blocked");
         Files.createDirectories(blockedParent.getParent());
-        Files.writeString(blockedParent, "not a directory");
+        Files.write(blockedParent, "not a directory".getBytes(StandardCharsets.UTF_8));
 
         Exception saveFailure = assertThrows(
                 Exception.class,

@@ -18,7 +18,7 @@
 ## 快速开始
 
 ```bash
-# 需要 JDK 17+
+# 需要 JDK 8
 ./gradlew bootJar
 java -jar build/libs/reader-pro-3.2.14-rebuild.jar
 # WebUI: http://localhost:8080/

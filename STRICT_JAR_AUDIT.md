@@ -142,3 +142,68 @@ The project must not be labeled JAR-aligned or a replacement for `reader-pro-3.2
 7. Retain ABI and behavioral tests as supporting evidence only; neither may substitute for the artifact comparison above.
 
 Until those gates pass, all previous statements such as "public descriptors match" must be read as limited ABI observations, not bytecode-equivalence claims.
+
+## PR40 Toolchain Convergence
+
+This follow-up was run against the same target artifact after moving the
+repository to the target-era toolchain:
+
+- Gradle `6.1.1`
+- JDK `1.8.0_492` with Java class-file target 52
+- Kotlin `1.5.21` with JVM target `1.8`
+- Spring Boot `2.1.6.RELEASE`
+
+`clean test` completed with 18 test classes and 64 tests passing (zero
+failures and zero errors) under that toolchain. The Java test sources were
+also made Java 8 compatible without changing their covered assertions.
+
+### Strict Comparison Delta
+
+| Check | Initial audit | PR40 rebuilt output | Strict status |
+| --- | ---: | ---: | --- |
+| Target class files | 936 | 936 | Fixed baseline |
+| Current class files | 693 | 694 | Not closed |
+| Shared class paths | 636 | 639 | Not closed |
+| Byte-identical shared classes | 0 | 166 | Improved, not closed |
+| Different shared classes | 636 | 473 | Not closed |
+| Target-only classes | 300 | 297 | Not closed |
+| Current-only classes | 57 | 55 | Not closed |
+| Current main class-file version | 61 (Java 17) | 52 (Java 8) | Matches target version |
+| Current Kotlin Metadata sample | `mv=[1,9,0]` | `mv=[1,5,1]` | Matches target sample |
+
+The shared-class SHA-256 comparison is exact: it hashes each target
+`BOOT-INF/classes/**/*.class` entry and each rebuilt main-output class with
+the same relative path. The 166 matching entries are evidence that matching
+the compiler era and target materially improves bytecode fidelity, but they
+do not establish equivalence for the other 473 shared entries.
+
+### Resource Comparison Delta
+
+| Check | Initial audit | PR40 rebuilt output | Strict status |
+| --- | ---: | ---: | --- |
+| Target resources | 159 | 159 | Fixed baseline |
+| Current resources | 159 | 160 | Not closed |
+| Shared resource paths | 158 | 159 | Paths closed |
+| Byte-identical shared resources | 69 | 69 | Not closed |
+| Different shared resources | 89 | 90 | Not closed |
+| Target-only resources | 1 | 0 | Paths closed |
+| Current-only resources | 1 | 1 | Not closed |
+
+`META-INF/reader-pro.kotlin_module` is now emitted at the target path. Its
+content remains subject to the exact resource comparison. The remaining
+current-only resource is `reader3-routes.txt`.
+
+### Executable Artifact Check
+
+`bootJar` was rerun on the PR40 toolchain and still fails with:
+
+```text
+Main class name has not been configured and it could not be resolved
+```
+
+This remains consistent with the missing target entrypoint and runtime
+classes: `ReaderApplication`, `YueduApi`, `FileController`, `BookConfig`,
+`ReaderAdapter`, `RemoteWebview`, and `RestVerticle` (including their Kotlin
+file-facade and generated coroutine classes). No executable replacement JAR
+exists yet, so packaging, manifest, nested-library, and ZIP-layout comparison
+remain blocked by source reconstruction rather than treated as passing.

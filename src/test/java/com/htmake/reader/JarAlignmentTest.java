@@ -99,7 +99,7 @@ class JarAlignmentTest {
     void rsaSegmentOperationsRoundTripMultipleBlocks() throws Exception {
         EncoderUtils encoder = EncoderUtils.INSTANCE;
         KeyPair keys = encoder.generateKeys();
-        String value = "segment-reader-pro-".repeat(40);
+        String value = repeat("segment-reader-pro-", 40);
 
         String privateEncrypted = invokeSegmentDefault(
                 "encryptSegmentByPrivateKey", PrivateKey.class, value, keys.getPrivate()
@@ -172,5 +172,13 @@ class JarAlignmentTest {
                 Object.class
         );
         return (String) method.invoke(null, EncoderUtils.INSTANCE, input, key, 0, 4, null);
+    }
+
+    private static String repeat(String value, int count) {
+        StringBuilder result = new StringBuilder(value.length() * count);
+        for (int index = 0; index < count; index++) {
+            result.append(value);
+        }
+        return result.toString();
     }
 }
