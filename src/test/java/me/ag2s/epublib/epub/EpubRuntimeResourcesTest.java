@@ -26,7 +26,7 @@ class EpubRuntimeResourcesTest {
         serializer.endDocument();
         assertEquals(
                 "<?xml version='1.0' encoding='UTF-8' ?>\r\n<chapter>reader</chapter>",
-                output.toString(StandardCharsets.UTF_8)
+                new String(output.toByteArray(), StandardCharsets.UTF_8)
         );
     }
 

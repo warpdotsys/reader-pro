@@ -6,7 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import io.legado.app.adapters.DefaultAdpater;
@@ -49,7 +52,7 @@ class ReconstructedCoreTest {
 
         try (BOMInputStream stream = new BOMInputStream(new ByteArrayInputStream(input))) {
             assertTrue(stream.hasBOM());
-            assertArrayEquals(payload, stream.readAllBytes());
+            assertArrayEquals(payload, readAllBytes(stream));
         }
     }
 
@@ -104,5 +107,15 @@ class ReconstructedCoreTest {
                 .getBytes(StandardCharsets.UTF_8);
 
         assertEquals("windows-1252", EncodingDetect.INSTANCE.getHtmlEncode(html));
+    }
+
+    private static byte[] readAllBytes(InputStream input) throws IOException {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        byte[] buffer = new byte[4096];
+        int count;
+        while ((count = input.read(buffer)) != -1) {
+            output.write(buffer, 0, count);
+        }
+        return output.toByteArray();
     }
 }

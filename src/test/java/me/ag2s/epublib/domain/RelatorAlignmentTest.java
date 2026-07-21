@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 
 class RelatorAlignmentTest {
@@ -14,7 +15,7 @@ class RelatorAlignmentTest {
 
         assertEquals(220, values.length);
         assertEquals(
-                List.of(
+                Arrays.asList(
                         "ELECTRICIAN", "ELECTROTYPER", "ENGINEER", "ENGRAVER", "ETCHER",
                         "EVENT_PLACE", "EXPERT", "FACSIMILIST", "FIELD_DIRECTOR", "FILM_EDITOR",
                         "FIRST_PARTY", "FORGER", "FORMER_OWNER", "FUNDER",
@@ -27,8 +28,8 @@ class RelatorAlignmentTest {
                 Arrays.stream(values)
                         .skip(Relator.EDITOR.ordinal() + 1L)
                         .limit(Relator.LIBELEE_APPELLEE.ordinal() - Relator.EDITOR.ordinal() - 1L)
-                        .map(Enum::name)
-                        .toList()
+                        .map(relator -> relator.name())
+                        .collect(Collectors.toList())
         );
         assertEquals("elg", Relator.ELECTRICIAN.getCode());
         assertEquals("Electrician", Relator.ELECTRICIAN.getName());
