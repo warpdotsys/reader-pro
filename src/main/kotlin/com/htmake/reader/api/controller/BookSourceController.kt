@@ -260,8 +260,8 @@ class BookSourceController(
         }
     }
 
-    suspend fun updateRemoteSourceSub(userNameSpace: String, user: User) {
-        if (user.book_source_limit == 0) {
+    suspend fun updateRemoteSourceSub(userNameSpace: String, user: User?) {
+        if (user != null && user.book_source_limit == 0) {
             return
         }
         generateBookSourceMap(userNameSpace)
