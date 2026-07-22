@@ -1,14 +1,14 @@
 package io.legado.app.adapters
 
-import io.legado.app.help.http.StrResponse
 import io.legado.app.model.DebugLog
+import io.legado.app.help.http.StrResponse
 
 interface ReaderAdapterInterface {
     fun getWorkDir(subPath: String = ""): String
 
     fun getWorkDir(vararg subDirFiles: String): String
 
-    val cacheDir: String
+    fun getCacheDir(): String
 
     suspend fun getStrResponseByRemoteWebview(
         url: String? = null,

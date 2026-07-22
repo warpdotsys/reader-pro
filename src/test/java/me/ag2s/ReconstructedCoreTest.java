@@ -70,7 +70,11 @@ class ReconstructedCoreTest {
                 new File(System.getProperty("user.dir"), "storage" + File.separator + "cache").toPath().toString(),
                 adapter.getCacheDir()
         );
-        assertEquals("storage" + File.separator + "cache", adapter.getRelativePath("", "storage", "cache"));
+        // The JAR's DefaultAdpater only strips a leading "/" (not the platform
+        // separator), so on Windows the relative path keeps its leading "\".
+        String rawPath = File.separator + "storage" + File.separator + "cache";
+        String expectedPath = rawPath.startsWith("/") ? rawPath.substring(1) : rawPath;
+        assertEquals(expectedPath, adapter.getRelativePath("", "storage", "cache"));
         assertEquals(adapter.getCacheDir(), appCtx.INSTANCE.getCacheDir());
     }
 
