@@ -31,16 +31,16 @@ class BookGroupController(coroutineContext: CoroutineContext) : BaseController(c
     }
 
     override fun checker(var1: JsonObject, var2: BookGroup): Boolean =
-        var2.groupId == var1.getLong("groupId")
+        var2.groupId.equals(var1.getLong("groupId"))
 
-    override fun onCheckEnd(var1: BookGroup, existed: Boolean, items: JsonArray) {
+    override fun onCheckEnd(var1: BookGroup, existed: Boolean, bookGroupList: JsonArray) {
         if (existed) {
             return
         }
 
         var maxOrder = 0
         var groupIdSum = 0L
-        for (item in items) {
+        for (item in bookGroupList) {
             val group = item.asJsonObject()
             maxOrder = maxOf(maxOrder, group?.getInteger("order", 0) ?: 0)
             groupIdSum += maxOf(group?.getLong("groupId", 0L) ?: 0L, 0L)
