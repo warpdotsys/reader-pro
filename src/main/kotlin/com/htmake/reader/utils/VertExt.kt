@@ -9,7 +9,9 @@ import org.slf4j.MDC
 import java.net.URLDecoder
 
 fun RoutingContext.success(any: Any?) {
-    val json = if (any is JsonObject) any.toString() else gson.toJson(any)
+    val json = if (any is JsonObject) any.toString() else {
+        gson.toJson(any)
+    }!!
     response().putHeader("content-type", "application/json; charset=utf-8").end(json)
 }
 

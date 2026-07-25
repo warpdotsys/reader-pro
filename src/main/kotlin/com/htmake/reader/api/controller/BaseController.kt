@@ -35,10 +35,8 @@ open class BaseController(
 ) : CoroutineScope {
     private var loginExpireDays = 7
 
-    val appConfig: AppConfig = requireNotNull(
-        SpringContextUtils.getBean("appConfig", AppConfig::class.java)
-    )
-    val env: Environment = requireNotNull(SpringContextUtils.getBean(Environment::class.java))
+    val appConfig: AppConfig = SpringContextUtils.getBean("appConfig", AppConfig::class.java)!!
+    val env: Environment = SpringContextUtils.getBean(Environment::class.java)!!
     val userMutex: Mutex = Mutex()
 
     suspend fun saveUserSession(

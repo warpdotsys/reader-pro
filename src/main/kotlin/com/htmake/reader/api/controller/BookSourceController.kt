@@ -25,9 +25,7 @@ private val logger = KotlinLogging.logger {}
 class BookSourceController(
     coroutineContext: CoroutineContext,
 ) : BaseController(coroutineContext) {
-    private var webClient: WebClient = requireNotNull(
-        SpringContextUtils.getBean("webClient", WebClient::class.java),
-    )
+    private var webClient: WebClient = SpringContextUtils.getBean("webClient", WebClient::class.java)!!
 
     fun getUserBookSourceJsonOpt(
         userNameSpace: String,

@@ -57,28 +57,6 @@ data class BookSource(
     override fun equals(other: Any?) =
         if (other is BookSource) other.bookSourceUrl == bookSourceUrl else false
 
-    @Transient
-    private var _userNameSpace: String = ""
-
-    fun setUserNameSpace(nameSpace: String) {
-        _userNameSpace = nameSpace
-    }
-
-    override fun getUserNameSpace(): String {
-        return _userNameSpace
-    }
-
-    @Transient
-    private var debugLog: DebugLog? = null
-
-    fun setLogger(logger: DebugLog?) {
-        debugLog = logger
-    }
-
-    override fun getLogger(): DebugLog? {
-        return debugLog
-    }
-
     private var searchRuleV: SearchRule? = null
 
     private var exploreRuleV: ExploreRule? = null
@@ -107,6 +85,28 @@ data class BookSource(
 
     fun getContentRule(): ContentRule {
         return ruleContent ?: ContentRule()
+    }
+
+    @Transient
+    private var _userNameSpace: String = ""
+
+    fun setUserNameSpace(nameSpace: String) {
+        _userNameSpace = nameSpace
+    }
+
+    override fun getUserNameSpace(): String {
+        return _userNameSpace
+    }
+
+    @Transient
+    private var debugLog: DebugLog? = null
+
+    fun setLogger(logger: DebugLog?) {
+        debugLog = logger
+    }
+
+    override fun getLogger(): DebugLog? {
+        return debugLog
     }
 
     fun equal(source: BookSource): Boolean {

@@ -31,6 +31,9 @@ open class DB<T>(
 
     companion object {
         fun <T> table(userNameSpace: String, name: String, driver: String = "JSON"): DB<T> =
-            if (driver == "SQL") SQLTable(userNameSpace, name) else JSONTable(userNameSpace, name)
+            when (driver) {
+                "SQL" -> SQLTable(userNameSpace, name)
+                else -> JSONTable(userNameSpace, name)
+            }
     }
 }

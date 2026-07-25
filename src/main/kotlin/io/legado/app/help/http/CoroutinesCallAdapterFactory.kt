@@ -30,7 +30,10 @@ class CoroutinesCallAdapterFactory private constructor() : CallAdapter.Factory()
             check(responseType is ParameterizedType) {
                 "Response must be parameterized as Response<Foo> or Response<out Foo>"
             }
-            ResponseCallAdapter<Any>(getParameterUpperBound(0, responseType))
+            ResponseCallAdapter<Any>(getParameterUpperBound(
+                    0,
+                    responseType
+                ))
         } else {
             BodyCallAdapter<Any>(responseType)
         }

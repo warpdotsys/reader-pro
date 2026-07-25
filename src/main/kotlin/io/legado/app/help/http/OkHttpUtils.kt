@@ -49,7 +49,7 @@ suspend fun OkHttpClient.newCall(retry: Int = 0, builder: Request.Builder.() -> 
         response = currentResponse
         if (currentResponse.isSuccessful) return currentResponse.body!!
     }
-    val finalResponse = requireNotNull(response)
+    val finalResponse = response!!
     return finalResponse.body ?: throw IOException(finalResponse.message)
 }
 
@@ -64,7 +64,7 @@ suspend fun OkHttpClient.newCallStrResponse(
         response = currentResponse
         if (currentResponse.isSuccessful) return StrResponse(currentResponse, currentResponse.body!!.text())
     }
-    val finalResponse = requireNotNull(response)
+    val finalResponse = response!!
     return StrResponse(finalResponse, finalResponse.body?.text() ?: finalResponse.message)
 }
 

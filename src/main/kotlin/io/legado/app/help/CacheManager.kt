@@ -33,7 +33,10 @@ class CacheManager(val userNameSpace: String) {
         }
     }
 
-    fun get(key: String): String? = if (key.isEmpty()) null else cacheInstance.getAsString(key)
+    fun get(key: String): String? {
+        if (key.isEmpty()) return null
+        return cacheInstance.getAsString(key)
+    }
 
     fun getInt(key: String): Int? = get(key)?.toIntOrNull()
 
@@ -43,22 +46,32 @@ class CacheManager(val userNameSpace: String) {
 
     fun getFloat(key: String): Float? = get(key)?.toFloatOrNull()
 
-    fun getByteArray(key: String): ByteArray? =
-        if (key.isEmpty()) null else cacheInstance.getAsBinary(key)
+    fun getByteArray(key: String): ByteArray? {
+        if (key.isEmpty()) return null
+        return cacheInstance.getAsBinary(key)
+    }
 
     fun getQueryTTF(key: String): QueryTTF? {
         val cache = queryTTFMap[key] ?: return null
-        return if (cache.first == 0L || cache.first > System.currentTimeMillis()) cache.second else null
+        return if (cache.first == 0L || cache.first > System.currentTimeMillis()) {
+            cache.second
+        } else {
+            null
+        }
     }
 
-    @JvmOverloads
     fun putFile(key: String, value: String, saveTime: Int = 0) {
-        if (key.isNotEmpty()) cacheInstance.put(key, value, saveTime)
+        if (key.isEmpty()) return
+        cacheInstance.put(key, value, saveTime)
     }
 
-    fun getFile(key: String): String? = if (key.isEmpty()) null else cacheInstance.getAsString(key)
+    fun getFile(key: String): String? {
+        if (key.isEmpty()) return null
+        return cacheInstance.getAsString(key)
+    }
 
     fun delete(key: String) {
-        if (key.isNotEmpty()) cacheInstance.remove(key)
+        if (key.isEmpty()) return
+        cacheInstance.remove(key)
     }
 }

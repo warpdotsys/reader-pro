@@ -10,5 +10,5 @@ class ByteConverter : Converter.Factory() {
         type: Type,
         annotations: Array<Annotation>,
         retrofit: Retrofit
-    ): Converter<ResponseBody, *> = Converter<ResponseBody, ByteArray> { value -> value.bytes() }
+    ): Converter<ResponseBody, ByteArray> = Converter { value -> value.bytes() }
 }

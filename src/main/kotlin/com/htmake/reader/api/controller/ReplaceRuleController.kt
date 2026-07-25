@@ -15,17 +15,16 @@ class ReplaceRuleController(coroutineContext: CoroutineContext) : BaseController
         get() = "replaceRule"
 
     override fun checker(var1: JsonObject, var2: ReplaceRule): Boolean =
-        var2.name == var1.getString("name")
+        var1.getString("name").equals(var2.name)
 
-    override fun beforeSave(var1: ReplaceRule, db: DB<ReplaceRule>): ReturnData? {
+    override fun beforeSave(var1: ReplaceRule, db: DB<ReplaceRule>): ReturnData? =
         if (var1.name.isEmpty()) {
-            return ReturnData().setErrorMsg("名称不能为空")
+            ReturnData().setErrorMsg("名称不能为空")
+        } else if (var1.pattern.isEmpty()) {
+            ReturnData().setErrorMsg("规则不能为空")
+        } else {
+            null
         }
-        if (var1.pattern.isEmpty()) {
-            return ReturnData().setErrorMsg("规则不能为空")
-        }
-        return null
-    }
 
     override suspend fun checkUserAuth(context: RoutingContext): Boolean = checkAuth(context)
 

@@ -3,5 +3,6 @@ package io.legado.app.utils
 val Throwable.msg: String
     get() {
         val stackTrace = stackTraceToString()
-        return if (stackTrace.isNotEmpty()) stackTrace else (localizedMessage ?: "noErrorMsg")
+        val msg = localizedMessage ?: "noErrorMsg"
+        return if (stackTrace.isNotEmpty()) stackTrace else msg
     }

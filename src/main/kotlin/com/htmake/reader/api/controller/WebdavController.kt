@@ -124,7 +124,7 @@ class WebdavController(
         if (file.isDirectory) return context.response().setStatusCode(405).end()
         try {
             if (file.exists()) file.delete()
-            file.writeBytes(requireNotNull(context.body).bytes)
+            file.writeBytes(context.body!!.bytes)
             context.response().setStatusCode(201).end()
         } catch (_: Exception) {
             context.response().setStatusCode(500).end()

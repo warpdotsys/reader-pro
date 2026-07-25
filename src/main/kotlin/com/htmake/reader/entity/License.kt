@@ -17,7 +17,9 @@ data class License(
 ) {
 
     fun isValid(): Boolean {
-        return expiredAt == 0L || expiredAt >= System.currentTimeMillis()
+        if (expiredAt == 0L) return true
+        if (expiredAt >= System.currentTimeMillis()) return true
+        return false
     }
 
     fun validHost(queryHost: String): Boolean {

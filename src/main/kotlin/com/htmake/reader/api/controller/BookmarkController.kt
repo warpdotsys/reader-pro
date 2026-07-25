@@ -15,14 +15,14 @@ class BookmarkController(coroutineContext: CoroutineContext) : BaseController(co
         get() = "bookmark"
 
     override fun checker(var1: JsonObject, var2: Bookmark): Boolean =
-        var2.time == var1.getLong("time")
+        var2.time.equals(var1.getLong("time"))
 
-    override fun beforeSave(var1: Bookmark, db: DB<Bookmark>): ReturnData? {
-        if (var1.bookName.isEmpty() && var1.bookAuthor.isEmpty()) {
-            return ReturnData().setErrorMsg("书签信息错误")
+    override fun beforeSave(var1: Bookmark, db: DB<Bookmark>): ReturnData? =
+        if (var1.bookName.isEmpty() || var1.bookAuthor.isEmpty()) {
+            ReturnData().setErrorMsg("书签信息错误")
+        } else {
+            null
         }
-        return null
-    }
 
     override suspend fun checkUserAuth(context: RoutingContext): Boolean = checkAuth(context)
 
