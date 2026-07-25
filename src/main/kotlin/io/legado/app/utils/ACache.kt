@@ -1,7 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package io.legado.app.utils
 
-import com.htmake.reader.init.appCtx
+import io.legado.app.adapters.ReaderAdapterHelper
 import java.io.*
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
@@ -31,7 +31,7 @@ class ACache private constructor(cacheDir: File, max_size: Long, max_count: Int)
             maxSize: Long = MAX_SIZE.toLong(),
             maxCount: Int = MAX_COUNT
         ): ACache {
-            val f = File(appCtx.cacheDir, cacheName)
+            val f = File(ReaderAdapterHelper.getAdapter().getCacheDir(), cacheName)
             return get(f, maxSize, maxCount)
         }
 
@@ -96,6 +96,10 @@ class ACache private constructor(cacheDir: File, max_size: Long, max_count: Int)
      * @param saveTime 保存的时间，单位：秒
      */
     fun put(key: String, value: String, saveTime: Int) {
+        if (saveTime <= 0) {
+            put(key, value)
+            return
+        }
         put(key, Utils.newStringWithDateInfo(saveTime, value))
     }
 
@@ -256,6 +260,10 @@ class ACache private constructor(cacheDir: File, max_size: Long, max_count: Int)
      * @param saveTime 保存的时间，单位：秒
      */
     fun put(key: String, value: ByteArray, saveTime: Int) {
+        if (saveTime <= 0) {
+            put(key, value)
+            return
+        }
         put(key, Utils.newByteArrayWithDateInfo(saveTime, value))
     }
 

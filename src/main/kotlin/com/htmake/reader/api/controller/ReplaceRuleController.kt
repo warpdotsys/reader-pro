@@ -14,14 +14,14 @@ class ReplaceRuleController(coroutineContext: CoroutineContext) : BaseController
     override val tableName: String
         get() = "replaceRule"
 
-    override fun checker(item: JsonObject, value: ReplaceRule): Boolean =
-        value.name == item.getString("name")
+    override fun checker(var1: JsonObject, var2: ReplaceRule): Boolean =
+        var2.name == var1.getString("name")
 
-    override fun beforeSave(value: ReplaceRule, db: DB<ReplaceRule>): ReturnData? {
-        if (value.name.isEmpty()) {
+    override fun beforeSave(var1: ReplaceRule, db: DB<ReplaceRule>): ReturnData? {
+        if (var1.name.isEmpty()) {
             return ReturnData().setErrorMsg("名称不能为空")
         }
-        if (value.pattern.isEmpty()) {
+        if (var1.pattern.isEmpty()) {
             return ReturnData().setErrorMsg("规则不能为空")
         }
         return null

@@ -89,18 +89,22 @@ private val lockMap = object : LinkedHashMap<String, ReadWriteLock>() {
 
 var _licenseValid = true
 
-fun String.url(): String = when {
-    startsWith("//") -> "http:$this".toHttpUrl().toString()
-    startsWith("http") -> toHttpUrl().toString()
-    else -> this
+fun String.url(): String {
+    if (startsWith("//")) {
+        return "http:$this".toHttpUrl().toString()
+    }
+    if (startsWith("http")) {
+        return toHttpUrl().toString()
+    }
+    return this
 }
 
 fun String.toDir(absolute: Boolean = false): String {
     var path = this
-    if (endsWith('/')) {
-        path = substring(0, length - 1)
+    if (path.endsWith("/")) {
+        path = path.substring(0, path.length - 1)
     }
-    if (absolute && !path.startsWith('/')) {
+    if (absolute && !path.startsWith("/")) {
         path = "/$path"
     }
     return path

@@ -27,18 +27,20 @@ data class License(
         if (queryHost.isEmpty()) {
             return false
         }
-        if (host == "*") {
+        if ("*".equals(host)) {
             return true
         }
         val hostParts = queryHost.split(":")
         val queryParts = hostParts[0].split(".")
-        for (hostname in host.split(",")) {
+        val hostnames = host.split(",")
+        for (hostname in hostnames) {
             val parts = hostname.split(".")
             if (parts.size == queryParts.size) {
                 var isValid = true
                 for (i in parts.indices) {
-                    if (parts[i] != "*" && parts[i] != queryParts[i]) {
+                    if (!"*".equals(parts[i]) && !parts[i].equals(queryParts[i])) {
                         isValid = false
+                        break
                     }
                 }
                 if (isValid) {

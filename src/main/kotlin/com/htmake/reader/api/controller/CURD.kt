@@ -14,23 +14,23 @@ private val logger = KotlinLogging.logger {}
 interface CURD<T> {
     val tableName: String
 
-    fun convertToEntity(json: JsonObject): T = json.mapTo(entityClass)
+    fun convertToEntity(var1: JsonObject): T = var1.mapTo(entityClass)
 
     @Suppress("UNCHECKED_CAST")
-    fun convertToEntityList(content: String): Array<T> =
-        gson.fromJson(content, ReflectArray.newInstance(entityClass, 0).javaClass) as Array<T>
+    fun convertToEntityList(var1: String): Array<T> =
+        gson.fromJson(var1, ReflectArray.newInstance(entityClass, 0).javaClass) as Array<T>
 
-    fun onList(items: JsonArray, userNameSpace: String): JsonArray = items
+    fun onList(var1: JsonArray, userNameSpace: String): JsonArray = var1
 
-    fun checker(item: JsonObject, value: T): Boolean
+    fun checker(var1: JsonObject, var2: T): Boolean
 
-    fun onCheckEnd(value: T, existed: Boolean, items: JsonArray) = Unit
+    fun onCheckEnd(var1: T, existed: Boolean, items: JsonArray) = Unit
 
-    fun beforeSave(value: T, db: DB<T>): ReturnData? = null
+    fun beforeSave(var1: T, db: DB<T>): ReturnData? = null
 
-    fun beforeAdd(value: T, db: DB<T>): ReturnData? = null
+    fun beforeAdd(var1: T, db: DB<T>): ReturnData? = null
 
-    fun beforeDelete(value: T, db: DB<T>): ReturnData? = null
+    fun beforeDelete(var1: T, db: DB<T>): ReturnData? = null
 
     suspend fun checkUserAuth(context: RoutingContext): Boolean
 

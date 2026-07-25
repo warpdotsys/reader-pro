@@ -14,11 +14,11 @@ class BookmarkController(coroutineContext: CoroutineContext) : BaseController(co
     override val tableName: String
         get() = "bookmark"
 
-    override fun checker(item: JsonObject, value: Bookmark): Boolean =
-        value.time == item.getLong("time")
+    override fun checker(var1: JsonObject, var2: Bookmark): Boolean =
+        var2.time == var1.getLong("time")
 
-    override fun beforeSave(value: Bookmark, db: DB<Bookmark>): ReturnData? {
-        if (value.bookName.isEmpty() && value.bookAuthor.isEmpty()) {
+    override fun beforeSave(var1: Bookmark, db: DB<Bookmark>): ReturnData? {
+        if (var1.bookName.isEmpty() && var1.bookAuthor.isEmpty()) {
             return ReturnData().setErrorMsg("书签信息错误")
         }
         return null

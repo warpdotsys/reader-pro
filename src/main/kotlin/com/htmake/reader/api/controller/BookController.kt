@@ -50,14 +50,23 @@ private const val BOOKSHELF = "bookshelf"
 class BookController(
     coroutineContext: CoroutineContext,
 ) : BaseController(coroutineContext) {
-    private var bookInfoCache: ACache = ACache.get(File(getWorkDir("storage", "cache", "bookInfo")))
-    private val concurrentLoopCount: Int = 4
-    private var webClient: WebClient = requireNotNull(
-        SpringContextUtils.getBean("webClient", WebClient::class.java),
-    )
+    private var bookInfoCache: ACache = ACache.get("bookInfoCache", 2000000L, 10000)
+    private val concurrentLoopCount: Int = 8
     private val backupFileNames: Array<String> by lazy {
-        arrayOf("bookshelf", "bookSource", "bookGroup", "bookmark", "replaceRule", "httpTTS")
+        arrayOf(
+            "bookSource.json",
+            "bookshelf.json",
+            "bookGroup.json",
+            "rssSources.json",
+            "replaceRule.json",
+            "bookmark.json",
+            "userConfig.json",
+            "httpTTS.json",
+            "remoteBookSourceSub.json",
+            "txtTocRule.json"
+        )
     }
+    private var webClient: WebClient = SpringContextUtils.getBean("webClient", WebClient::class.java)!!
 
     suspend fun getInvalidBookSources(context: RoutingContext): ReturnData {
         val result = authenticated(context) ?: return needLogin()

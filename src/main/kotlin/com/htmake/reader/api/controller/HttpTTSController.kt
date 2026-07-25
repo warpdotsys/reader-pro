@@ -14,12 +14,12 @@ class HttpTTSController(
     override val tableName: String
         get() = "httpTTS"
 
-    override fun checker(item: JsonObject, value: HttpTTS): Boolean =
-        value.name == item.getString("name")
+    override fun checker(var1: JsonObject, var2: HttpTTS): Boolean =
+        var2.name == var1.getString("name")
 
-    override fun beforeSave(value: HttpTTS, db: DB<HttpTTS>): ReturnData? = when {
-        value.name.isEmpty() -> ReturnData().setErrorMsg("名称不能为空")
-        value.url.isEmpty() -> ReturnData().setErrorMsg("链接不能为空")
+    override fun beforeSave(var1: HttpTTS, db: DB<HttpTTS>): ReturnData? = when {
+        var1.name.isEmpty() -> ReturnData().setErrorMsg("名称不能为空")
+        var1.url.isEmpty() -> ReturnData().setErrorMsg("链接不能为空")
         else -> null
     }
 
@@ -30,11 +30,11 @@ class HttpTTSController(
     override val entityClass: Class<HttpTTS>
         get() = HttpTTS::class.java
 
-    override fun convertToEntity(json: JsonObject): HttpTTS =
-        HttpTTS.fromJson(json.toString()).getOrThrow()
+    override fun convertToEntity(var1: JsonObject): HttpTTS =
+        HttpTTS.fromJson(var1.toString()).getOrThrow()
 
-    override fun convertToEntityList(content: String): Array<HttpTTS> =
-        content.asJsonArray()
+    override fun convertToEntityList(var1: String): Array<HttpTTS> =
+        var1.asJsonArray()
             ?.map { item -> HttpTTS.fromJson(item.toString()).getOrThrow() }
             ?.toTypedArray()
             ?: emptyArray()

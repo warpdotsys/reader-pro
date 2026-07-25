@@ -175,9 +175,9 @@ data class Book(
     fun setRootDir(root: String) {
         if (root.isNotEmpty() && !root.endsWith(File.separator)) {
             rootDir = root + File.separator
-            return
+        } else {
+            rootDir = root
         }
-        rootDir = root
     }
 
     fun getLocalFile(): File {
@@ -220,19 +220,19 @@ data class Book(
 
     fun toSearchBook(): SearchBook {
         return SearchBook(
-            bookUrl = bookUrl,
-            origin = origin,
-            originName = originName,
-            type = type,
-            name = name,
-            author = author,
-            kind = kind,
-            coverUrl = coverUrl,
-            intro = intro,
-            wordCount = wordCount,
-            latestChapterTitle = latestChapterTitle,
-            tocUrl = tocUrl,
-            variable = variable
+                name = name,
+                author = author,
+                kind = kind,
+                bookUrl = bookUrl,
+                origin = origin,
+                originName = originName,
+                type = type,
+                wordCount = wordCount,
+                latestChapterTitle = latestChapterTitle,
+                coverUrl = coverUrl,
+                intro = intro,
+                tocUrl = tocUrl,
+                variable = variable
         ).apply {
             this.infoHtml = this@Book.infoHtml
             this.tocHtml = this@Book.tocHtml
@@ -242,24 +242,28 @@ data class Book(
 
     fun getEpubRootDir(): String {
         // 根据 content.opf 位置来确认root目录
+        // var contentOPF = "OEBPS/content.opf"
+
         val defaultPath = "OEBPS"
 
         // 根据 META-INF/container.xml 来获取 contentOPF 位置
-        val containerRes =
-            File(bookUrl + File.separator + "index" + File.separator + "META-INF" + File.separator + "container.xml")
+        val containerRes = File(bookUrl + File.separator + "index" + File.separator + "META-INF" + File.separator + "container.xml")
         if (containerRes.exists()) {
             try {
                 val document = Jsoup.parse(containerRes.readText())
                 val rootFileElement = document
-                    .getElementsByTag("rootfiles")[0]
-                    .getElementsByTag("rootfile")[0]
-                val result = rootFileElement.attr("full-path")
-                println("result: $result")
-                if (result.isNotEmpty()) {
-                    return File(result).parentFile?.toString() ?: ""
+                        .getElementsByTag("rootfiles").get(0)
+                        .getElementsByTag("rootfile").get(0);
+                val result = rootFileElement.attr("full-path");
+                System.out.println("result: " + result)
+                if (result != null && result.isNotEmpty()) {
+                    return File(result).parentFile?.let{
+                        it.toString()
+                    } ?: ""
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
+                e.printStackTrace();
+                // Log.e(TAG, e.getMessage(), e);
             }
         }
 

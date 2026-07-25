@@ -10,7 +10,6 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 object StringUtils {
-    @Suppress("unused")
     private const val TAG = "StringUtils"
     private const val HOUR_OF_DAY = 24
     private const val DAY_OF_YESTERDAY = 2

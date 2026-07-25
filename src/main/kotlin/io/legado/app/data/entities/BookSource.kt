@@ -50,6 +50,13 @@ data class BookSource(
         return bookSourceUrl
     }
 
+    override fun hashCode(): Int {
+        return bookSourceUrl.hashCode()
+    }
+
+    override fun equals(other: Any?) =
+        if (other is BookSource) other.bookSourceUrl == bookSourceUrl else false
+
     @Transient
     private var _userNameSpace: String = ""
 
@@ -72,19 +79,14 @@ data class BookSource(
         return debugLog
     }
 
-    @Suppress("unused")
     private var searchRuleV: SearchRule? = null
 
-    @Suppress("unused")
     private var exploreRuleV: ExploreRule? = null
 
-    @Suppress("unused")
     private var bookInfoRuleV: BookInfoRule? = null
 
-    @Suppress("unused")
     private var tocRuleV: TocRule? = null
 
-    @Suppress("unused")
     private var contentRuleV: ContentRule? = null
 
     fun getSearchRule(): SearchRule {
@@ -129,9 +131,7 @@ data class BookSource(
 
     private fun equal(a: String?, b: String?): Boolean {
         if (a != b) {
-            if (!(a.isNullOrEmpty() && b.isNullOrEmpty())) {
-                return false
-            }
+            return a.isNullOrEmpty() && b.isNullOrEmpty()
         }
         return true
     }

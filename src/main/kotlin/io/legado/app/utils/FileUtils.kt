@@ -102,14 +102,13 @@ object FileUtils {
     @Synchronized
     fun deleteFile(filePath: String) {
         val file = File(filePath)
-        if (file.exists()) {
-            if (file.isDirectory) {
-                file.listFiles()?.forEach {
-                    deleteFile(it.path)
-                }
+        if (!file.exists()) return
+        if (file.isDirectory) {
+            file.listFiles()?.forEach {
+                deleteFile(it.path)
             }
-            file.delete()
         }
+        file.delete()
     }
 
     fun getCachePath(): String {

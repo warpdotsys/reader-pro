@@ -17,23 +17,23 @@ class BookGroupController(coroutineContext: CoroutineContext) : BaseController(c
     override val tableName: String
         get() = "bookGroup"
 
-    override fun onList(items: JsonArray, userNameSpace: String): JsonArray {
-        if (items.size() == 0) {
+    override fun onList(var1: JsonArray, userNameSpace: String): JsonArray {
+        if (var1.size() == 0) {
             val defaults = """
-                [{"groupId":-1,"groupName":"全部","order":-10,"show":true},{"groupId":-2,"groupName":"本地","order":-9,"show":true},{"groupId":-3,"groupName":"音频","order":-8,"show":true},{"groupId":-4,"groupName":"未分组","order":-7,"show":true},{"groupId":-5,"groupName":"更新错误","order":-6,"show":true}]
+            [{"groupId":-1,"groupName":"全部","order":-10,"show":true},{"groupId":-2,"groupName":"本地","order":-9,"show":true},{"groupId":-3,"groupName":"音频","order":-8,"show":true},{"groupId":-4,"groupName":"未分组","order":-7,"show":true},{"groupId":-5,"groupName":"更新错误","order":-6,"show":true}]
             """.asJsonArray()
             if (defaults != null) {
                 saveUserStorage(userNameSpace, "bookGroup", defaults)
                 return defaults
             }
         }
-        return items
+        return var1
     }
 
-    override fun checker(item: JsonObject, value: BookGroup): Boolean =
-        value.groupId == item.getLong("groupId")
+    override fun checker(var1: JsonObject, var2: BookGroup): Boolean =
+        var2.groupId == var1.getLong("groupId")
 
-    override fun onCheckEnd(value: BookGroup, existed: Boolean, items: JsonArray) {
+    override fun onCheckEnd(var1: BookGroup, existed: Boolean, items: JsonArray) {
         if (existed) {
             return
         }
@@ -50,12 +50,12 @@ class BookGroupController(coroutineContext: CoroutineContext) : BaseController(c
         while ((groupId and groupIdSum) != 0L) {
             groupId = groupId shl 1
         }
-        value.groupId = groupId
-        value.order = maxOrder + 1
+        var1.groupId = groupId
+        var1.order = maxOrder + 1
     }
 
-    override fun beforeSave(value: BookGroup, db: DB<BookGroup>): ReturnData? {
-        if (value.groupName.isEmpty()) {
+    override fun beforeSave(var1: BookGroup, db: DB<BookGroup>): ReturnData? {
+        if (var1.groupName.isEmpty()) {
             return ReturnData().setErrorMsg("分组名称不能为空")
         }
         return null

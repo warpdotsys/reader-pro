@@ -53,9 +53,8 @@ data class RssSource(
 
     override fun getKey(): String = sourceUrl
 
-    override fun equals(other: Any?): Boolean {
-        return other is RssSource && other.sourceUrl == sourceUrl
-    }
+    override fun equals(other: Any?) =
+        other is RssSource && other.sourceUrl == sourceUrl
 
     override fun hashCode(): Int = sourceUrl.hashCode()
 

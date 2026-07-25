@@ -32,17 +32,17 @@ class LicenseController(
     private val webClient: WebClient by lazy { WebClient.create(Vertx.vertx()) }
     private var privateKeyContent = ""
     private var tryCodeCache = ACache.get("tryCodeCache", 2_000_000L, 10_000)
-    private val backupFileNames = arrayOf(
-        "bookShelf.json",
-        "bookSource.json",
-        "rssSource.json",
-        "replaceRule.json",
-        "bookmark.json",
-        "bookGroup.json",
-        "userConfig.json",
-    )
-
-    fun getBackupFileNames(): Array<String> = backupFileNames
+    val backupFileNames: Array<String> by lazy {
+        arrayOf(
+            "bookShelf.json",
+            "bookSource.json",
+            "rssSource.json",
+            "replaceRule.json",
+            "bookmark.json",
+            "bookGroup.json",
+            "userConfig.json",
+        )
+    }
 
     suspend fun getLicense(@Suppress("UNUSED_PARAMETER") context: RoutingContext): ReturnData =
         ReturnData().setData(mapOf("license" to getInstalledLicense(ignoreInvalid = true)))

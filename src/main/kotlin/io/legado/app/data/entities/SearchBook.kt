@@ -23,12 +23,25 @@ data class SearchBook(
     var originOrder: Int = 0
 ) : BaseBook, Comparable<SearchBook> {
 
+    override var infoHtml: String? = null
+
+    override var tocHtml: String? = null
+
     override fun equals(other: Any?): Boolean {
-        return other is SearchBook && other.bookUrl == bookUrl
+        if (other is SearchBook) {
+            if (other.bookUrl == bookUrl) {
+                return true
+            }
+        }
+        return false
     }
 
     override fun hashCode(): Int {
         return bookUrl.hashCode()
+    }
+
+    override fun compareTo(other: SearchBook): Int {
+        return other.originOrder - this.originOrder
     }
 
     @delegate:Transient
@@ -44,10 +57,6 @@ data class SearchBook(
         }
         variable = GSON.toJson(variableMap)
     }
-
-    override var infoHtml: String? = null
-
-    override var tocHtml: String? = null
 
     @Transient
     private var _userNameSpace: String = ""
@@ -70,22 +79,20 @@ data class SearchBook(
         origins?.add(origin)
     }
 
-    override fun compareTo(other: SearchBook): Int = other.originOrder - this.originOrder
-
     fun toBook(): Book {
         return Book(
-            bookUrl = bookUrl,
-            tocUrl = tocUrl,
-            origin = origin,
-            originName = originName,
             name = name,
             author = author,
             kind = kind,
+            bookUrl = bookUrl,
+            origin = origin,
+            originName = originName,
+            type = type,
+            wordCount = wordCount,
+            latestChapterTitle = latestChapterTitle,
             coverUrl = coverUrl,
             intro = intro,
-            type = type,
-            latestChapterTitle = latestChapterTitle,
-            wordCount = wordCount,
+            tocUrl = tocUrl,
             variable = variable
         ).apply {
             this.infoHtml = this@SearchBook.infoHtml

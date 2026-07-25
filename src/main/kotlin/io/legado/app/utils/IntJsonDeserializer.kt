@@ -6,6 +6,14 @@ import com.google.gson.JsonElement
 import java.lang.reflect.Type
 
 class IntJsonDeserializer : JsonDeserializer<Int?> {
-    override fun deserialize(json: JsonElement, typeOfT: Type?, context: JsonDeserializationContext?): Int? =
-        json.takeIf { it.isJsonPrimitive }?.asJsonPrimitive?.takeIf { it.isNumber }?.asNumber?.toInt()
+    override fun deserialize(json: JsonElement, typeOfT: Type?, context: JsonDeserializationContext?): Int? {
+        if (json.isJsonPrimitive) {
+            val primitive = json.asJsonPrimitive
+            if (primitive.isNumber) {
+                return primitive.asNumber.toInt()
+            }
+            return null
+        }
+        return null
+    }
 }

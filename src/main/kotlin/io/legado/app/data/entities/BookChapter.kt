@@ -40,6 +40,17 @@ data class BookChapter(
         variable = GSON.toJson(variableMap)
     }
 
+    @Transient
+    private var _userNameSpace: String = ""
+
+    fun setUserNameSpace(nameSpace: String) {
+        _userNameSpace = nameSpace
+    }
+
+    override fun getUserNameSpace(): String {
+        return _userNameSpace
+    }
+
     override fun hashCode() = url.hashCode()
 
     override fun equals(other: Any?): Boolean {
@@ -57,15 +68,4 @@ data class BookChapter(
     }
 
     fun getFileName(): String = String.format("%05d-%s.nb", index, MD5Utils.md5Encode16(title))
-
-    @Transient
-    private var _userNameSpace: String = ""
-
-    fun setUserNameSpace(nameSpace: String) {
-        _userNameSpace = nameSpace
-    }
-
-    override fun getUserNameSpace(): String {
-        return _userNameSpace
-    }
 }

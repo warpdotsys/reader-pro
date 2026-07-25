@@ -14,7 +14,6 @@ import java.util.Locale;
 public class Date implements Serializable {
 
     private static final long serialVersionUID = 7533866830395120136L;
-    private static final String DATE_FORMAT = "yyyy-MM-dd";
 
     public enum Event {
         PUBLICATION("publication"),
@@ -60,7 +59,7 @@ public class Date implements Serializable {
     }
 
     public Date(java.util.Date date, Event event) {
-        this((new SimpleDateFormat(DATE_FORMAT, Locale.US)).format(date),
+        this((new SimpleDateFormat("yyyy-MM-dd", Locale.US)).format(date),
                 event);
     }
 
@@ -70,7 +69,7 @@ public class Date implements Serializable {
     }
 
     public Date(java.util.Date date, String event) {
-        this((new SimpleDateFormat(DATE_FORMAT, Locale.US)).format(date),
+        this((new SimpleDateFormat("yyyy-MM-dd", Locale.US)).format(date),
                 event);
     }
 
