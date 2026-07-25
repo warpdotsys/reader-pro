@@ -27,7 +27,7 @@ class UserController(
     val userMaxCount = 15
 
     private fun getUserLimit(context: RoutingContext): Int {
-        val license = getInstalledLicense(ignoreInvalid = true)
+        val license = getInstalledLicense()
         return if (license.validHost(context.request().host())) {
             appConfig.userLimit.coerceAtLeast(1).coerceAtMost(license.userMaxLimit)
         } else {

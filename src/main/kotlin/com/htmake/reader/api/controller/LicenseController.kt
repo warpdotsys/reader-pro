@@ -45,7 +45,7 @@ class LicenseController(
     }
 
     suspend fun getLicense(@Suppress("UNUSED_PARAMETER") context: RoutingContext): ReturnData =
-        ReturnData().setData(mapOf("license" to getInstalledLicense(ignoreInvalid = true)))
+        ReturnData().setData(mapOf("license" to getInstalledLicense()))
 
     suspend fun importLicense(context: RoutingContext) {
         val result = ReturnData()
@@ -104,7 +104,7 @@ class LicenseController(
 
     suspend fun isHostValid(context: RoutingContext): ReturnData {
         val host = context.queryParam("host").firstOrNull() ?: context.request().host()
-        return ReturnData().setData(getInstalledLicense(ignoreInvalid = true).validHost(host))
+        return ReturnData().setData(getInstalledLicense().validHost(host))
     }
 
     suspend fun decryptLicense(context: RoutingContext): ReturnData {
@@ -122,7 +122,7 @@ class LicenseController(
     }
 
     suspend fun isLicenseValid(@Suppress("UNUSED_PARAMETER") context: RoutingContext): ReturnData =
-        ReturnData().setData(getInstalledLicense(ignoreInvalid = true).isValid())
+        ReturnData().setData(getInstalledLicense().isValid())
 
     suspend fun checkLicense(license: License) {
         if (!license.isValid()) {
