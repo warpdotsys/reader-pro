@@ -264,6 +264,7 @@ class BookController(
                     WebBook(gson.toJson(source), appConfig.debugLog, null, userNameSpace)
                         .searchBook(key, intParam(context, "page") ?: 1)
                 }.onSuccess { books.addAll(it) }.onFailure {
+                    logger.info("searchBookMulti error: {}", it.message)
                     addInvalidBookSource(source.bookSourceUrl, mapOf("error" to (it.message ?: "search failed")), userNameSpace)
                 }
             }
