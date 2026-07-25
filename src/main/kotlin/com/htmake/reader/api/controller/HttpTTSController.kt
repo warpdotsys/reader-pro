@@ -15,7 +15,7 @@ class HttpTTSController(
         get() = "httpTTS"
 
     override fun checker(var1: JsonObject, var2: HttpTTS): Boolean =
-        var1.getString("name").equals(var2.name)
+        var2.name.equals(var1.getString("name"))
 
     override fun beforeSave(var1: HttpTTS, db: DB<HttpTTS>): ReturnData? {
         val result = ReturnData()

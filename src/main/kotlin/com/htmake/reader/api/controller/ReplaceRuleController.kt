@@ -15,7 +15,7 @@ class ReplaceRuleController(coroutineContext: CoroutineContext) : BaseController
         get() = "replaceRule"
 
     override fun checker(var1: JsonObject, var2: ReplaceRule): Boolean =
-        var1.getString("name").equals(var2.name)
+        var2.name.equals(var1.getString("name"))
 
     override fun beforeSave(var1: ReplaceRule, db: DB<ReplaceRule>): ReturnData? =
         if (var1.name.isEmpty()) {

@@ -43,8 +43,9 @@ import kotlinx.coroutines.sync.withLock
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.rendering.PDFRenderer
 import kotlin.coroutines.CoroutineContext
+import mu.KotlinLogging
 
-private const val BOOKSHELF = "bookshelf"
+private val logger = KotlinLogging.logger {}
 
 @Suppress("UNCHECKED_CAST", "UNUSED_PARAMETER")
 class BookController(
@@ -346,7 +347,7 @@ class BookController(
         val bookshelf = shelfJson(userNameSpace)
         val index = shelfIndex(bookshelf, saved.bookUrl)
         if (index >= 0) bookshelf.list[index] = JsonObject.mapFrom(saved) else bookshelf.add(JsonObject.mapFrom(saved))
-        saveUserStorage(userNameSpace, BOOKSHELF, bookshelf)
+        saveUserStorage(userNameSpace, "bookshelf", bookshelf)
         return Pair(saved, if (index >= 0) "updated" else "saved")
     }
 
@@ -536,7 +537,7 @@ class BookController(
         userNameSpace: String,
         handler: (Book) -> Book,
     ): Book {
-        val mutex = UserMutex.getLocker("$userNameSpace@$BOOKSHELF")
+        val mutex = UserMutex.getLocker("$userNameSpace@bookshelf")
         return mutex.withLock {
             val shelf = shelfJson(userNameSpace)
             val index = shelfIndex(shelf, book.bookUrl)
@@ -546,7 +547,7 @@ class BookController(
                 setUserNameSpace(userNameSpace)
             }
             shelf.list[index] = JsonObject.mapFrom(updated)
-            saveUserStorage(userNameSpace, BOOKSHELF, shelf)
+            saveUserStorage(userNameSpace, "bookshelf", shelf)
             updated
         }
     }
@@ -908,7 +909,7 @@ class BookController(
         ?: false
 
     private fun shelfJson(userNameSpace: String): JsonArray =
-        getUserStorage(userNameSpace, BOOKSHELF).asJsonArray() ?: JsonArray()
+        getUserStorage(userNameSpace, "bookshelf").asJsonArray() ?: JsonArray()
 
     private fun shelfIndex(shelf: JsonArray, bookUrl: String): Int = (0 until shelf.size()).firstOrNull { index ->
         shelf.getJsonObject(index).getString("bookUrl") == bookUrl
@@ -946,7 +947,7 @@ class BookController(
 
     private fun deleteShelfBooks(userNameSpace: String, urls: Set<String>) {
         val shelf = shelfJson(userNameSpace)
-        saveUserStorage(userNameSpace, BOOKSHELF, JsonArray(shelf.filter { value ->
+        saveUserStorage(userNameSpace, "bookshelf", JsonArray(shelf.filter { value ->
             (value as JsonObject).getString("bookUrl") !in urls
         }))
     }
