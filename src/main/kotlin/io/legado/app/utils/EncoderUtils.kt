@@ -379,16 +379,16 @@ object EncoderUtils {
         keySize: Int = 2048
     ): String {
         val byteArray = input.toByteArray(Charsets.UTF_8)
-        var temp: ByteArray?
+        var temp: ByteArray
         var offset = 0
-        val maxEncryptBlock = keySize / 8 - 11
+        val MAX_ENCRYPT_BLOCK = keySize / 8 - 11
         val bos = ByteArrayOutputStream()
         val cipher = Cipher.getInstance("RSA")
         cipher.init(Cipher.ENCRYPT_MODE, privateKey)
         while (byteArray.size - offset > 0) {
-            if (byteArray.size - offset >= maxEncryptBlock) {
-                temp = cipher.doFinal(byteArray, offset, maxEncryptBlock)
-                offset += maxEncryptBlock
+            if (byteArray.size - offset >= MAX_ENCRYPT_BLOCK) {
+                temp = cipher.doFinal(byteArray, offset, MAX_ENCRYPT_BLOCK)
+                offset += MAX_ENCRYPT_BLOCK
             } else {
                 temp = cipher.doFinal(byteArray, offset, byteArray.size - offset)
                 offset = byteArray.size
@@ -405,16 +405,16 @@ object EncoderUtils {
         keySize: Int = 2048
     ): String? {
         val byteArray = Base64.decode(input, Base64.NO_WRAP)
-        var temp: ByteArray?
+        var temp: ByteArray
         var offset = 0
-        val maxDecryptBlock = keySize / 8
+        val MAX_DECRYPT_BLOCK = keySize / 8
         val bos = ByteArrayOutputStream()
         val cipher = Cipher.getInstance("RSA")
         cipher.init(Cipher.DECRYPT_MODE, publicKey)
         while (byteArray.size - offset > 0) {
-            if (byteArray.size - offset >= maxDecryptBlock) {
-                temp = cipher.doFinal(byteArray, offset, maxDecryptBlock)
-                offset += maxDecryptBlock
+            if (byteArray.size - offset >= MAX_DECRYPT_BLOCK) {
+                temp = cipher.doFinal(byteArray, offset, MAX_DECRYPT_BLOCK)
+                offset += MAX_DECRYPT_BLOCK
             } else {
                 temp = cipher.doFinal(byteArray, offset, byteArray.size - offset)
                 offset = byteArray.size
@@ -431,16 +431,16 @@ object EncoderUtils {
         keySize: Int = 2048
     ): String {
         val byteArray = input.toByteArray(Charsets.UTF_8)
-        var temp: ByteArray?
+        var temp: ByteArray
         var offset = 0
-        val maxEncryptBlock = keySize / 8 - 11
+        val MAX_ENCRYPT_BLOCK = keySize / 8 - 11
         val bos = ByteArrayOutputStream()
         val cipher = Cipher.getInstance("RSA")
         cipher.init(Cipher.ENCRYPT_MODE, publicKey)
         while (byteArray.size - offset > 0) {
-            if (byteArray.size - offset >= maxEncryptBlock) {
-                temp = cipher.doFinal(byteArray, offset, maxEncryptBlock)
-                offset += maxEncryptBlock
+            if (byteArray.size - offset >= MAX_ENCRYPT_BLOCK) {
+                temp = cipher.doFinal(byteArray, offset, MAX_ENCRYPT_BLOCK)
+                offset += MAX_ENCRYPT_BLOCK
             } else {
                 temp = cipher.doFinal(byteArray, offset, byteArray.size - offset)
                 offset = byteArray.size
@@ -457,16 +457,16 @@ object EncoderUtils {
         keySize: Int = 2048
     ): String? {
         val byteArray = Base64.decode(input, Base64.NO_WRAP)
-        var temp: ByteArray?
+        var temp: ByteArray
         var offset = 0
-        val maxDecryptBlock = keySize / 8
+        val MAX_DECRYPT_BLOCK = keySize / 8
         val bos = ByteArrayOutputStream()
         val cipher = Cipher.getInstance("RSA")
         cipher.init(Cipher.DECRYPT_MODE, privateKey)
         while (byteArray.size - offset > 0) {
-            if (byteArray.size - offset >= maxDecryptBlock) {
-                temp = cipher.doFinal(byteArray, offset, maxDecryptBlock)
-                offset += maxDecryptBlock
+            if (byteArray.size - offset >= MAX_DECRYPT_BLOCK) {
+                temp = cipher.doFinal(byteArray, offset, MAX_DECRYPT_BLOCK)
+                offset += MAX_DECRYPT_BLOCK
             } else {
                 temp = cipher.doFinal(byteArray, offset, byteArray.size - offset)
                 offset = byteArray.size

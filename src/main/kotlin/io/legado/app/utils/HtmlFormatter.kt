@@ -17,22 +17,19 @@ object HtmlFormatter {
     )
 
     fun format(html: String?, otherRegex: Regex = otherHtmlRegex): String {
-        if (html == null) {
-            return ""
-        }
+        html ?: return ""
         return html
             .replace(wrapHtmlRegex, "\n")
             .replace(commentRegex, "")
             .replace(otherRegex, "")
-            .replace("\\s*\n+\\s*".toRegex(), "\n\u3000\u3000")
+            .replace("\\s*\\n+\\s*".toRegex(), "\n\u3000\u3000")
             .replace("^[\\n\\s]+".toRegex(), "\u3000\u3000")
             .replace("[\\n\\s]+$".toRegex(), "")
     }
 
     fun formatKeepImg(html: String?, redirectUrl: URL? = null): String {
-        if (html == null) {
-            return ""
-        }
+        html ?: return ""
+
         val keepImgHtml = format(html, notImgHtmlRegex)
         val matcher = formatImagePattern.matcher(keepImgHtml)
         var appendPos = 0
@@ -40,25 +37,30 @@ object HtmlFormatter {
         while (matcher.find()) {
             var param = ""
             sb.append(
-                keepImgHtml.substring(appendPos, matcher.start()) +
-                    "<img src=\"" + NetworkUtils.getAbsoluteURL(
+                keepImgHtml.substring(appendPos, matcher.start()),
+                "<img src=\"${
+                    NetworkUtils.getAbsoluteURL(
                         redirectUrl,
                         matcher.group(1)?.let { str ->
                             val urlMatcher = AnalyzeUrl.paramPattern.matcher(str)
                             if (urlMatcher.find()) {
-                                param = "," + str.substring(urlMatcher.end())
+                                param = ',' + str.substring(urlMatcher.end())
                                 str.substring(0, urlMatcher.start())
                             } else {
                                 str
                             }
                         } ?: matcher.group(2) ?: matcher.group(3)!!
-                    ) + param + "\">"
+                    ) + param
+                }\">"
             )
             appendPos = matcher.end()
         }
-        if (appendPos < keepImgHtml.length) {
-            sb.append(keepImgHtml.substring(appendPos, keepImgHtml.length))
-        }
+        if (appendPos < keepImgHtml.length) sb.append(
+            keepImgHtml.substring(
+                appendPos,
+                keepImgHtml.length
+            )
+        )
         return sb.toString()
     }
 }

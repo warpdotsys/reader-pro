@@ -10,16 +10,22 @@ object XmlUtils {
 
     fun xml2map(source: Any): MutableMap<String, Any> {
         val factory = DocumentBuilderFactory.newInstance()
-        val doc = linkedMapOf<String, Any>()
+        val doc: MutableMap<String, Any> = linkedMapOf()
         return try {
             val builder = factory.newDocumentBuilder()
-            val document = when (source) {
-                is String -> builder.parse(source)
-                is InputStream -> builder.parse(source)
-                is InputSource -> builder.parse(source)
-                else -> return doc
+            if (source is String) {
+                val document = builder.parse(source)
+                return parseNode(document.getChildNodes())
             }
-            parseNode(document.childNodes)
+            if (source is InputStream) {
+                val document = builder.parse(source)
+                return parseNode(document.getChildNodes())
+            }
+            if (source is InputSource) {
+                val document = builder.parse(source)
+                return parseNode(document.getChildNodes())
+            }
+            doc
         } catch (e: Exception) {
             e.printStackTrace()
             doc
